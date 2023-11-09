@@ -1,0 +1,17 @@
+{
+  "$schema": "",
+  "framework": "vue",
+  "name": "bott-frontend",
+  "version": "0.0.0",
+  "contributions": {
+    "html": {
+      "types-syntax": "typescript",
+      "attributes": [
+        {
+          "name": "v-clickable",
+          "required": false
+        }
+      ]
+    }
+  }
+}

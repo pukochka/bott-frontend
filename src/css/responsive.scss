@@ -1,0 +1,36 @@
+.bott-dialog__responsive {
+  width: 100%;
+}
+
+@media (min-width: 599px) {
+  .bott-dialog__responsive {
+    width: 85%;
+  }
+}
+
+@media (min-width: 1023px) {
+  .bott-dialog__responsive {
+    width: 80%;
+  }
+}
+
+@media (min-width: 1439px) {
+  .bott-dialog__responsive {
+    width: 75%;
+  }
+}
+
+@media (min-width: 1846px) {
+  .bott-menu-container {
+    flex: 1 0 auto;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1846px) {
+  .bott-menu__toc {
+    display: none;
+  }
+}

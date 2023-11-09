@@ -1,0 +1,47 @@
+<template>
+  <q-card flat bordered class="rounded q-px-sm q-pb-sm" v-if="visible">
+    <panel-header label="FAQ" icon="help"></panel-header>
+
+    <div v-html="text" v-if="text.length"></div>
+
+    <div class="row q-col-gutter-y-xs">
+      <div class="col-12" v-for="(item, index) of links" :key="index">
+        <q-btn
+          flat
+          no-caps
+          padding="4px"
+          class="rounded fit"
+          size="13px"
+          color="primary"
+          :href="item.link"
+          :label="item.label"
+        />
+      </div>
+    </div>
+
+    <div style="max-height: 200px" v-if="video.length">
+      <file-img :link="video" :name="'.mp4'"></file-img>
+    </div>
+  </q-card>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { useInlineStore } from '../../stores/inlineStore';
+
+import PanelHeader from '../PanelHeader.vue';
+import FileImg from '../../../file-manager/components/extension/FileImg.vue';
+
+const inline = useInlineStore();
+
+const video = computed(() => inline.message.faq.video);
+const text = computed(() => inline.message.faq.text);
+const links = computed(() => inline.message.faq.links);
+
+const visible = computed(
+  () => video.value.length || text.value.length || links.value.length
+);
+</script>
+
+<style scoped lang="scss"></style>

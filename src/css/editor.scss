@@ -1,0 +1,106 @@
+.tg-spoiler,
+.editor-text .tg-spoiler,
+.ProseMirror .tg-spoiler {
+  background: #eee;
+  background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+  border-radius: 4px;
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+  color: inherit !important;
+
+  @keyframes shine {
+    to {
+      background-position-x: -200%;
+    }
+  }
+}
+
+body.body--dark .tg-spoiler {
+  background: #5d5d5d;
+}
+
+.editor-text a,
+.ProseMirror a {
+  color: var(--q-primary);
+  position: relative;
+  &:hover &::before {
+    opacity: 1;
+  }
+
+  &::before {
+    content: 'Ссылка';
+    position: absolute;
+    opacity: 0;
+    left: 100%;
+    top: -20px;
+    transform: translateX(-50%);
+    background: #000;
+    border-radius: 4px;
+  }
+}
+
+.no-prosemirror code {
+  color: inherit;
+}
+.no-prosemirror > p {
+  margin: 0;
+  padding: 0;
+}
+.ProseMirror {
+  width: 100%;
+  box-shadow: none !important;
+  min-height: 200px;
+  max-height: 350px;
+  outline: none;
+  resize: vertical;
+  overflow-y: scroll;
+  font-size: 16px;
+  line-height: 1.1em;
+  padding: 2px;
+}
+
+.ProseMirror > p {
+  margin: 0;
+  padding: 0;
+}
+
+.text {
+  padding: 4px;
+  resize: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  outline: 1px solid rgb(163, 163, 163);
+  background: rgb(75, 74, 74);
+  color: rgb(199, 196, 196);
+}
+
+.ProseMirror.code {
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+}
+
+.ProseMirror::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: transparent;
+}
+
+.ProseMirror::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border: 2px solid #fff;
+  border-radius: 4px;
+}
+
+.ProseMirror::-webkit-scrollbar-button,
+.ProseMirror::-webkit-scrollbar-corner,
+.ProseMirror::-webkit-resizer {
+  display: none;
+}
+
+.ProseMirror code {
+  color: inherit !important;
+}

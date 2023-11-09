@@ -1,0 +1,51 @@
+.inline-flex {
+  display: inline-flex;
+}
+
+.setting-desc {
+  &.blue {
+    border-color: #64b5f6;
+  }
+  &.red {
+    border-color: #dce775;
+  }
+  &.grey {
+    border-color: $grey-4;
+    background: $grey-2;
+  }
+  padding: 16px 24px;
+  font-size: 1em;
+  line-height: 1.35em;
+  border-width: 0 5px;
+  border-style: solid;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+}
+
+.message-rect {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -8px;
+    width: 10px;
+    height: 10px;
+    clip-path: polygon(100% 3%, 0% 100%, 100% 100%);
+    background: $blue-2;
+  }
+}
+
+$rounded-container-colors: 'grey' '#f5f5f5' '#e0e0e0',
+  'yellow' '#fff9c4' '#fff176', 'blue' '#bbdefb' '#64b5f6';
+
+@each $name, $bg, $br in $rounded-container-colors {
+  .rounded-container-#{$name} {
+    background: #{$bg};
+    border-radius: 4px;
+    border-color: #{$br};
+    padding: 4px;
+    border-width: 0 5px;
+    border-style: solid;
+  }
+}

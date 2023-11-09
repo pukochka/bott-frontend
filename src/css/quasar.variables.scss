@@ -1,0 +1,73 @@
+$primary: #00b4ff;
+$dark-primary: #ffffff;
+
+$secondary: #26a69a;
+$dark-secondary: #ffffff;
+
+$accent: #ea5e13;
+
+$dark: #1d1d1d;
+$dark-page: #0d1b2a;
+$light: #0d1b2a;
+$light-page: #ffffff;
+
+$positive: #21ba45;
+$negative: #c10015;
+$info: #31ccec;
+$warning: #f2c037;
+
+$bg-logo-light: #0d1b2a;
+$bg-logo-dark: #dee2e6;
+
+$bg-footer-light: #d8e1e5;
+$bg-footer-dark: #475d66;
+
+/**
+* Синий цвет
+**/
+$text-primary-dark: #005a80;
+$text-primary-light: $primary;
+$bg-primary-dark: #002433;
+$bg-primary-light: #f5f5f5;
+
+/**
+* Желтый цвет
+**/
+$text-warning-dark: #f2c037;
+$text-warning-light: #c3920d;
+$bg-warning-dark: #2a1f03;
+$bg-warning-light: #fdf6e1;
+
+/**
+* Зеленый цвет
+**/
+$text-success-dark: #42b883;
+$text-success-light: #42b883;
+$bg-success-dark: #051c0a;
+$bg-success-light: #daf8e1;
+
+/**
+* Красный цвет
+**/
+$text-negative-dark: #c10015;
+$text-negative-light: #c10015;
+$bg-negative-dark: #270004;
+$bg-negative-light: #ffdfe3;
+
+/**
+* Серый цвет
+**/
+$text-neutral-dark: #f5f5f5;
+$text-neutral-light: #979dac;
+$bg-neutral-dark: #495057;
+$bg-neutral-light: #d8e1e5;
+
+/**
+* Бирюзовый цвет
+**/
+$text-prism-dark: #26a69a;
+$text-prism-light: #26a69a;
+$bg-prism-dark: #082421;
+$bg-prism-light: #edfbfa;
+
+$generic-hover-transition: 0.4s cubic-bezier(0.25, 0.8, 0.5, 1) !default;

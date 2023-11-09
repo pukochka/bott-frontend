@@ -1,0 +1,15 @@
+{
+  "extends": "@quasar/app-vite/tsconfig-preset",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "assets/*": ["src/assets/*"],
+      "stores/*": ["src/stores/*"],
+      "layouts/*": ["src/layouts/*"]
+      //      "modules/*": ["src/modules/*"],
+      //      "components/*": ["src/components/*"]
+    },
+    "types": ["vite/client"],
+    "isolatedModules": false
+  }
+}
