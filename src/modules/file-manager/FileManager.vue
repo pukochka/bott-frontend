@@ -1,18 +1,19 @@
 <template>
   <q-btn
-    v-if="config.dialog"
+    v-if="props.dialog"
     flat
-    padding="2px 10px"
+    dense
     no-caps
     class="rounded"
-    size="md"
     color="primary"
+    padding="2px 10px"
+    icon="attach_file"
     :label="'Загрузить ' + btnText"
     @click="dialog = !dialog"
   />
 
   <q-dialog
-    v-if="config.dialog"
+    v-if="props.dialog"
     v-model="dialog"
     full-width
     class="rounded"
@@ -26,24 +27,26 @@
 </template>
 
 <script lang="ts" setup>
-import { config } from './config';
-
-import { computed, ref } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
+import { defaultMessageFree } from '../inline-menu/stores/inlineModels';
 
 import { fetchFile } from './api/queries';
 import { useFMStore } from './stores/FMStrore';
 
 import FileManagerCard from './FileManagerCard.vue';
 
+const props = withDefaults(defineProps<FileManagerProps>(), {
+  message: () => defaultMessageFree,
+  dialog: false,
+});
+
 const dialog = ref(false);
 
 const data = useFMStore();
 
-const btnText = computed(
-  () => text[config.value.query] ?? 'Загрузить картинку'
-);
+const btnText = computed(() => text[data.query] ?? 'картинку');
 
-const text = {
+const text: Record<any, string> = {
   photos: 'картинку',
   files: 'файл',
   animations: 'анимацию',
@@ -56,7 +59,25 @@ const updateManager = () => {
   data.drawerInfo = true;
 };
 
-const updateShow = () => fetchFile('index');
+const updateShow = () => {
+  fetchFile('index');
+};
+
+onBeforeMount(() => {
+  data.message = props.message;
+  data.dialog = props.dialog;
+});
+
+watch(
+  () => props.message,
+  () => (data.message = props.message),
+  { deep: true }
+);
+
+interface FileManagerProps {
+  message?: MessageFree;
+  dialog: boolean;
+}
 </script>
 
 <style lang="scss" scoped></style>

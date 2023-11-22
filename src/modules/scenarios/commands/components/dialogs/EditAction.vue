@@ -4,10 +4,10 @@
     position="bottom"
     @keydown="enterDown"
     @before-show="update"
-    v-model="data.dialogs.edit_action"
+    v-model="commands.dialogs.edit_action"
   >
     <q-card style="width: 100%" flat bordered class="dialog-rounded">
-      <dialog-header :label="t('edit-action')"></dialog-header>
+      <dialog-header label="Изменение действия"></dialog-header>
 
       <q-card-section class="q-pt-none">
         <q-input
@@ -15,18 +15,27 @@
           counter
           outlined
           class="bott-input--rounded"
-          :label="t('scenario-name')"
-          :hint="t('command-notrepeat')"
+          label="Название действия"
+          hint="Название не должно повторяться"
           v-model="text.value"
           :maxlength="text.max"
-          :rules="[() => text.required || t('notify-overlength-command')]"
+          :rules="[
+            () =>
+              text.required ||
+              'Введено неверное количество символов или название повторяется',
+          ]"
         />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
         <action-menu
+          index
+          static
           :route="route"
           :actions="config.routes"
+          :host="config.host"
+          :bot_id="config.bot.id"
+          :token="config.bot.token"
           @change="registerRoute"
         ></action-menu>
       </q-card-section>
@@ -37,7 +46,7 @@
           no-caps
           size="md"
           class="rounded"
-          :label="t('button-close')"
+          label="Закрыть"
           color="primary"
           v-close-popup
         />
@@ -47,7 +56,7 @@
           unelevated
           size="md"
           class="rounded"
-          :label="t('button-save')"
+          label="Сохранить"
           color="primary"
           :loading="loading"
           :disable="required"
@@ -61,15 +70,15 @@
 import config from '../../../config';
 
 import { computed, ref } from 'vue';
-import { t } from 'src/boot/lang';
+
 import { fetchCommands } from '../../api/command';
 
-import { useDataStore } from '../../stores/dataStore';
+import { useCommandsStore } from '../../stores/commandsStore';
 
 import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
-const data = useDataStore();
+const commands = useCommandsStore();
 
 const route = ref<string | null>(null);
 const loading = ref(false);
@@ -81,8 +90,8 @@ const text = ref({
     return (
       this.max >= this.value.length &&
       this.min <= this.value.length &&
-      data.commands.filter((item) => item.label === text.value.value).length ===
-        0
+      commands.commands.filter((item) => item.label === text.value.value)
+        .length === 0
     );
   },
 });
@@ -99,15 +108,15 @@ const editRoute = () => {
   Promise.all([
     fetchCommands('update-route', {
       route: route.value ?? '',
-      route_id: data.selectedCommand?.id ?? 0,
+      route_id: commands.selectedCommand?.id ?? 0,
     }),
     fetchCommands('update-message', {
       message: text.value.value,
-      route_id: data.selectedCommand?.id ?? 0,
+      route_id: commands.selectedCommand?.id ?? 0,
     }),
   ]).then(() => {
     loading.value = false;
-    data.closeDialog('edit_action');
+    commands.closeDialog('edit_action');
   });
 };
 
@@ -116,7 +125,7 @@ const enterDown = (evt: KeyboardEvent) => {
 };
 
 const update = () => {
-  route.value = data.selectedCommand?.route ?? '';
-  text.value.value = data.selectedCommand?.label ?? '';
+  route.value = commands.selectedCommand?.route ?? '';
+  text.value.value = commands.selectedCommand?.label ?? '';
 };
 </script>

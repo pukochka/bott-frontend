@@ -1,4 +1,5 @@
 import { usePSStore } from '../stores/PSstore';
+import { PaperPoint } from '../stores/PSmodels';
 
 export function makeAutoAlign() {
   const store = usePSStore();
@@ -25,8 +26,18 @@ export function makeAutoAlign() {
   });
 }
 
-export function getTextPoints(coords: Array<number>) {
-  const [x, y] = coords;
+export function getTextPoints(
+  coords: PaperPoint | Array<number>,
+  radius?: number,
+  diff?: number
+) {
+  if (Array.isArray(coords)) {
+    const [x, y] = coords;
 
-  return [x, y + 20 + 80];
+    return [x, y + (diff ?? 20) + (radius ?? 80)];
+  }
+
+  const { x, y } = coords;
+
+  return [x, y + (diff ?? 20) + (radius ?? 80)];
 }

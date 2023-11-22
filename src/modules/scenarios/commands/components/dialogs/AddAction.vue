@@ -3,10 +3,10 @@
     persistent
     position="bottom"
     @keydown="enterDown"
-    v-model="data.dialogs.add_action"
+    v-model="commands.dialogs.add_action"
   >
     <q-card style="width: 100%" flat bordered class="dialog-rounded">
-      <dialog-header :label="t('add-action')"></dialog-header>
+      <dialog-header label="Добавить действие"></dialog-header>
 
       <q-card-section class="q-pt-none">
         <q-input
@@ -14,16 +14,27 @@
           counter
           outlined
           class="bott-input--rounded"
-          :label="t('scenario-name')"
-          :hint="t('command-notrepeat')"
+          label="Название действия"
+          hint="Название не должно повторяться"
           v-model="text.value"
           :maxlength="text.max"
-          :rules="[() => text.required || t('notify-overlength-command')]"
+          :rules="[
+            () =>
+              text.required ||
+              'Введено неверное количество символов или название повторяется',
+          ]"
         />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <action-menu @change="registerRoute"></action-menu>
+        <action-menu
+          index
+          static
+          :host="config.host"
+          :bot_id="config.bot.id"
+          :token="config.bot.token"
+          @change="registerRoute"
+        ></action-menu>
       </q-card-section>
 
       <q-card-section class="q-pt-none row justify-end q-gutter-x-sm">
@@ -32,7 +43,7 @@
           no-caps
           size="md"
           class="rounded"
-          :label="t('button-close')"
+          label="Закрыть"
           color="primary"
           v-close-popup
         />
@@ -42,7 +53,7 @@
           unelevated
           size="md"
           class="rounded"
-          :label="t('button-add')"
+          label="Добавить"
           color="primary"
           :disable="!text.required"
           :loading="loading"
@@ -54,16 +65,16 @@
 </template>
 <script setup lang="ts">
 import { ref, onBeforeUpdate } from 'vue';
-import { t } from 'src/boot/lang';
 
 import { fetchCommands } from '../../../messages/api';
 
-import { useDataStore } from '../../stores/dataStore';
+import { useCommandsStore } from '../../stores/commandsStore';
 
 import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
+import config from '../../../config';
 
-const data = useDataStore();
+const commands = useCommandsStore();
 
 const loading = ref(false);
 
@@ -75,8 +86,8 @@ const text = ref({
     return (
       this.max >= this.value.length &&
       this.min <= this.value.length &&
-      data.commands.filter((item) => item.label === text.value.value).length ===
-        0 &&
+      commands.commands.filter((item) => item.label === text.value.value)
+        .length === 0 &&
       route.value !== null
     );
   },
@@ -96,7 +107,7 @@ const addAction = () => {
     route: route.value ?? '',
   }).then(() => {
     loading.value = false;
-    data.closeDialog('add_action');
+    commands.closeDialog('add_action');
   });
 };
 

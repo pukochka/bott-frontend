@@ -8,15 +8,13 @@
           index + 1 === menu.length && menu.length % 2 ? '  col' : ' col-6',
         ]"
         v-for="(item, index) of menu"
-        :key="index"
-      >
+        :key="index">
         <q-item
           clickable
           class="rounded fit"
           :class="['text-' + item.color]"
           :href="item.color !== 'danger' ? item.link : undefined"
-          @click="activate(item)"
-        >
+          @click="activate(item)">
           <q-item-section>
             <q-item-label class="text-center text-body2">
               {{ item.label }}
@@ -27,8 +25,7 @@
             v-if="item.description"
             class="bott-tooltip text-center"
             anchor="top middle"
-            self="bottom middle"
-          >
+            self="bottom middle">
             {{ item.description }}
           </q-tooltip>
         </q-item>
@@ -45,7 +42,6 @@ import { useDialog } from '../../../file-manager/stores/useDialog';
 
 import PanelHeader from '../PanelHeader.vue';
 import { historyGo } from '../../stores/helpers';
-import config from '../../config';
 
 const inline = useInlineStore();
 

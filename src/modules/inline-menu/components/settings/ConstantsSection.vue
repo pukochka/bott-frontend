@@ -5,7 +5,7 @@
       icon="data_object"
     ></panel-header>
 
-    <div class="q-px-sm q-pb-sm q-gutter-y-xs">
+    <div class="q-px-sm q-pb-sm">
       <div
         class="row items-center"
         v-for="([name, text], index) of constants"
@@ -19,11 +19,15 @@
           size="13px"
           color="primary"
           class="rounded"
-          :label="'{ ' + name + ' }'"
-          @click="copy('{ ' + name + ' }')"
+          :label="'{' + name + '}'"
+          @click="copy('{' + name + '}')"
         >
-          <q-tooltip class="rounded" anchor="top middle" self="bottom middle">
-            Скопировать {{ '{ ' + name + ' }' }}
+          <q-tooltip
+            class="bott-tooltip"
+            anchor="top middle"
+            self="bottom middle"
+          >
+            Скопировать {{ '{' + name + '}' }}
           </q-tooltip>
         </q-btn>
 

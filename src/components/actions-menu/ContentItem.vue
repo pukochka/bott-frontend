@@ -1,5 +1,5 @@
 <template>
-  <div class="row no-wrap rounded bordered overflow-hidden">
+  <div class="row no-wrap rounded bordered overflow-hidden relative-position">
     <q-item clickable class="flex-grow" @click="openDialog('select')">
       <q-item-section>
         <q-item-label>{{ selectedItem?.text }}</q-item-label>
@@ -13,8 +13,7 @@
     <edit-link
       v-if="selectedItem?.link"
       :link="selectedItem?.link"
-      :text="selectedItem?.text ?? ''"
-    ></edit-link>
+      :text="selectedItem?.text ?? ''"></edit-link>
 
     <q-btn
       flat
@@ -22,16 +21,18 @@
       color="primary"
       icon="search"
       v-if="search"
-      @click="openDialog('search')"
-    >
+      @click="openDialog('search')">
       <q-tooltip
         class="bott-tooltip text-center"
         anchor="top middle"
-        self="bottom middle"
-      >
+        self="bottom middle">
         Поиск
       </q-tooltip>
     </q-btn>
+
+    <q-inner-loading :showing="props.loading">
+      <q-spinner size="30px" color="primary" />
+    </q-inner-loading>
   </div>
 
   <q-dialog v-model="dialog" position="bottom">
@@ -46,8 +47,7 @@
           color="primary"
           icon="close"
           label="Закрыть"
-          v-close-popup
-        />
+          v-close-popup />
       </div>
 
       <div class="q-px-sm q-pb-sm" v-if="filterSection === 'search'">
@@ -56,8 +56,7 @@
           outlined
           v-model="text"
           label="Поиск..."
-          class="bott-input--rounded"
-        />
+          class="bott-input--rounded" />
       </div>
 
       <q-separator />
@@ -66,15 +65,13 @@
         :visible-items="20"
         :items="filtered"
         separator
-        v-close-popup
-      >
+        v-close-popup>
         <template v-slot="{ item }">
           <q-item
             clickable
             :key="item.route"
             @click="emit(filterSection, item)"
-            v-close-popup
-          >
+            v-close-popup>
             <q-item-section>
               <q-item-label>{{ item.text }}</q-item-label>
 
@@ -103,6 +100,7 @@ const props = withDefaults(defineProps<Props>(), {
   state: () => [],
   selectedItem: () => null,
   searchItems: () => [],
+  loading: false,
 });
 
 const emit = defineEmits<{
@@ -111,7 +109,7 @@ const emit = defineEmits<{
 }>();
 
 const text = ref('');
-const filterSection = ref<'select' | 'search'>('select');
+const filterSection = ref<any>('select');
 
 const filtered = computed(() =>
   filterSection.value === 'select' ? filteredItems.value : filteredSearch.value
@@ -146,6 +144,7 @@ interface Props {
   select?: boolean;
   selectedItem: RoutesMenu | OptionsMenu | null;
   searchItems?: Array<any>;
+  loading: boolean;
 }
 </script>
 

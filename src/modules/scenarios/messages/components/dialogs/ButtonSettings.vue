@@ -2,33 +2,50 @@
   <q-dialog
     persistent
     position="bottom"
-    @before-show="updateShow"
-    @hide="updateHide"
+    @before-show="initState"
+    @hide="destroyState"
     @keydown="enterDown"
     v-model="states.dialogs.edit_button"
   >
-    <q-card style="width: 100%" flat bordered class="dialog-rounded">
-      <dialog-header :label="t('edit-button')"></dialog-header>
+    <q-card bordered flat style="width: 100%" class="dialog-rounded">
+      <q-toolbar class="q-px-md">
+        <q-toolbar-title>Изменение кнопки</q-toolbar-title>
+
+        <q-btn
+          flat
+          round
+          size="md"
+          color="primary"
+          icon="close"
+          v-close-popup
+        />
+      </q-toolbar>
 
       <q-card-section class="q-pt-none">
         <q-input
+          class="bott-input--rounded"
           autofocus
           counter
           outlined
-          class="bott-input--rounded"
-          :label="t('text-of-button')"
+          label="Текст кнопки"
           v-model="text.value"
           :maxlength="text.max"
-          :rules="[() => text.required || t('warning-length')]"
+          :rules="[
+            () => text.required || 'Введено неверное количество символов',
+          ]"
         />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
         <select-type
+          :host="config.host"
+          :token="config.bot.token"
+          :bot_id="config.bot.id"
           :webs="config.webs"
-          :button="data.selectedButton"
           :types="inlineTypes"
           :buttons="inlineButtons"
+          :button="data.selectedButton"
+          :message_id="data.selectedMessage?.id ?? 0"
           @update="update"
         ></select-type>
       </q-card-section>
@@ -39,17 +56,17 @@
           no-caps
           class="rounded"
           size="md"
-          :label="t('button-close')"
+          label="Закрыть"
           color="primary"
           v-close-popup
         />
 
         <q-btn
-          no-caps
           unelevated
+          no-caps
           class="rounded"
           size="md"
-          :label="t('button-save')"
+          label="Сохранить"
           color="primary"
           :disable="!text.required"
           :loading="loading"
@@ -60,29 +77,26 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import config from '../../../../config';
-import {
-  inlineTypes,
-  inlineButtons,
-} from 'src/modules/inline-menu/stores/buttons';
+import config from '../../../config';
 
 import { ref } from 'vue';
+import { fetchButtons } from '../../api';
 
-import { t } from 'src/boot/lang';
-import { fetchButtons } from '../../../api';
-
-import { useDataStore } from '../../../stores/data/dataStore';
-import { useStatesStore } from '../../../stores/states/statesStore';
+import { useStatesStore } from '../../stores/states/statesStore';
+import { useDataStore } from '../../stores/data/dataStore';
 
 import SelectType from 'src/components/select-type/SelectType.vue';
-import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
+import {
+  inlineButtons,
+  inlineTypes,
+} from '../../../../inline-menu/stores/buttons';
 
 const states = useStatesStore();
 const data = useDataStore();
 
 const loading = ref(false);
 
-const state = ref<any>({
+const state: any = ref({
   action: null,
   type: -1,
 });
@@ -107,8 +121,8 @@ const enterDown = (evt: KeyboardEvent) => {
 };
 
 const editButton = () => {
+  const message = data.selectedMessage;
   loading.value = true;
-  let message = data.selectedMessage;
 
   const currentAction =
     state.value.type === 5
@@ -124,12 +138,13 @@ const editButton = () => {
       id: data.selectedButton?.id ?? 0,
     },
     (response) => {
-      if (state.value.type === 5) {
-        data.scenarioValue = response.data;
+      if ([5, 6].includes(state.value.type)) {
+        data.scenarioValue = response.data.data;
+
         return;
       }
 
-      message!.inline_menu = response.data[0];
+      message!.menu = response.data.data;
     }
   ).then(() => {
     loading.value = false;
@@ -137,15 +152,15 @@ const editButton = () => {
   });
 };
 
-const updateHide = () => {
-  text.value.value = '';
-  state.value.action = null;
-};
-
-const updateShow = () => {
+const initState = () => {
   if (data.selectedButton === null) return;
 
   text.value.value = data.selectedButton.text;
-  state.value.action = data.selectedButton?.action ?? '';
+  state.value.action = data.selectedButton.action ?? null;
+};
+
+const destroyState = () => {
+  text.value.value = '';
+  state.value.action = null;
 };
 </script>

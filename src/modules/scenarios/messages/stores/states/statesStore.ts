@@ -14,6 +14,7 @@ export const useStatesStore = defineStore({
         add_message: false,
 
         edit_label: false,
+        edit_message: false,
         edit_button: false,
         edit_feedback: false,
         edit_text_command: false,
@@ -46,7 +47,7 @@ export const useStatesStore = defineStore({
       this.dialogs[name] = false;
     },
 
-    startDrag(event: MouseEvent, element: SCMessage) {
+    startDrag(event: MouseEvent, element: MessageFree) {
       document.addEventListener('mousemove', this.dragMove, false);
       document.addEventListener('mouseup', this.endDrag, false);
 

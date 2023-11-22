@@ -11,8 +11,7 @@
             class="col-grow rounded fit"
             :color="selected === button.type ? 'primary' : 'item'"
             :label="button.label"
-            @click="select(button.type)"
-          />
+            @click="select(button.type)" />
         </div>
       </div>
     </div>
@@ -21,13 +20,16 @@
       :webs="webs"
       :action="action"
       :route="action"
+      :bot_id="props.bot_id"
+      :message_id="props.message_id"
+      :token="props.token"
+      :host="props.host"
       :is="selectedType.component"
       :label="selectedType.label"
       :hint="selectedType.hint"
       :grow="selectedType.grow"
       :default="selectedType.default"
-      @change="update"
-    ></component>
+      @change="update"></component>
   </div>
 </template>
 
@@ -38,6 +40,9 @@ const props = withDefaults(defineProps<SelectTypesProps>(), {
   webs: () => [],
   button: () => null,
   buttons: () => [],
+  bot_id: 0,
+  message_id: 0,
+  token: '',
   types: () => {
     return {};
   },
@@ -75,6 +80,10 @@ interface SelectTypesProps {
   webs: WebModule[];
   buttons: Array<{ label: string; type: number }>;
   types: Record<number, any>;
+  bot_id: number;
+  message_id: number;
+  token: string;
+  host: string;
 }
 </script>
 

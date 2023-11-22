@@ -79,6 +79,10 @@ interface GeneralTypeProps {
   webs?: any;
   actions?: any;
   route?: any;
+  bot_id: number;
+  message_id: number;
+  token: string;
+  host: string;
 }
 </script>
 

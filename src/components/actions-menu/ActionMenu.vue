@@ -5,6 +5,7 @@
     <content-item
       search
       select
+      :loading="loading"
       :state="menu.routes"
       :search-items="menu.search"
       :selected-item="menu.selectedMain"
@@ -25,6 +26,7 @@
     <content-item
       select
       v-if="menu.is_options"
+      :loading="loading"
       :state="menu.options"
       :selected-item="menu.selectedOption"
       @select="selectOption"
@@ -32,7 +34,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { watch, onBeforeMount, onUnmounted } from 'vue';
+import { watch, onBeforeMount, onUnmounted, ref } from 'vue';
 
 import { useParse, useState } from './useMenu';
 
@@ -43,6 +45,12 @@ import ContentItem from './ContentItem.vue';
 
 const props = withDefaults(defineProps<ActionsMenuProps>(), {
   route: () => null,
+  bot_id: 0,
+  message_id: 0,
+  token: '',
+  host: '',
+  index: false,
+  static: false,
 });
 
 const emit = defineEmits<{
@@ -50,6 +58,8 @@ const emit = defineEmits<{
 }>();
 
 const menu = useMenuStore();
+
+const loading = ref(true);
 
 const selectMain = (item: RoutesMenu) => useState(item);
 const selectOption = (item: OptionsMenu) => (menu.selectedOption = item);
@@ -72,15 +82,23 @@ const updateRoute = () => {
 };
 
 onBeforeMount(() => {
-  if (menu.routes.length) {
+  if (menu.routes.length && props.static) {
+    loading.value = false;
     updateRoute();
 
     return;
   }
 
-  fetchMenu(updateRoute).then(() => {
-    emit('change', menu.route);
-  });
+  fetchMenu(
+    props.index ? 'index' : 'index-message',
+    props.bot_id,
+    props.token,
+    props.message_id,
+    props.host,
+    updateRoute
+  )
+    .then(() => emit('change', menu.route))
+    .then(() => (loading.value = false));
 });
 
 onUnmounted(() => {
@@ -90,6 +108,12 @@ onUnmounted(() => {
 
 interface ActionsMenuProps {
   route?: string | null;
+  bot_id: number;
+  message_id: number;
+  token: string;
+  host: string;
+  index?: boolean;
+  static?: boolean;
 }
 </script>
 

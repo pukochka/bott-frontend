@@ -46,23 +46,19 @@
 
   <add-message></add-message>
 
-  <button-settings></button-settings>
-
-  <add-button></add-button>
-
-  <draggable-dial></draggable-dial>
+  <edit-message></edit-message>
 
   <message-buttons></message-buttons>
 
   <message-type></message-type>
 
-  <message-text></message-text>
-
   <edit-label></edit-label>
+
+  <button-settings></button-settings>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import { onBeforeMount } from 'vue';
 import { fetchCommands, fetchMessage } from './api';
 
 import { useStatesStore } from './stores/states/statesStore';
@@ -73,16 +69,14 @@ import ScenarioHeader from './components/sections/ScenarioHeader.vue';
 
 import VectorSection from './components/sections/VectorSection.vue';
 import EditLabel from './components/edit/EditLabel.vue';
-
-import AddButton from './components/dialogs/buttons/AddButton.vue';
-import ButtonSettings from './components/dialogs/buttons/ButtonSettings.vue';
-import DraggableDial from './components/dialogs/buttons/DraggableDial.vue';
+import EditMessage from './components/dialogs/message/EditMessage.vue';
 
 import MessageItem from './components/items/MessageItem.vue';
 import AddMessage from './components/dialogs/message/AddMessage.vue';
 import MessageType from './components/dialogs/message/MessageType.vue';
-import MessageText from './components/dialogs/message/MessageText.vue';
 import MessageButtons from './components/dialogs/message/MessageButtons.vue';
+import ButtonSettings from './components/dialogs/ButtonSettings.vue';
+import { getQueryParam } from '../../../utils/helpers/string';
 
 const states = useStatesStore();
 const vector = useVectorStore();
@@ -95,10 +89,12 @@ const thumbStyle = {
   margin: '2px',
 };
 
-onMounted(() => {
+onBeforeMount(() => {
+  const route_id = Number(getQueryParam('route_id')) ?? 1;
+
   fetchMessage('types');
   fetchMessage('colors');
-  fetchCommands('view', { route_id: 1648290 }).then();
+  fetchCommands('view', { route_id: route_id }).then();
 });
 </script>
 

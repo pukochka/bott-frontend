@@ -22,7 +22,7 @@
     <drag-horizontal
       v-if="states.dragValue.el"
       :column_id="column.id"
-      :sort="column?.messages?.length"
+      :sort="column.messages.length"
     ></drag-horizontal>
   </div>
 </template>

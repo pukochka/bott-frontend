@@ -1,47 +1,69 @@
 import instance from './instance';
 
-import { useDataStore } from '../stores/dataStore';
+import { useCommandsStore } from '../stores/commandsStore';
 
 export async function fetchCommands<Q extends keyof SCCommandQueries>(
   query: Q,
   params?: SCCommandParams<Q>,
   action?: () => void
 ) {
-  const data = useDataStore();
+  const commands = useCommandsStore();
 
   try {
     return await instance({
-      url: '/v1/bot/route/route/' + query,
+      url: 'v1/bot/routenew/route/' + query,
       data: params,
     }).then((response) => {
       if (query === 'update-route') {
         /** */
 
-        data.commands.push(response.data.data);
+        commands.commands.push(response.data.data);
 
         /** */
       } else if (query === 'create') {
         /** */
 
-        data.commands.push(response.data.data);
+        commands.commands.push(response.data.data);
 
         /** */
       } else if (query === 'create-with-column') {
         /** */
 
-        data.commands.push(response.data.data);
+        commands.commands.push(response.data.data);
 
         /** */
       } else if (query === 'index') {
         /** */
 
-        data.commands = response.data.data;
+        commands.commands = response.data.data;
 
         /** */
       } else if (query === 'delete') {
         /** */
 
         if (action !== void 0) action();
+
+        /** */
+      }
+    });
+  } catch (e) {}
+}
+
+export async function fetchMessage<Q extends keyof SCMessageQueries>(
+  query: Q,
+  params?: SCMessageParams<Q>
+) {
+  const commands = useCommandsStore();
+
+  try {
+    return await instance({
+      url: 'v1/bot/messagenew/message/' + query,
+      data: { ...params },
+    }).then((response) => {
+      if (query === 'types') {
+        /** */
+
+        commands.types = response.data.data;
 
         /** */
       }

@@ -13,7 +13,7 @@ export default async function fetchMessage<Q extends keyof SCMessageQueries>(
 
   try {
     return await instance({
-      url: '/v1/bot/message/message/' + query,
+      url: 'v1/bot/messagenew/message/' + query,
       data: { ...params },
     }).then((response) => {
       if (action !== void 0) action(response);

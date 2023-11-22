@@ -5,17 +5,32 @@ import { FMStore } from './FMmodels';
 import 'src/utils/polifils/dimension';
 import { useDialog } from './useDialog';
 import { fetchFile } from '../api/queries';
-import { compareDown, compareNone, compareUp } from './helpers';
+import {
+  compareDown,
+  compareDownDate,
+  compareNone,
+  compareUp,
+  compareUpDate,
+} from './helpers';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Compress from 'compress.js';
+
+const paths: Record<any, string> = {
+  1: 'photos',
+  3: 'files',
+  4: 'videos',
+  5: 'animations',
+};
 
 export const useFMStore = defineStore('file-manager-data', {
   state: () =>
     ({
       usersFiles: [],
       uploadFiles: [],
+      message: undefined,
+      dialog: false,
 
       selectedFiles: [],
       selectedFile: null,
@@ -67,6 +82,8 @@ export const useFMStore = defineStore('file-manager-data', {
 
     filesCount: (state) => state.usersFiles?.length ?? 0,
 
+    query: (state) => paths[state.message?.type?.id ?? 1],
+
     files: (state) =>
       state.usersFiles
         .reverse()
@@ -94,8 +111,8 @@ export const useFMStore = defineStore('file-manager-data', {
           state.sortable.date === null
             ? compareNone
             : state.sortable.date
-            ? compareUp.apply('date')
-            : compareDown.apply('date')
+            ? compareUpDate.apply('date')
+            : compareDownDate.apply('date')
         ),
 
     uploadSize: (state) =>

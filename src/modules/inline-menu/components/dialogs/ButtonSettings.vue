@@ -28,13 +28,17 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <select-types
+        <select-type
+          :bot_id="config.bot.id"
+          :token="config.bot.token"
+          :message_id="inline.message.id"
+          :host="config.host"
           :webs="config.webs"
           :button="inline.selectedButton"
           :buttons="inlineButtons"
           :types="inlineTypes"
           @update="update"
-        ></select-types>
+        ></select-type>
       </q-card-section>
 
       <q-card-section class="q-pt-none row justify-end q-gutter-x-sm">
@@ -76,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import config from 'src/modules/inline-menu/config';
+import config from '../../config';
 
 import { computed, onBeforeUpdate, ref } from 'vue';
 
@@ -86,7 +90,7 @@ import { useInlineStore } from '../../stores/inlineStore';
 
 import { inlineButtons, inlineTypes } from '../../stores/buttons';
 
-import SelectTypes from 'src/components/select-type/SelectType.vue';
+import SelectType from 'src/components/select-type/SelectType.vue';
 import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 

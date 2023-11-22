@@ -39,9 +39,9 @@
   </div>
 
   <div class="relative-position" style="min-height: 200px">
-    <div class="row q-col-gutter-md" v-if="data.commands?.length">
+    <div class="row q-col-gutter-md" v-if="commands.commands?.length">
       <command-item
-        v-for="command of data.commands"
+        v-for="command of filtered"
         :key="command.id"
         :command="command"
       ></command-item>
@@ -54,23 +54,47 @@
       {{ $t('create-scenarios-action') }}
     </div>
 
-    <q-inner-loading :showing="data.loading">
+    <transition name="q-transition--fade">
+      <div class="absolute-full flex flex-center" v-if="!filtered.length">
+        <div class="column items-center">
+          <q-icon name="search" color="primary" size="32px" />
+
+          <div class="text-h6">Ничего не нашлось (:</div>
+        </div>
+      </div>
+    </transition>
+
+    <q-inner-loading :showing="commands.loading">
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { useDataStore } from '../../stores/dataStore';
+import { useCommandsStore } from '../../stores/commandsStore';
 
 import CommandItem from '../CommandItem.vue';
 
-const data = useDataStore();
+const commands = useCommandsStore();
 
 const search = ref('');
 const tab = ref('all');
+
+const filtered = computed(() =>
+  commands.commands
+    .filter((command) =>
+      tab.value === 'scenarios'
+        ? command.is_column
+        : tab.value === 'actions'
+        ? !command.is_column
+        : command
+    )
+    .filter((command) =>
+      command.label.toLowerCase().includes(search.value.toLowerCase())
+    )
+);
 
 watch(tab, () => (search.value = ''));
 </script>

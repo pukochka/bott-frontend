@@ -8,7 +8,7 @@ export default async function fetchColumn<Q extends keyof SCColumnQueries>(
   const data = useDataStore();
   try {
     return await instance({
-      url: '/v1/bot/route/column/' + query,
+      url: 'v1/bot/routenew/column/' + query,
       data: params,
     }).then((response) => {
       /** */

@@ -4,19 +4,45 @@ export const defaultColor: SCColor = {
   color: '',
 };
 
-export const defaultMessage: SCMessage = {
+export const defaultMessage: MessageFree = {
   id: 0,
-  inline_menu: null,
-  column_id: 0,
-  custom_id: '',
-  color: { title: '', id: 0, color: '' },
-  active: false,
   title: '',
-  sort: -1,
-  type: { title: '', id: 0 },
-  text: { content: '', length: 0 },
-  specType: { id: 0 },
-  link: '',
+  text: '',
+  text_length: 0,
+  photos: null,
+  files: null,
+  videos: null,
+  feedback: null,
+  animations: null,
+  type: {
+    id: 0,
+    type: 0,
+    label: '',
+    description: '',
+  },
+  color: null,
+  specType: {
+    id: 0,
+    // title: '',
+  },
+  sort: null,
+  column_id: null,
+  active: false,
+  menu: null,
+  is_generate_default: false,
+  is_copy: false,
+  is_support_menu: false,
+  is_duplicate: false,
+  is_test: false,
+  support_types: {},
+  constants: {},
+  constantAnswers: {},
+  faq: {
+    video: '',
+    text: '',
+    links: [],
+  },
+  frontendMenu: [],
 };
 
 export const defaultButton: IMButton = {

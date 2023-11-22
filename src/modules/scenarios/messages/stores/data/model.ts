@@ -8,7 +8,7 @@ export interface DataStore {
   selectedLine: number | null;
   selectedMenu: IMMenu | null;
 
-  selectedMessage: SCMessage | null;
+  selectedMessage: MessageFree | null;
   selectedColumn: SCColumn | null;
 }
 

@@ -72,41 +72,11 @@ declare interface SCColumn {
   /**
    * Массив сообщений
    */
-  messages: SCMessage[];
+  messages: MessageFree[];
   /**
    * Расположение колонны
    */
   sort: number;
-}
-
-/**
- * Сущность сообщения
- * */
-declare interface SCMessage {
-  /** */
-  active: boolean;
-  /** */
-  color: SCColor;
-  /** Уникальный идентификатор колонны в которой находится сообщение */
-  column_id: number;
-  /** Вспомогательный уникальный идентификатор связи с типом */
-  custom_id: string;
-  /** Уникальный идентификатор сообщения */
-  id: number;
-  /** */
-  inline_menu: IMMenu | null;
-  /** Ссылка для подробного редактирования */
-  link: string;
-  /** Сортировка внутри колонны */
-  sort: number;
-  /** */
-  specType: { id: number };
-  /** */
-  text: { content: string; length: number };
-  /** */
-  title: string;
-  /** Тип сообщения */
-  type: { id: number; title: string };
 }
 
 /**

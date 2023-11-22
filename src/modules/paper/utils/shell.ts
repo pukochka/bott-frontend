@@ -1,15 +1,26 @@
-import { Group } from 'paper';
-import { createText } from './create';
+import { Group, Point } from 'paper';
+import { createTextDeaf, setting } from './create';
 import { createPlatform } from './platform';
 import { usePSStore } from '../stores/PSstore';
+import { Connection, Crossroad } from './links';
+import { PaperPoint } from '../stores/PSmodels';
 
-export function createShell(message: any, coords: Array<number>) {
+export function createShell(message: any, coords: Array<number> | PaperPoint) {
   const store = usePSStore();
   const shell = new Group();
 
-  const platform = createPlatform(message, coords);
+  if (message.position) {
+    coords = new Point(message.position.x, message.position.y);
+  }
 
-  const text = createText(message, coords);
+  const platform = createPlatform(message, coords);
+  const text = createTextDeaf(setting[message.type].title, coords, 18, 0, 80);
+  text.justification = 'center';
+
+  if (!message.next) {
+    const connection = new Connection(message, platform);
+    shell.addChild(connection.group);
+  }
 
   shell.addChildren([platform, text]);
 
@@ -22,12 +33,13 @@ export function createShell(message: any, coords: Array<number>) {
 
   platform.onMouseDown = () => {
     store.dragging = true;
+    store.connecting = true;
     shell.bringToFront();
   };
 
   platform.onMouseUp = () => {
     store.dragging = false;
-    shell.sendToBack();
+    store.connecting = false;
   };
 
   shell.name = 'message-' + message.id;

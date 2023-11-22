@@ -2,21 +2,20 @@
   <q-card
     flat
     bordered
-    class="rounded relative-position q-gutter-y-sm q-pa-md"
+    class="rounded relative-position q-gutter-y-sm q-pa-sm"
     :id="'message_' + message.id"
     style="max-width: 370px; min-width: 370px"
   >
     <q-badge
-      class="rounded q-mt-none cursor-pointer"
+      class="rounded q-mt-none cursor-pointer first-message--banner q-pa-xs"
       v-if="message.active"
-      floating
       v-ripple
     >
-      <span class="text-weight-medium">{{ t('first-message') }}</span>
+      <span class="text-weight-medium">Начальное сообщение</span>
 
       <q-popup-proxy class="rounded bordered bott-portal-menu">
         <q-banner style="max-width: 200px">
-          {{ t('notify-first-message') }}
+          Это первое сообщение, которое бот пришлет пользователю.
         </q-banner>
       </q-popup-proxy>
     </q-badge>
@@ -54,73 +53,39 @@
       :message="message"
     ></message-buttons>
 
-    <div v-if="message.type.id !== 2 && !dragging" class="row">
+    <div class="row items-center">
       <q-btn
-        v-if="!message.inline_menu"
         flat
+        dense
         no-caps
+        padding="4px"
+        class="rounded col"
         color="primary"
-        :label="t('add-buttons')"
-        class="col rounded"
-        :loading="loading"
-        @click="addInlineMenu"
-      />
-
-      <q-btn
-        v-else
-        flat
-        no-caps
-        color="primary"
-        :label="t('buttons-settings')"
-        class="col rounded"
-        @click="editButtons"
+        label="Изменить сообщение"
+        @click="openMessage"
       />
     </div>
 
-    <q-inner-loading
+    <message-shadow
       @click="cancelConnection"
       :showing="cancelConnecting"
-      class="flex flex-center q-mt-none rounded q-pa-md cancel-connection cursor-pointer"
-    >
-      <q-tooltip
-        class="bott-tooltip text-center"
-        anchor="top middle"
-        self="bottom middle"
-      >
-        Нажмите для отмены связи
-      </q-tooltip>
+      label="Отменить связь"
+      class="cancel-connection"
+      tooltip="Нажмите для отмены связи"
+    ></message-shadow>
 
-      <div class="text-h6 text-center">{{ t('cancel-connection') }}</div>
-    </q-inner-loading>
-
-    <q-inner-loading
-      :showing="isConnecting"
+    <message-shadow
       @click="connect"
-      class="flex flex-center q-mt-none rounded q-pa-md cursor-pointer"
-    >
-      <q-tooltip
-        class="bott-tooltip text-center"
-        anchor="top middle"
-        self="bottom middle"
-      >
-        {{ t('click-connection') }}
-      </q-tooltip>
-
-      <div class="q-gutter-y-sm">
-        <div class="row justify-center">
-          <q-icon name="ads_click" size="32px" />
-        </div>
-
-        <div class="text-h6 text-center">
-          {{ t('notify-to-connection') }}
-        </div>
-      </div>
-    </q-inner-loading>
+      :showing="isConnecting"
+      label="Наведите на блок и нажмите на него для связи"
+      icon="ads_click"
+      tooltip="Нажмите для связи"
+    ></message-shadow>
 
     <drag-horizontal
       floating
-      :sort="index"
-      :column_id="message.column_id"
+      :sort="index ?? 0"
+      :column_id="message?.column_id ?? 0"
       v-if="dragging === false && states.dragValue.el"
     ></drag-horizontal>
   </q-card>
@@ -142,6 +107,7 @@ import MessageButtons from './sections/MessageButtons.vue';
 import EditTitle from '../edit/EditTitle.vue';
 import DragHorizontal from './sections/DragHorizontal.vue';
 import MessageMain from './sections/MessageMain.vue';
+import MessageShadow from './sections/MessageShadow.vue';
 
 const props = withDefaults(defineProps<MessageItemProps>(), {
   message: () => defaultMessage,
@@ -162,6 +128,12 @@ const isConnecting = computed(
 const cancelConnecting = computed(
   () => vector.connection && vector.mountedLine?.message_id === props.message.id
 );
+
+const openMessage = () => {
+  data.selectedMessage = props.message;
+
+  states.openDialog('edit_message');
+};
 
 const startDrag = (e: MouseEvent) => {
   states.startDrag(e, props.message);
@@ -185,32 +157,13 @@ const connect = () => {
       type: 5,
     },
     (response) => {
-      data.scenarioValue = response.data;
+      data.scenarioValue = response.data.data;
     }
   );
 };
 
-const addInlineMenu = () => {
-  loading.value = true;
-  let message = props.message;
-
-  fetchMessage(
-    'add-inline-menu',
-    { message_id: props.message.id },
-    (response) => {
-      message.inline_menu = response.data?.data?.inline_menu ?? null;
-    }
-  ).then(() => (loading.value = false));
-};
-
-const editButtons = () => {
-  data.selectedMessage = props.message;
-
-  states.openDialog('settings_button');
-};
-
 interface MessageItemProps {
-  message: SCMessage;
+  message: MessageFree;
   dragging?: boolean;
   index?: number;
 }
@@ -218,5 +171,10 @@ interface MessageItemProps {
 <style lang="scss">
 .cancel-connection {
   background: rgba(255, 0, 0, 0.3);
+}
+.first-message--banner {
+  position: absolute;
+  top: -16px;
+  left: -16px;
 }
 </style>

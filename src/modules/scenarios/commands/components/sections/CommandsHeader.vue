@@ -26,33 +26,38 @@
 <script lang="ts" setup>
 import config from '../../../config';
 
-import { t } from 'src/boot/lang';
 import { useDialog } from 'src/utils/use/useDialog';
-import { useDataStore } from '../../stores/dataStore';
+import { useCommandsStore } from '../../stores/commandsStore';
+import { historyGo } from '../../../../inline-menu/stores/helpers';
 
-const data = useDataStore();
+const commands = useCommandsStore();
 
 const openNotify = () => {
-  useDialog(t('notify-delete-scenarios'));
+  useDialog(
+    'Вы уверены, что хотите сбросить все действия и сценария без возможности восстановления?',
+    true
+  ).onOk(() => {
+    historyGo('/lk/common/premium/route/reset?bot_id=' + config.bot.id);
+  });
 };
 
 const buttons = [
   {
-    label: t('add-scenario'),
+    label: 'Добавить сценарий',
     icon: 'account_tree',
-    action: () => data.openDialog('add_scenario'),
+    action: () => commands.openDialog('add_scenario'),
     color: 'primary',
-    href: null,
+    href: undefined,
   },
   {
-    label: t('add-action'),
+    label: 'Добавить действие',
     icon: 'keyboard_command_key',
-    action: () => data.openDialog('add_action'),
+    action: () => commands.openDialog('add_action'),
     color: 'primary',
-    href: null,
+    href: undefined,
   },
   {
-    label: t('commands-for-botfather'),
+    label: 'Команды для BotFather',
     icon: 'smart_toy',
     action: '',
     color: 'primary',
@@ -66,11 +71,11 @@ const buttons = [
     href: `/lk/common/premium/route/help?bot_id=${config.bot.id}`,
   },
   {
-    label: t('return-all'),
+    label: 'Сбросить всё',
     icon: 'restart_alt',
     action: () => openNotify(),
     color: 'red',
-    href: null,
+    href: undefined,
   },
 ];
 </script>

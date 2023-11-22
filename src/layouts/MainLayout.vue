@@ -71,7 +71,7 @@
             ></bott-drawer>
           </div>
 
-          <div v-if="footer" class="padding-left-60"></div>
+          <div v-if="footer && !mdBr" class="padding-left-60"></div>
 
           <router-view></router-view>
 

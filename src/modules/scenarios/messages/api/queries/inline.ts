@@ -14,17 +14,12 @@ export default async function fetchButtons<Q extends keyof IMQueries>(
   const data = useDataStore();
   try {
     return await instance({
-      url: '/v1/bot/keyboard/inline-keyboard/' + query,
-      data: { ...params, menu_id: data.selectedMessage?.inline_menu?.id },
+      url: 'v1/bot/keyboard/inline-new/' + query,
+      data: { ...params, menu_id: data.selectedMessage?.menu?.id },
     }).then((response) => {
       /** */
-      let data;
 
-      try {
-        data = JSON.parse(response.data);
-      } catch (e) {}
-
-      if (action !== void 0) action(data);
+      if (action !== void 0) action(response);
 
       /** */
       // else if (params['type'] === 6 && query === 'update-data-and-type') {

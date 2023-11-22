@@ -5,7 +5,7 @@ import { useVectorStore } from './vector/vectorStore';
 export class Dragging {
   x: number;
   y: number;
-  el: SCMessage | null;
+  el: MessageFree | null;
 
   constructor() {
     this.x = 0;

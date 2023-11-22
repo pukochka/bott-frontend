@@ -39,6 +39,13 @@ body.body--dark .tg-spoiler {
   }
 }
 
+.editor-content {
+  white-space: pre-wrap;
+}
+.editor-content > br {
+  height: 0;
+}
+
 .no-prosemirror code {
   color: inherit;
 }

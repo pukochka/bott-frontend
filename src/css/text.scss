@@ -172,6 +172,10 @@ kbd {
   font-weight: 500;
   line-height: 1.715em;
   font-size: 14px;
+  & p{
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .text-icon-primary .q-icon {

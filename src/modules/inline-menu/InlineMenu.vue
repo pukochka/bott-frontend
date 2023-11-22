@@ -13,6 +13,8 @@
             <top-section></top-section>
 
             <file-manager
+              dialog
+              :message="inline.message"
               v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
             ></file-manager>
           </div>
@@ -21,24 +23,7 @@
             v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
           ></assigned-file>
 
-          <div
-            id="message"
-            class="editor-text no-prosemirror text-body2"
-            v-html="inline.message.text"
-          ></div>
-
-          <div class="row">
-            <q-btn
-              no-caps
-              unelevated
-              class="col rounded"
-              size="md"
-              color="primary"
-              icon="edit"
-              label="Редактор сообщения"
-              @click="inline.openDialog('editor')"
-            />
-          </div>
+          <message-content></message-content>
         </q-card>
 
         <buttons-section
@@ -76,9 +61,10 @@
   <draggable-dial :elements="inline.inlineLines"></draggable-dial>
 </template>
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
 import { fetchMenu, fetchMessage, fetchSettings } from './api/queries';
+import { getQueryParam } from '../../utils/helpers/string';
 
 import { useInlineStore } from './stores/inlineStore';
 import { useDialog } from '../file-manager/stores/useDialog';
@@ -97,6 +83,11 @@ import ConstantsSection from './components/settings/ConstantsSection.vue';
 import FaqSection from './components/settings/FaqSection.vue';
 import ControlSection from './components/settings/ControlSection.vue';
 import TopSection from './components/TopSection.vue';
+import MessageContent from './components/MessageContent.vue';
+
+const props = withDefaults(defineProps<InlineMenuProps>(), {
+  message: undefined,
+});
 
 const inline = useInlineStore();
 
@@ -128,18 +119,27 @@ const deleteLine = (line: number) => {
 };
 
 onBeforeMount(() => {
+  if (props.message) {
+    inline.message = props.message;
+
+    fetchSettings('settings', props.message.id).then(
+      () => (loading.value.start = false)
+    );
+
+    return;
+  }
+
+  const message_id = Number(getQueryParam('id')) ?? 1;
+
   Promise.all([
-    fetchMessage('get', { message_id: 1087891 }),
-    fetchSettings('settings', 1087891),
+    fetchMessage('get', { message_id: 1 }),
+    fetchSettings('settings', 1),
   ]).then(() => (loading.value.start = false));
 });
 
-onMounted(() => {
-  document.querySelector('.editor-text')!.innerHTML = document
-    .querySelector('.editor-text')!
-    .innerHTML.replace('<p></p>', '')
-    .replace(/<p><\/p>/gi, '<br>');
-});
+interface InlineMenuProps {
+  message?: MessageFree | null;
+}
 </script>
 
 <style lang="scss" scoped></style>

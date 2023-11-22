@@ -1,12 +1,33 @@
 <template>
   <div class="q-py-xs">WEB модуль</div>
 
-  <div class="text-center text-red" v-if="webs?.length === 0">
-    На вашем тарифе недоступны или не созданы веб модули, либо ваш тип бота их
-    не поддерживает
-  </div>
+  <q-tabs
+    v-model="module"
+    class="text-primary row bott-tab__indicator q-gutter-x-sm"
+    dense
+    no-caps
+    v-if="visible"
+  >
+    <q-tab name="link" label="Ссылка на Ваш модуль" class="col-6 rounded" />
 
-  <div class="row rounded bordered overflow-hidden" v-else>
+    <q-tab name="modules" label="Модули BOT-T" class="col-6 rounded" />
+  </q-tabs>
+
+  <q-input
+    outlined
+    counter
+    maxlength="256"
+    v-if="module === 'link'"
+    v-model="link"
+    label="Ссылка на модуль"
+    class="bott-input--rounded"
+    @update:model-value="(value) => emit('change', value)"
+  />
+
+  <div
+    class="row rounded bordered overflow-hidden"
+    v-if="visible && module === 'modules'"
+  >
     <q-item
       class="col-grow"
       clickable
@@ -72,7 +93,7 @@
   </q-dialog>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const props = withDefaults(defineProps<WebModuleProps>(), {
   webs: () => [],
@@ -85,6 +106,10 @@ const emit = defineEmits<{
 
 const dialog = ref(false);
 const selected = ref<WebModule | null>(null);
+const module = ref<'link' | 'modules'>('link');
+const link = ref('');
+
+const visible = computed(() => props.webs.length);
 
 const update = (item: WebModule) => {
   selected.value = Object.assign({}, item);
@@ -97,6 +122,9 @@ onMounted(() => {
   else {
     selected.value =
       props.webs?.find((item) => item.value === props.action) ?? null;
+
+    if (selected.value?.value) module.value = 'modules';
+    else link.value = props.action;
 
     emit('change', selected.value?.value ?? null);
   }
@@ -111,5 +139,9 @@ interface WebModuleProps {
   route?: any;
   default?: any;
   grow?: any;
+  bot_id: number;
+  message_id: number;
+  token: string;
+  host: string;
 }
 </script>

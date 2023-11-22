@@ -82,7 +82,7 @@ const saveText = () => {
       text: encodeText(text.value),
     },
     () => {
-      message!.text.content = text.value;
+      message!.text = text.value;
     }
   ).then(() => {
     loading.value = false;
@@ -91,7 +91,7 @@ const saveText = () => {
 };
 
 const update = () => {
-  text.value = data.selectedMessage?.text?.content ?? '';
-  max_value.value = data.selectedMessage?.text?.length ?? 0;
+  text.value = data.selectedMessage?.text ?? '';
+  max_value.value = data.selectedMessage?.text_length ?? 0;
 };
 </script>

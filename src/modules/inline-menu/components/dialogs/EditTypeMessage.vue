@@ -3,8 +3,7 @@
     persistent
     position="bottom"
     @before-show="updateShow"
-    v-model="inline.dialogs.edit_type_message"
-  >
+    v-model="inline.dialogs.edit_type_message">
     <q-card flat bordered style="width: 100%" class="dialog-rounded">
       <q-toolbar class="q-px-md">
         <q-toolbar-title>Изменение типа сообщения</q-toolbar-title>
@@ -16,14 +15,12 @@
           size="md"
           color="primary"
           icon="close"
-          v-close-popup
-        />
+          v-close-popup />
       </q-toolbar>
 
       <q-card-section
         class="q-pt-none relative-position"
-        style="min-height: 200px"
-      >
+        style="min-height: 200px">
         <edit-type
           v-if="types.length"
           @select="update"
@@ -31,8 +28,7 @@
           :token="config.bot.token"
           :bot_id="config.bot.id"
           :host="config.host"
-          :type="selected"
-        ></edit-type>
+          :type="selected"></edit-type>
 
         <div class="text-h6 text-center text-red absolute-center" v-else>
           В данном сообщении нельзя изменить тип
@@ -41,8 +37,7 @@
 
       <q-card-section
         class="row justify-end q-gutter-x-sm q-pt-none"
-        v-if="types.length"
-      >
+        v-if="types.length">
         <q-btn
           class="rounded"
           flat
@@ -50,8 +45,7 @@
           size="md"
           color="red"
           label="Отмена"
-          v-close-popup
-        />
+          v-close-popup />
 
         <q-btn
           class="rounded"
@@ -60,8 +54,8 @@
           size="md"
           color="primary"
           label="Сохранить"
-          @click="editTypeMessage"
-        />
+          :loading="loading"
+          @click="editTypeMessage" />
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -86,6 +80,11 @@ const types = computed(() =>
   Object.entries(inline.message.support_types).map(([_, value]) => value)
 );
 
+const closeDialog = () => {
+  loading.value = false;
+  inline.closeDialog('edit_type_message');
+};
+
 const editTypeMessage = () => {
   loading.value = true;
 
@@ -106,10 +105,7 @@ const editTypeMessage = () => {
 
       inline.message = response;
 
-      fetchSettings('settings', inline.message.id).then(() => {
-        loading.value = false;
-        inline.closeDialog('edit_type_message');
-      });
+      fetchSettings('settings', inline.message.id).then(() => closeDialog());
     }
   );
 };

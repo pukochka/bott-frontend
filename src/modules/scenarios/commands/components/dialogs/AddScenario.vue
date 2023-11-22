@@ -4,27 +4,31 @@
     position="bottom"
     @keydown="enterDown"
     @before-show="updateShow"
-    v-model="data.dialogs.add_scenario"
+    v-model="commands.dialogs.add_scenario"
   >
     <q-card style="width: 100%" flat bordered class="dialog-rounded">
-      <dialog-header :label="t('add-scenario')"></dialog-header>
+      <dialog-header label="Добавить сценарий"></dialog-header>
 
       <q-card-section class="q-pt-none">
         <q-input
           autofocus
           counter
           outlined
-          :label="t('scenario-name')"
-          :hint="t('command-notrepeat')"
+          label="Название сценария"
+          hint="Название не должно повторяться"
           class="bott-input--rounded"
           v-model="text.value"
           :maxlength="text.max"
-          :rules="[() => text.required || t('notify-overlength-command')]"
+          :rules="[
+            () =>
+              text.required ||
+              'Введено неверное количество символов или название повторяется',
+          ]"
         />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <div class="q-pb-sm">{{ t('type-of-first-message') }}</div>
+        <div class="q-pb-sm">Тип первого сообщения</div>
 
         <edit-type @select="update"></edit-type>
       </q-card-section>
@@ -35,7 +39,7 @@
           flat
           size="md"
           class="rounded"
-          :label="t('button-close')"
+          label="Закрыть"
           color="primary"
           v-close-popup
         />
@@ -44,12 +48,12 @@
           no-caps
           unelevated
           size="md"
-          :label="t('button-add')"
+          label="Добавить"
           color="primary"
           class="rounded"
           :disable="!text.required"
           :loading="loading"
-          @click="AddRoute"
+          @click="addRoute"
         />
       </q-card-section>
     </q-card>
@@ -58,16 +62,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { t } from 'src/boot/lang';
-
 import { fetchCommands } from '../../../messages/api';
 
-import { useDataStore } from '../../stores/dataStore';
+import { useCommandsStore } from '../../stores/commandsStore';
 
 import EditType from '../../../messages/components/edit/EditType.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
-const data = useDataStore();
+const commands = useCommandsStore();
 
 const loading = ref(false);
 const selected = ref(0);
@@ -84,8 +86,8 @@ const text = ref({
     return (
       this.max >= this.value.length &&
       this.min <= this.value.length &&
-      data.commands.filter((item) => item.label === text.value.value).length ===
-        0
+      commands.commands.filter((item) => item.label === text.value.value)
+        .length === 0
     );
   },
 });
@@ -102,7 +104,7 @@ const addRoute = () => {
     message_type: selected.value,
   }).then(() => {
     loading.value = false;
-    data.closeDialog('add_scenario');
+    commands.closeDialog('add_scenario');
   });
 };
 

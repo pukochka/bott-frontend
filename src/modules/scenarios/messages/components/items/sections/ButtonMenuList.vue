@@ -31,8 +31,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-import { t } from 'src/boot/lang';
-
 import { fetchButtons } from '../../../api';
 import { useVectorStore } from '../../../stores/vector/vectorStore';
 import { useStatesStore } from '../../../stores/states/statesStore';
@@ -67,10 +65,11 @@ const startLine = (e: MouseEvent) => {
 
 const deleteButton = () => {
   loading.value.delete = true;
-  let message = props.message;
+  const message = data.selectedMessage;
 
   fetchButtons('delete-button', { id: props.button.id }, (response) => {
-    message!.inline_menu = response.data?.[0];
+    message!.menu = response.data.data;
+
     vector.deleteConnection('button_id', props.button.id);
     setTimeout(vector.updateConnections, 10);
   }).then(() => {
@@ -90,7 +89,8 @@ const disableButton = () => {
       text: props.button.text,
     },
     (response) => {
-      data.scenarioValue = response.data;
+      data.scenarioValue = response.data.data;
+
       vector.deleteConnection('button_id', props.button.id);
       setTimeout(vector.updateConnections, 10);
     }
@@ -101,7 +101,7 @@ const disableButton = () => {
 
 const menuButtons = computed(() => [
   {
-    label: t('edit-button-action'),
+    label: 'Изменить кнопку',
     icon: 'edit',
     color: 'primary',
     loading: false,
@@ -109,7 +109,7 @@ const menuButtons = computed(() => [
     action: () => states.openDialog('edit_button'),
   },
   {
-    label: t('add-connection'),
+    label: 'Добавить связь',
     icon: 'lan',
     color: 'primary',
     loading: false,
@@ -119,15 +119,7 @@ const menuButtons = computed(() => [
     },
   },
   {
-    label: t('add-route'),
-    icon: 'route',
-    color: 'primary',
-    loading: false,
-    condition: props.button?.type === 6,
-    action: () => states.openDialog('edit_button'),
-  },
-  {
-    label: t('change-connection'),
+    label: 'Изменить связь',
     icon: 'lan',
     color: 'primary',
     loading: false,
@@ -137,15 +129,7 @@ const menuButtons = computed(() => [
     },
   },
   {
-    label: t('change-route'),
-    icon: 'route',
-    color: 'primary',
-    loading: false,
-    condition: props.button?.type !== 5 && props.button?.type !== 6,
-    action: () => states.openDialog('edit_button'),
-  },
-  {
-    label: t('create-inactive'),
+    label: 'Сделать неактивной',
     icon: 'close',
     color: 'orange',
     loading: loading.value.disable,
@@ -153,7 +137,7 @@ const menuButtons = computed(() => [
     action: () => disableButton(),
   },
   {
-    label: t('button-delete'),
+    label: 'Удалить',
     icon: 'delete',
     color: 'red',
     loading: loading.value.delete,
@@ -163,7 +147,7 @@ const menuButtons = computed(() => [
 ]);
 
 interface ButtonMenuListProps {
-  message: SCMessage;
+  message: MessageFree;
   button: IMButton;
 }
 </script>

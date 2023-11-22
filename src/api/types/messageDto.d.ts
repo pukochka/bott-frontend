@@ -35,8 +35,8 @@ declare interface MessageFree {
 declare interface MessageSpecType {
   /** 0 - свободное сообщение 30 - Сообщение принадлежит колонне Остальные все специализированные */
   id: number;
-  /** Название спец. типа */
-  title: string;
+  // /** Название спец. типа */
+  // title: string;
 }
 
 /** Цвет сообщения, используется только в сценариях */
@@ -63,22 +63,22 @@ declare interface MessageFreeMedia {
 }
 
 declare interface MessagePhoto extends MessageFreeMedia {
-  is_disable_notification: boolean;
-  is_protect_content: boolean;
-  is_spoiler: boolean;
+  is_disable_notification: boolean | null;
+  is_protect_content: boolean | null;
+  is_spoiler: boolean | null;
 }
 
 declare interface MessageFile extends MessageFreeMedia {
-  is_disable_notification: boolean;
-  is_protect_content: boolean;
-  is_disable_content_type_detection: boolean;
+  is_disable_notification: boolean | null;
+  is_protect_content: boolean | null;
+  is_disable_content_type_detection: boolean | null;
 }
 
 declare interface MessageVideo extends MessageFreeMedia {
-  is_support_streaming: boolean;
-  is_protect_content: boolean;
-  is_spoiler: boolean;
-  is_disable_notification: boolean;
+  is_support_streaming: boolean | null;
+  is_protect_content: boolean | null;
+  is_spoiler: boolean | null;
+  is_disable_notification: boolean | null;
 }
 
 declare interface MessageFaqDto {

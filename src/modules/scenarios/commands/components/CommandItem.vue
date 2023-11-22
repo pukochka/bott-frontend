@@ -19,26 +19,27 @@
         Нажмите, для изменения
       </q-tooltip>
 
-      <router-link
-        :to="'/control-panel/premium/scenarios/messages'"
-        class="absolute-full"
-        v-if="command.is_column"
-      ></router-link>
+      <!--      <router-link-->
+      <!--        :to="'/control-panel/premium/scenarios/messages'"-->
+      <!--        class="absolute-full"-->
+      <!--        v-if="command.is_column"-->
+      <!--      ></router-link>-->
     </q-card>
   </div>
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import { useDataStore } from '../stores/dataStore';
+import { useCommandsStore } from '../stores/commandsStore';
 
 import { defaultCommand } from '../../messages/stores/deafults';
+import { setQueryParam } from '../../../../utils/helpers/string';
 
 const props = withDefaults(defineProps<CommandItemProps>(), {
   command: () => defaultCommand,
 });
 
-const data = useDataStore();
+const commands = useCommandsStore();
 
 const hint = computed(() => {
   if (props.command.is_column) return 'Сценарий';
@@ -48,10 +49,15 @@ const hint = computed(() => {
 });
 
 const openAction = () => {
-  if (props.command.is_column) return;
+  if (props.command.is_column) {
+    setQueryParam('route_id', props.command.id);
+    commands.scenario = true;
 
-  data.selectedCommand = props.command;
-  data.openDialog('edit_action');
+    return;
+  }
+
+  commands.selectedCommand = props.command;
+  commands.openDialog('edit_action');
 };
 
 interface CommandItemProps {

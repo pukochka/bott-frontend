@@ -28,13 +28,17 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <select-types
+        <select-type
+          :bot_id="config.bot.id"
+          :token="config.bot.token"
+          :host="config.host"
+          :message_id="inline.message.id"
           :webs="config.webs"
           :buttons="inlineButtons"
           :types="inlineTypes"
           :button="null"
           @update="update"
-        ></select-types>
+        ></select-type>
       </q-card-section>
 
       <q-card-section class="q-pt-none row justify-end q-gutter-x-sm">
@@ -74,7 +78,7 @@ import { useInlineStore } from '../../stores/inlineStore';
 import { inlineButtons, inlineTypes } from '../../stores/buttons';
 
 import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
-import SelectTypes from 'src/components/select-type/SelectType.vue';
+import SelectType from 'src/components/select-type/SelectType.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
 const inline = useInlineStore();
@@ -99,10 +103,7 @@ const condition = computed(
   () => text.value.required === false || state.value.action === null
 );
 
-const update = (value: any) => {
-  console.log(value);
-  state.value = value;
-};
+const update = (value: any) => (state.value = value);
 
 const addEmoji = (value: string) => (text.value.value += value);
 

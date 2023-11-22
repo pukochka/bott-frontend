@@ -1,5 +1,7 @@
 export interface FMStore {
   usersFiles: Array<FMItem>;
+  message: MessageFree | undefined;
+  dialog: boolean;
 
   allow_size: number;
   _employed: number;
@@ -48,7 +50,7 @@ type SortableNames = 'date' | 'size';
 export const defaultFileCard: FMItem = {
   link: '',
   size: '0',
-  date: 0,
+  date: '0',
   name: '',
   used: false,
 };

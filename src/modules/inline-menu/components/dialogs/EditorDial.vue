@@ -4,6 +4,7 @@
     persistent
     position="bottom"
     v-model="inline.dialogs.editor"
+    @before-show="updateShow"
   >
     <div class="row justify-center">
       <q-card
@@ -74,26 +75,25 @@ const updateText = (value: string) => (text.value = value);
 const saveText = () => {
   loading.value = true;
 
+  const content = encodeText(text.value);
+
   fetchMessage(
     'update-text',
     {
       message_id: inline.message.id,
-      text: encodeText(text.value),
+      text: content,
     },
     () => {
       inline.message.text = text.value ?? inline.message.text;
-      setTimeout(
-        () =>
-          (document.querySelector('.editor-text')!.innerHTML = document
-            .querySelector('.editor-text')!
-            .innerHTML.replace(/<p><\/p>/gi, '<br>')),
-        30
-      );
     }
   ).then(() => {
     loading.value = false;
     inline.closeDialog('editor');
   });
+};
+
+const updateShow = () => {
+  text.value = inline.message.text;
 };
 </script>
 

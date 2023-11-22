@@ -3,8 +3,7 @@
     flat
     bordered
     style="max-height: 600px"
-    class="rounded overflow-hidden"
-  >
+    class="rounded overflow-hidden">
     <div class="q-pa-xs row items-center" style="min-height: 29px">
       <div class="q-pl-sm" v-show="!data.loadings.index">
         {{ data.loadCount }} файл(ов)
@@ -22,8 +21,7 @@
         padding="2px"
         icon="close"
         v-close-popup
-        v-if="config.dialog"
-      />
+        v-if="data.dialog" />
     </div>
 
     <q-separator />
@@ -36,8 +34,7 @@
       view="hHh Lpr lff"
       container
       style="min-height: 390px"
-      class="bott-layout__drawer"
-    >
+      class="bott-layout__drawer">
       <drawer-info></drawer-info>
 
       <q-page-container>
@@ -56,7 +53,6 @@
 </template>
 
 <script setup lang="ts">
-import { config } from './config';
 import { computed, onBeforeMount } from 'vue';
 
 import { useFMStore } from './stores/FMStrore';

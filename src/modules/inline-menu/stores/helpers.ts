@@ -22,3 +22,9 @@ export function historyGo(to: string) {
 
   el.click();
 }
+
+export function replaceBr() {
+  document.querySelector('.editor-text')!.innerHTML = document
+    .querySelector('.editor-text')!
+    .innerHTML.replace(/<p><\/p>/gi, '<br>');
+}

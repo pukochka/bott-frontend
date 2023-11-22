@@ -1,37 +1,35 @@
-import CommonType from 'src/components/select-type/CommonType.vue';
-import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';
-import WebModule from 'src/components/select-type/WebModule.vue';
-import InfoType from 'src/components/info/InfoType.vue';
-
-import { t } from 'src/boot/lang';
+import CommonType from '../../../components/select-type/CommonType.vue';
+import ActionMenu from '../../../components/actions-menu/ActionMenu.vue';
+import WebModule from '../../../components/select-type/WebModule.vue';
+import InfoType from '../../../components/info/InfoType.vue';
 
 export const inlineButtons = [
   {
-    label: t('link'),
+    label: 'Ссылка',
     type: 0,
   },
   {
-    label: t('action'),
+    label: 'Действие',
     type: 1,
   },
   {
-    label: t('share'),
+    label: 'Поделиться',
     type: 2,
   },
   {
-    label: t('text'),
+    label: 'Текст',
     type: 3,
   },
   {
-    label: t('web-module'),
+    label: 'WEB модуль',
     type: 4,
   },
 ];
 
 export const inlineTypes: Record<number, any> = {
   0: {
-    label: t('enter-link'),
-    hint: t('example-link'),
+    label: 'Введите ссылку',
+    hint: 'Пример ссылки: https://bot-t.com',
     component: CommonType,
     default: 'https://',
   },
@@ -40,13 +38,13 @@ export const inlineTypes: Record<number, any> = {
   },
   2: {
     grow: true,
-    label: t('share'),
-    default: t('share'),
+    label: 'Поделиться',
+    default: 'Поделиться',
     component: CommonType,
   },
   3: {
     grow: true,
-    label: t('your-text'),
+    label: 'Ваш текст',
     component: CommonType,
   },
   4: {
@@ -58,7 +56,7 @@ export const inlineTypes: Record<number, any> = {
     component: InfoType,
   },
   6: {
-    label: t('button-inactive'),
+    label: 'Кнопка неактивна',
     component: InfoType,
   },
 };

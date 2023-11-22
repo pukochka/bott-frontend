@@ -1,15 +1,17 @@
 <template>
   <q-card flat bordered class="rounded overflow-hidden">
-    <panel-header label="Настройки сообщения" icon="tune"></panel-header>
+    <panel-header
+      v-if="inline.settings.length"
+      label="Настройки сообщения"
+      icon="tune"></panel-header>
 
-    <q-list>
+    <q-list v-if="inline.settings.length">
       <component
         @loading="update"
         :is="components[setting.type]"
         :setting="setting"
         v-for="(setting, index) of inline.settings"
-        :key="index"
-      ></component>
+        :key="index"></component>
     </q-list>
 
     <div class="row q-col-gutter-sm q-pa-sm">
@@ -21,8 +23,7 @@
           size="md"
           color="orange"
           label="Изменить тип сообщения"
-          @click="inline.openDialog('edit_type_message')"
-        />
+          @click="inline.openDialog('edit_type_message')" />
       </div>
 
       <div class="col-12 col-sm-6 row q-col-gutter-x-sm">
@@ -34,13 +35,11 @@
             color="green"
             :icon="laTelegram"
             :loading="loading.send"
-            @click="sendTestMessage"
-          >
+            @click="sendTestMessage">
             <q-tooltip
               class="bott-tooltip"
               anchor="top middle"
-              self="bottom middle"
-            >
+              self="bottom middle">
               Отправить тестовое сообщение в ЛС
             </q-tooltip>
           </q-btn>
@@ -53,13 +52,11 @@
             size="md"
             color="primary"
             icon="content_copy"
-            @click="copy"
-          >
+            @click="copy">
             <q-tooltip
               class="bott-tooltip text-center"
               anchor="top middle"
-              self="bottom middle"
-            >
+              self="bottom middle">
               Копировать ссылку на сообщение
             </q-tooltip>
           </q-btn>
@@ -80,13 +77,14 @@ import { ref } from 'vue';
 
 import { laTelegram } from '@quasar/extras/line-awesome';
 import { useInlineStore } from '../../stores/inlineStore';
+import { fetchMessage } from '../../api/queries';
+import { useNotify } from '../../stores/helpers';
 
 import SettingCheckbox from './types/SettingCheckbox.vue';
 import SettingInput from './types/SettingInput.vue';
 import SettingDate from './types/SettingDate.vue';
 import SettingDateTime from './types/SettingDateTime.vue';
-import { fetchMessage } from '../../api/queries';
-import { useNotify } from '../../stores/helpers';
+
 import PanelHeader from '../PanelHeader.vue';
 
 const inline = useInlineStore();
@@ -111,7 +109,7 @@ const sendTestMessage = () => {
 
   fetchMessage('test', {
     message_id: inline.message.id,
-    user_id: config.bot.user_id,
+    user_id: user_id,
   }).then(() => {
     loading.value.send = false;
   });

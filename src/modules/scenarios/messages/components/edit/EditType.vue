@@ -7,7 +7,7 @@
         class="bordered rounded fit"
         @click="select(type.type)"
       >
-        <q-item-section avatar>
+        <q-item-section avatar v-if="!sm">
           <q-icon :name="icons[type.type]" color="primary" size="24px" />
         </q-item-section>
 
@@ -31,8 +31,9 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useDataStore } from '../../stores/data/dataStore';
+import { useQuasar } from 'quasar';
 
 const props = withDefaults(defineProps<EditTypeProps>(), {
   messageType: 0,
@@ -43,9 +44,12 @@ const emit = defineEmits<{
 }>();
 
 const data = useDataStore();
+const quasar = useQuasar();
 
 const selected = ref(0);
 const checkbox = ref(0);
+
+const sm = computed(() => quasar.screen.lt.sm);
 
 const select = (type: number) => {
   selected.value = type;
@@ -63,7 +67,7 @@ const icons = [
 ];
 
 onMounted(() => {
-  if (props.messageType !== undefined) select(props.messageType);
+  if (props.messageType) select(props.messageType);
 
   emit('select', selected.value);
 });

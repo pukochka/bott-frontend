@@ -18,6 +18,7 @@ export type DialogNames =
   | 'add_message'
   | 'edit_label'
   | 'edit_button'
+  | 'edit_message'
   | 'edit_feedback'
   | 'edit_text_command'
   | 'edit_text_message'

@@ -9,7 +9,7 @@
     @click="data.selectedMessage = props.message"
   >
     <q-tooltip class="rounded" anchor="top middle" self="bottom middle">
-      {{ t('message-settings') }}
+      Настройки сообщения
     </q-tooltip>
 
     <q-menu
@@ -45,7 +45,6 @@
 </template>
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { t } from 'src/boot/lang';
 
 import { fetchMessage, fetchCommands } from '../../../api';
 
@@ -113,7 +112,7 @@ const deleteMessage = () => {
 
 const menuButtons = computed(() => [
   {
-    label: t('edit-type'),
+    label: 'Изменить тип',
     icon: 'edit',
     color: 'primary',
     close: true,
@@ -122,16 +121,16 @@ const menuButtons = computed(() => [
     action: () => changeType(),
   },
   {
-    label: t('duplicate'),
+    label: 'Дублировать',
     icon: 'content_copy',
     color: 'primary',
     close: false,
     loading: loading.value.copy,
-    condition: !props.message.active,
+    condition: !props.message.active && props.message.is_duplicate,
     action: () => copyMessage(),
   },
   {
-    label: t('make-first'),
+    label: 'Сделать начальным',
     icon: 'looks_one',
     color: 'primary',
     close: false,
@@ -140,7 +139,7 @@ const menuButtons = computed(() => [
     action: () => setActive(),
   },
   {
-    label: t('button-delete'),
+    label: 'Удалить',
     icon: 'delete',
     color: 'red',
     close: false,
@@ -151,6 +150,6 @@ const menuButtons = computed(() => [
 ]);
 
 interface MessageMenuProps {
-  message: SCMessage;
+  message: MessageFree;
 }
 </script>

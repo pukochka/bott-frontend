@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../../config';
 
-import { useDataStore } from '../stores/dataStore';
+import { useCommandsStore } from '../stores/commandsStore';
 import { useDialog } from 'src/utils/use/useDialog';
 
 const instance = axios.create({
@@ -18,9 +18,9 @@ instance.interceptors.request.use(function (request) {
 
 instance.interceptors.response.use(
   function (response) {
-    const data = useDataStore();
+    const commands = useCommandsStore();
 
-    data.loading = false;
+    commands.loading = false;
 
     if (!response.data.result) {
       useDialog(
@@ -35,7 +35,7 @@ instance.interceptors.response.use(
     return Promise.resolve(response);
   },
   function (error) {
-    useDialog('Проверьте подключение к интернету или выключите VPN.');
+    useDialog('Попробуйте перезагрузить страницу - это должно помочь.');
 
     return Promise.reject(error);
   }

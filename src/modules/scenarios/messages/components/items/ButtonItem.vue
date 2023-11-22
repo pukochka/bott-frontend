@@ -2,7 +2,7 @@
   <q-item
     clickable
     class="items-center justify-between no-focus-item"
-    :class="{ reverse: isReverse }"
+    :class="{ reverse: targetReverse }"
     @click="select"
   >
     <div class="">
@@ -65,19 +65,19 @@ const data = useDataStore();
 
 const menu_state = ref(false);
 
-const select = () => {
-  data.selectedButton = props.button;
-  data.selectedMessage = props.message;
-};
-
-const isReverse = computed(
+const targetReverse = computed(
   () =>
     vector.lines.find((item) => item.button_id === props.button.id)?.line
       ?.reverse ?? false
 );
 
+const select = () => {
+  data.selectedButton = props.button;
+  data.selectedMessage = props.message;
+};
+
 interface ButtonItemProps {
-  message: SCMessage;
+  message: MessageFree;
   button: IMButton;
 }
 </script>

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { DataStore, DialogNames } from './models';
+import { CommandsStore, DialogNames } from './models';
 
-export const useDataStore = defineStore('data-commands-store', {
+export const useCommandsStore = defineStore('data-commands-store', {
   state: () =>
     ({
       commands: [],
@@ -16,7 +16,8 @@ export const useDataStore = defineStore('data-commands-store', {
       selectedCommand: null,
 
       loading: true,
-    } as DataStore),
+      scenario: false,
+    } as CommandsStore),
   getters: {
     actions: (state) => state.commands.filter((command) => !command.is_column),
     scenarios: (state) => state.commands.filter((command) => command.is_column),

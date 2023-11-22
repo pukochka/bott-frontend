@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-8 row items-center rounded bordered q-px-sm cursor-pointer no-wrap"
+    class="col row items-center rounded bordered q-px-sm cursor-pointer no-wrap"
     @mouseleave="hover = false"
     @mouseenter="hover = true"
     :style="{ 'background-color': color }"
@@ -125,7 +125,7 @@ onBeforeMount(() => {
 });
 
 interface EditTitleProps {
-  message: SCMessage;
+  message: MessageFree;
 }
 </script>
 

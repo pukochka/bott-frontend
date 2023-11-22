@@ -64,9 +64,7 @@ const data = useDataStore();
 
 const loading = ref(false);
 
-const menu = computed(
-  () => data.selectedMessage?.inline_menu ?? { id: 0, lines: [], title: '' }
-);
+const menu = computed(() => data.selectedMessage?.menu ?? { id: 0, lines: [] });
 
 const select = (button: IMButton) => {
   data.selectedButton = button;
@@ -96,7 +94,7 @@ const deleteMenu = () => {
         message_id: data.selectedMessage?.id ?? 0,
       },
       () => {
-        message!.inline_menu = null;
+        message!.menu = null;
       }
     );
   });

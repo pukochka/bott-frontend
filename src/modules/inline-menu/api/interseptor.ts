@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from 'src/modules/inline-menu/config';
+import config from '../config';
 
 import { useInlineStore } from '../stores/inlineStore';
 import { useDialog } from '../../file-manager/stores/useDialog';

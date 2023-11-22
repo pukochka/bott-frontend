@@ -1,16 +1,12 @@
 import { defineStore } from 'pinia';
-import { PSStoreModel, defaultFeedback, defaultInput } from './PSmodels';
-import { Group } from 'paper';
-import { Link } from '../utils/links';
+import { PSStoreModel, defaultFeedback } from './PSmodels';
+import { Crossroad, Link } from '../utils/links';
 
 export const usePSStore = defineStore('paper-store', {
   state: () =>
     ({
       view: null,
       layer: null,
-
-      links: null,
-      messages: null,
 
       feedback: defaultFeedback,
 
@@ -21,36 +17,66 @@ export const usePSStore = defineStore('paper-store', {
       onconnection: false,
       connecting: false,
       clickable: false,
+
+      dialogs: {
+        setting: false,
+      },
+
+      position: { visible: false, action: null },
     } as unknown as PSStoreModel),
   getters: {
-    alignCount: (state) => state.feedback.inputs.length + 1,
+    alignCount: (state) => state.feedback.inputs.length,
   },
   actions: {
-    mountLayers() {
-      this.links = new Group();
-      this.messages = new Group();
-
-      this.layer.insertChild(0, this.links);
-      this.layer.insertChild(1, this.messages);
-    },
     mountLink() {
-      this.feedback.flow.forEach((flow) => {
-        const [start, end] = this.findLinks(flow);
+      this.feedback.inputs.forEach((item) => {
+        const end = this.feedback.inputs.find(
+          (inp) => inp.id === item.next?.id && inp.type === item.next.type
+        );
 
-        const link = new Link(start.platform, end.platform);
+        if (!item.next && item.type === 4) {
+          const inputs = Object.fromEntries(
+            this.feedback.inputs.map((opt) => {
+              return [opt.id, opt];
+            })
+          );
 
-        this.connect.push({
-          link: [start.id, end.id],
-          group: link,
-        });
+          const platforms = item.crossroad?.options
+            .map((opt) => {
+              return { id: opt.next.id, type: opt.next.type };
+            })
+            .map((cross) => {
+              if (inputs[cross.id]?.type === cross.type)
+                return inputs[cross.id];
+            });
 
-        this.links.addChild(link.group);
+
+          const crossroad = new Crossroad(
+            item.platform,
+            ...platforms.map((cross) => cross?.platform)
+          );
+
+          const ids = (platforms ?? []).map((item: any) => item.id);
+
+          this.connect.push({
+            link: [item.id, ...ids],
+            group: crossroad,
+          });
+
+          this.layer.insertChild(0, crossroad.group);
+        }
+
+        if (item.next && end) {
+          const link = new Link(item.platform, end.platform);
+
+          this.connect.push({
+            link: [item.id, end.id],
+            group: link,
+          });
+
+          this.layer.insertChild(0, link.group);
+        }
       });
-    },
-    findLinks(flow: MessageFeedbackFlow): MessageFeedbackItem[] {
-      return this.feedback.inputs.filter((input) =>
-        flow.link.includes(input.id)
-      );
     },
     dragMessage(message: any) {
       const connect = this.connect
@@ -59,7 +85,11 @@ export const usePSStore = defineStore('paper-store', {
         })
         .filter((item) => item);
 
-      connect.forEach((item) => item.group.move());
+      connect.forEach((item) => item.group.move(message));
+    },
+    openMenu(action?: () => void) {
+      if (action !== void 0) this.position.action = action;
+      this.position.visible = true;
     },
   },
 });

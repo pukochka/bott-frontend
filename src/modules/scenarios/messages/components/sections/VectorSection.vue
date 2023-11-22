@@ -84,7 +84,7 @@ const openMenu = (button_id: number) => {
     data.scenarioValue?.columns.map((column) => column.messages).flat() ?? [];
 
   for (const message of messages) {
-    const isInclude = (message.inline_menu?.lines ?? [])
+    const isInclude = (message.menu?.lines ?? [])
       .map((line) => line.buttons ?? [])
       .flat()
       .map((button) => button.id)
@@ -97,7 +97,7 @@ const openMenu = (button_id: number) => {
     data.scenarioValue?.columns
       .map((column) => column.messages)
       .flat()
-      .map((message) => message.inline_menu?.lines ?? [])
+      .map((message) => message.menu?.lines ?? [])
       .flat()
       .map((line) => line.buttons ?? [])
       .flat()

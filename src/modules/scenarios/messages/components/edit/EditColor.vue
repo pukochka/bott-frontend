@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-gutter-sm q-pa-sm">
+  <div class="row q-gutter-sm q-py-sm">
     <div
       v-for="(item, index) in data.colors"
       :key="index"
@@ -19,7 +19,7 @@
 
   <div
     @click="setColor(null)"
-    class="rounded bordered q-pa-xs q-mx-sm q-mb-sm cursor-pointer text-center relative-position"
+    class="rounded bordered cursor-pointer text-center relative-position q-pa-xs"
   >
     <div class="absolute-left" v-if="!color_id && loading">
       <q-spinner color="primary" size="2em" />
@@ -74,7 +74,7 @@ const setColor = (color: number | null) => {
 };
 
 interface EditColorProps {
-  message: SCMessage;
+  message: MessageFree;
 }
 </script>
 <style lang="scss"></style>

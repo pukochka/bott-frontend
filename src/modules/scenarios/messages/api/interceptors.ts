@@ -3,6 +3,7 @@ import config from '../../config';
 
 import { useDialog } from 'src/utils/use/useDialog';
 console.log();
+
 const instance = axios.create({
   baseURL: config.host,
   method: 'post',
@@ -17,27 +18,21 @@ instance.interceptors.request.use(function (request) {
 
 instance.interceptors.response.use(
   function (response) {
-    let jsonData = false;
+    if (!response.data.result) {
+      useDialog(
+        response.data.message ??
+          'Попробуйте перезагрузить страницу - это должно помочь.' +
+            '\n' +
+            response.config.url
+      );
 
-    try {
-      jsonData = JSON.parse(response.data)?.result;
-    } catch (e) {}
-
-    if (response.data.result || jsonData) {
-      return Promise.resolve(response);
+      return Promise.reject('error');
     }
 
-    useDialog(
-      response.data.message ??
-        'Попробуйте перезагрузить страницу - это должно помочь.' +
-          '\n' +
-          response.config.url
-    );
-
-    return Promise.reject('error');
+    return Promise.resolve(response);
   },
   function (error) {
-    useDialog('Проверьте подключение к интернету или выключите VPN.');
+    useDialog('Попробуйте перезагрузить страницу - это должно помочь.');
 
     return Promise.reject(error);
   }

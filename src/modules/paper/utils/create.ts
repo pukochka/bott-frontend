@@ -1,4 +1,13 @@
-import Paper, { PointText, Point, Item, Shape, Size, Path } from 'paper';
+import Paper, {
+  PointText,
+  Point,
+  Item,
+  Shape,
+  Size,
+  Path,
+  Layer,
+  Color,
+} from 'paper';
 import { usePSStore } from '../stores/PSstore';
 import { getTextPoints, makeAutoAlign } from './coords';
 
@@ -6,14 +15,18 @@ import {
   mdiMessage,
   mdiFileDocumentArrowRightOutline,
   mdiMessageQuestion,
+  mdiMulticast,
 } from '@quasar/extras/mdi-v7';
 import { createShell } from './shell';
 import { PaperPoint, PaperSize } from '../stores/PSmodels';
+import { keysOfAdd } from './models/additional';
+import { useAddict } from './platform';
 
 export const setting: any = {
   1: { title: 'Сообщение', icon: mdiMessage },
-  2: { title: 'Сообщение с файлом', icon: mdiFileDocumentArrowRightOutline },
+  2: { title: 'Сообщение\nс файлом', icon: mdiFileDocumentArrowRightOutline },
   3: { title: 'Опрос', icon: mdiMessageQuestion },
+  4: { title: 'Несколько\nответов', icon: mdiMulticast },
 };
 
 let oldDelta = new Point(0, 0);
@@ -27,8 +40,8 @@ export function install() {
 
   store.view = Paper.project.view;
   store.layer = Paper.project.activeLayer;
-
-  store.mountLayers();
+  store.view.zoom = 0.5;
+  // store.view.center = new Point(0, 0);
 
   for (let i = 0; i < store.feedback.inputs.length; i++) {
     const coords = makeAutoAlign();
@@ -42,24 +55,16 @@ export function install() {
       shell,
       platform,
     });
-
-    store.messages.addChild(shell);
   }
 
   store.mountLink();
 
-  store.layer.onMouseDrag = (event: any) => {
-    if (store.dragging || store.onconnection) return;
+  store.view.onMouseDrag = (event: any) => {
+    if (store.dragging || store.onconnection || store.onmessage) return;
 
     store.view.translate(event.delta.subtract(oldDelta));
     oldDelta = oldDelta.subtract(event.delta);
   };
-
-  store.view.zoom = 0.7;
-
-  // store.view.onMouseMove = (e) => {
-  //   console.log(e.point.x, e.point.y);
-  // };
 
   canvas.addEventListener('wheel', (ev: any) => {
     if (ev.wheelDelta > 0 && store.view.zoom < 1.5) store.view.zoom += 0.07;
@@ -69,14 +74,18 @@ export function install() {
 }
 
 export function circle(
-  coords: Array<number> | PaperPoint,
+  center: Array<number> | PaperPoint,
   radius: number,
-  color?: string
+  fillColor?: string,
+  shadowBlur?: any,
+  shadowColor?: any
 ) {
   const circle = new Shape.Circle({
-    center: coords,
-    radius: radius,
-    fillColor: color ?? '#ffffff',
+    center,
+    radius,
+    fillColor: fillColor ?? '#ffffff',
+    shadowBlur,
+    shadowColor,
   });
 
   circle.remove();
@@ -109,7 +118,7 @@ export function createIcon(
   name: string,
   coords: Array<number> | PaperPoint,
   size?: PaperSize,
-  color?: string
+  color?: any
 ) {
   const svg = `<svg viewBox="0 0 24 24" ><path fill="${
     color ?? '#ffffff'
@@ -126,7 +135,7 @@ export function createIcon(
 
 export function createText(
   message: any,
-  coords: Array<number>,
+  coords: PaperPoint | Array<number>,
   fontSize?: number
 ) {
   const content = new PointText({
@@ -139,6 +148,29 @@ export function createText(
 
   content.bounds.center.x = x;
   content.bounds.center.y = y;
+
+  content.remove();
+
+  return content;
+}
+
+export function createTextDeaf(
+  message: string,
+  coords: PaperPoint | Array<number>,
+  fontSize?: number,
+  diff?: number,
+  radius?: number
+) {
+  const content = new PointText({
+    content: message,
+    fillColor: 'white',
+    fontSize: fontSize ?? 16,
+  });
+
+  const [x, y] = getTextPoints(coords, radius, diff);
+
+  content.bounds.x = x;
+  content.bounds.y = y;
 
   content.remove();
 
