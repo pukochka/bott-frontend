@@ -1,24 +1,28 @@
 import {
   colors,
-  PaperCircle,
+  defaultInput,
+  MessageFeedbackItemPreview,
   PaperGroup,
   PaperItem,
   PaperLine,
-  PaperPath,
   PaperPoint,
-} from '../stores/PSmodels';
-import { Color, Group, Path, Point, Segment, Shape, Size } from 'paper';
+} from '../stores/Feedbackmodels';
+import { Group, Path, Point, Size } from 'paper';
 import { circle, createIcon, dashLine } from './create';
 import { mdiPlus, mdiWrench } from '@quasar/extras/mdi-v7';
 import { usePSStore } from '../stores/PSstore';
 import gsap from 'gsap';
-const { blue, alfaBlue, noColor, white } = colors;
+const { blue, noColor, white } = colors;
 
 export class Link {
   group: PaperGroup = new Group();
 
   start: PaperItem | null = null;
   end: PaperItem | null = null;
+
+  startMessage: MessageFeedbackItemPreview = defaultInput;
+  endMessage: MessageFeedbackItemPreview = defaultInput;
+
   lineStart: PaperLine | null = null;
   lineEnd: PaperLine | null = null;
   line: PaperLine | null = null;
@@ -26,9 +30,19 @@ export class Link {
 
   startCircle: PaperItem | null = null;
   endCircle: PaperItem | null = null;
-  icon: PaperItem = createIcon(mdiWrench, [0, 0], new Size(15, 15), '#ffffff');
+  // icon: PaperItem = createIcon(mdiWrench, [0, 0], new Size(15, 15), '#ffffff');
 
-  constructor(start: PaperGroup, end: PaperGroup) {
+  constructor(
+    start?: PaperGroup,
+    end?: PaperGroup,
+    startMessage?: any,
+    endMessage?: any
+  ) {
+    if (start === void 0 || end === void 0) return;
+
+    this.startMessage = startMessage ?? defaultInput;
+    this.endMessage = endMessage ?? defaultInput;
+
     this.start = start;
     this.end = end;
 
@@ -48,8 +62,11 @@ export class Link {
   }
 
   mountLink() {
-    this.startCircle = circle(this.circlesPoints.start, 30, blue);
-    this.endCircle = circle(this.circlesPoints.end, 30, blue);
+    const startColor = this.startMessage.setting.alfa ?? '';
+    const endColor = this.endMessage.setting.alfa ?? '';
+
+    this.startCircle = circle(this.circlesPoints.start, 30, startColor);
+    this.endCircle = circle(this.circlesPoints.end, 30, endColor);
 
     this.group.addChildren([this.startCircle, this.endCircle]);
   }
@@ -60,13 +77,13 @@ export class Link {
     this.lineStart = dashLine(
       this.circlesPoints.middle,
       this.circlesPoints.start,
-      '#ffffff',
+      this.startMessage.setting.alfa,
       30
     );
     this.lineEnd = dashLine(
       this.circlesPoints.middle,
       this.circlesPoints.end,
-      '#ffffff',
+      this.startMessage.setting.alfa,
       30
     );
     this.lineFront = new Path.Line({
@@ -78,18 +95,18 @@ export class Link {
 
     this.lineFront.onMouseEnter = () => {
       store.clickable = true;
-      this.icon.tweenTo({ fillColor: blue }, 150);
+      // this.icon.tweenTo({ fillColor: blue }, 150);
     };
     this.lineFront.onMouseLeave = () => {
       store.clickable = false;
-      this.icon.tweenTo({ fillColor: white }, 150);
+      // this.icon.tweenTo({ fillColor: white }, 150);
     };
 
-    this.icon.set({ position: this.circlesPoints.middle });
+    // this.icon.set({ position: this.circlesPoints.middle });
 
     this.group.insertChildren(0, [this.lineStart, this.lineEnd]);
 
-    this.group.addChildren([this.icon, this.lineFront]);
+    this.group.addChildren([this.lineFront]);
   }
 
   move() {
@@ -100,8 +117,8 @@ export class Link {
       this.lineEnd &&
       this.lineFront
     ) {
-      this.startCircle.bounds.center = this.circlesPoints.start;
-      this.endCircle.bounds.center = this.circlesPoints.end;
+      this.startCircle.position = this.circlesPoints.start;
+      this.endCircle.position = this.circlesPoints.end;
 
       this.lineFront.firstCurve.point1 = this.circlesPoints.start;
       this.lineFront.firstCurve.point2 = this.circlesPoints.end;
@@ -112,80 +129,89 @@ export class Link {
       this.lineEnd.firstCurve.point1 = this.circlesPoints.middle;
       this.lineEnd.firstCurve.point2 = this.circlesPoints.end;
 
-      this.icon.set({ position: this.circlesPoints.middle });
+      // this.icon.set({ position: this.circlesPoints.middle });
     }
   }
 }
 
 export class Crossroad {
+  messages: MessageFeedbackItemPreview[] = [];
+  message: MessageFeedbackItemPreview = defaultInput;
   group: PaperGroup = new Group();
   lines: PaperGroup = new Group();
+  circles: PaperGroup = new Group();
   area: PaperGroup = new Group();
   center: any = null;
-  line: any = null;
   start: PaperGroup | null = null;
 
   platforms: Array<any> = [];
 
-  constructor(start: PaperGroup, ...platforms: PaperGroup[]) {
-    this.start = start;
-    this.platforms = platforms;
+  constructor(
+    messages: MessageFeedbackItemPreview[],
+    start?: MessageFeedbackItemPreview,
+    ...platforms: PaperGroup[]
+  ) {
+    if (start?.platform === void 0) return;
 
-    this.platforms.forEach((item, index) => {
-      this.lines.addChild(
-        new Path.Line({
-          from: this.start?.bounds.center,
-          to: item.bounds.center,
-        })
-      );
-    });
-
-    this.center = circle(this.lines.bounds.center, 30, blue);
-
-    this.line = dashLine(
-      this.lines.bounds.center,
-      this.start.position,
-      '#ffffff',
-      30
-    );
+    this.messages = messages;
+    this.message = start;
+    this.start = start?.platform;
+    this.platforms = platforms.concat(this.start);
+    const color = this.message.setting.alfa;
 
     this.platforms.forEach((item) => {
-      const line = dashLine(
-        this.lines.bounds.center,
-        item.position,
-        '#ffffff',
-        30
-      );
-      this.area.insertChild(0, line);
+      const from = this.start?.position ?? new Point(0, 0);
+      const to = item.position;
+
+      this.lines.addChild(new Path.Line({ from, to }));
     });
 
-    this.group.addChildren([this.line, this.area, this.center]);
+    this.center = circle(this.lines.bounds.center, 30, color);
+
+    this.platforms.forEach((item, index) => {
+      const from = this.lines.position;
+      const to = item.position;
+      const messageColor = this.messages[index].setting;
+
+      const bounds = rotateCircle(from, to, 80);
+      const line = dashLine(from, to, color, 30);
+
+      this.area.insertChild(0, line);
+      this.circles.addChild(circle(bounds.end, 30, messageColor.alfa));
+    });
+
+    this.group.addChildren([this.area, this.circles, this.center]);
   }
 
   move() {
+    /** Определение центра (пока не знаю как сделать нормально) TODO */
     this.platforms.forEach((item, index) => {
       const curve = <PaperLine>this.lines.children[index];
 
       curve.firstCurve.point1 = this.start?.position ?? new Point(0, 0);
       curve.firstCurve.point2 = item.position ?? new Point(0, 0);
     });
-
+    /** Переопределение центра */
     this.center.position = this.lines.bounds.center;
 
+    /** Перемещение линий */
     this.platforms.forEach((item, index) => {
-      const curve = <PaperLine>this.area.children[index];
+      const from = this.center?.position ?? new Point(0, 0);
+      const to = item.position ?? new Point(0, 0);
+      const line = <PaperLine>this.area.children[index];
+      const circle = this.circles.children[index];
 
-      curve.firstCurve.point1 = this.center?.position ?? new Point(0, 0);
-      curve.firstCurve.point2 = item.position ?? new Point(0, 0);
+      line.firstCurve.point1 = from;
+      line.firstCurve.point2 = to;
+
+      const bounds = rotateCircle(from, to, 80);
+      circle.position = bounds.end;
     });
-
-    this.line.firstCurve.point1 = this.start?.position;
-    this.line.firstCurve.point2 = this.center.position;
   }
 }
 
 export class Connection {
-  message: any = null;
+  message: MessageFeedbackItemPreview = defaultInput;
   group: PaperGroup = new Group();
   groupConnection: PaperGroup = new Group();
   platform: PaperGroup | null = null;
@@ -193,6 +219,7 @@ export class Connection {
   front: any | null = null;
   icon: PaperItem = createIcon(mdiPlus, [0, 0], new Size(30, 30), '#ffffff');
   connectCircle: any | null = null;
+  frontCircle: any | null = null;
   iconConnection: PaperItem = createIcon(
     mdiPlus,
     [0, 0],
@@ -201,29 +228,27 @@ export class Connection {
   );
 
   action = false;
+  prev = false;
   drag = false;
 
-  constructor(message: any, platform: PaperGroup) {
+  constructor(message: MessageFeedbackItemPreview, platform: PaperGroup) {
     const store = usePSStore();
     this.message = message;
     this.platform = platform;
 
     if (!this.platform || !this.message) return;
 
-    this.group.name = 'group';
-    this.groupConnection.name = 'groupConnection';
-
     const coords = new Point(
       this.platform.position.x + 70,
       this.platform.position.y
     );
 
-    this.connectCircle = circle([0, 0], 0, '#8a8a8a', 8, white);
-    const frontCircle = circle([0, 0], 80, noColor);
+    this.connectCircle = circle([0, 0], 0, '#adb5bd', 8, '#adb5bd');
+    this.frontCircle = circle([0, 0], 80, noColor);
 
-    const back = circle(coords, 30, blue);
+    const back = circle(coords, 30, this.message.setting.color);
     this.front = circle(coords, 30, noColor);
-    this.line = dashLine(coords, coords, '#ffffff', 30);
+    this.line = dashLine(coords, coords, this.message.setting.alfa, 30);
 
     this.icon.visible = false;
     this.icon.position = coords;
@@ -232,7 +257,7 @@ export class Connection {
     this.groupConnection.addChildren([
       this.connectCircle,
       this.iconConnection,
-      frontCircle,
+      this.frontCircle,
     ]);
     this.groupConnection.opacity = 0;
     this.groupConnection.remove();
@@ -243,34 +268,18 @@ export class Connection {
       this.openConnection();
     };
 
-    this.group.onClick = () => {
-      if (this.drag) return;
-
-      this.action = true;
-      this.createPrevConnect();
-      store.openMenu(() => {
-        this.action = false;
-        this.groupConnection.remove();
-        this.removePrevConnect();
-        this.returnCircle();
-      });
-    };
-
     this.group.onMouseUp = (event: any) => {
-      if (event.target?.children?.[0]?.intersects(this.connectCircle)) {
+      const child = event.target?.children?.[3];
+
+      if (
+        child?.intersects(this.connectCircle) ||
+        child?.isInside(this.connectCircle.bounds)
+      ) {
         this.createConnect();
         return;
       }
 
-      store.connecting = false;
-
-      gsap.to(this.groupConnection, { opacity: 0, duration: 0.15 });
-      gsap.to(this.connectCircle, { radius: 0, duration: 0.15 }).then(() => {
-        this.groupConnection.remove();
-        this.drag = false;
-      });
-
-      this.returnCircle();
+      this.removeConnection();
     };
 
     this.group.onMouseEnter = () => {
@@ -331,38 +340,43 @@ export class Connection {
 
     store.openMenu(() => {
       this.action = false;
-      this.groupConnection.remove();
       this.removePrevConnect();
-      this.returnCircle();
+      this.removeConnection();
     });
   }
 
   createPrevConnect() {
+    this.prev = true;
     this.group.opacity = 0.01;
 
     const store = usePSStore();
 
     if (!this.platform || !this.message) return;
 
-    const link = new Link(this.platform, this.groupConnection);
+    const link = new Link(this.platform, this.groupConnection, this.message, {
+      setting: { color: '#adb5bd', alfa: '#adb5bd' },
+    });
     link.group.sendToBack();
 
     store.connect.push({
-      link: [this.message.id],
+      link: [this.message.id + 'new'],
       group: link,
     });
   }
   removePrevConnect() {
+    this.prev = false;
     if (this.action) return;
 
     this.group.opacity = 1;
     const store = usePSStore();
 
-    store.connect
-      .find((item) => item.link.includes(this.message?.id))
-      ?.group?.group.remove();
+    const group = store.connect.find((item) =>
+      item.link.includes(this.message.id + 'new')
+    );
+    group?.group.group.remove();
+
     store.connect = store.connect.filter(
-      (item) => !item.link.includes(this.message?.id)
+      (item) => !item.link.includes(this.message.id + 'new')
     );
   }
 
@@ -376,6 +390,20 @@ export class Connection {
       y: this.platform?.position.y,
       duration: 0.15,
     });
+  }
+
+  removeConnection() {
+    const store = usePSStore();
+    store.connecting = false;
+    store.onconnection = false;
+
+    gsap.to(this.groupConnection, { opacity: 0, duration: 0.15 });
+    gsap.to(this.connectCircle, { radius: 1, duration: 0.15 }).then(() => {
+      this.groupConnection.remove();
+      this.drag = false;
+    });
+
+    this.returnCircle();
   }
 }
 

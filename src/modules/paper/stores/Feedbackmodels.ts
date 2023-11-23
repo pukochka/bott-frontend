@@ -1,4 +1,3 @@
-import { Link } from '../utils/links';
 import { Color } from 'paper';
 
 export type PaperView = paper.View;
@@ -11,12 +10,13 @@ export type PaperLine = paper.Path.Line;
 export type PaperCircle = paper.Path.Circle;
 export type PaperPoint = paper.Point;
 
-export interface PSStoreModel {
+export interface FeedbackModels {
   view: PaperView;
   layer: PaperLayer;
 
-  feedback: MessageFeedback;
-  connect: Array<{ link: Array<number>; group: any }>;
+  _message: MessageFree;
+  _feedback: MessageFeedback<MessageFeedbackItemPreview>;
+  connect: Array<{ link: Array<number | string>; group: any }>;
 
   dragging: boolean;
   onmessage: boolean;
@@ -24,9 +24,7 @@ export interface PSStoreModel {
   connecting: boolean;
   clickable: boolean;
 
-  dialogs: {
-    setting: boolean;
-  };
+  dialogs: Record<DialogsNames, boolean>;
 
   position: {
     x: number;
@@ -34,6 +32,14 @@ export interface PSStoreModel {
     visible: boolean;
     action: null | (() => void);
   };
+}
+
+export type DialogsNames = 'settings' | 'answers' | 'notify';
+
+export interface MessageFeedbackItemPreview extends MessageFeedbackItem {
+  platform?: PaperGroup;
+  shell?: PaperGroup;
+  setting: { title: string; icon: string; color: string; alfa: string };
 }
 
 export const colors = {
@@ -174,7 +180,7 @@ const inputs: MessageFeedbackItem[] = [
   },
 ];
 
-export const defaultInput: MessageFeedbackItem = {
+export const defaultInput: MessageFeedbackItemPreview = {
   id: 0,
   text: '',
   confirm: true,
@@ -187,6 +193,7 @@ export const defaultInput: MessageFeedbackItem = {
   file: null,
   select: null,
   crossroad: null,
+  setting: { title: '', color: '', icon: '', alfa: '' },
 };
 
 const message = {
@@ -311,16 +318,18 @@ const message = {
   frontendMenu: [],
 };
 
-export const defaultFeedback: MessageFeedback = {
+export const defaultFeedback: MessageFeedback<MessageFeedbackItemPreview> = {
   id: 0,
-  hello: message,
-  cancel: message,
-  notice: message,
+  hello: null,
+  cancel: null,
+  notice: null,
   end: null,
-  noticeAdmin: message,
-  startAdmin: message,
-  answerAdmin: message,
-  admin: message,
+  noticeAdmin: null,
+  startAdmin: null,
+  answerAdmin: null,
+  admin: null,
   setting: defaultFeedbackSetting,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   inputs: inputs,
 };

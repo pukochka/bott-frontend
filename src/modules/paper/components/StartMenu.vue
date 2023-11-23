@@ -2,7 +2,8 @@
   <q-card
     bordered
     flat
-    class="column absolute-left q-ma-xs rounded overflow-hidden"
+    square
+    class="column absolute-left overflow-hidden"
     @mouseenter="openMenu(true)"
     @mouseleave="openMenu(false)"
   >

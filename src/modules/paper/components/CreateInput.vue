@@ -13,6 +13,7 @@
       <q-item clickable v-ripple v-for="(type, index) of types" :key="index">
         <q-item-section>
           <q-item-label>{{ type.label }}</q-item-label>
+
           <q-item-label caption>{{ type.description }}</q-item-label>
         </q-item-section>
       </q-item>

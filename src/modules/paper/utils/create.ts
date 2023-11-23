@@ -5,8 +5,7 @@ import Paper, {
   Shape,
   Size,
   Path,
-  Layer,
-  Color,
+  Rectangle,
 } from 'paper';
 import { usePSStore } from '../stores/PSstore';
 import { getTextPoints, makeAutoAlign } from './coords';
@@ -18,15 +17,33 @@ import {
   mdiMulticast,
 } from '@quasar/extras/mdi-v7';
 import { createShell } from './shell';
-import { PaperPoint, PaperSize } from '../stores/PSmodels';
-import { keysOfAdd } from './models/additional';
-import { useAddict } from './platform';
-
+import { colors, PaperPoint, PaperSize } from '../stores/Feedbackmodels';
+const { blue } = colors;
 export const setting: any = {
-  1: { title: 'Сообщение', icon: mdiMessage },
-  2: { title: 'Сообщение\nс файлом', icon: mdiFileDocumentArrowRightOutline },
-  3: { title: 'Опрос', icon: mdiMessageQuestion },
-  4: { title: 'Несколько\nответов', icon: mdiMulticast },
+  1: {
+    title: 'Сообщение',
+    icon: mdiMessage,
+    color: '#a3b18a',
+    alfa: 'rgba(163,177,138,0.6)',
+  },
+  2: {
+    title: 'Сообщение\nс файлом',
+    icon: mdiFileDocumentArrowRightOutline,
+    color: '#ffc971',
+    alfa: 'rgba(255,201,113,0.6)',
+  },
+  3: {
+    title: 'Опрос',
+    icon: mdiMessageQuestion,
+    color: '#cd5d67',
+    alfa: 'rgba(205,93,103,0.6)',
+  },
+  4: {
+    title: 'Несколько\nответов',
+    icon: mdiMulticast,
+    color: '#ac9e9e',
+    alfa: 'rgba(172,158,158,0.6)',
+  },
 };
 
 let oldDelta = new Point(0, 0);
@@ -43,6 +60,11 @@ export function install() {
   store.view.zoom = 0.5;
   // store.view.center = new Point(0, 0);
 
+  for (const input of store.feedback.inputs) {
+    const elSetting = setting[input.type];
+    Object.assign(input, { setting: elSetting });
+  }
+
   for (let i = 0; i < store.feedback.inputs.length; i++) {
     const coords = makeAutoAlign();
 
@@ -50,6 +72,8 @@ export function install() {
       store.feedback.inputs[i],
       coords[i]
     );
+
+    const elSetting = setting[store.feedback.inputs[i].type];
 
     store.feedback.inputs[i] = Object.assign(store.feedback.inputs[i], {
       shell,
@@ -163,7 +187,8 @@ export function createTextDeaf(
 ) {
   const content = new PointText({
     content: message,
-    fillColor: 'white',
+    fillColor: 'black',
+    fontWeight: 'bold',
     fontSize: fontSize ?? 16,
   });
 

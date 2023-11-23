@@ -1,8 +1,11 @@
 <template>
   <div class="col-4">
-    <div class="row justify-between items-center no-wrap q-pb-sm">
-      <div class="">
-        <transition name="q-transition--fade">
+    <div
+      class="row justify-center items-center q-mb-sm relative-position"
+      style="min-height: 28px"
+    >
+      <transition name="q-transition--fade">
+        <div class="absolute-left row items-center" v-if="props.open">
           <q-btn
             flat
             size="12px"
@@ -10,17 +13,19 @@
             color="primary"
             icon="help_center"
             class="rounded"
-            v-if="props.open"
           />
-        </transition>
-      </div>
+        </div>
+      </transition>
 
-      <div class="text-body2 text-center">
+      <div class="text-body2 text-center" style="max-width: 140px">
         {{ message.label }}
       </div>
 
-      <div class="" :style="{ 'min-width': props.open ? '24px' : 'auto' }">
-        <transition name="q-transition--fade">
+      <transition name="q-transition--fade">
+        <div
+          class="absolute-right row items-center"
+          v-if="message.condition && props.open"
+        >
           <q-btn
             flat
             size="12px"
@@ -28,7 +33,6 @@
             color="primary"
             icon="more_vert"
             class="rounded"
-            v-if="message.condition && props.open"
           >
             <q-menu
               v-model="menu"
@@ -54,8 +58,8 @@
               </q-list>
             </q-menu>
           </q-btn>
-        </transition>
-      </div>
+        </div>
+      </transition>
     </div>
 
     <q-card

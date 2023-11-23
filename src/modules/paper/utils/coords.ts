@@ -1,5 +1,5 @@
 import { usePSStore } from '../stores/PSstore';
-import { PaperPoint } from '../stores/PSmodels';
+import { PaperPoint } from '../stores/Feedbackmodels';
 
 export function makeAutoAlign() {
   const store = usePSStore();

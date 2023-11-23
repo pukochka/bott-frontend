@@ -9,14 +9,6 @@
       :style="{ width: quasar.screen.width - 60 + 'px' }"
     ></canvas>
 
-    <q-inner-loading
-      :showing="store.position.visible"
-      @click="closeMenu"
-      class="bg-alpha cursor-default"
-    >
-      <div class=""></div>
-    </q-inner-loading>
-
     <create-input></create-input>
 
     <!--    <goodbye-menu></goodbye-menu>-->
@@ -26,33 +18,45 @@
     <start-menu></start-menu>
 
     <end-menu></end-menu>
+
+    <bottom-menu></bottom-menu>
+
+    <q-inner-loading
+      v-close-popup
+      @click="closeMenu"
+      :showing="store.position.visible"
+      class="bg-alpha cursor-default"
+    >
+      <div class=""></div>
+    </q-inner-loading>
   </div>
 
   <notify-setting></notify-setting>
+
+  <users-answers></users-answers>
+
+  <feedback-settings></feedback-settings>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { config } from './config';
+import { computed, onBeforeMount, onMounted } from 'vue';
+import { fetchMessage } from './api/queries';
 import { install } from './utils/create';
 import { usePSStore } from './stores/PSstore';
 import { useQuasar } from 'quasar';
+
 import EndMenu from './components/EndMenu.vue';
 import NotifySetting from './components/dialogs/NotifySetting.vue';
 import CreateInput from './components/CreateInput.vue';
 import StartMenu from './components/StartMenu.vue';
 import MainMenu from './components/MainMenu.vue';
-import GoodbyeMenu from './components/GoodbyeMenu.vue';
+import BottomMenu from './components/BottomMenu.vue';
+import UsersAnswers from './components/dialogs/UsersAnswers.vue';
+import FeedbackSettings from './components/dialogs/FeedbackSettings.vue';
 
 const store = usePSStore();
 const quasar = useQuasar();
-
-// const c = computed(() => {
-//   return {
-//     ' cursor-grabbing': store.dragging,
-//     ' cursor-grab': store.onmessage || store.onconnection,
-//     ' cursor-pointer': store.clickable,
-//   };
-// });
 
 const closeMenu = () => {
   store.position.visible = false;
@@ -67,6 +71,9 @@ const classes = computed(
 );
 
 onMounted(install);
+onBeforeMount(() => {
+  fetchMessage('get', { message_id: config.message_id });
+});
 </script>
 
 <style scoped lang="scss">

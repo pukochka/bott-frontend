@@ -2,10 +2,16 @@ import { Group, Point } from 'paper';
 import { createTextDeaf, setting } from './create';
 import { createPlatform } from './platform';
 import { usePSStore } from '../stores/PSstore';
-import { Connection, Crossroad } from './links';
-import { PaperPoint } from '../stores/PSmodels';
+import { Connection } from './links';
+import {
+  MessageFeedbackItemPreview,
+  PaperPoint,
+} from '../stores/Feedbackmodels';
 
-export function createShell(message: any, coords: Array<number> | PaperPoint) {
+export function createShell(
+  message: MessageFeedbackItemPreview,
+  coords: Array<number> | PaperPoint
+) {
   const store = usePSStore();
   const shell = new Group();
 
@@ -14,10 +20,10 @@ export function createShell(message: any, coords: Array<number> | PaperPoint) {
   }
 
   const platform = createPlatform(message, coords);
-  const text = createTextDeaf(setting[message.type].title, coords, 18, 0, 80);
+  const text = createTextDeaf(message.setting.title, coords, 18, 0, 87);
   text.justification = 'center';
 
-  if (!message.next) {
+  if (!message.next && !message.crossroad?.options.length) {
     const connection = new Connection(message, platform);
     shell.addChild(connection.group);
   }

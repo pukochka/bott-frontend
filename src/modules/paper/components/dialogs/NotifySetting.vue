@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="store.dialogs.setting" position="bottom" full-width>
+  <q-dialog v-model="store.dialogs.notify" position="bottom" full-width>
     <div class="row justify-center">
       <q-card flat bordered class="dialog-rounded bott-dialog__responsive">
         <q-card-section>

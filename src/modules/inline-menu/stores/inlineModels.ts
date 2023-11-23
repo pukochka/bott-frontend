@@ -50,7 +50,6 @@ export const defaultMessageFree: MessageFree = {
   color: null,
   specType: {
     id: 0,
-    title: '',
   },
   sort: null,
   column_id: null,

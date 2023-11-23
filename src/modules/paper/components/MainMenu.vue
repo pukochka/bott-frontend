@@ -2,42 +2,19 @@
   <q-card
     bordered
     flat
-    class="row absolute-top q-ma-xs q-mx-xxl rounded overflow-hidden"
+    square
+    class="row absolute-top q-mx-xxl overflow-hidden"
   >
-    <div class="col">
+    <div class="col" v-for="(button, index) of buttons" :key="index">
       <q-btn
         square
         no-caps
-        stack
         flat
         class="fit"
-        size="md"
-        color="primary"
-        label="Смотреть ответы"
-      />
-    </div>
-    <div class="col">
-      <q-btn
-        square
-        no-caps
-        stack
-        flat
-        class="fit"
-        size="md"
-        color="primary"
-        label="Настройки уведомлений для администраторов и в чаты/каналы"
-      />
-    </div>
-    <div class="col">
-      <q-btn
-        square
-        no-caps
-        stack
-        flat
-        class="fit"
-        size="md"
-        color="primary"
-        label="Настройки обратной связи"
+        size="13px"
+        :icon="button.icon"
+        :color="button.color"
+        :label="button.label"
       />
     </div>
 
@@ -48,17 +25,43 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { usePSStore } from '../stores/PSstore';
+import {
+  mdiBellCog,
+  mdiForum,
+  mdiMessageSettings,
+} from '@quasar/extras/mdi-v7';
 
 const store = usePSStore();
 
 const disabled = computed(
   () => store.onconnection || store.dragging || store.onmessage
 );
+
+const buttons = computed(() => [
+  {
+    label: 'Смотреть ответы',
+    action: '',
+    icon: mdiForum,
+    color: 'primary',
+  },
+  {
+    label: 'Настройки уведомлений для администраторов',
+    action: '',
+    icon: mdiBellCog,
+    color: 'primary',
+  },
+  {
+    label: 'Настройки обратной связи',
+    action: '',
+    icon: mdiMessageSettings,
+    color: 'primary',
+  },
+]);
 </script>
 
 <style scoped lang="scss">
 .q-mx-xxl {
-  margin-left: 180px;
-  margin-right: 180px;
+  margin-left: 170px;
+  margin-right: 170px;
 }
 </style>

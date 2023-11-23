@@ -2,7 +2,8 @@
   <q-card
     bordered
     flat
-    class="column absolute-right q-ma-xs rounded overflow-hidden"
+    square
+    class="column absolute-right overflow-hidden"
     @mouseenter="openMenu(true)"
     @mouseleave="openMenu(false)"
   >
@@ -43,7 +44,7 @@ const menu = ref(false);
 const add = () => {
   console.log(
     store.feedback.inputs.map((item) => {
-      return { x: item.platform.position.x, y: item.platform.position.y };
+      return { x: item.platform?.position.x, y: item.platform?.position.y };
     })
   );
 };

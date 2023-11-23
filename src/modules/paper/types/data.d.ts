@@ -1,4 +1,4 @@
-declare interface MessageFeedback {
+declare interface MessageFeedback<Q> {
   id: number;
   /** Приветсвие при отправке обратной связи; null - сразу будут начинаться вопросы */
   hello: MessageFree | null;
@@ -11,7 +11,7 @@ declare interface MessageFeedback {
   admin: MessageFree | null;
   setting: MessageFeedbackSetting;
   /** Вопросы обратной связи */
-  inputs: Array<MessageFeedbackItem>;
+  inputs: Array<Q>;
 }
 
 declare interface MessageFeedbackSetting {

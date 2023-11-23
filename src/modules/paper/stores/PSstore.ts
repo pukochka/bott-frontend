@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia';
-import { PSStoreModel, defaultFeedback } from './PSmodels';
+import {
+  defaultFeedback,
+  FeedbackModels,
+  MessageFeedbackItemPreview,
+  PaperGroup,
+} from './Feedbackmodels';
 import { Crossroad, Link } from '../utils/links';
+import { defaultMessageFree } from '../../inline-menu/stores/inlineModels';
 
 export const usePSStore = defineStore('paper-store', {
   state: () =>
@@ -8,7 +14,8 @@ export const usePSStore = defineStore('paper-store', {
       view: null,
       layer: null,
 
-      feedback: defaultFeedback,
+      _message: null,
+      _feedback: defaultFeedback,
 
       connect: [],
 
@@ -23,9 +30,12 @@ export const usePSStore = defineStore('paper-store', {
       },
 
       position: { visible: false, action: null },
-    } as unknown as PSStoreModel),
+    } as unknown as FeedbackModels),
   getters: {
-    alignCount: (state) => state.feedback.inputs.length,
+    alignCount: (state) => state._feedback.inputs.length,
+    message: (state): MessageFree => state._message ?? defaultMessageFree,
+    feedback: (state): MessageFeedback<MessageFeedbackItemPreview> =>
+      state._feedback ?? defaultFeedback,
   },
   actions: {
     mountLink() {
@@ -41,20 +51,26 @@ export const usePSStore = defineStore('paper-store', {
             })
           );
 
-          const platforms = item.crossroad?.options
-            .map((opt) => {
-              return { id: opt.next.id, type: opt.next.type };
-            })
-            .map((cross) => {
-              if (inputs[cross.id]?.type === cross.type)
-                return inputs[cross.id];
-            });
-
-
-          const crossroad = new Crossroad(
-            item.platform,
-            ...platforms.map((cross) => cross?.platform)
+          const platforms = <MessageFeedbackItemPreview[]>(
+            item.crossroad?.options
+              .map((opt) => {
+                return { id: opt.next.id, type: opt.next.type };
+              })
+              .map((cross) => {
+                if (inputs[cross.id]?.type === cross.type)
+                  return inputs[cross.id];
+              })
           );
+
+          const crosses = <PaperGroup[]>(
+            (platforms ?? [])
+              .map((cross) => cross?.platform)
+              .filter((item) => item !== void 0)
+          );
+
+          const messages = platforms.concat(item);
+
+          const crossroad = new Crossroad(messages, item, ...crosses);
 
           const ids = (platforms ?? []).map((item: any) => item.id);
 
@@ -67,7 +83,7 @@ export const usePSStore = defineStore('paper-store', {
         }
 
         if (item.next && end) {
-          const link = new Link(item.platform, end.platform);
+          const link = new Link(item.platform, end.platform, item, end);
 
           this.connect.push({
             link: [item.id, end.id],
