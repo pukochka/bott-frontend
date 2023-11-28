@@ -40,9 +40,10 @@ export async function fetchMessage<Q extends keyof SCMessageQueries>(
 
       if (query === 'get') {
         /** */
-        // store._message = response.data.data;
-        // store._feedback = response.data.data.feedback;
-        // install();
+        store._message = response.data.data;
+        store._feedback = response.data.data.feedback;
+
+        install();
         /** */
       }
     });

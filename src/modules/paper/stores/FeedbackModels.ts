@@ -9,6 +9,7 @@ export type PaperPath = paper.Path;
 export type PaperLine = paper.Path.Line;
 export type PaperCircle = paper.Path.Circle;
 export type PaperPoint = paper.Point;
+export type PaperText = paper.PointText;
 
 export interface FeedbackModels {
   view: PaperView;
@@ -16,6 +17,9 @@ export interface FeedbackModels {
 
   _message: MessageFree;
   _feedback: MessageFeedback<MessageFeedbackItemPreview>;
+  loading: boolean;
+
+  shells: Array<PaperGroup>;
   connect: Array<{ link: Array<number | string>; group: any }>;
 
   dragging: boolean;
@@ -23,23 +27,32 @@ export interface FeedbackModels {
   onconnection: boolean;
   connecting: boolean;
   clickable: boolean;
+  notopen: boolean;
+  linking: boolean;
 
   dialogs: Record<DialogsNames, boolean>;
 
-  position: {
-    x: number;
-    y: number;
-    visible: boolean;
-    action: null | (() => void);
+  selectedMessage: MessageFeedbackItemPreview;
+
+  menu: {
+    create: boolean;
+    link: boolean;
   };
+
+  action: null | (() => void);
 }
 
-export type DialogsNames = 'settings' | 'answers' | 'notify';
+export type DialogsNames = 'settings' | 'answers' | 'notify' | 'message';
+export type MenuNames = 'create' | 'link';
 
 export interface MessageFeedbackItemPreview extends MessageFeedbackItem {
   platform?: PaperGroup;
   shell?: PaperGroup;
-  setting: { title: string; icon: string; color: string; alfa: string };
+  setting: {
+    title: string;
+    icon: string;
+    color: string;
+  };
 }
 
 export const colors = {
@@ -59,6 +72,29 @@ const defaultFeedbackSetting: MessageFeedbackSetting = {
   period: 0,
 };
 
+const o = [
+  {
+    x: -391.2558139534885,
+    y: -3.4883720930231448,
+  },
+  {
+    x: 89.64297244049774,
+    y: -6.123546511627936,
+  },
+  {
+    x: -798.4927325581398,
+    y: -1.1613372093024168,
+  },
+  {
+    x: -390.3558248717116,
+    y: 454.88634130363585,
+  },
+  {
+    x: 103.9069512225743,
+    y: 448.2994186046509,
+  },
+];
+
 const inputs: MessageFeedbackItem[] = [
   {
     id: 1,
@@ -68,8 +104,8 @@ const inputs: MessageFeedbackItem[] = [
     feedback_id: 123,
     type: 4,
     position: {
-      x: -68,
-      y: 350,
+      x: -391.2558139534885,
+      y: -3.4883720930231448,
     },
     next: null,
     input: null,
@@ -78,7 +114,7 @@ const inputs: MessageFeedbackItem[] = [
     crossroad: {
       options: [
         {
-          text: 'dada',
+          text: 'Выбрать сообщение',
           next: {
             id: 12,
             type: 1,
@@ -87,16 +123,7 @@ const inputs: MessageFeedbackItem[] = [
           id: 122,
         },
         {
-          text: 'dada',
-          next: {
-            id: 123,
-            type: 2,
-          },
-          sort: 2,
-          id: 12,
-        },
-        {
-          text: 'dada',
+          text: 'Выбрать файл',
           next: {
             id: 1221222222223,
             type: 2,
@@ -115,8 +142,8 @@ const inputs: MessageFeedbackItem[] = [
     feedback_id: 123,
     type: 2,
     position: {
-      x: 664.7200073242187,
-      y: 342,
+      x: 89.64297244049774,
+      y: -6.123546511627936,
     },
     next: null,
     input: null,
@@ -131,11 +158,11 @@ const inputs: MessageFeedbackItem[] = [
     sort: 0,
     feedback_id: 123,
     type: 2,
-    position: {
-      x: 468,
-      y: 754,
+    position: { x: -1884.856368921776, y: -823.8886099365751 },
+    next: {
+      id: 1,
+      type: 4,
     },
-    next: null,
     input: null,
     file: null,
     select: null,
@@ -149,8 +176,8 @@ const inputs: MessageFeedbackItem[] = [
     feedback_id: 123,
     type: 1,
     position: {
-      x: 534,
-      y: -44,
+      x: -390.3558248717116,
+      y: 454.88634130363585,
     },
     next: {
       id: 126565,
@@ -169,8 +196,8 @@ const inputs: MessageFeedbackItem[] = [
     feedback_id: 123,
     type: 3,
     position: {
-      x: 1160.160021972656,
-      y: -40,
+      x: 103.9069512225743,
+      y: 448.2994186046509,
     },
     next: null,
     input: null,
@@ -193,7 +220,7 @@ export const defaultInput: MessageFeedbackItemPreview = {
   file: null,
   select: null,
   crossroad: null,
-  setting: { title: '', color: '', icon: '', alfa: '' },
+  setting: { title: '', color: '', icon: '' },
 };
 
 const message = {
@@ -318,6 +345,22 @@ const message = {
   frontendMenu: [],
 };
 
+// export const defaultFeedback: MessageFeedback<MessageFeedbackItemPreview> = {
+//   id: 0,
+//   hello: null,
+//   cancel: null,
+//   notice: null,
+//   end: null,
+//   noticeAdmin: message,
+//   startAdmin: message,
+//   answerAdmin: null,
+//   admin: null,
+//   setting: defaultFeedbackSetting,
+//   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//   // @ts-ignore
+//   inputs: inputs,
+// };
+
 export const defaultFeedback: MessageFeedback<MessageFeedbackItemPreview> = {
   id: 0,
   hello: null,
@@ -329,7 +372,5 @@ export const defaultFeedback: MessageFeedback<MessageFeedbackItemPreview> = {
   answerAdmin: null,
   admin: null,
   setting: defaultFeedbackSetting,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  inputs: inputs,
+  inputs: [],
 };

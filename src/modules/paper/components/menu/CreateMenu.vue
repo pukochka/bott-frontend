@@ -1,7 +1,7 @@
 <template>
   <q-menu
     touch-position
-    v-if="store.position.visible"
+    v-if="store.menu.create"
     max-width="300px"
     class="bott-portal-menu"
   >
@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { usePSStore } from '../stores/PSstore';
+import { usePSStore } from '../../stores/PSstore';
 
 const store = usePSStore();
 
@@ -34,18 +34,21 @@ const types = computed(() => [
       'Пользователю нужно будет ответить на сообщение. Сообщение будет проверено, при выборе вида проверки, в случае ошибки выведет текст который Вы введете.',
     id: 1,
   },
-
   {
     label: 'Ответ с файлом',
     description:
       'Пользователю нужно будет прислать файл, установленного расширения и размера.',
     id: 2,
   },
-
   {
     label: 'Опрос пользователя',
     description: 'Пользователю нужно будет выбрать подходящий ответ.',
     id: 3,
+  },
+  {
+    label: 'Несколько ответов',
+    description: '',
+    id: 4,
   },
 ]);
 </script>

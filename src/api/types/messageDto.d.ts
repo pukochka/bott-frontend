@@ -7,7 +7,7 @@ declare interface MessageFree {
   photos: MessagePhoto | null;
   files: MessageFile | null;
   videos: MessageVideo | null;
-  feedback: MessageFeedback | null;
+  feedback: MessageFeedback<MessageFeedbackItem> | null;
   animations: MessageVideo | null;
 
   type: MessageType;

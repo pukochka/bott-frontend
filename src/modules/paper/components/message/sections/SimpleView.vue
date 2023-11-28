@@ -2,13 +2,20 @@
   <div class="">
     <q-item-label header class="q-py-xs">Проверка</q-item-label>
 
-    <div class="rounded-container-grey">
-      <q-radio v-model="typeSelect" val="without" label="Без проверки" />
-
-      <q-radio v-model="typeSelect" val="your" label="Свой шаблон" />
-
-      <q-radio v-model="typeSelect" val="models" label="Готовые шаблоны" />
-    </div>
+    <q-tabs
+      v-model="typeSelect"
+      no-caps
+      dense
+      class="bott-tab__indicator text-primary"
+    >
+      <q-tab
+        v-for="(radio, index) of radios"
+        :key="index"
+        :name="radio.value"
+        :label="radio.label"
+        class="col rounded"
+      />
+    </q-tabs>
   </div>
   <div class="" v-if="typeSelect === 'patterns'">
     <q-item-label header class="q-py-xs">Готовые шаблоны</q-item-label>
@@ -16,13 +23,12 @@
     <div class="row q-col-gutter-sm">
       <div
         class="col-12 col-sm-6 col-md-4"
-        v-for="pattern in patterns"
+        v-for="pattern of patterns"
         :key="pattern.id"
         @click="selectedPattern = Object.assign(pattern, {})"
       >
         <q-item
           clickable
-          v-ripple
           class="rounded fit"
           :class="[
             selectedPattern.id === pattern.id ? ' outline-2 bg-blue-2' : '',
@@ -48,8 +54,9 @@
       counter
       v-model="yourPattern.value"
       :maxlength="yourPattern.max"
+      class="bott-input--rounded"
       hint="Необходимо знание регулярных выражений, иначе проверка не будет работать"
-      :rules="[() => yourPattern.required || config.text.danger_input]"
+      :rules="[() => yourPattern.required || 'config.text.danger_input']"
     />
   </div>
 
@@ -59,23 +66,23 @@
     </q-item-label>
 
     <q-input
-      v-model="text.value"
-      :maxlength="text.max"
       dense
       autogrow
       outlined
       counter
-      :rules="[() => text.required || config.text.danger_input]"
+      v-model="text.value"
+      :maxlength="text.max"
+      class="bott-input--rounded"
+      :rules="[() => text.required || 'config.text.danger_input']"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import config from '../../../config';
-import { ref, onMounted, watch } from 'vue';
-import { patterns } from '../../../stores/patterns';
+import { ref, onMounted, watch, computed } from 'vue';
+import { patterns } from '../models';
 
-import { defaultSimpleQuestion } from '../../../stores/FBModels';
+import { defaultSimpleQuestion } from '../models';
 
 const props = withDefaults(defineProps<SimpleQuestionProps>(), {
   data: () => defaultSimpleQuestion,
@@ -89,10 +96,25 @@ const emit = defineEmits<{
 const typeSelect = ref<'without' | 'your' | 'patterns'>('without');
 const selectedPattern = ref(patterns[0]);
 
+const radios = computed(() => [
+  {
+    label: 'Без проверки',
+    value: 'without',
+  },
+  {
+    label: 'Свой шаблон',
+    value: 'your',
+  },
+  {
+    label: 'Готовые шаблоны',
+    value: 'patterns',
+  },
+]);
+
 const text = ref({
   value: 'Неверно введена информация',
-  max: config.limits.maxInputLength,
-  min: config.limits.minInputLength,
+  max: 512,
+  min: 2,
   get required() {
     return this.value.length >= this.min && this.value.length <= this.max;
   },
@@ -100,8 +122,8 @@ const text = ref({
 
 const yourPattern = ref({
   value: '',
-  max: config.limits.maxInputLength,
-  min: config.limits.minInputLength,
+  max: 1024,
+  min: 2,
   get required() {
     return this.value.length >= this.min && this.value.length <= this.max;
   },
@@ -147,9 +169,9 @@ onMounted(() => {
     yourPattern.value.value = props.data.validator;
   } else {
     typeSelect.value = 'patterns';
-    selectedPattern.value = patterns.find(
-      (item) => item.value === props.data.validator
-    );
+    // selectedPattern.value = models.find(
+    //   (item) => item.value === props.data.validator
+    // );
   }
 });
 

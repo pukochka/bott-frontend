@@ -1,8 +1,3 @@
-declare interface FBMessageIdParam {
-  /** Уникальный идентификатор сообщения */
-  message_id: number;
-}
-
 interface FBTypeParam {
   /** Уникальный идентификатор сообщения */
   type: keyof MessageFeedbackMessageType;
@@ -45,95 +40,83 @@ interface FBStartParams {
   start_type: number;
 }
 
-type FBMessageParams = FBTypeParam & FBMessageIdParam & FBInputIdParam;
+type FBMessageParams = FBTypeParam & FBInputIdParam;
 
 declare interface FBQueries {
   /** Удаляет приветсвенное сообщение в обратную связь. Без него будет сразу начинаться вопросы */
-  'drop-hello': FBMessageIdParam;
+  'drop-hello': undefined;
   /** Добавляет приветсвенное сообщение. Без него будет сразу начинаться вопросы */
-  'add-hello': FBMessageIdParam;
+  'add-hello': undefined;
   /** Удаляет прощание */
-  'drop-end': FBMessageIdParam;
+  'drop-end': undefined;
   /** Добавляет прощание */
-  'add-end': FBMessageIdParam;
+  'add-end': undefined;
   /** Удаляет answerAdmin */
-  'add-answer': FBMessageIdParam;
+  'add-answer': undefined;
   /** Добавляет сообщение, которое будет отправлено по клику в сообщение администратора с дейсвтием 'Ответит' */
-  'drop-answer': FBMessageIdParam;
+  'drop-answer': undefined;
   /** Удаляет сообщение, которое будет отправлено админу */
-  'drop-cancel': FBMessageIdParam;
+  'drop-cancel': undefined;
   /** Добавляет сообщение, которое будет отпраавлено по клику на кнопку отмены */
-  'add-cancel': FBMessageIdParam;
+  'add-cancel': undefined;
   /** Добавляет сообщение, которое будет отправлено администраторам, если пользователь начал проходить вопросы */
-  'add-start-admin': FBMessageIdParam;
+  'add-start-admin': undefined;
   /** Удаляет сообщение startAdmin */
-  'drop-start-admin': FBMessageIdParam;
+  'drop-start-admin': undefined;
   /** Удаляет сообщения уведомления админисратора */
-  'drop-notice-admin': FBMessageIdParam;
+  'drop-notice-admin': undefined;
   /** Добавляет сообщение, которое будет отправлено администратору, если пользователь не закончил проходить вопросы */
-  'add-notice-admin': FBMessageIdParam;
+  'add-notice-admin': undefined;
   /** Удаляет сообщение notice */
-  'drop-notice': FBMessageIdParam;
+  'drop-notice': undefined;
   /** Добавляет уведомление, которое отправляется польхователю и предлагает продолжить отвечать на вопросы */
-  'add-notice': FBMessageIdParam;
+  'add-notice': undefined;
   /** Удаляет сообщение администратора */
-  'add-admin': FBMessageIdParam;
+  'add-admin': undefined;
   /** Добавляет сообщение, которое будет отправлено администратору после прохожденяи всех вопросов */
-  'drop-admin': FBMessageIdParam;
+  'drop-admin': undefined;
   /** Обнволяет настройки сообщения с обратной связью */
-  'update-setting': MessageFeedbackSetting & FBMessageIdParam;
+  'update-setting': MessageFeedbackSetting;
   /** Доабавляет вопрос */
-  'create-input': FBTypeParam & FBMessageIdParam;
+  'create-input': FBTypeParam;
   /** Удаляет вопрос */
-  'delete-input': FBInputIdParam & FBTypeParam & FBMessageIdParam;
+  'delete-input': FBInputIdParam & FBTypeParam;
   /** Обнволяет координаты позиции вопроса */
   'set-input-position': FBMessageParams & MessageFeedbackPosition;
   /** Устанавливает следующий вопрос */
   'set-input-next': FBNextParams & FBMessageParams;
   /** Устанавливает первый вопрос */
-  'set-start-input': FBStartParams & FBMessageIdParam;
+  'set-start-input': FBStartParams;
   /** Устанавливает следующий вопрос */
   'update-input': FBConfirmParam & FBMessageParams & FBTextParam;
   /** Обновляет св-ва текстового вопроса */
-  'update-input-text': MessageFeedbackItemInput &
-    FBInputIdParam &
-    FBMessageIdParam;
+  'update-input-text': MessageFeedbackItemInput & FBInputIdParam;
   /** Обновляет св-ва вопроса с выбором ответа */
-  'update-input-select': FBInputIdParam & FBMessageIdParam & FBIsMultipleParam;
+  'update-input-select': FBInputIdParam & FBIsMultipleParam;
   /** Обновляет св-ва файлового вопроса */
-  'update-input-file': MessageFeedbackItemFile &
-    FBInputIdParam &
-    FBMessageIdParam;
+  'update-input-file': MessageFeedbackItemFile & FBInputIdParam;
   /** Добавляет вариант ответа в вопросе select */
-  'add-select-option': FBInputIdParam & FBMessageIdParam & FBTextParam;
+  'add-select-option': FBInputIdParam & FBTextParam;
   /** Обновляет вариант ответа в вопросе select */
-  'update-select-option': FBOptionIdParam &
-    FBInputIdParam &
-    FBMessageIdParam &
-    FBTextParam;
+  'update-select-option': FBOptionIdParam & FBInputIdParam & FBTextParam;
   /** Поднимает вариант ответа в вопросе select */
-  'up-select-option': FBOptionIdParam & FBInputIdParam & FBMessageIdParam;
+  'up-select-option': FBOptionIdParam & FBInputIdParam;
   /** Отпускает вариант ответа в вопросе select */
-  'down-select-option': FBOptionIdParam & FBInputIdParam & FBMessageIdParam;
+  'down-select-option': FBOptionIdParam & FBInputIdParam;
   /** Отпускает вариант ответа в вопросе select */
-  'delete-select-option': FBOptionIdParam & FBInputIdParam & FBMessageIdParam;
+  'delete-select-option': FBOptionIdParam & FBInputIdParam;
   /** Добавляет вариант ответа в вопросе crossroad */
-  'add-crossroad-option': FBInputIdParam & FBMessageIdParam & FBTextParam;
+  'add-crossroad-option': FBInputIdParam & FBTextParam;
   /** Обновляет вариант ответа в вопросе crossroad */
-  'update-crossroad-option': FBInputIdParam & FBMessageIdParam & FBTextParam;
+  'update-crossroad-option': FBInputIdParam & FBTextParam;
   /** Удаляет вариант ответа в вопросе crossroad */
-  'delete-crossroad-option': FBOptionIdParam &
-    FBInputIdParam &
-    FBMessageIdParam;
+  'delete-crossroad-option': FBOptionIdParam & FBInputIdParam;
   /** Поднимает вариант ответа в вопросе crossroad */
-  'up-crossroad-option': FBOptionIdParam & FBInputIdParam & FBMessageIdParam;
+  'up-crossroad-option': FBOptionIdParam & FBInputIdParam;
   /** Отпускает вариант ответа в вопросе crossroad */
-  'down-crossroad-option': FBOptionIdParam & FBInputIdParam & FBMessageIdParam;
+  'down-crossroad-option': FBOptionIdParam & FBInputIdParam;
   /** Задает следующий вариант ответа */
-  'set-crossroad-option-next': FBNextParams &
-    FBOptionIdParam &
-    FBInputIdParam &
-    FBMessageIdParam;
+  'set-crossroad-option-next': FBNextParams & FBOptionIdParam & FBInputIdParam;
 }
 
 declare type FBParams<Q extends keyof FBQueries> = FBQueries[Q];

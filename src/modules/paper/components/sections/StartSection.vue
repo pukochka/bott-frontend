@@ -3,7 +3,7 @@
     bordered
     flat
     square
-    class="column absolute-right overflow-hidden"
+    class="column absolute-left overflow-hidden"
     @mouseenter="openMenu(true)"
     @mouseleave="openMenu(false)"
   >
@@ -31,23 +31,17 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../stores/PSstore';
 import { computed, ref } from 'vue';
-import { defaultMessage } from '../../scenarios/messages/stores/deafults';
-import MessageCard from './sections/MessageCard.vue';
+import { usePSStore } from '../../stores/PSstore';
+
+import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
+
+import MessageCard from '../views/MessageCard.vue';
 
 const store = usePSStore();
 
 const open = ref(false);
 const menu = ref(false);
-
-const add = () => {
-  console.log(
-    store.feedback.inputs.map((item) => {
-      return { x: item.platform?.position.x, y: item.platform?.position.y };
-    })
-  );
-};
 
 const openMenu = (value: boolean) => {
   if (store.onconnection || store.dragging || store.onmessage || menu.value)
@@ -56,27 +50,25 @@ const openMenu = (value: boolean) => {
   open.value = value;
 };
 
-const end = computed(() => store.feedback.end ?? defaultMessage);
-const admin = computed(() => store.feedback.admin ?? defaultMessage);
-const answerAdmin = computed(
-  () => store.feedback.answerAdmin ?? defaultMessage
-);
+const hello = computed(() => store.feedback.hello ?? defaultMessage);
+const startAdmin = computed(() => store.feedback.startAdmin ?? defaultMessage);
+const cancel = computed(() => store.feedback.cancel ?? defaultMessage);
 
 const messages = computed(() => [
   {
-    label: 'Прощание',
-    data: end.value,
-    condition: store.feedback.end !== null,
+    label: 'Приветствие',
+    data: hello.value,
+    condition: store.feedback.hello !== null,
   },
   {
     label: 'Уведомление администратора',
-    data: admin.value,
-    condition: store.feedback.admin !== null,
+    data: startAdmin.value,
+    condition: store.feedback.startAdmin !== null,
   },
   {
-    label: 'Быстрые ответы для администратора',
-    data: answerAdmin.value,
-    condition: store.feedback.answerAdmin !== null,
+    label: 'Сообщение при отмене',
+    data: cancel.value,
+    condition: store.feedback.cancel !== null,
   },
 ]);
 

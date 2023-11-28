@@ -9,26 +9,17 @@
       :style="{ width: quasar.screen.width - 60 + 'px' }"
     ></canvas>
 
-    <create-input></create-input>
+    <create-menu></create-menu>
 
-    <!--    <goodbye-menu></goodbye-menu>-->
+    <link-menu></link-menu>
 
-    <main-menu></main-menu>
+    <top-section></top-section>
 
-    <start-menu></start-menu>
+    <start-section></start-section>
 
-    <end-menu></end-menu>
+    <end-section></end-section>
 
-    <bottom-menu></bottom-menu>
-
-    <q-inner-loading
-      v-close-popup
-      @click="closeMenu"
-      :showing="store.position.visible"
-      class="bg-alpha cursor-default"
-    >
-      <div class=""></div>
-    </q-inner-loading>
+    <bottom-section></bottom-section>
   </div>
 
   <notify-setting></notify-setting>
@@ -36,6 +27,21 @@
   <users-answers></users-answers>
 
   <feedback-settings></feedback-settings>
+
+  <message-settings></message-settings>
+
+  <q-inner-loading
+    v-close-popup
+    @click="closeMenu"
+    :showing="visible"
+    class="bg-alpha cursor-default"
+  >
+    <div class="absolute-full"></div>
+  </q-inner-loading>
+
+  <!--  <q-inner-loading :showing="store.loading" class="bg-indigo">-->
+  <!--    <q-spinner-gears size="50px" color="primary" />-->
+  <!--  </q-inner-loading>-->
 </template>
 
 <script setup lang="ts">
@@ -46,21 +52,35 @@ import { install } from './utils/create';
 import { usePSStore } from './stores/PSstore';
 import { useQuasar } from 'quasar';
 
-import EndMenu from './components/EndMenu.vue';
-import NotifySetting from './components/dialogs/NotifySetting.vue';
-import CreateInput from './components/CreateInput.vue';
-import StartMenu from './components/StartMenu.vue';
-import MainMenu from './components/MainMenu.vue';
-import BottomMenu from './components/BottomMenu.vue';
+import LinkMenu from './components/menu/LinkMenu.vue';
+import CreateMenu from './components/menu/CreateMenu.vue';
+import StartSection from './components/sections/StartSection.vue';
+import EndSection from './components/sections/EndSection.vue';
+import TopSection from './components/sections/TopSection.vue';
+import BottomSection from './components/sections/BottomSection.vue';
 import UsersAnswers from './components/dialogs/UsersAnswers.vue';
 import FeedbackSettings from './components/dialogs/FeedbackSettings.vue';
+import MessageSettings from './components/message/MessageSettings.vue';
+import NotifySetting from './components/dialogs/NotifySetting.vue';
+import { MenuNames } from './stores/FeedbackModels';
 
 const store = usePSStore();
 const quasar = useQuasar();
 
+const visible = computed(() =>
+  Object.entries(store.menu)
+    .map(([_, value]) => value)
+    .includes(true)
+);
 const closeMenu = () => {
-  store.position.visible = false;
-  if (store.position.action) store.position.action();
+  Object.entries(store.menu).forEach(([key]) => {
+    store.menu[<MenuNames>key] = false;
+
+    if (store.action) {
+      store.action();
+      store.action = null;
+    }
+  });
 };
 
 const classes = computed(
@@ -70,7 +90,7 @@ const classes = computed(
     (store.clickable ? ' cursor-pointer' : '')
 );
 
-onMounted(install);
+// onMounted(install);
 onBeforeMount(() => {
   fetchMessage('get', { message_id: config.message_id });
 });

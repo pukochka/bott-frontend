@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia';
 import {
   defaultFeedback,
+  defaultInput,
+  DialogsNames,
   FeedbackModels,
+  MenuNames,
   MessageFeedbackItemPreview,
-  PaperGroup,
-} from './Feedbackmodels';
-import { Crossroad, Link } from '../utils/links';
+} from './FeedbackModels';
+import { Link } from '../utils/lines/link';
 import { defaultMessageFree } from '../../inline-menu/stores/inlineModels';
 
 export const usePSStore = defineStore('paper-store', {
@@ -18,24 +20,46 @@ export const usePSStore = defineStore('paper-store', {
       _feedback: defaultFeedback,
 
       connect: [],
+      shells: [],
+      loading: true,
 
       dragging: false,
       onmessage: false,
       onconnection: false,
       connecting: false,
       clickable: false,
+      notopen: false,
+      linking: false,
 
       dialogs: {
         setting: false,
+        answer: false,
+        notify: false,
+        message: false,
       },
 
-      position: { visible: false, action: null },
+      selectedMessage: defaultInput,
+
+      menu: { create: false, link: false },
+      action: null,
     } as unknown as FeedbackModels),
   getters: {
     alignCount: (state) => state._feedback.inputs.length,
     message: (state): MessageFree => state._message ?? defaultMessageFree,
     feedback: (state): MessageFeedback<MessageFeedbackItemPreview> =>
       state._feedback ?? defaultFeedback,
+
+    crossroadConnections: (state) => {
+      const cross = state._feedback.inputs
+        .filter((item) => item.crossroad)
+        .map((item) => item.crossroad?.options ?? [])
+        .flat()
+        .map((item) => {
+          return [item?.next.id, item.next.type];
+        });
+
+      return Object.fromEntries(cross);
+    },
   },
   actions: {
     mountLink() {
@@ -62,24 +86,35 @@ export const usePSStore = defineStore('paper-store', {
               })
           );
 
-          const crosses = <PaperGroup[]>(
-            (platforms ?? [])
-              .map((cross) => cross?.platform)
-              .filter((item) => item !== void 0)
-          );
+          platforms.forEach((platform) => {
+            const options = <[number, MessageFeedbackCrossroadOption][]>(
+              this.feedback.inputs
+                .map((item) =>
+                  item.crossroad?.options.map((opt) => {
+                    return [opt.next.id, opt];
+                  })
+                )
+                .flat()
+                .filter((i) => i)
+            );
 
-          const messages = platforms.concat(item);
+            const option = Object.fromEntries(options)[platform.id];
 
-          const crossroad = new Crossroad(messages, item, ...crosses);
+            const link = new Link(
+              item.platform,
+              platform.platform,
+              item,
+              platform,
+              option
+            );
 
-          const ids = (platforms ?? []).map((item: any) => item.id);
+            this.connect.push({
+              link: [item.id, platform.id],
+              group: link,
+            });
 
-          this.connect.push({
-            link: [item.id, ...ids],
-            group: crossroad,
+            this.layer.insertChild(0, link.group);
           });
-
-          this.layer.insertChild(0, crossroad.group);
         }
 
         if (item.next && end) {
@@ -103,9 +138,15 @@ export const usePSStore = defineStore('paper-store', {
 
       connect.forEach((item) => item.group.move(message));
     },
-    openMenu(action?: () => void) {
-      if (action !== void 0) this.position.action = action;
-      this.position.visible = true;
+    openMenu(name: MenuNames, action?: () => void) {
+      if (action !== void 0) this.action = action;
+      this.menu[name] = true;
+    },
+    openDialog(name: DialogsNames) {
+      this.dialogs[name] = true;
+    },
+    closeDialog(name: DialogsNames) {
+      this.dialogs[name] = false;
     },
   },
 });

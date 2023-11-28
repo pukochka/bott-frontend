@@ -76,7 +76,7 @@
           <router-view></router-view>
 
           <div
-            v-if="mdBr === false"
+            v-if="!footer && mdBr === false"
             class="bott-drawer__container row justify-center col-grow"
             :class="[!viewToc ? ' bott-menu__toc' : '']"
           >

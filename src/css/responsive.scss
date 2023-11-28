@@ -20,6 +20,12 @@
   }
 }
 
+@media (max-width: 1439px) {
+  .bott-dialog__responsive {
+    width: 75%;
+  }
+}
+
 @media (min-width: 1846px) {
   .bott-menu-container {
     flex: 1 0 auto;

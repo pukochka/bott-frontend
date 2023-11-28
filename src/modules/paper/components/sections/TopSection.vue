@@ -15,6 +15,7 @@
         :icon="button.icon"
         :color="button.color"
         :label="button.label"
+        @click="button.action"
       />
     </div>
 
@@ -24,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { usePSStore } from '../stores/PSstore';
+import { usePSStore } from '../../stores/PSstore';
 import {
   mdiBellCog,
   mdiForum,
@@ -40,19 +41,19 @@ const disabled = computed(
 const buttons = computed(() => [
   {
     label: 'Смотреть ответы',
-    action: '',
+    action: () => store.openDialog('answers'),
     icon: mdiForum,
     color: 'primary',
   },
   {
     label: 'Настройки уведомлений для администраторов',
-    action: '',
+    action: () => store.openDialog('notify'),
     icon: mdiBellCog,
     color: 'primary',
   },
   {
     label: 'Настройки обратной связи',
-    action: '',
+    action: () => store.openDialog('settings'),
     icon: mdiMessageSettings,
     color: 'primary',
   },

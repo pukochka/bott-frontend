@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import PaperList from '../../../../../modules/paper/PaperList.vue';
+import PaperList from '../../../../../modules/paper/FeedbackView.vue';
 </script>
 
 <style lang="scss" scoped></style>

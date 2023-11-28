@@ -3,7 +3,7 @@
     bordered
     flat
     square
-    class="column absolute-left overflow-hidden"
+    class="column absolute-right overflow-hidden"
     @mouseenter="openMenu(true)"
     @mouseleave="openMenu(false)"
   >
@@ -31,12 +31,10 @@
 </template>
 
 <script setup lang="ts">
+import { usePSStore } from '../../stores/PSstore';
 import { computed, ref } from 'vue';
-import { usePSStore } from '../stores/PSstore';
-
-import { defaultMessage } from '../../scenarios/messages/stores/deafults';
-
-import MessageCard from './sections/MessageCard.vue';
+import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
+import MessageCard from '../views/MessageCard.vue';
 
 const store = usePSStore();
 
@@ -50,25 +48,27 @@ const openMenu = (value: boolean) => {
   open.value = value;
 };
 
-const hello = computed(() => store.feedback.hello ?? defaultMessage);
-const startAdmin = computed(() => store.feedback.startAdmin ?? defaultMessage);
-const cancel = computed(() => store.feedback.cancel ?? defaultMessage);
+const end = computed(() => store.feedback.end ?? defaultMessage);
+const admin = computed(() => store.feedback.admin ?? defaultMessage);
+const answerAdmin = computed(
+  () => store.feedback.answerAdmin ?? defaultMessage
+);
 
 const messages = computed(() => [
   {
-    label: 'Приветствие',
-    data: hello.value,
-    condition: store.feedback.hello !== null,
+    label: 'Прощание',
+    data: end.value,
+    condition: store.feedback.end !== null,
   },
   {
     label: 'Уведомление администратора',
-    data: startAdmin.value,
-    condition: store.feedback.startAdmin !== null,
+    data: admin.value,
+    condition: store.feedback.admin !== null,
   },
   {
-    label: 'Сообщение при отмене',
-    data: cancel.value,
-    condition: store.feedback.cancel !== null,
+    label: 'Быстрые ответы для администратора',
+    data: answerAdmin.value,
+    condition: store.feedback.answerAdmin !== null,
   },
 ]);
 
