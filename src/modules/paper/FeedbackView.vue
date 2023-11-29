@@ -26,9 +26,11 @@
 
   <users-answers></users-answers>
 
-  <feedback-settings></feedback-settings>
+  <feedback-setting></feedback-setting>
 
-  <message-settings></message-settings>
+  <message-setting></message-setting>
+
+  <message-free-setting></message-free-setting>
 
   <q-inner-loading
     v-close-popup
@@ -46,11 +48,12 @@
 
 <script setup lang="ts">
 import { config } from './config';
-import { computed, onBeforeMount, onMounted } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 import { fetchMessage } from './api/queries';
-import { install } from './utils/create';
 import { usePSStore } from './stores/PSstore';
 import { useQuasar } from 'quasar';
+
+import { MenuNames } from './stores/FeedbackModels';
 
 import LinkMenu from './components/menu/LinkMenu.vue';
 import CreateMenu from './components/menu/CreateMenu.vue';
@@ -59,10 +62,10 @@ import EndSection from './components/sections/EndSection.vue';
 import TopSection from './components/sections/TopSection.vue';
 import BottomSection from './components/sections/BottomSection.vue';
 import UsersAnswers from './components/dialogs/UsersAnswers.vue';
-import FeedbackSettings from './components/dialogs/FeedbackSettings.vue';
-import MessageSettings from './components/message/MessageSettings.vue';
+import FeedbackSetting from './components/dialogs/FeedbackSetting.vue';
+import MessageSetting from './components/message/MessageSetting.vue';
 import NotifySetting from './components/dialogs/NotifySetting.vue';
-import { MenuNames } from './stores/FeedbackModels';
+import MessageFreeSetting from './components/dialogs/MessageFreeSetting.vue';
 
 const store = usePSStore();
 const quasar = useQuasar();
@@ -90,7 +93,6 @@ const classes = computed(
     (store.clickable ? ' cursor-pointer' : '')
 );
 
-// onMounted(install);
 onBeforeMount(() => {
   fetchMessage('get', { message_id: config.message_id });
 });

@@ -1,10 +1,10 @@
 import { PaperItem, PaperPoint, PaperSize } from '../stores/FeedbackModels';
-import { Item, Path, Point, PointText, Shape, Size } from 'paper';
+import { Color, Item, Path, Point, PointText, Shape, Size } from 'paper';
 import { getTextPoints } from './coords';
 import {
-  mdiFileDocumentArrowRightOutline,
   mdiMessage,
-  mdiMessageQuestion,
+  mdiMessageBulleted,
+  mdiViewGallery,
 } from '@quasar/extras/mdi-v7';
 
 export const setting: Record<
@@ -18,12 +18,12 @@ export const setting: Record<
   },
   2: {
     title: 'Сообщение\nс файлом',
-    icon: mdiFileDocumentArrowRightOutline,
+    icon: mdiMessageBulleted,
     color: '#ffc971',
   },
   3: {
     title: 'Опрос',
-    icon: mdiMessageQuestion,
+    icon: mdiViewGallery,
     color: '#cd5d67',
   },
   4: {
@@ -99,6 +99,7 @@ export function createText(
   fontSize?: number,
   diff?: number,
   radius?: number,
+  color?: string,
   justification?: string
 ) {
   const content = new PointText({
@@ -114,6 +115,7 @@ export function createText(
   content.bounds.x = x;
   content.bounds.y = y;
   content.justification = justification ?? 'center';
+  content.fillColor = new Color(color ?? 'black');
 
   content.remove();
 

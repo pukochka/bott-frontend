@@ -7,6 +7,7 @@ import {
   MessageFeedbackItemPreview,
   PaperPoint,
 } from '../../stores/FeedbackModels';
+import { fetchFeedback } from '../../api/queries';
 
 export function createShell(
   message: MessageFeedbackItemPreview,
@@ -45,6 +46,13 @@ export function createShell(
   platform.onMouseUp = () => {
     store.dragging = false;
     store.connecting = false;
+
+    fetchFeedback('set-input-position', {
+      input_id: message.id,
+      type: message.type,
+      x: platform.position.x,
+      y: platform.position.y,
+    }).then();
   };
 
   platform.onMouseLeave = () => {

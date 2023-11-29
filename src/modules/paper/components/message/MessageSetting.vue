@@ -3,7 +3,7 @@
     persistent
     full-width
     position="bottom"
-    @before-show="update"
+    @before-show="updateShow"
     v-model="store.dialogs.message"
   >
     <div class="row justify-center">
@@ -83,7 +83,7 @@
             :disable="
               !(text.required && add_required.message && add_required.your)
             "
-            :loading="loading"
+            :loading="loading.save"
             @click="saveSettings"
           />
         </q-card-section>
@@ -103,6 +103,8 @@ import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.v
 import FileView from './sections/FileView.vue';
 import SimpleView from './sections/SimpleView.vue';
 import QuizView from './sections/QuizView.vue';
+import { useDialog } from '../../../file-manager/stores/useDialog';
+import { update } from '../../utils/create';
 
 const store = usePSStore();
 
@@ -116,7 +118,10 @@ const text = ref({
 });
 
 const confirm = ref(false);
-const loading = ref(false);
+const loading = ref({
+  delete: false,
+  save: false,
+});
 const type = ref<1 | 2 | 3>(1);
 const data = ref<FBSimpleQuestion | FBFileQuestion | ApiQuiz | null>(null);
 
@@ -146,19 +151,29 @@ function registerRequired(value: { your: boolean; message: boolean }) {
 }
 
 const deleteQuestion = () => {
-  console.log(1);
-  // main.openNotify({
-  //   message: 'Вы уверены, что хотите удалить вопрос?',
-  //   type: 'sure',
-  //   data: {
-  //     type: main.viewSelected.question.type,
-  //     id: main.viewSelected.question.id,
-  //   },
-  // });
+  useDialog('Вы уверены, что хотите удалить вопрос?').onOk(() => {
+    loading.value.delete = true;
+    fetchFeedback(
+      'delete-input',
+      {
+        type: store.selectedMessage?.type ?? 1,
+        input_id: store.selectedMessage?.id ?? 1,
+      },
+      (response) => {
+        loading.value.delete = false;
+        store._feedback = response.feedback;
+
+        store.closeDialog('message');
+        store.selectedMessage = null;
+
+        update();
+      }
+    );
+  });
 };
 
 const saveSettings = () => {
-  loading.value = true;
+  loading.value.save = true;
 
   // fetchFeedback(`update-input-${query.value}`, {
   //   ...data.value,
@@ -171,7 +186,7 @@ const saveSettings = () => {
   // });
 };
 
-const update = () => {
+const updateShow = () => {
   console.log(store.selectedMessage);
   confirm.value = !store.selectedMessage?.confirm;
   type.value = store.selectedMessage?.type ?? 1;

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { config } from '../config';
 import { useDialog } from '../../file-manager/stores/useDialog';
+import { usePSStore } from '../stores/PSstore';
 
 export const instance = axios.create({
   baseURL: config.host,
@@ -8,9 +9,12 @@ export const instance = axios.create({
 });
 
 instance.interceptors.request.use(function (request) {
+  const store = usePSStore();
+
   request.params = { token: config.bot.token };
   request.data = {
     bot_id: config.bot.id,
+    message_id: store.message.id,
     ...request.data,
   };
 

@@ -18,7 +18,33 @@ export function install() {
   store.layer = Paper.project.activeLayer;
   store.view.zoom = 0.5;
 
-  // store.view.center = setCenter();
+  store.view.center = setCenter();
+
+  update(true);
+
+  store.loading = false;
+
+  store.view.onMouseDrag = (event: any) => {
+    if (store.dragging || store.onconnection || store.onmessage) return;
+
+    store.view.translate(event.delta.subtract(oldDelta));
+    oldDelta = oldDelta.subtract(event.delta);
+  };
+
+  canvas.addEventListener('wheel', (ev: any) => {
+    if (ev.wheelDelta > 0 && store.view.zoom < 1.5) store.view.zoom += 0.07;
+
+    if (ev.wheelDelta < 0 && store.view.zoom > 0.25) store.view.zoom -= 0.07;
+  });
+}
+
+export function update(start?: boolean) {
+  const store = usePSStore();
+
+  store.connect = [];
+  store.shells = [];
+
+  if (!start) store.layer.removeChildren();
 
   for (const input of store.feedback.inputs) {
     const elSetting = setting[input.type];
@@ -40,21 +66,4 @@ export function install() {
   }
 
   store.mountLink();
-
-  store.loading = false;
-
-  store.view.onMouseDrag = (event: any) => {
-    if (store.dragging || store.onconnection || store.onmessage) return;
-
-    store.view.translate(event.delta.subtract(oldDelta));
-    oldDelta = oldDelta.subtract(event.delta);
-  };
-
-  canvas.addEventListener('wheel', (ev: any) => {
-    if (ev.wheelDelta > 0 && store.view.zoom < 1.5) store.view.zoom += 0.07;
-
-    if (ev.wheelDelta < 0 && store.view.zoom > 0.25) store.view.zoom -= 0.07;
-
-    console.log(store.view.zoom);
-  });
 }

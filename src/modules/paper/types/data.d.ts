@@ -10,6 +10,7 @@ declare interface MessageFeedback<Q> {
   answerAdmin: MessageFree | null;
   admin: MessageFree | null;
   setting: MessageFeedbackSetting;
+  start: MessageFeedbackNextItem | null;
   /** Вопросы обратной связи */
   inputs: Array<Q>;
 }

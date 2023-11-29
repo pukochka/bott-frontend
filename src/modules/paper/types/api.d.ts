@@ -1,6 +1,6 @@
 interface FBTypeParam {
   /** Уникальный идентификатор сообщения */
-  type: keyof MessageFeedbackMessageType;
+  type: number;
 }
 
 interface FBInputIdParam {
@@ -30,14 +30,26 @@ interface FBTextParam {
 
 interface FBNextParams {
   /** Уникальный идентификатор сообщения */
-  next_id: number;
-  next_type: number;
+  next_id: number | null;
+  next_type: number | null;
 }
 
 interface FBStartParams {
   /** Уникальный идентификатор сообщения */
   start_id: number;
   start_type: number;
+}
+
+interface FBAfterParams {
+  /** Уникальный идентификатор сообщения */
+  after_id: number | null;
+  after_type: number | null;
+}
+
+interface FBPositionParams {
+  /** Уникальный идентификатор сообщения */
+  pos_x: number | null;
+  pos_y: number | null;
 }
 
 type FBMessageParams = FBTypeParam & FBInputIdParam;
@@ -78,7 +90,7 @@ declare interface FBQueries {
   /** Обнволяет настройки сообщения с обратной связью */
   'update-setting': MessageFeedbackSetting;
   /** Доабавляет вопрос */
-  'create-input': FBTypeParam;
+  'create-input': FBTypeParam & FBAfterParams & FBPositionParams;
   /** Удаляет вопрос */
   'delete-input': FBInputIdParam & FBTypeParam;
   /** Обнволяет координаты позиции вопроса */

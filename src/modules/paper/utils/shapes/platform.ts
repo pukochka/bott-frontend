@@ -1,7 +1,7 @@
 import { usePSStore } from '../../stores/PSstore';
 import { Group, Point } from 'paper';
 import gsap from 'gsap';
-import { circle, createIcon } from '../common';
+import { circle, createIcon, createText } from '../common';
 import {
   colors,
   MessageFeedbackItemPreview,
@@ -24,6 +24,8 @@ export function createPlatform(
   const backCircle = circle(coords, 80, message.setting.color);
   const backCircle1 = circle(coords, 90, '#fafafa');
 
+  backCircle.opacity = 0.6;
+
   circleGroup.addChildren([backCircle1, backCircle, mainCircle, frontCircle]);
 
   const point = new Point(coords);
@@ -41,6 +43,22 @@ export function createPlatform(
     circleGroup.insertChildren(3, [router, icon]);
   } else {
     circleGroup.insertChild(3, icon);
+  }
+
+  if (
+    message.next?.id === store.feedback.start?.id &&
+    message.next?.type === store.feedback.start?.type
+  ) {
+    const startText = createText(
+      'Стартовое\nсообщение',
+      coords,
+      10,
+      0,
+      -60,
+      'white'
+    );
+
+    circleGroup.insertChild(3, startText);
   }
 
   frontCircle.onMouseEnter = () => {

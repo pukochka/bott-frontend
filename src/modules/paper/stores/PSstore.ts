@@ -36,9 +36,11 @@ export const usePSStore = defineStore('paper-store', {
         answer: false,
         notify: false,
         message: false,
+        message_free: false,
       },
 
-      selectedMessage: defaultInput,
+      selectedMessage: null,
+      selectedMessageFree: null,
 
       menu: { create: false, link: false },
       action: null,

@@ -37,6 +37,7 @@ import { usePSStore } from '../../stores/PSstore';
 import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
 
 import MessageCard from '../views/MessageCard.vue';
+import { fetchFeedback } from '../../api/queries';
 
 const store = usePSStore();
 
@@ -59,16 +60,19 @@ const messages = computed(() => [
     label: 'Приветствие',
     data: hello.value,
     condition: store.feedback.hello !== null,
+    method: 'hello',
   },
   {
     label: 'Уведомление администратора',
     data: startAdmin.value,
     condition: store.feedback.startAdmin !== null,
+    method: 'start-admin',
   },
   {
     label: 'Сообщение при отмене',
     data: cancel.value,
     condition: store.feedback.cancel !== null,
+    method: 'cancel',
   },
 ]);
 

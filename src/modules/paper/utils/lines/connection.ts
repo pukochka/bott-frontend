@@ -96,6 +96,17 @@ export class Connection {
     this.group.onMouseUp = (event: any) => {
       const child = event.target?.children?.[3];
 
+      if (this.canConnect.length && this.prev) {
+        const next = this.canConnect[0];
+
+        fetchFeedback('set-input-next', {
+          input_id: this.message.id,
+          type: this.message.type,
+          next_id: next.data.id ?? null,
+          next_type: next.data.type ?? null,
+        }).then();
+      }
+
       if (overlap(child, this.connectCircle)) {
         this.createConnect();
         return;
@@ -160,16 +171,11 @@ export class Connection {
         this.createPrevLink();
       }
 
-      // if (this.prev) this.removePrevLink();
-
       if (this.line && this.platform) {
         this.line.firstCurve.point1 = this.platform.position;
         this.line.firstCurve.point2 = this.front.position;
       }
     };
-
-    this.groupConnection.onMouseEnter = this.createPrevLink.bind(this);
-    this.groupConnection.onMouseLeave = this.removePrevLink.bind(this);
   }
 
   openConnection() {
@@ -190,6 +196,7 @@ export class Connection {
 
     const store = usePSStore();
     if (!this.prev) this.createPrevLink();
+    store.selectedMessage = this.message;
 
     store.openMenu('create', () => {
       this.action = false;

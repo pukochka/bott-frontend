@@ -129,6 +129,8 @@ export class Link {
 
     this.lineFront.onClick = () => {
       store.openMenu('link');
+
+      store.selectedMessage = this.startMessage;
     };
 
     this.lineFront.onMouseEnter = () => {

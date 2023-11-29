@@ -1,22 +1,33 @@
 import { useDialog } from '../../file-manager/stores/useDialog';
 import { instance } from './instance';
 import { usePSStore } from '../stores/PSstore';
-import { install } from '../utils/create';
+import { install, update } from '../utils/create';
 
 export async function fetchFeedback<Q extends keyof FBQueries>(
   query: Q,
-  data: FBParams<Q>,
+  data?: FBParams<Q>,
   action?: (response: any) => void
 ) {
   try {
+    const store = usePSStore();
+
     return await instance({
       url: 'v1/bot/messagenew/feedback/main/' + query,
       data,
     }).then((response) => {
       /** */
-      console.log(response);
 
       if (action !== void 0) action(response.data.data);
+
+      /** */
+
+      if (query === 'set-input-next') {
+        store._feedback = response.data.data.feedback;
+        store.selectedMessage = null;
+
+        update();
+      }
+
       /** */
     });
   } catch (e) {

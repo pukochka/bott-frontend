@@ -44,6 +44,7 @@
                   clickable
                   v-for="(button, index) of buttons"
                   :key="index"
+                  @click="button.action"
                 >
                   <q-item-section avatar>
                     <q-icon
@@ -54,6 +55,13 @@
                   </q-item-section>
 
                   <q-item-section>{{ button.label }}</q-item-section>
+
+                  <q-inner-loading
+                    :showing="loading.drop"
+                    v-if="button.icon === 'close'"
+                  >
+                    <q-spinner size="16px" color="primary" />
+                  </q-inner-loading>
                 </q-item>
               </q-list>
             </q-menu>
@@ -84,6 +92,8 @@
           color="primary"
           icon="add_circle"
           class="rounded col-6"
+          :loading="loading.add"
+          @click="messageAction('add')"
         >
           <q-tooltip
             class="bott-tooltip text-center"
@@ -101,15 +111,38 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
+import { fetchFeedback } from '../../api/queries';
+import { usePSStore } from '../../stores/PSstore';
 
 const props = withDefaults(defineProps<MessageCardProps>(), {
   open: false,
   message: () => {
-    return { data: defaultMessage, label: '', condition: false };
+    return {
+      data: defaultMessage,
+      label: '',
+      condition: false,
+      method: 'hello',
+    };
   },
 });
 
+const store = usePSStore();
+
 const menu = ref(false);
+const loading = ref({
+  add: false,
+  drop: false,
+});
+
+const messageAction = (prefix: 'add' | 'drop') => {
+  loading.value[prefix] = true;
+
+  fetchFeedback(`${prefix}-${props.message.method}`, undefined, (response) => {
+    store._feedback = response.feedback;
+  }).then(() => {
+    loading.value[prefix] = false;
+  });
+};
 
 const buttons = computed(() => [
   {
@@ -122,13 +155,18 @@ const buttons = computed(() => [
     label: 'Удалить',
     icon: 'close',
     color: 'red',
-    action: '',
+    action: () => messageAction('drop'),
   },
 ]);
 
 interface MessageCardProps {
   open: boolean;
-  message: { data: MessageFree; label: string; condition: boolean };
+  message: {
+    data: MessageFree;
+    label: string;
+    condition: boolean;
+    method: 'hello';
+  };
 }
 </script>
 
