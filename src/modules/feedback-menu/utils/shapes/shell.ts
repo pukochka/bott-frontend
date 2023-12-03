@@ -1,12 +1,12 @@
 import { Group, Point } from 'paper';
 import { createText } from '../common';
 import { createPlatform } from './platform';
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 import { Connection } from '../lines/connection';
 import {
   MessageFeedbackItemPreview,
   PaperPoint,
-} from '../../stores/FeedbackModels';
+} from '../../stores/feedbackModels';
 import { fetchFeedback } from '../../api/queries';
 
 export function createShell(

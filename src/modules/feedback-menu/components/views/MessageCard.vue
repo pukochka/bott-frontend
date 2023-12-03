@@ -91,7 +91,7 @@
 import { ref } from 'vue';
 import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
 import { fetchFeedback } from '../../api/queries';
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 import MessageMenu from './MessageMenu.vue';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 

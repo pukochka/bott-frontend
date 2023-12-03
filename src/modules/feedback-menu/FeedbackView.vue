@@ -59,10 +59,10 @@
 import { config } from './config';
 import { computed, onBeforeMount } from 'vue';
 import { fetchMessage } from './api/queries';
-import { usePSStore } from './stores/PSstore';
+import { usePSStore } from './stores/feedbackStore';
 import { useQuasar } from 'quasar';
 
-import { MenuNames } from './stores/FeedbackModels';
+import { MenuNames } from './stores/feedbackModels';
 
 import LinkMenu from './components/menu/LinkMenu.vue';
 import CreateMenu from './components/menu/CreateMenu.vue';

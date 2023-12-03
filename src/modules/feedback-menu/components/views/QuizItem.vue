@@ -122,7 +122,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 
 import { defaultQuiz } from '../message/models';
 import { fetchFeedback } from '../../api/queries';

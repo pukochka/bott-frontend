@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 import { computed, ref } from 'vue';
 
 import { fetchFeedback } from '../../api/queries';

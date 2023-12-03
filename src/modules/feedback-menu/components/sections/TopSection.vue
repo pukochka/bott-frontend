@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 import {
   mdiBellCog,
   mdiForum,

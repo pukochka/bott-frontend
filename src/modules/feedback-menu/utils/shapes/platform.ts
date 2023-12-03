@@ -1,4 +1,4 @@
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 import { Group, Point } from 'paper';
 import gsap from 'gsap';
 import { circle, createIcon, createText } from '../common';
@@ -6,7 +6,7 @@ import {
   colors,
   MessageFeedbackItemPreview,
   PaperPoint,
-} from '../../stores/FeedbackModels';
+} from '../../stores/feedbackModels';
 import { createPlus } from '../figures';
 
 const { noColor } = colors;

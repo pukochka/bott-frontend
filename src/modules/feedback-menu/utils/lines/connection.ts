@@ -4,10 +4,10 @@ import {
   MessageFeedbackItemPreview,
   PaperGroup,
   PaperLine,
-} from '../../stores/FeedbackModels';
+} from '../../stores/feedbackModels';
 import { Group, Point } from 'paper';
 import { createPlus } from '../figures';
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 import { circle, dashLine } from '../common';
 import gsap from 'gsap';
 import { Link } from './link';

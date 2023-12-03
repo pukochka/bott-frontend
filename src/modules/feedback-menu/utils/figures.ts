@@ -3,7 +3,7 @@ import {
   PaperPath,
   PaperPoint,
   PaperText,
-} from '../stores/FeedbackModels';
+} from '../stores/feedbackModels';
 import { Group, Path, Point, PointText } from 'paper';
 
 export function createPlus(

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { config } from '../config';
 import { useDialog } from '../../file-manager/stores/useDialog';
-import { usePSStore } from '../stores/PSstore';
+import { usePSStore } from '../stores/feedbackStore';
 
 export const instance = axios.create({
   baseURL: config.host,

@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 import InlineMenu from '../../../inline-menu/InlineMenu.vue';
 import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
 import { config } from '../../config';

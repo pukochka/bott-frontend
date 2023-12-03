@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 
 const store = usePSStore();
 </script>

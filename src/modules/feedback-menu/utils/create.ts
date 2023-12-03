@@ -1,5 +1,5 @@
 import Paper, { Point } from 'paper';
-import { usePSStore } from '../stores/PSstore';
+import { usePSStore } from '../stores/feedbackStore';
 import { makeAutoAlign, setCenter } from './coords';
 
 import { createShell } from './shapes/shell';

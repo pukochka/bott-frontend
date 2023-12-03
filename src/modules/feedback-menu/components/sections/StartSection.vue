@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 
 import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
 

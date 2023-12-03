@@ -5,11 +5,11 @@ import {
   PaperGroup,
   PaperItem,
   PaperLine,
-} from '../../stores/FeedbackModels';
+} from '../../stores/feedbackModels';
 import { Group, Path, Point } from 'paper';
 import { circle, dashLine, moveToPoint } from '../common';
 
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 
 import { Arrow, CrossroadText } from '../figures';
 import { rotateCircle } from '../common';

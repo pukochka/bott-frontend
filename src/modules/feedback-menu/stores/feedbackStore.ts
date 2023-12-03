@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
 import {
   defaultFeedback,
-  defaultInput,
   DialogsNames,
   FeedbackModels,
   MenuNames,
   MessageFeedbackItemPreview,
-} from './FeedbackModels';
+} from './feedbackModels';
 import { Link } from '../utils/lines/link';
 import { defaultMessageFree } from '../../inline-menu/stores/inlineModels';
 import { Point } from 'paper';

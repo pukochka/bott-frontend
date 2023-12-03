@@ -80,9 +80,9 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { patterns } from '../models';
 
-import { defaultInput } from '../../../stores/FeedbackModels';
+import { defaultInput } from '../../../stores/feedbackModels';
 import { fetchFeedback } from '../../../api/queries';
-import { usePSStore } from '../../../stores/PSstore';
+import { usePSStore } from '../../../stores/feedbackStore';
 
 const props = withDefaults(defineProps<SimpleQuestionProps>(), {
   message: () => defaultInput,

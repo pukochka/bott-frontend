@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 import { fetchFeedback } from '../../api/queries';
 
 import { mdiMessagePlus } from '@quasar/extras/mdi-v7';

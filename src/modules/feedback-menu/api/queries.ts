@@ -1,5 +1,5 @@
 import { instance } from './instance';
-import { usePSStore } from '../stores/PSstore';
+import { usePSStore } from '../stores/feedbackStore';
 import { install, update } from '../utils/create';
 
 const beforeAction: Array<keyof FBMainQueries> = [];

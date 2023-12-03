@@ -93,9 +93,9 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { fetchFeedback } from '../../../api/queries';
 
-import { defaultInput } from '../../../stores/FeedbackModels';
+import { defaultInput } from '../../../stores/feedbackModels';
 import { extensions } from '../models';
-import { usePSStore } from '../../../stores/PSstore';
+import { usePSStore } from '../../../stores/feedbackStore';
 
 const props = withDefaults(defineProps<FileQuestionProps>(), {
   message: () => defaultInput,

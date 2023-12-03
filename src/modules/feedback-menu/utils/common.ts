@@ -1,4 +1,4 @@
-import { PaperItem, PaperPoint, PaperSize } from '../stores/FeedbackModels';
+import { PaperItem, PaperPoint, PaperSize } from '../stores/feedbackModels';
 import { Color, Item, Path, Point, PointText, Shape, Size } from 'paper';
 import { getTextPoints } from './coords';
 import { mdiMessage, mdiFile, mdiAnimation } from '@quasar/extras/mdi-v7';

@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { usePSStore } from '../../stores/PSstore';
+import { usePSStore } from '../../stores/feedbackStore';
 
 import { fetchFeedback } from '../../api/queries';
 import TypesQuestionList from '../views/TypesQuestionList.vue';

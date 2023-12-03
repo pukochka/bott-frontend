@@ -82,9 +82,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { fetchFeedback } from '../../../api/queries';
-import { usePSStore } from '../../../stores/PSstore';
+import { usePSStore } from '../../../stores/feedbackStore';
 
-import { defaultInput } from '../../../stores/FeedbackModels';
+import { defaultInput } from '../../../stores/feedbackModels';
 
 import QuizItem from '../../views/QuizItem.vue';
 import RadioItem from '../../views/RadioItem.vue';
