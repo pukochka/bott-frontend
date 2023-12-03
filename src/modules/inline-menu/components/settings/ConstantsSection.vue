@@ -2,15 +2,13 @@
   <q-card flat bordered class="rounded" v-if="visible">
     <panel-header
       label="Константы для сообщения"
-      icon="data_object"
-    ></panel-header>
+      icon="data_object"></panel-header>
 
     <div class="q-px-sm q-pb-sm">
       <div
         class="row items-center"
         v-for="([name, text], index) of constants"
-        :key="index"
-      >
+        :key="index">
         <q-btn
           dense
           no-caps
@@ -20,13 +18,11 @@
           color="primary"
           class="rounded"
           :label="'{' + name + '}'"
-          @click="copy('{' + name + '}')"
-        >
+          @click="copy('{' + name + '}')">
           <q-tooltip
             class="bott-tooltip"
             anchor="top middle"
-            self="bottom middle"
-          >
+            self="bottom middle">
             Скопировать {{ '{' + name + '}' }}
           </q-tooltip>
         </q-btn>

@@ -1,7 +1,6 @@
 import instance from './instance';
 import { useFMStore } from '../stores/FMStrore';
 import { debounce } from 'quasar';
-import { config } from '../config';
 
 export async function fetchFile<Q extends keyof FMQueries>(
   query: Q,
@@ -10,16 +9,16 @@ export async function fetchFile<Q extends keyof FMQueries>(
 ) {
   const data = useFMStore();
 
-  const host = config.value.host + 'v1/bot/manager/' + +config.value.query;
+  const host = 'v1/bot/manager/' + data.query;
 
   const url =
     (query.includes('/')
       ? host.slice(0, host.lastIndexOf('/') + 1)
-      : 'v1/bot/manager/' + config.value.query + '/') + query;
+      : 'v1/bot/manager/' + data.query + '/') + query;
 
   try {
     return await instance({
-      url: url,
+      url: data.host + url,
       data: params,
     }).then((response) => {
       /** */
@@ -37,7 +36,9 @@ export async function fetchFile<Q extends keyof FMQueries>(
           response.data?.data?.file_support_extensions ?? [];
         data.paths = response.data?.data?.paths ?? 'photos';
 
-        data.usersFiles = data.usersFiles.sort((a, b) => a.date - b.date);
+        data.usersFiles = data.usersFiles.sort(
+          (a, b) => Date.parse(a.date) - Date.parse(b.date)
+        );
 
         /** */
       } else if (query === 'main/delete') {

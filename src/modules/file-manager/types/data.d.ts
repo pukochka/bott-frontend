@@ -17,7 +17,7 @@ declare interface FMItem {
   /**
    * Дата загрузки
    * */
-  date: number;
+  date: string;
   /**
    *
    * */

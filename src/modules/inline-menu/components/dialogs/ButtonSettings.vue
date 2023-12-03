@@ -29,10 +29,10 @@
 
       <q-card-section class="q-pt-none">
         <select-type
-          :bot_id="config.bot.id"
-          :token="config.bot.token"
+          :bot_id="inline.bot_id"
+          :token="inline.token"
           :message_id="inline.message.id"
-          :host="config.host"
+          :host="inline.host"
           :webs="config.webs"
           :button="inline.selectedButton"
           :buttons="inlineButtons"

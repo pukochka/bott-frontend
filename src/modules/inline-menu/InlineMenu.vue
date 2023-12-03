@@ -13,15 +13,18 @@
             <top-section></top-section>
 
             <file-manager
+              v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
               dialog
               :message="inline.message"
-              v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
-            ></file-manager>
+              :bot_id="inline.bot_id"
+              :token="inline.token"
+              :host="inline.host"></file-manager>
           </div>
 
           <assigned-file
-            v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
-          ></assigned-file>
+            v-if="
+              [1, 3, 4, 5].includes(inline.message.type.id)
+            "></assigned-file>
 
           <message-content></message-content>
         </q-card>
@@ -32,8 +35,7 @@
           :loading="loading.delete"
           @select-button="openSettings"
           @add-button="addButtonInLine"
-          @delete-line="deleteLine"
-        ></buttons-section>
+          @delete-line="deleteLine"></buttons-section>
 
         <setting-section></setting-section>
       </div>
@@ -64,14 +66,14 @@
 import { onBeforeMount, ref } from 'vue';
 
 import { fetchMenu, fetchMessage, fetchSettings } from './api/queries';
-import { getQueryParam } from '../../utils/helpers/string';
+import { getQueryParam } from 'src/utils/helpers/string';
 
 import { useInlineStore } from './stores/inlineStore';
 import { useDialog } from '../file-manager/stores/useDialog';
 
 import AddButton from './components/dialogs/AddButton.vue';
 import ButtonSettings from './components/dialogs/ButtonSettings.vue';
-import ButtonsSection from '../../components/inline/ButtonsSection.vue';
+import ButtonsSection from 'src/components/inline/ButtonsSection.vue';
 import SettingSection from './components/SettingSection.vue';
 import EditorDial from './components/dialogs/EditorDial.vue';
 import DraggableDial from './components/dialogs/DraggableDial.vue';
@@ -87,6 +89,9 @@ import MessageContent from './components/MessageContent.vue';
 
 const props = withDefaults(defineProps<InlineMenuProps>(), {
   message: undefined,
+  bot_id: 0,
+  host: '',
+  token: '',
 });
 
 const inline = useInlineStore();
@@ -119,6 +124,8 @@ const deleteLine = (line: number) => {
 };
 
 onBeforeMount(() => {
+  windowProps();
+
   if (props.message) {
     inline.message = props.message;
 
@@ -132,13 +139,32 @@ onBeforeMount(() => {
   const message_id = Number(getQueryParam('id')) ?? 1;
 
   Promise.all([
-    fetchMessage('get', { message_id: 1 }),
-    fetchSettings('settings', 1),
+    fetchMessage('get', { message_id: message_id }),
+    fetchSettings('settings', message_id),
   ]).then(() => (loading.value.start = false));
 });
 
+const windowProps = () => {
+  if (props.bot_id && props.token && props.host) {
+    inline.bot_id = props.bot_id;
+    inline.token = props.token;
+    inline.host = props.host;
+
+    return;
+  }
+
+  try {
+    // inline.bot_id = bot.id;
+    // inline.token = bot.token;
+    // inline.host = host;
+  } catch (e) {}
+};
+
 interface InlineMenuProps {
   message?: MessageFree | null;
+  bot_id?: number;
+  host?: string;
+  token?: string;
 }
 </script>
 

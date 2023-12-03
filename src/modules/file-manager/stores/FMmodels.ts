@@ -2,6 +2,9 @@ export interface FMStore {
   usersFiles: Array<FMItem>;
   message: MessageFree | undefined;
   dialog: boolean;
+  bot_id: number;
+  host: string;
+  token: string;
 
   allow_size: number;
   _employed: number;

@@ -1,11 +1,12 @@
 <template>
-  <file-img v-if="aviExt" :name="props.name" :link="props.link"></file-img>
+  <file-img v-if="aviExt" :name="props.name" :link="props.link">
+    <slot></slot>
+  </file-img>
 
   <q-responsive class="absolute-full" v-else>
     <video
       muted
-      :style="{ 'object-fit': data.imageFit, 'object-position': '50% 50%' }"
-    >
+      :style="{ 'object-fit': data.imageFit, 'object-position': '50% 50%' }">
       <source :src="props.link" />
 
       Ваш браузер не поддерживает видео HTML5.

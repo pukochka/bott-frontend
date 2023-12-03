@@ -38,6 +38,9 @@ import FileManagerCard from './FileManagerCard.vue';
 const props = withDefaults(defineProps<FileManagerProps>(), {
   message: () => defaultMessageFree,
   dialog: false,
+  bot_id: 0,
+  host: '',
+  token: '',
 });
 
 const dialog = ref(false);
@@ -46,7 +49,7 @@ const data = useFMStore();
 
 const btnText = computed(() => text[data.query] ?? 'картинку');
 
-const text: Record<any, string> = {
+const text = {
   photos: 'картинку',
   files: 'файл',
   animations: 'анимацию',
@@ -66,6 +69,9 @@ const updateShow = () => {
 onBeforeMount(() => {
   data.message = props.message;
   data.dialog = props.dialog;
+  data.bot_id = props.bot_id ?? 0;
+  data.token = props.token ?? '';
+  data.host = props.host ?? '';
 });
 
 watch(
@@ -77,6 +83,9 @@ watch(
 interface FileManagerProps {
   message?: MessageFree;
   dialog: boolean;
+  bot_id?: number;
+  host?: string;
+  token?: string;
 }
 </script>
 

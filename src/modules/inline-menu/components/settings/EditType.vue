@@ -6,9 +6,8 @@
           dense
           clickable
           class="bordered rounded fit"
-          @click="select(tp.type)"
-        >
-          <q-item-section avatar>
+          @click="select(tp.type)">
+          <q-item-section avatar v-if="!sm">
             <q-icon :name="icons[tp.type]" color="primary" size="24px" />
           </q-item-section>
 
@@ -24,8 +23,7 @@
             toggle-indeterminate
             v-if="selected === tp.type"
             class="absolute-top-right"
-            :model-value="checkbox === tp.type"
-          />
+            :model-value="checkbox === tp.type" />
         </q-item>
       </div>
     </q-list>
@@ -33,7 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
+import { useQuasar } from 'quasar';
 
 const props = withDefaults(defineProps<EditTypeProps>(), {
   type: 0,
@@ -47,8 +46,12 @@ const emit = defineEmits<{
   (e: 'select', value: number): void;
 }>();
 
+const quasar = useQuasar();
+
 const selected = ref(0);
 const checkbox = ref(0);
+
+const sm = computed(() => quasar.screen.lt.sm);
 
 const select = (type: number) => {
   selected.value = type;

@@ -14,6 +14,10 @@ export const useInlineStore = defineStore('inline-store', {
       selectedButton: null,
       selectedLine: null,
 
+      bot_id: 0,
+      host: '',
+      token: '',
+
       dialogs: {
         add_button: false,
         button_settings: false,

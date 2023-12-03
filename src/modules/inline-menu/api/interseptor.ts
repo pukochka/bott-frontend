@@ -1,20 +1,18 @@
 import axios from 'axios';
-import config from '../config';
 
 import { useInlineStore } from '../stores/inlineStore';
 import { useDialog } from '../../file-manager/stores/useDialog';
 
 const instance = axios.create({
-  baseURL: config.host,
   method: 'post',
 });
 
 instance.interceptors.request.use(function (request) {
   const inline = useInlineStore();
 
-  request.params = { token: config.bot.token };
+  request.params = { token: inline.token };
   request.data = {
-    bot_id: config.bot.id,
+    bot_id: inline.bot_id,
     menu_id: inline.inlineMenu?.id,
     ...request.data,
   };

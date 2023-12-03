@@ -1,9 +1,9 @@
 <template>
-  <paper-list></paper-list>
+  <feedback-view></feedback-view>
 </template>
 
 <script lang="ts" setup>
-import PaperList from '../../../../../modules/paper/FeedbackView.vue';
+import FeedbackView from 'src/modules/feedback-menu/FeedbackView.vue';
 </script>
 
 <style lang="scss" scoped></style>

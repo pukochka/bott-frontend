@@ -2,18 +2,16 @@ import axios from 'axios';
 
 import { useDialog } from '../stores/useDialog';
 import { useFMStore } from '../stores/FMStrore';
-import { config } from '../config';
 
 const instance = axios.create({
   method: 'post',
-  baseURL: config.value.host,
 });
 
 instance.interceptors.request.use(function (request) {
-  request.params = { token: config.value?.bot?.token };
-  request.data = { bot_id: config.value?.bot?.id, ...request.data };
-
   const data = useFMStore();
+
+  request.params = { token: data.token };
+  request.data = { bot_id: data.bot_id, ...request.data };
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

@@ -17,7 +17,7 @@ import {
 // @ts-ignore
 import Compress from 'compress.js';
 
-const paths: Record<any, string> = {
+const paths = {
   1: 'photos',
   3: 'files',
   4: 'videos',
@@ -31,6 +31,9 @@ export const useFMStore = defineStore('file-manager-data', {
       uploadFiles: [],
       message: undefined,
       dialog: false,
+      bot_id: 0,
+      host: '',
+      token: '',
 
       selectedFiles: [],
       selectedFile: null,

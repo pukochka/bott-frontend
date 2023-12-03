@@ -60,7 +60,7 @@ export function useParse(route: string | null) {
 }
 
 export function useRoutes(data: RoutesMenu[]) {
-  const allRoutes: (RoutesMenu | OptionsMenu)[] = [];
+  let allRoutes: (RoutesMenu | OptionsMenu)[] = [];
 
   for (const item of data) {
     allRoutes.push(item);
@@ -80,12 +80,14 @@ export function useRoutes(data: RoutesMenu[]) {
     else return -1;
   });
 
+  allRoutes = allRoutes.filter((item) => isNaN(Number(item.text)));
+
   return allRoutes.filter(
     (item) => item.type_value !== 2 && item.type_value !== 1
   );
 }
 
-export const defaultState: StateActionsMenu = {
+export const defaultState: any = {
   main: {
     items: [],
     item: null,

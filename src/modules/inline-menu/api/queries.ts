@@ -12,7 +12,7 @@ export async function fetchMenu<Q extends keyof IMQueries>(
 
   try {
     return await instance({
-      url: 'v1/bot/keyboard/inline-new/' + query,
+      url: inline.host + 'v1/bot/keyboard/inline-new/' + query,
       data: params,
     }).then((response) => {
       /** */
@@ -35,7 +35,7 @@ export async function fetchMessage<Q extends keyof SCMessageQueries>(
 
   try {
     return await instance({
-      url: 'v1/bot/messagenew/message/' + query,
+      url: inline.host + 'v1/bot/messagenew/message/' + query,
       data: params,
     }).then((response) => {
       if (action) action(response.data.data);
@@ -94,7 +94,7 @@ export async function fetchSettings(
 
   try {
     return await instance({
-      url: 'v1/bot/message/settings/' + request,
+      url: inline.host + 'v1/bot/message/settings/' + request,
       data: data,
     }).then((response) => {
       /** */

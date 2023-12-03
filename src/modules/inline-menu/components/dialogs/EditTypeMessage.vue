@@ -25,9 +25,9 @@
           v-if="types.length"
           @select="update"
           :types="types"
-          :token="config.bot.token"
-          :bot_id="config.bot.id"
-          :host="config.host"
+          :token="inline.token"
+          :bot_id="inline.bot_id"
+          :host="inline.host"
           :type="selected"></edit-type>
 
         <div class="text-h6 text-center text-red absolute-center" v-else>
@@ -62,7 +62,6 @@
 </template>
 
 <script setup lang="ts">
-import config from '../../config';
 import { computed, ref } from 'vue';
 
 import { useInlineStore } from '../../stores/inlineStore';
@@ -97,13 +96,13 @@ const editTypeMessage = () => {
     (response) => {
       if (selected.value === 2) {
         historyGo(
-          `/lk/common/messages/feedback/view?bot_id=${config.bot.id}&id=${inline.message.id}`
+          `/lk/common/messages/feedback/view?bot_id=${inline.bot_id}&id=${inline.message.id}`
         );
 
         return;
       }
 
-      inline.message = response;
+      Object.assign(inline.message, response);
 
       fetchSettings('settings', inline.message.id).then(() => closeDialog());
     }

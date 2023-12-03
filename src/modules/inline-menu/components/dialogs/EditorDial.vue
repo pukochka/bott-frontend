@@ -16,7 +16,7 @@
 
         <q-card-section class="q-pt-none">
           <editor-content
-            :id="config.bot.id"
+            :id="inline.bot_id"
             :message_id="inline.message.id"
             :content="inline.message.text"
             :max-value="inline.message.text_length"
@@ -52,8 +52,6 @@
 </template>
 
 <script lang="ts" setup>
-import config from '../../config';
-
 import { ref } from 'vue';
 
 import { useInlineStore } from '../../stores/inlineStore';

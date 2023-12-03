@@ -7,6 +7,10 @@ export interface InlineStore {
   selectedButton: IMButton | null;
   selectedLine: number | null;
 
+  bot_id: number;
+  host: string;
+  token: string;
+
   dialogs: Record<DialogsNames, boolean>;
 }
 

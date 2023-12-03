@@ -79,7 +79,6 @@
 </template>
 
 <script setup lang="ts">
-import { config } from '../../config';
 import { computed, ref } from 'vue';
 import { defaultFileCard } from '../../stores/FMmodels';
 
@@ -136,15 +135,15 @@ const assignMessage = () => {
     'assign',
     {
       link: file.link,
-      id: config.value.message[data.paths].id,
+      id: data.message?.[data.query]?.id,
     },
     () => {
       fetchFile('index', undefined, () => {
         useDialog('Успешно прикреплено!');
 
-        if (config.value.dialog) {
-          config.value.message[data.paths]['abs_path'] = file.link;
-          config.value.message[data.paths]['host'] = file.name;
+        if (data.dialog) {
+          data.message[data.query]['abs_path'] = file.link;
+          data.message[data.query]['host'] = file.name;
         }
       }).then(() => (loading.value = false));
     }

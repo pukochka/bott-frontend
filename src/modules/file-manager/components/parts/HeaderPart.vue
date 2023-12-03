@@ -12,8 +12,7 @@
         :label="action.label"
         :disable="action.disabled"
         :loading="action.loading"
-        @click="action.action"
-      ></q-btn>
+        @click="action.action"></q-btn>
     </div>
 
     <q-space></q-space>
@@ -25,8 +24,7 @@
           class="bott-input--rounded"
           v-model="data.search"
           color="primary"
-          outlined
-        >
+          outlined>
           <template #append>
             <q-btn
               dense
@@ -35,8 +33,7 @@
               color="primary"
               icon="close"
               v-if="data.search !== ''"
-              @click="data.search = ''"
-            />
+              @click="data.search = ''" />
           </template>
         </q-input>
       </q-menu>
@@ -54,21 +51,18 @@
       color="primary"
       icon="upload"
       label="Загрузить"
-      @click="openExplorer"
-    >
+      @click="openExplorer">
       <input
         ref="uploadFiles"
         type="file"
         :accept="data.extensions"
         class="upload-input"
         multiple
-        @change="data.loadFiles"
-      />
+        @change="data.loadFiles" />
     </q-btn>
   </div>
 </template>
 <script setup lang="ts">
-import { config } from '../../config';
 import { computed, ref } from 'vue';
 import { defaultFileCard } from '../../stores/FMmodels';
 
@@ -142,15 +136,15 @@ const assignMessage = () => {
     'assign',
     {
       link: data.selectedFiles[0]?.link ?? '',
-      id: config.value.message[data.paths].id,
+      id: data.message[data.query].id,
     },
     () => {
       fetchFile('index', undefined, () => {
         useDialog('Успешно прикреплено!');
 
-        if (config.value.dialog) {
-          config.value.message[data.paths]['abs_path'] = file.link;
-          config.value.message[data.paths]['host'] = file.name;
+        if (data.dialog) {
+          data.message[data.query]['abs_path'] = file.link;
+          data.message[data.query]['host'] = file.name;
         }
       });
     }
