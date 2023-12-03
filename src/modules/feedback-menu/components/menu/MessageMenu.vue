@@ -35,13 +35,13 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import { computed, ref } from 'vue';
 
 import { fetchFeedback } from '../../api/queries';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const loading = ref({
   delete: false,

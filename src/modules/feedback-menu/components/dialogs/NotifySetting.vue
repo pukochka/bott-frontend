@@ -22,10 +22,10 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../../stores/feedbackStore';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const label = ref('');
 

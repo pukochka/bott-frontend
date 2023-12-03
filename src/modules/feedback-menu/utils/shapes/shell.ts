@@ -1,7 +1,7 @@
 import { Group, Point } from 'paper';
 import { createText } from '../common';
 import { createPlatform } from './platform';
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import { Connection } from '../lines/connection';
 import {
   MessageFeedbackItemPreview,
@@ -13,7 +13,7 @@ export function createShell(
   message: MessageFeedbackItemPreview,
   coords: Array<number> | PaperPoint
 ) {
-  const store = usePSStore();
+  const store = useFeedbackStore();
   const shell = new Group();
 
   if (message.position) {

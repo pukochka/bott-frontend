@@ -45,13 +45,13 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import { fetchFeedback } from '../../api/queries';
 
 import { mdiMessagePlus } from '@quasar/extras/mdi-v7';
 import TypesQuestionList from '../views/TypesQuestionList.vue';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const loading = ref({
   delete: false,

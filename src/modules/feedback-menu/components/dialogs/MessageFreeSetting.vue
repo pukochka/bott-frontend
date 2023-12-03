@@ -23,12 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../../stores/feedbackStore';
+import { config } from '../../config';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import InlineMenu from '../../../inline-menu/InlineMenu.vue';
 import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
-import { config } from '../../config';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 </script>
 
 <style scoped lang="scss"></style>

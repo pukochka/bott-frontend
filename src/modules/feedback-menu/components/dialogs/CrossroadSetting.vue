@@ -81,14 +81,14 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 import { fetchFeedback } from '../../api/queries';
 
 import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
 import QuizItem from '../views/QuizItem.vue';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const text = ref('');
 const loading = ref({

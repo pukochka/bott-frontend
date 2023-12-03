@@ -1,4 +1,4 @@
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import { Group, Point } from 'paper';
 import gsap from 'gsap';
 import { circle, createIcon, createText } from '../common';
@@ -15,7 +15,7 @@ export function createPlatform(
   message: MessageFeedbackItemPreview,
   coords: Array<number> | PaperPoint
 ) {
-  const store = usePSStore();
+  const store = useFeedbackStore();
 
   const circleGroup = new Group();
 

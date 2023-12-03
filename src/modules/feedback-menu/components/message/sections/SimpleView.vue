@@ -82,7 +82,7 @@ import { patterns } from '../models';
 
 import { defaultInput } from '../../../stores/feedbackModels';
 import { fetchFeedback } from '../../../api/queries';
-import { usePSStore } from '../../../stores/feedbackStore';
+import { useFeedbackStore } from '../../../stores/feedbackStore';
 
 const props = withDefaults(defineProps<SimpleQuestionProps>(), {
   message: () => defaultInput,
@@ -93,7 +93,7 @@ const emit = defineEmits<{
   (e: 'load'): void;
 }>();
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const text = ref('');
 const validator = ref('');

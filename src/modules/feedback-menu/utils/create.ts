@@ -1,5 +1,5 @@
 import Paper, { Point } from 'paper';
-import { usePSStore } from '../stores/feedbackStore';
+import { useFeedbackStore } from '../stores/feedbackStore';
 import { makeAutoAlign, setCenter } from './coords';
 
 import { createShell } from './shapes/shell';
@@ -11,7 +11,7 @@ let oldDelta = new Point(0, 0);
 export function install() {
   const canvas = <HTMLCanvasElement>document.getElementById('feedback-layer');
 
-  const store = usePSStore();
+  const store = useFeedbackStore();
 
   Paper.setup(canvas);
 
@@ -55,7 +55,7 @@ export function install() {
 }
 
 export function update(start?: boolean) {
-  const store = usePSStore();
+  const store = useFeedbackStore();
 
   store.connect = [];
   store.shells = [];

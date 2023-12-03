@@ -43,14 +43,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import {
   mdiBellCog,
   mdiForum,
   mdiMessageSettings,
 } from '@quasar/extras/mdi-v7';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const disabled = computed(
   () => store.onconnection || store.dragging || store.onmessage

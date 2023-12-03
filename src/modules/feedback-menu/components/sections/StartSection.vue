@@ -32,14 +32,14 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
 
 import MessageCard from '../views/MessageCard.vue';
 import { fetchFeedback } from '../../api/queries';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const open = ref(false);
 const menu = ref(false);

@@ -59,7 +59,7 @@
 import { config } from './config';
 import { computed, onBeforeMount } from 'vue';
 import { fetchMessage } from './api/queries';
-import { usePSStore } from './stores/feedbackStore';
+import { useFeedbackStore } from './stores/feedbackStore';
 import { useQuasar } from 'quasar';
 
 import { MenuNames } from './stores/feedbackModels';
@@ -80,7 +80,7 @@ import MessageFreeSetting from './components/dialogs/MessageFreeSetting.vue';
 import CrossroadSetting from './components/dialogs/CrossroadSetting.vue';
 import CrossroadOption from './components/dialogs/CrossroadOption.vue';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 const quasar = useQuasar();
 
 const visible = computed(() =>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { config } from '../config';
 import { useDialog } from '../../file-manager/stores/useDialog';
-import { usePSStore } from '../stores/feedbackStore';
+import { useFeedbackStore } from '../stores/feedbackStore';
 
 export const instance = axios.create({
   baseURL: config.host,
@@ -9,7 +9,7 @@ export const instance = axios.create({
 });
 
 instance.interceptors.request.use(function (request) {
-  const store = usePSStore();
+  const store = useFeedbackStore();
 
   request.params = { token: config.bot.token };
   request.data = {

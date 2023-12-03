@@ -91,7 +91,7 @@ import { computed, ref } from 'vue';
 
 import { fetchFeedback } from '../../api/queries';
 import { useDialog } from '../../../file-manager/stores/useDialog';
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import FileView from './sections/FileView.vue';
@@ -100,7 +100,7 @@ import QuizView from './sections/QuizView.vue';
 import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
 import RadioItem from '../views/RadioItem.vue';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const text = ref({
   value: '',

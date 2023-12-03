@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 
 const props = withDefaults(defineProps<MessageMenuProps>(), {
   message: null,
@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<MessageMenuProps>(), {
 
 const emit = defineEmits<{ (e: 'drop'): void }>();
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const loading = ref(false);
 

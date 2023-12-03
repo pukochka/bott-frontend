@@ -10,7 +10,7 @@ import { Link } from '../utils/lines/link';
 import { defaultMessageFree } from '../../inline-menu/stores/inlineModels';
 import { Point } from 'paper';
 
-export const usePSStore = defineStore('paper-store', {
+export const useFeedbackStore = defineStore('paper-store', {
   state: () =>
     ({
       view: null,

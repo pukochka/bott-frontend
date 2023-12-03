@@ -91,7 +91,7 @@
 import { ref } from 'vue';
 import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
 import { fetchFeedback } from '../../api/queries';
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import MessageMenu from './MessageMenu.vue';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 
@@ -107,7 +107,7 @@ const props = withDefaults(defineProps<MessageCardProps>(), {
   },
 });
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const menu = ref(false);
 const loading = ref({

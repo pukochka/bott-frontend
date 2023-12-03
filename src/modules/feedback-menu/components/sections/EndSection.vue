@@ -31,13 +31,13 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import { computed, ref } from 'vue';
 import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
 
 import MessageCard from '../views/MessageCard.vue';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const open = ref(false);
 const menu = ref(false);

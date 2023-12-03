@@ -95,7 +95,7 @@ import { fetchFeedback } from '../../../api/queries';
 
 import { defaultInput } from '../../../stores/feedbackModels';
 import { extensions } from '../models';
-import { usePSStore } from '../../../stores/feedbackStore';
+import { useFeedbackStore } from '../../../stores/feedbackStore';
 
 const props = withDefaults(defineProps<FileQuestionProps>(), {
   message: () => defaultInput,
@@ -106,7 +106,7 @@ const emit = defineEmits<{
   (e: 'load'): void;
 }>();
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const slider = ref({
   value: 1,

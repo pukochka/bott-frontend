@@ -9,7 +9,7 @@ import {
 import { Group, Path, Point } from 'paper';
 import { circle, dashLine, moveToPoint } from '../common';
 
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import { Arrow, CrossroadText } from '../figures';
 import { rotateCircle } from '../common';
@@ -98,7 +98,7 @@ export class Link {
   }
 
   mountLineGroup() {
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     this.lineStart = dashLine(
       this.points.middle,

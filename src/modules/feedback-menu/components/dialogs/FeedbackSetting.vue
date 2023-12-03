@@ -19,9 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 
-const store = usePSStore();
+const store = useFeedbackStore();
 </script>
 
 <style scoped lang="scss"></style>

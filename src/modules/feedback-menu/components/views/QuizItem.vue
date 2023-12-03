@@ -122,7 +122,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import { defaultQuiz } from '../message/models';
 import { fetchFeedback } from '../../api/queries';
@@ -135,7 +135,7 @@ const props = withDefaults(defineProps<QuizItemProps>(), {
   method: 'select-option',
 });
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const text = ref({
   value: '',

@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { fetchFeedback } from '../../../api/queries';
-import { usePSStore } from '../../../stores/feedbackStore';
+import { useFeedbackStore } from '../../../stores/feedbackStore';
 
 import { defaultInput } from '../../../stores/feedbackModels';
 
@@ -98,7 +98,7 @@ const emit = defineEmits<{
   (e: 'load'): void;
 }>();
 
-const store = usePSStore();
+const store = useFeedbackStore();
 
 const text = ref({
   value: '',

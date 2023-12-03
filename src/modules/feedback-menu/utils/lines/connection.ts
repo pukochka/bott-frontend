@@ -7,7 +7,7 @@ import {
 } from '../../stores/feedbackModels';
 import { Group, Point } from 'paper';
 import { createPlus } from '../figures';
-import { usePSStore } from '../../stores/feedbackStore';
+import { useFeedbackStore } from '../../stores/feedbackStore';
 import { circle, dashLine } from '../common';
 import gsap from 'gsap';
 import { Link } from './link';
@@ -39,7 +39,7 @@ export class Connection {
   }
 
   get canConnect() {
-    const store = usePSStore();
+    const store = useFeedbackStore();
     return store.shells.filter(
       (item) =>
         overlap(this.front, item.children[0]) &&
@@ -55,7 +55,7 @@ export class Connection {
   }
 
   constructor(message: MessageFeedbackItemPreview, platform: PaperGroup) {
-    const store = usePSStore();
+    const store = useFeedbackStore();
     this.message = message;
     this.platform = platform;
 
@@ -185,7 +185,7 @@ export class Connection {
   }
 
   openConnection() {
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     store.layer.addChild(this.groupConnection);
 
@@ -199,7 +199,7 @@ export class Connection {
   createConnect() {
     this.action = true;
     if (!this.platform) return;
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     if (!this.prev) this.createPrevLink();
 
@@ -238,7 +238,7 @@ export class Connection {
     this.prev = true;
     this.group.opacity = 0.01;
 
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     if (!this.platform || !this.message) return;
 
@@ -262,7 +262,7 @@ export class Connection {
     if (this.action) return;
 
     this.group.opacity = 1;
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     store.connect
       .filter((item) => item.link.includes('new'))
@@ -290,7 +290,7 @@ export class Connection {
   }
 
   removeConnection() {
-    const store = usePSStore();
+    const store = useFeedbackStore();
     store.connecting = false;
     store.onconnection = false;
 
@@ -307,7 +307,7 @@ export class FirstConnection {
   group: PaperGroup = new Group();
   icon: PaperGroup = createPlus(new Point(0, 0), 3);
   constructor() {
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     const back = circle([0, 0], 80, '#adb5bd', 8, '#adb5bd');
     const front = circle([0, 0], 80, noColor);

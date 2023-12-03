@@ -1,5 +1,5 @@
 import { instance } from './instance';
-import { usePSStore } from '../stores/feedbackStore';
+import { useFeedbackStore } from '../stores/feedbackStore';
 import { install, update } from '../utils/create';
 
 const beforeAction: Array<keyof FBMainQueries> = [];
@@ -34,7 +34,7 @@ export async function fetchFeedback<Q extends keyof FBMainQueries>(
   action?: (response: any) => void
 ) {
   try {
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/feedback/main/' + query,
@@ -79,7 +79,7 @@ export async function fetchMessage<Q extends keyof SCMessageQueries>(
   action?: (response: any) => void
 ) {
   try {
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/message/' + query,
@@ -105,7 +105,7 @@ export async function fetchFeedbackAnswer<Q extends keyof FBAnswerQueries>(
   action?: (response: any) => void
 ) {
   try {
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/feedback/answer/' + query,
@@ -120,13 +120,13 @@ export async function fetchFeedbackAnswer<Q extends keyof FBAnswerQueries>(
   } catch (e) {}
 }
 
-export async function fetchFeedbackNotify<Q extends keyof FBAnswerQueries>(
+export async function fetchA<Q extends keyof FBAnswerQueries>(
   query: Q,
   data?: FBAnswerParams<Q>,
   action?: (response: any) => void
 ) {
   try {
-    const store = usePSStore();
+    const store = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/feedback/notification/' + query,

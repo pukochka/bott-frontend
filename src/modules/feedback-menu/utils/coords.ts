@@ -1,9 +1,9 @@
-import { usePSStore } from '../stores/feedbackStore';
+import { useFeedbackStore } from '../stores/feedbackStore';
 import { PaperPoint } from '../stores/feedbackModels';
 import { Point } from 'paper';
 
 export function makeAutoAlign() {
-  const store = usePSStore();
+  const store = useFeedbackStore();
 
   const coords = <Array<Array<number>>>Array.from({
     length: store.alignCount,
@@ -23,7 +23,7 @@ export function makeAutoAlign() {
 }
 
 export function setCenter() {
-  const store = usePSStore();
+  const store = useFeedbackStore();
   const x = <number[]>(
     store.feedback.inputs.map((item) => item.position?.x).filter((item) => item)
   );
