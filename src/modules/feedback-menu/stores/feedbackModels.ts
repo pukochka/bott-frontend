@@ -15,6 +15,15 @@ export interface FeedbackModels {
   layer: PaperLayer;
   first: PaperGroup;
 
+  answers: Array<FeedbackAnswer>;
+  answersCount: {
+    all: number;
+    unfinished: number;
+    unread: number;
+    visible: number;
+  };
+  notifications: Array<FeedbackNotification>;
+
   _message: MessageFree;
   _feedback: MessageFeedback<MessageFeedbackItemPreview>;
   loading: boolean;
@@ -65,6 +74,13 @@ export interface MessageFeedbackItemPreview extends MessageFeedbackItem {
   };
 }
 
+export const statuses: Record<number, { label: string; color: string }> = {
+  0: { label: 'В процессе ответа', color: 'primary' },
+  1: { label: 'Не прочитан', color: 'red' },
+  2: { label: 'Прочитан', color: 'warning' },
+  3: { label: 'Отвечен', color: 'positive' },
+};
+
 export const colors = {
   noColor: 'rgba(255,255,255,0.001)',
   alfaBlue: 'rgba(0,180,255,0.5)',
@@ -72,14 +88,38 @@ export const colors = {
   white: new Color(255, 255, 255),
 };
 
-const defaultFeedbackSetting: MessageFeedbackSetting = {
+export const defaultFeedbackSetting: MessageFeedbackSetting = {
   is_notice: true,
   user_limit: 0,
   time_notice: 0,
   time_cancel: 0,
-  template_answer: 0,
+  template_answer: '',
   limit_in_period: 0,
   period: 0,
+};
+
+export const defaultAnswer: FeedbackAnswer = {
+  data: '',
+  id: 0,
+  adminAnswer: null,
+  created_time: '',
+  answer: '',
+  items: [],
+  notice_time: '',
+  status: {
+    id: 1,
+    title: '',
+  },
+  user: {
+    id: 1,
+    type: '',
+    first_name: '',
+    link: '',
+    last_name: '',
+    username: '',
+    telegram_id: 1,
+  },
+  deleted_time: '',
 };
 
 export const defaultInput: MessageFeedbackItemPreview = {

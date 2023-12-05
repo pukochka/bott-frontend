@@ -2,13 +2,15 @@
   <q-card flat bordered class="rounded" v-if="visible">
     <panel-header
       label="Константы для сообщения"
-      icon="data_object"></panel-header>
+      icon="data_object"
+    ></panel-header>
 
     <div class="q-px-sm q-pb-sm">
       <div
         class="row items-center"
         v-for="([name, text], index) of constants"
-        :key="index">
+        :key="index"
+      >
         <q-btn
           dense
           no-caps
@@ -18,11 +20,13 @@
           color="primary"
           class="rounded"
           :label="'{' + name + '}'"
-          @click="copy('{' + name + '}')">
+          @click="copy('{' + name + '}')"
+        >
           <q-tooltip
             class="bott-tooltip"
             anchor="top middle"
-            self="bottom middle">
+            self="bottom middle"
+          >
             Скопировать {{ '{' + name + '}' }}
           </q-tooltip>
         </q-btn>
@@ -36,21 +40,24 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useInlineStore } from '../../stores/inlineStore';
-
 import PanelHeader from '../PanelHeader.vue';
 import { copyToClipboard } from 'quasar';
 import { useNotify } from '../../stores/helpers';
 
-const inline = useInlineStore();
+const props = withDefaults(defineProps<ConstantsSectionProps>(), {
+  constants: () => ({}),
+});
 
-const constants = computed(() => Object.entries(inline.message.constants));
-
-const visible = computed(() => Object.entries(inline.message.constants).length);
+const constants = computed(() => Object.entries(props.constants));
+const visible = computed(() => constants.value.length);
 
 const copy = (name: string) => {
   copyToClipboard(name).then(useNotify.bind(this, 'Скопированно!'));
 };
+
+interface ConstantsSectionProps {
+  constants: Record<any, string>;
+}
 </script>
 
 <style scoped lang="scss"></style>

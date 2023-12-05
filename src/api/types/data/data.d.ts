@@ -80,17 +80,11 @@ declare interface StateActionsMenu {
  *
  * */
 declare interface Currency {
-  /**
-   *
-   * */
+  /** */
   id: number;
-  /**
-   *
-   * */
+  /** */
   letter: string;
-  /**
-   *
-   * */
+  /** */
   code: string;
 }
 
@@ -98,13 +92,9 @@ declare interface Currency {
  *
  * */
 declare interface Simple {
-  /**
-   *
-   * */
+  /** */
   id: number;
-  /**
-   *
-   * */
+  /** */
   title: string;
 }
 
@@ -147,39 +137,24 @@ declare interface Bot {
   /**
    * Сущность пользователя в системе BOTT
    * */
-  user: User;
+  user: BOTTUser;
 }
 
 /**
- * Сущность пользователя в системе BOTT
+ * Сущность пользователя, общая для всех ботов.
  * */
-declare interface User {
-  /**
-   *
-   * */
+declare interface BOTTUser {
   id: number;
-  /**
-   *
-   * */
+  /** уникальный идентификатор телеграм */
   telegram_id: number;
-  /**
-   *
-   * */
-  username: string;
-  /**
-   *
-   * */
+  /** Ник пользвателя null - не существует */
+  username: string | null;
+  /** Имя пользвателя */
   first_name: string;
-  /**
-   *
-   * */
+  /** Фамилия пользвателя */
   last_name: string;
-  /**
-   *
-   * */
+  /** Пряма ссылка на пользователя с HTML тегами или сразу ник @BOTTRU (Если есть) */
   link: string;
-  /**
-   *
-   * */
+  /** Тип аккаунта: private group supergroup channel */
   type: string;
 }

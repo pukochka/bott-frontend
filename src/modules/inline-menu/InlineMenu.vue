@@ -18,13 +18,13 @@
               :message="inline.message"
               :bot_id="inline.bot_id"
               :token="inline.token"
-              :host="inline.host"></file-manager>
+              :host="inline.host"
+            ></file-manager>
           </div>
 
           <assigned-file
-            v-if="
-              [1, 3, 4, 5].includes(inline.message.type.id)
-            "></assigned-file>
+            v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
+          ></assigned-file>
 
           <message-content></message-content>
         </q-card>
@@ -35,7 +35,8 @@
           :loading="loading.delete"
           @select-button="openSettings"
           @add-button="addButtonInLine"
-          @delete-line="deleteLine"></buttons-section>
+          @delete-line="deleteLine"
+        ></buttons-section>
 
         <setting-section></setting-section>
       </div>
@@ -45,9 +46,11 @@
 
         <inline-settings></inline-settings>
 
-        <faq-section></faq-section>
+        <faq-section :faq="inline.message.faq"></faq-section>
 
-        <constants-section></constants-section>
+        <constants-section
+          :constants="inline.message.constants"
+        ></constants-section>
       </div>
     </div>
   </div>

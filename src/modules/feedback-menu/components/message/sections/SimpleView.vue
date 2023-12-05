@@ -139,8 +139,9 @@ onMounted(() => {
         (item) => item.value === validator.value
       )[0];
 
-      if (pattern.value !== void 0) {
+      if (pattern.value === void 0) {
         pattern.value = patterns[0];
+      } else {
         section.value = 'patterns';
         validator.value = '';
       }

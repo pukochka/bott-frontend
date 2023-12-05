@@ -28,20 +28,28 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useInlineStore } from '../../stores/inlineStore';
-
 import PanelHeader from '../PanelHeader.vue';
 import FileImg from '../../../file-manager/components/extension/FileImg.vue';
 
-const inline = useInlineStore();
+const props = withDefaults(defineProps<FaqSectionProps>(), {
+  faq: () => ({
+    video: '',
+    links: [],
+    text: '',
+  }),
+});
 
-const video = computed(() => inline.message.faq.video);
-const text = computed(() => inline.message.faq.text);
-const links = computed(() => inline.message.faq.links);
+const video = computed(() => props.faq.video);
+const text = computed(() => props.faq.text);
+const links = computed(() => props.faq.links);
 
 const visible = computed(
   () => video.value.length || text.value.length || links.value.length
 );
+
+interface FaqSectionProps {
+  faq: MessageFaqDto;
+}
 </script>
 
 <style scoped lang="scss"></style>

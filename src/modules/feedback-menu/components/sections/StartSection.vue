@@ -37,7 +37,6 @@ import { useFeedbackStore } from '../../stores/feedbackStore';
 import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
 
 import MessageCard from '../views/MessageCard.vue';
-import { fetchFeedback } from '../../api/queries';
 
 const store = useFeedbackStore();
 
@@ -60,18 +59,21 @@ const messages = computed(() => [
     label: 'Приветствие',
     data: hello.value,
     condition: store.feedback.hello !== null,
+    desc: 'Это сообщение будет отправлено перед первым вопросом и опрос начнется, только после нажатия на кнопку. Оставьте поля пустыми, тогда опрос начнется сразу с вопросов',
     method: 'hello',
   },
   {
     label: 'Стартовое для администратора',
     data: startAdmin.value,
     condition: store.feedback.startAdmin !== null,
+    desc: '',
     method: 'start-admin',
   },
   {
     label: 'Сообщение при отмене',
     data: cancel.value,
     condition: store.feedback.cancel !== null,
+    desc: '',
     method: 'cancel',
   },
 ]);

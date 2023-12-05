@@ -25,7 +25,7 @@ declare interface MessageFeedbackSetting {
   /** Через сколько минут напомнить ответить на вопросы, если ответы остались незавершенные; 0 - не напоминать */
   time_cancel: number;
   /** Шаблон ответа. Будет применен для каждого ответа пользваотеля. И затем заменит поле {ANSWERS} */
-  template_answer: number;
+  template_answer: string;
   /** Количество ответов от одного пользователя за период; 0 - безлимит */
   limit_in_period: number;
   /** Период в минутах; 0 - безлимит */
@@ -104,11 +104,4 @@ declare interface MessageFeedbackItemSelectOption {
   id: number;
   text: string;
   sort: number;
-}
-
-declare interface MessageFeedbackMessageType {
-  1: 'input';
-  2: 'file';
-  3: 'select';
-  4: 'crossroad';
 }

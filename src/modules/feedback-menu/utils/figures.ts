@@ -99,9 +99,7 @@ export class CrossroadText {
   get sign() {
     return [1, 3].indexOf(this.quadrant) === -1 ? -1 : 1;
   }
-  // get sign() {
-  //   return this.vector.angle < 0 ? -1 : 1;
-  // }
+
   get angle() {
     return this.vector.angle;
   }

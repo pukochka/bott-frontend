@@ -115,16 +115,22 @@ export async function fetchFeedbackAnswer<Q extends keyof FBAnswerQueries>(
 
       if (action !== void 0) action(response.data.data);
 
+      if (query === 'index') {
+        /** */
+
+        store.answers = response.data.data ?? [];
+
+        /** */
+      }
+
       /** */
     });
   } catch (e) {}
 }
 
-export async function fetchA<Q extends keyof FBAnswerQueries>(
-  query: Q,
-  data?: FBAnswerParams<Q>,
-  action?: (response: any) => void
-) {
+export async function fetchFeedbackNotify<
+  Q extends keyof FBNotificationQueries
+>(query: Q, data?: FBNotificationParams<Q>, action?: (response: any) => void) {
   try {
     const store = useFeedbackStore();
 
@@ -135,6 +141,14 @@ export async function fetchA<Q extends keyof FBAnswerQueries>(
       /** */
 
       if (action !== void 0) action(response.data.data);
+
+      if (query === 'index') {
+        /** */
+
+        store.notifications = response.data.data;
+
+        /** */
+      }
 
       /** */
     });

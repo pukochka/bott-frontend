@@ -57,7 +57,7 @@ interface FBLimitParams {
 
 interface FBUserIdParam {
   /** Идентификатор пользователя */
-  user_id: string | null;
+  user_id: string | number | null;
 }
 
 interface FBAnswerCommonParams extends FBUserIdParam {
@@ -185,9 +185,9 @@ declare interface FBMainQueries {
 
 declare interface FBAnswerQueries {
   /** Выводит ответы на определённый вопрос */
-  index: FBStatusParam & FBLimitParams & FBAnswerCommonParams;
+  index: Partial<FBStatusParam & FBLimitParams & FBAnswerCommonParams>;
   /** Выводит кол-во ответов на определённый вопрос */
-  count: FBStatusParam & FBAnswerCommonParams;
+  count: Partial<FBStatusParam & FBAnswerCommonParams>;
   /** Выводит ответ определённый */
   view: FBAnswerIdParam;
   /** Удаляет заявку(и) */

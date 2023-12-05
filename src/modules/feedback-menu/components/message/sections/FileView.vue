@@ -12,6 +12,7 @@
 
       <q-slider
         label
+        thumb-size="20px"
         track-size="10px"
         color="primary"
         class="q-px-lg"
@@ -152,6 +153,7 @@ function toFormat(ext: string) {
 onMounted(() => {
   slider.value.value = props.message.file?.size ?? 1024;
   selected.value = toFormat(props.message.file?.extensions ?? '');
+  text.value = props.message.file?.extensions ?? '';
 
   if (props.message.file?.extensions.length) {
     section.value = 'your';

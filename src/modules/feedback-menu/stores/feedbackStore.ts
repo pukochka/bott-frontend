@@ -18,6 +18,14 @@ export const useFeedbackStore = defineStore('paper-store', {
       first: null,
 
       _message: null,
+      answers: [],
+      answersCount: {
+        all: 0,
+        unfinished: 0,
+        unread: 0,
+        visible: 3,
+      },
+      notifications: [],
       _feedback: defaultFeedback,
 
       connect: [],
