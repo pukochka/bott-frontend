@@ -48,25 +48,10 @@ export const extensions = [
   'js',
 ];
 
-export const defaultQuiz: FBQuiz = {
+export const defaultQuiz: MessageFeedbackItemSelectOption = {
   id: 0,
   sort: 0,
   text: '',
-};
-
-export const defaultSimpleQuestion: FBSimpleQuestion = {
-  validator: '',
-  message: '',
-};
-
-export const defaultFileQuestion: FBFileQuestion = {
-  extensions: '',
-  size: 0,
-};
-
-export const defaultQuizQuestion: FBQuizQuestion = {
-  is_multiple: false,
-  options: [],
 };
 
 export const types = {

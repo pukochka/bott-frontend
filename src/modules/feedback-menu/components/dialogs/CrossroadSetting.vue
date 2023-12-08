@@ -85,7 +85,7 @@ import { useFeedbackStore } from '../../stores/feedbackStore';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 import { fetchFeedback } from '../../api/queries';
 
-import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
+import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import QuizItem from '../views/QuizItem.vue';
 
 const store = useFeedbackStore();

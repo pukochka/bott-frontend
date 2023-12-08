@@ -26,7 +26,7 @@
 import { config } from '../../config';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import InlineMenu from '../../../inline/InlineMenu.vue';
-import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
+import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
 const store = useFeedbackStore();
 </script>

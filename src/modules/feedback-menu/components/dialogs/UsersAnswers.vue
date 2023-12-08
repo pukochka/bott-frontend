@@ -115,7 +115,7 @@ import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import { fetchFeedbackAnswer } from '../../api/queries';
 
-import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
+import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import AnswersStatistics from './answer/AnswersStatistics.vue';
 import AnswerItem from './answer/AnswerItem.vue';
 import AnswersMenu from './answer/AnswersMenu.vue';

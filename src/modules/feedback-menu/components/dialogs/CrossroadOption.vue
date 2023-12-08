@@ -62,7 +62,7 @@ import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import { fetchFeedback } from '../../api/queries';
 import TypesQuestionList from '../views/TypesQuestionList.vue';
-import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
+import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
 const store = useFeedbackStore();
 

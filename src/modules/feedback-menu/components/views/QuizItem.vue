@@ -126,7 +126,6 @@ import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import { defaultQuiz } from '../message/models';
 import { fetchFeedback } from '../../api/queries';
-import { update } from '../../utils/create';
 
 const props = withDefaults(defineProps<QuizItemProps>(), {
   button: () => defaultQuiz,
@@ -156,7 +155,7 @@ const deleteQuiz = () => {
   loading.value.delete = true;
 
   fetchFeedback(
-    `delete-${props.method}`,
+    `delete-${<'select-option'>props.method}`,
     {
       input_id: store.selectedMessage?.id ?? 0,
       option_id: props.button.id,
@@ -169,7 +168,7 @@ const editQuiz = () => {
   loading.value.edit = true;
 
   fetchFeedback(
-    `update-${props.method}`,
+    `update-${<'select-option'>props.method}`,
     {
       input_id: store.selectedMessage?.id ?? 0,
       option_id: props.button.id,
@@ -183,7 +182,7 @@ const moveQuiz = (side: 'down' | 'up') => {
   loading.value[side] = true;
 
   fetchFeedback(
-    `${side}-${props.method}`,
+    `${side}-${<'select-option'>props.method}`,
     {
       input_id: store.selectedMessage?.id ?? 0,
       option_id: props.button.id,
@@ -197,7 +196,7 @@ const updateText = () => {
 };
 
 interface QuizItemProps {
-  button: FBQuiz;
+  button: MessageFeedbackItemSelectOption;
   length: number;
   method: 'select-option' | 'crossroad-option';
   delete?: boolean;

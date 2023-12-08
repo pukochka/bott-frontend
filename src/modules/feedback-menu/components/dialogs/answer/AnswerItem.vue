@@ -45,7 +45,9 @@ const props = withDefaults(defineProps<AnswerItemProps>(), {
   answer: () => defaultAnswer,
 });
 
-const status = computed(() => statuses[props.answer.status.id] ?? '');
+const status = computed(
+  () => statuses[props.answer.status.id] ?? { label: '', color: '' }
+);
 
 const answer = computed(() =>
   props.answer.answer === ''
