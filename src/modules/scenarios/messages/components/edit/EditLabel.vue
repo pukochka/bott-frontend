@@ -7,7 +7,7 @@
     v-model="states.dialogs.edit_label"
   >
     <q-card style="width: 100%" flat bordered class="dialog-rounded">
-      <dialog-header :label="t('edit-label')"></dialog-header>
+      <dialog-header label="Изменение названия"></dialog-header>
 
       <q-card-section class="q-pt-none">
         <q-input
@@ -15,11 +15,13 @@
           counter
           outlined
           class="bott-input--rounded"
-          :label="t('scenario-name')"
-          :hint="t('command-notrepeat')"
+          label="Название сценария"
+          hint="Название не должно повторяться"
           v-model="text.value"
           :maxlength="text.max"
-          :rules="[() => text.required || t('warning-length')]"
+          :rules="[
+            () => text.required || 'Введено неверное количество символов',
+          ]"
         />
       </q-card-section>
 
@@ -28,7 +30,7 @@
           flat
           no-caps
           class="rounded"
-          :label="t('button-close')"
+          label="Закрыть"
           color="primary"
           v-close-popup
         />
@@ -37,7 +39,7 @@
           no-caps
           unelevated
           class="rounded"
-          :label="t('button-save')"
+          label="Сохранить"
           color="primary"
           :loading="loading"
           :disable="!text.required"
@@ -50,8 +52,6 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-
-import { t } from 'src/boot/lang';
 
 import { useStatesStore } from '../../stores/states/statesStore';
 import { useDataStore } from '../../stores/data/dataStore';

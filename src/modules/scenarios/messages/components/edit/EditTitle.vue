@@ -10,7 +10,7 @@
       anchor="top middle"
       self="bottom middle"
     >
-      {{ t('edit-title') }}
+      Изменить название
     </q-tooltip>
 
     <div
@@ -39,7 +39,7 @@
         counter
         class="bott-input--rounded"
         color="primary"
-        :hint="t('message-title ')"
+        hint="Название сообщения"
         v-model="edit"
         :maxlength="64"
         @keyup.enter="updateTitle"
@@ -74,13 +74,12 @@
 </template>
 <script setup lang="ts">
 import { ref, computed, onBeforeMount } from 'vue';
-import { t } from 'src/boot/lang';
 
 import { isDarkColor } from 'src/utils/helpers/dom';
 
 import { fetchMessage } from '../../api';
 
-import { defaultMessage } from '../../stores/deafults';
+import { defaultMessage } from '../../stores/defaults';
 
 import EditColor from './EditColor.vue';
 

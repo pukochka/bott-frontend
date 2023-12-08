@@ -4,7 +4,6 @@ import { install, update } from '../utils/create';
 
 const beforeAction: Array<keyof FBMainQueries> = [];
 const afterAction: Array<keyof FBMainQueries> = [
-  'set-input-next',
   'delete-input',
   'set-start-input',
   'create-input',
@@ -31,7 +30,7 @@ const notNullable: Array<keyof FBMainQueries> = [
 export async function fetchFeedback<Q extends keyof FBMainQueries>(
   query: Q,
   data?: FBMainParams<Q>,
-  action?: (response: any) => void
+  action?: (response: any, original: any) => void
 ) {
   try {
     const store = useFeedbackStore();
@@ -57,7 +56,7 @@ export async function fetchFeedback<Q extends keyof FBMainQueries>(
 
       /** */
 
-      if (action !== void 0) action(response.data.data);
+      if (action !== void 0) action(response.data.data, response);
 
       /** */
 

@@ -128,6 +128,7 @@ const checkMessage = () => {
 
 const assignMessage = () => {
   const file = data.selectedFiles[0] ?? defaultFileCard;
+  const path = data.message?.type.path ?? 'photos';
 
   loading.value = true;
 
@@ -135,15 +136,15 @@ const assignMessage = () => {
     'assign',
     {
       link: file.link,
-      id: data.message?.[data.query]?.id,
+      id: data.message?.[path]?.id ?? 0,
     },
     () => {
       fetchFile('index', undefined, () => {
         useDialog('Успешно прикреплено!');
 
-        if (data.dialog) {
-          data.message[data.query]['abs_path'] = file.link;
-          data.message[data.query]['host'] = file.name;
+        if (data.dialog && data.message) {
+          data.message[path].abs_path = file.link;
+          data.message[path].host = file.name;
         }
       }).then(() => (loading.value = false));
     }

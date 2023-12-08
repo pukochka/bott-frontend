@@ -13,6 +13,7 @@ import gsap from 'gsap';
 import { Link } from './link';
 import { overlap } from '../common';
 import { fetchFeedback } from '../../api/queries';
+import { update } from '../create';
 const { noColor } = colors;
 
 export class Connection {
@@ -31,6 +32,12 @@ export class Connection {
   prev = false;
   drag = false;
 
+  get canCreateConnectCircle() {
+    const store = useFeedbackStore();
+    return store.shells.filter((shell) =>
+      overlap(this.connectCircle, shell.children[0])
+    ).length;
+  }
   get isNewConnect() {
     return (
       (this.platform?.position.x ?? 0) + 400 < this.front.position.x ||
@@ -90,6 +97,8 @@ export class Connection {
     this.group.onMouseDown = () => {
       store.connecting = true;
 
+      if (this.canCreateConnectCircle) return;
+
       this.openConnection();
     };
 
@@ -99,26 +108,52 @@ export class Connection {
       if (this.canConnect.length && this.prev) {
         const next = this.canConnect[0];
 
+        const removeLink = this.removePrevLink.bind(this);
+        const removeConnection = this.removeConnection.bind(this);
+
+        function remove(response: any, original: any) {
+          if (!original.data.result) {
+            removeLink();
+            removeConnection();
+
+            return;
+          }
+
+          store._feedback = response.feedback;
+          store.selectedMessage = null;
+
+          update();
+        }
+
         if (this.message.type === 4) {
-          fetchFeedback('set-crossroad-option-next', {
-            input_id: this.message.id,
-            option_id: next.data.id,
-            next_id: next.data.id ?? null,
-            next_type: next.data.type ?? null,
-          }).then();
+          fetchFeedback(
+            'set-crossroad-option-next',
+            {
+              input_id: this.message.id,
+              option_id: next.data.id,
+              next_id: next.data.id ?? null,
+              next_type: next.data.type ?? null,
+            },
+            remove
+          ).then();
 
           return;
         }
-        fetchFeedback('set-input-next', {
-          input_id: this.message.id,
-          type: this.message.type,
-          next_id: next.data.id ?? null,
-          next_type: next.data.type ?? null,
-        }).then();
+
+        fetchFeedback(
+          'set-input-next',
+          {
+            input_id: this.message.id,
+            type: this.message.type,
+            next_id: next.data.id ?? null,
+            next_type: next.data.type ?? null,
+          },
+          remove
+        ).then();
       }
 
       if (overlap(child, this.connectCircle)) {
-        this.createConnect();
+        this.createConnect(event);
         return;
       }
 
@@ -196,7 +231,7 @@ export class Connection {
 
     this.createConnectCircle();
   }
-  createConnect() {
+  createConnect(event: any) {
     this.action = true;
     if (!this.platform) return;
     const store = useFeedbackStore();
@@ -206,6 +241,7 @@ export class Connection {
     store.selectedMessage = this.message;
 
     store.action = () => {
+      store.onconnection = false;
       this.action = false;
       this.removePrevLink();
       this.removeConnection();
@@ -217,10 +253,14 @@ export class Connection {
       return;
     }
 
-    store.openMenu('create');
+    const touch = !!event.event?.changedTouches?.[0];
+
+    store.openMenu('create', undefined, touch);
   }
 
   createConnectCircle() {
+    if (this.canCreateConnectCircle) return;
+
     gsap.to(this.groupConnection, { opacity: 1, duration: 0.15 });
     gsap.to(this.connectCircle, { radius: 80, duration: 0.15 });
   }
@@ -321,8 +361,16 @@ export class FirstConnection {
       store.clickable = false;
     };
 
-    front.onClick = () => {
-      store.openMenu('create');
+    front.onClick = (event: any) => {
+      const touch = !!event.event?.changedTouches?.[0];
+
+      store.openMenu(
+        'create',
+        () => {
+          store.onconnection = false;
+        },
+        touch
+      );
     };
 
     this.group.addChildren([back, this.icon, front]);

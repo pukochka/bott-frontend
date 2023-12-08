@@ -1,4 +1,4 @@
-const config = {
+export const config = {
   /**
    * Глобальные переменные
    * */
@@ -29,5 +29,3 @@ const config = {
   routes: [],
   webs: [],
 };
-
-export default config;

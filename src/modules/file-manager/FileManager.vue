@@ -28,7 +28,7 @@
 
 <script lang="ts" setup>
 import { computed, onBeforeMount, ref, watch } from 'vue';
-import { defaultMessageFree } from '../inline-menu/stores/inlineModels';
+import { defaultMessageFree } from '../inline/stores/inlineModels';
 
 import { fetchFile } from './api/queries';
 import { useFMStore } from './stores/FMStrore';
@@ -47,7 +47,9 @@ const dialog = ref(false);
 
 const data = useFMStore();
 
-const btnText = computed(() => text[data.query] ?? 'картинку');
+const btnText = computed(
+  () => text[data.message?.type.path ?? 'photos'] ?? 'картинку'
+);
 
 const text = {
   photos: 'картинку',

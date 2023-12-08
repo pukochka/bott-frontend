@@ -14,20 +14,58 @@
           class="q-pt-none q-gutter-y-xs relative-position"
           style="min-height: 200px"
         >
-          <answers-statistics></answers-statistics>
+          <answers-statistics @filter="updatePagination"></answers-statistics>
 
           <div class="q-py-xs">Все ответы</div>
 
-          <div class="">
-            <div class="row q-col-gutter-sm" v-if="store.answers.length">
+          <div class="scroll-x bordered rounded">
+            <q-list style="min-width: 600px">
+              <q-item dense>
+                <q-item-section side>
+                  <q-btn
+                    dense
+                    class="rounded"
+                    flat
+                    padding="2px"
+                    color="primary"
+                    icon="more_vert"
+                  >
+                    <answers-menu></answers-menu>
+
+                    <q-tooltip
+                      class="bott-tooltip"
+                      anchor="top middle"
+                      self="bottom middle"
+                    >
+                      Действия с ответами
+                    </q-tooltip>
+                  </q-btn>
+                </q-item-section>
+
+                <q-item-section>Ответ</q-item-section>
+                <q-item-section class="text-center">
+                  Пользователь
+                </q-item-section>
+                <q-item-section class="text-center">
+                  Время ответа
+                </q-item-section>
+                <q-item-section class="text-center">Статус</q-item-section>
+              </q-item>
+
+              <q-separator />
+
               <answer-item
                 v-for="answer of paginationAnswers"
                 :key="answer.id"
                 :answer="answer"
               ></answer-item>
-            </div>
 
-            <div class="q-pa-xl text-center" v-else>Ответов пока нет...</div>
+              <q-item v-if="!paginationAnswers.length">
+                <q-item-section class="text-center q-pa-md">
+                  Ответов пока нет...
+                </q-item-section>
+              </q-item>
+            </q-list>
           </div>
 
           <div
@@ -38,7 +76,7 @@
               v-for="(button, index) of pagination"
               :key="index"
               flat
-              size="md"
+              :dense="sm"
               class="rounded"
               :disable="button.disable"
               :color="button.color"
@@ -80,37 +118,56 @@ import { fetchFeedbackAnswer } from '../../api/queries';
 import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
 import AnswersStatistics from './answer/AnswersStatistics.vue';
 import AnswerItem from './answer/AnswerItem.vue';
+import AnswersMenu from './answer/AnswersMenu.vue';
+import { useQuasar } from 'quasar';
 
 const store = useFeedbackStore();
+const quasar = useQuasar();
 
 const loading = ref({
   show: true,
   next: false,
   prev: false,
+  last: false,
+  first: false,
 });
 
 const page = ref(1);
-const count = ref(3);
+const count = ref(5);
 const offset = ref(0);
+const filter = ref<any>(undefined);
+const statuses: Record<any, 'unfinished' | 'unread'> = {
+  0: 'unfinished',
+  1: 'unread',
+};
+
+const sm = computed(() => quasar.screen.lt.sm);
 
 const paginationAnswers = computed(() =>
   store.answers.filter(
-    (_, index) =>
-      index >= count.value - store.answersCount.visible && index < count.value
+    (_, index) => index >= count.value - 5 && index < count.value
   )
 );
 
-const pages = computed(() => Math.ceil(store.answersCount.all / 3));
+const pages = computed(() =>
+  Math.ceil(store.answersCount[statuses?.[filter.value] ?? 'all'] / 5)
+);
+
+const updatePagination = (value?: any) => {
+  filter.value = value;
+
+  page.value = 1;
+  count.value = 5;
+  offset.value = 0;
+};
 
 const updateShow = () => {
-  page.value = 1;
-  count.value = store.answersCount.visible;
-  offset.value = 0;
+  updatePagination();
 
   loading.value.show = true;
 
   Promise.all([
-    fetchFeedbackAnswer('index', { limit: 24 }),
+    fetchFeedbackAnswer('index'),
     fetchFeedbackAnswer(
       'count',
       undefined,
@@ -132,14 +189,16 @@ const updateShow = () => {
 const nextPage = () => {
   if (loading.value.next) return;
 
-  if (count.value + store.answersCount.visible > 24) {
+  if (count.value + 5 > 25) {
     loading.value.next = true;
+
+    const status = filter.value;
 
     fetchFeedbackAnswer(
       'index',
-      { limit: 24, offset: (offset.value += 24) },
+      { offset: (offset.value += 25), status },
       () => {
-        count.value = store.answersCount.visible;
+        count.value = 5;
         page.value++;
       }
     ).then(() => (loading.value.next = false));
@@ -148,19 +207,22 @@ const nextPage = () => {
   }
 
   page.value++;
-  count.value += store.answersCount.visible;
+  count.value += 5;
 };
+
 const prevPage = () => {
   if (loading.value.prev) return;
 
-  if (count.value - store.answersCount.visible < store.answersCount.visible) {
+  if (count.value - 5 < 5) {
     loading.value.prev = true;
+
+    const status = filter.value;
 
     fetchFeedbackAnswer(
       'index',
-      { limit: 24, offset: (offset.value -= 24) },
+      { offset: (offset.value -= 25), status },
       () => {
-        count.value = 24;
+        count.value = 25;
         page.value--;
       }
     ).then(() => (loading.value.prev = false));
@@ -169,10 +231,57 @@ const prevPage = () => {
   }
 
   page.value--;
-  count.value -= store.answersCount.visible;
+  count.value -= 5;
+};
+
+const lastPage = () => {
+  const lastOffset = Math.floor((pages.value * 5) / 25) * 25;
+
+  if (offset.value === lastOffset) {
+    count.value = pages.value % 5 === 0 ? 25 : (pages.value % 5) * 5;
+    page.value = pages.value;
+
+    return;
+  }
+
+  loading.value.last = true;
+
+  const status = filter.value;
+
+  fetchFeedbackAnswer('index', { offset: lastOffset, status }, () => {
+    count.value = pages.value % 5 === 0 ? 25 : (pages.value % 5) * 5;
+    page.value = pages.value;
+    offset.value = lastOffset;
+  }).then(() => (loading.value.last = false));
+};
+const firstPage = () => {
+  if (offset.value === 0) {
+    page.value = 1;
+    count.value = 5;
+
+    return;
+  }
+
+  loading.value.first = true;
+
+  const status = filter.value;
+
+  fetchFeedbackAnswer('index', { status }, () => {
+    page.value = 1;
+    offset.value = 0;
+    count.value = 5;
+  }).then(() => (loading.value.first = false));
 };
 
 const pagination = computed(() => [
+  {
+    label: 'Первая страница',
+    icon: 'first_page',
+    color: 'primary',
+    disable: page.value === 1,
+    loading: loading.value.first,
+    action: firstPage,
+  },
   {
     label: 'Предыдущая страница',
     icon: 'chevron_left',
@@ -196,6 +305,14 @@ const pagination = computed(() => [
     disable: page.value === pages.value,
     loading: loading.value.next,
     action: nextPage,
+  },
+  {
+    label: 'Последняя страница',
+    icon: 'last_page',
+    color: 'primary',
+    disable: page.value === pages.value,
+    loading: loading.value.last,
+    action: lastPage,
   },
 ]);
 </script>

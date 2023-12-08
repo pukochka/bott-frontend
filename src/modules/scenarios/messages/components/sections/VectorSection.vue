@@ -7,22 +7,19 @@
       @mouseenter="showTooltip"
       @mouseleave="hideTooltip"
       @mouseout="hideTooltip"
-      @click="openMenu(button.button_id)"
-    >
+      @click="openMenu(button.button_id)">
       <circle
         stroke="transparent"
         fill="transparent"
         :cx="button.line?.start_x"
         :cy="button.line?.start_y"
-        :r="12"
-      />
+        :r="12" />
 
       <path
         class="line"
         stroke-width="1.4"
         :d="button.line?.path"
-        fill="transparent"
-      />
+        fill="transparent" />
 
       <polygon class="arrow" :points="button.line?.polygon" stroke-width="1" />
     </g>
@@ -33,26 +30,21 @@
     touch-position
     @before-show="showUpdate"
     @before-hide="hideUpdate"
-    class="bott-portal-menu"
-  >
+    class="bott-portal-menu">
     <button-menu-list
       :button="data.selectedButton"
-      :message="data.selectedMessage"
-    ></button-menu-list>
+      :message="data.selectedMessage"></button-menu-list>
   </q-menu>
 
-  <teleport to="#q-app">
-    <transition name="q-transition--fade">
-      <q-card
-        v-if="tooltip.state"
-        flat
-        class="absolute rounded z-max q-tooltip--style"
-        :style="{ top: tooltip.y + 'px', left: tooltip.x + 'px' }"
-      >
-        Нажмите, чтобы изменить
-      </q-card>
-    </transition>
-  </teleport>
+  <transition name="q-transition--fade">
+    <q-card
+      v-if="tooltip.state"
+      flat
+      class="absolute rounded z-max q-tooltip--style"
+      :style="{ top: tooltip.y + 'px', left: tooltip.x + 'px' }">
+      Нажмите, чтобы изменить
+    </q-card>
+  </transition>
 </template>
 
 <script lang="ts" setup>
@@ -121,12 +113,12 @@ const showTooltip = async (e: MouseEvent) => {
 
   const { clientY, clientX } = e;
 
-  tooltip.value.x = clientX;
-  tooltip.value.y = clientY - 40;
+  tooltip.value.x = clientX - 80;
+  tooltip.value.y = clientY - 40 - 100;
 
   tooltip.value.handle = true;
 
-  await new Promise((res) => setTimeout(() => res(1), 600)).then(() => {
+  await new Promise((res) => setTimeout(() => res(1), 300)).then(() => {
     if (tooltip.value.handle) tooltip.value.state = true;
   });
 };

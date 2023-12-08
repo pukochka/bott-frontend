@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeUnmount } from 'vue';
+import { ref, onBeforeUnmount, computed } from 'vue';
 import { useEditor, EditorContent } from '@tiptap/vue-3';
 import { t } from 'src/boot/lang';
 
@@ -97,8 +97,15 @@ const state = ref({
 
 const is_link = ref(false);
 
+const text = computed(() =>
+  props.content
+    .split('\n')
+    .map((item) => `<p>${item}</p>`)
+    .join('')
+);
+
 const editor = useEditor({
-  content: '',
+  content: text.value,
   injectCSS: true,
   extensions: [
     Document.configure({
@@ -129,11 +136,6 @@ const editor = useEditor({
       limit: props.maxValue,
     }),
   ],
-  onCreate: (state) => {
-    state.editor.commands.insertContent(
-      props.content.replace('<p><p>', '').replace('<p></p>', '')
-    );
-  },
   onUpdate: (state) => {
     emit('update', state.editor.getHTML());
   },

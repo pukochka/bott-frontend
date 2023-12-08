@@ -4,8 +4,7 @@
       v-for="(message, index) in column.messages"
       :key="message.id"
       :message="message"
-      :index="index"
-    ></message-item>
+      :index="index"></message-item>
 
     <div class="row">
       <q-btn
@@ -13,27 +12,23 @@
         flat
         no-caps
         color="primary"
-        :label="t('add-message')"
+        label="Добавить сообщение"
         class="col rounded"
-        @click="addMessage"
-      />
+        @click="addMessage" />
     </div>
 
     <drag-horizontal
       v-if="states.dragValue.el"
       :column_id="column.id"
-      :sort="column.messages.length"
-    ></drag-horizontal>
+      :sort="column.messages.length"></drag-horizontal>
   </div>
 </template>
 <script lang="ts" setup>
-import { t } from 'src/boot/lang';
-
 import { useStatesStore } from '../../stores/states/statesStore';
 import { useDataStore } from '../../stores/data/dataStore';
 import { useVectorStore } from '../../stores/vector/vectorStore';
 
-import { defaultColumn } from '../../stores/deafults';
+import { defaultColumn } from '../../stores/defaults';
 
 import MessageItem from './MessageItem.vue';
 import DragHorizontal from './sections/DragHorizontal.vue';

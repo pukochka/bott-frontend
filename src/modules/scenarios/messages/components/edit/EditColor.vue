@@ -1,7 +1,7 @@
 <template>
   <div class="row q-gutter-sm q-py-sm">
     <div
-      v-for="(item, index) in data.colors"
+      v-for="(item, index) of data.colors"
       :key="index"
       class="col rounded bordered q-pa-md cursor-pointer relative-position"
       :style="{ 'background-color': '#' + item.color }"
@@ -29,18 +29,17 @@
       <q-icon size="22px" color="primary" name="check" />
     </div>
 
-    {{ t('without-filling') }}
+    Без заливки
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { t } from 'src/boot/lang';
 
 import { fetchMessage } from '../../api';
 
 import { useDataStore } from '../../stores/data/dataStore';
 
-import { defaultMessage } from '../../stores/deafults';
+import { defaultMessage } from '../../stores/defaults';
 
 const props = withDefaults(defineProps<EditColorProps>(), {
   message: () => defaultMessage,

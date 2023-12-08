@@ -7,7 +7,7 @@
     v-model="states.dialogs.change_type"
   >
     <q-card style="width: 100%" flat bordered class="dialog-rounded">
-      <dialog-header :label="t('edit-type-of-message')"></dialog-header>
+      <dialog-header label="Изменить тип сообщения"></dialog-header>
 
       <q-card-section class="q-pt-none">
         <edit-type @select="update" :message-type="selected"></edit-type>
@@ -19,7 +19,7 @@
           no-caps
           size="md"
           class="rounded"
-          :label="t('button-close')"
+          label="Закрыть"
           color="primary"
           v-close-popup
         />
@@ -29,7 +29,7 @@
           unelevated
           size="md"
           class="rounded"
-          :label="t('button-save')"
+          label="Сохранить"
           color="primary"
           :loading="loading"
           @click="changeType"
@@ -41,7 +41,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-import { t } from 'src/boot/lang';
 import { fetchMessage } from '../../../api';
 
 import { useStatesStore } from '../../../stores/states/statesStore';
@@ -76,8 +75,8 @@ const changeType = () => {
       message_id: data.selectedMessage?.id ?? 0,
       type: selected.value,
     },
-    () => {
-      message!.type.id = selected.value;
+    (response) => {
+      Object.assign(message, response.data.data);
     }
   ).then(() => {
     loading.value = false;

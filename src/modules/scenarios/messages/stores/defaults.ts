@@ -1,9 +1,3 @@
-export const defaultColor: SCColor = {
-  title: '',
-  id: 0,
-  color: '',
-};
-
 export const defaultMessage: MessageFree = {
   id: 0,
   title: '',
@@ -19,11 +13,11 @@ export const defaultMessage: MessageFree = {
     type: 0,
     label: '',
     description: '',
+    path: 'photos',
   },
   color: null,
   specType: {
     id: 0,
-    // title: '',
   },
   sort: null,
   column_id: null,
@@ -56,11 +50,6 @@ export const defaultButton: IMButton = {
   line: 0,
 };
 
-export const defaultConnection: SCConnection = {
-  button_id: 0,
-  message_id: 0,
-};
-
 export const defaultCommand: SCCommand = {
   id: 0,
   bot_id: 0,
@@ -68,15 +57,6 @@ export const defaultCommand: SCCommand = {
   label: '',
   is_column: false,
   is_menu: false,
-};
-
-export const defaultCommandView: SCCommandView = {
-  id: 0,
-  bot_id: 0,
-  route: '',
-  label: '',
-  columns: [],
-  lines: [],
 };
 
 export const defaultColumn: SCColumn = {

@@ -7,7 +7,7 @@
     v-model="states.dialogs.add_message"
   >
     <q-card style="width: 100%" flat bordered class="dialog-rounded">
-      <dialog-header :label="t('choose-type-of-message')"></dialog-header>
+      <dialog-header label="Выберите тип сообщения"></dialog-header>
 
       <q-card-section class="q-pt-none">
         <edit-type @select="update"></edit-type>
@@ -19,7 +19,7 @@
           no-caps
           class="rounded"
           size="md"
-          :label="t('button-close')"
+          label="Закрыть"
           color="primary"
           v-close-popup
         />
@@ -29,7 +29,7 @@
           unelevated
           class="rounded"
           size="md"
-          :label="t('button-add')"
+          label="Добавить"
           color="primary"
           :loading="loading"
           @click="AddMessage"
@@ -40,8 +40,6 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-
-import { t } from 'src/boot/lang';
 
 import { fetchColumn } from '../../../api';
 
@@ -72,7 +70,7 @@ const AddMessage = () => {
   if (data.selectedColumn === null) {
     fetchColumn('create', {
       route_id: data.scenarioValue?.id ?? 0,
-      type: selected.value,
+      message_type: selected.value,
     }).then(() => {
       loading.value = false;
       states.closeDialog('add_message');

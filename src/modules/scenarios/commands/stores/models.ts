@@ -7,7 +7,10 @@ export interface CommandsStore {
   selectedCommand: SCCommand | null;
 
   loading: boolean;
-  scenario: boolean;
 }
 
-export type DialogNames = 'add_action' | 'add_scenario' | 'edit_action';
+export type DialogNames =
+  | 'add_action'
+  | 'add_scenario'
+  | 'edit_action'
+  | 'scenario';

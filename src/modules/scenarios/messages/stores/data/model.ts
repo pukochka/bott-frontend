@@ -11,8 +11,3 @@ export interface DataStore {
   selectedMessage: MessageFree | null;
   selectedColumn: SCColumn | null;
 }
-
-export interface SCFeedback {
-  message_id: number;
-  feedback: FBMessage;
-}

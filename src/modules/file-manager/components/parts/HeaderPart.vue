@@ -12,7 +12,8 @@
         :label="action.label"
         :disable="action.disabled"
         :loading="action.loading"
-        @click="action.action"></q-btn>
+        @click="action.action"
+      ></q-btn>
     </div>
 
     <q-space></q-space>
@@ -24,7 +25,8 @@
           class="bott-input--rounded"
           v-model="data.search"
           color="primary"
-          outlined>
+          outlined
+        >
           <template #append>
             <q-btn
               dense
@@ -33,7 +35,8 @@
               color="primary"
               icon="close"
               v-if="data.search !== ''"
-              @click="data.search = ''" />
+              @click="data.search = ''"
+            />
           </template>
         </q-input>
       </q-menu>
@@ -51,14 +54,16 @@
       color="primary"
       icon="upload"
       label="Загрузить"
-      @click="openExplorer">
+      @click="openExplorer"
+    >
       <input
         ref="uploadFiles"
         type="file"
         :accept="data.extensions"
         class="upload-input"
         multiple
-        @change="data.loadFiles" />
+        @change="data.loadFiles"
+      />
     </q-btn>
   </div>
 </template>
@@ -129,6 +134,7 @@ const checkMessage = () => {
 
 const assignMessage = () => {
   const file = data.selectedFiles[0] ?? defaultFileCard;
+  const path = data.message?.type.path ?? 'photos';
 
   loading.value = true;
 
@@ -136,15 +142,15 @@ const assignMessage = () => {
     'assign',
     {
       link: data.selectedFiles[0]?.link ?? '',
-      id: data.message[data.query].id,
+      id: data.message?.[path]?.id ?? 0,
     },
     () => {
       fetchFile('index', undefined, () => {
         useDialog('Успешно прикреплено!');
 
         if (data.dialog) {
-          data.message[data.query]['abs_path'] = file.link;
-          data.message[data.query]['host'] = file.name;
+          data.message[path]['abs_path'] = file.link;
+          data.message[path]['host'] = file.name;
         }
       });
     }

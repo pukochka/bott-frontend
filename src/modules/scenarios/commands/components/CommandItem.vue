@@ -18,12 +18,6 @@
       >
         Нажмите, для изменения
       </q-tooltip>
-
-      <!--      <router-link-->
-      <!--        :to="'/control-panel/premium/scenarios/messages'"-->
-      <!--        class="absolute-full"-->
-      <!--        v-if="command.is_column"-->
-      <!--      ></router-link>-->
     </q-card>
   </div>
 </template>
@@ -32,8 +26,8 @@ import { computed } from 'vue';
 
 import { useCommandsStore } from '../stores/commandsStore';
 
-import { defaultCommand } from '../../messages/stores/deafults';
-import { setQueryParam } from '../../../../utils/helpers/string';
+import { defaultCommand } from '../../messages/stores/defaults';
+import { setQueryParam } from 'src/utils/helpers/string';
 
 const props = withDefaults(defineProps<CommandItemProps>(), {
   command: () => defaultCommand,
@@ -49,14 +43,15 @@ const hint = computed(() => {
 });
 
 const openAction = () => {
+  commands.selectedCommand = props.command;
+
   if (props.command.is_column) {
     setQueryParam('route_id', props.command.id);
-    commands.scenario = true;
+    commands.openDialog('scenario');
 
     return;
   }
 
-  commands.selectedCommand = props.command;
   commands.openDialog('edit_action');
 };
 

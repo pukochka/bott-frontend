@@ -123,12 +123,14 @@ export class Link {
     this.lineStart.opacity = 0.6;
     this.lineEnd.opacity = 0.6;
 
-    this.lineFront.onClick = () => {
+    this.lineFront.onClick = (event: any) => {
       store.selectedMessage = this.startMessage;
       store.selectedMessageNext = this.endMessage;
       store.selectedOption = this.crossroad;
 
-      store.openMenu('link');
+      const touch = !!event.event?.changedTouches?.[0];
+
+      store.openMenu('link', undefined, touch);
     };
 
     this.lineFront.onMouseEnter = () => {

@@ -6,13 +6,11 @@
     class="rounded"
     :color="linesConnection ? 'warning' : 'primary'"
     :icon="notConnection ? 'radio_button_unchecked' : 'radio_button_checked'"
-    :id="`button_${button.id}`"
-  >
+    :id="`button_${button.id}`">
     <q-tooltip
       class="bott-tooltip text-center"
       anchor="top middle"
-      self="bottom middle"
-    >
+      self="bottom middle">
       {{ tooltip }}
     </q-tooltip>
   </q-btn>
@@ -20,8 +18,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import { t } from 'src/boot/lang';
-import { defaultButton } from '../../../stores/deafults';
+import { defaultButton } from '../../../stores/defaults';
 
 const props = withDefaults(defineProps<ButtonCheckboxProps>(), {
   button: () => defaultButton,
@@ -32,7 +29,7 @@ const linesConnection = computed(() => props.button.type === 5);
 
 const tooltip = computed(() =>
   notConnection.value
-    ? t('button-inactive')
+    ? 'Неактивная кнопка'
     : linesConnection.value
     ? 'Нажмите, чтобы изменить связь'
     : 'Нажмите, чтобы изменить путь'

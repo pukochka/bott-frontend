@@ -53,6 +53,7 @@ declare interface MessageType {
   type: number;
   label: string;
   description: string;
+  path: 'photos' | 'animations' | 'files' | 'videos';
 }
 
 declare interface MessageFreeMedia {

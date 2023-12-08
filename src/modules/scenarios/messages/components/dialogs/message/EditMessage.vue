@@ -3,8 +3,7 @@
     persistent
     full-width
     position="bottom"
-    v-model="states.dialogs.edit_message"
-  >
+    v-model="states.dialogs.edit_message">
     <div class="row justify-center">
       <q-card flat bordered class="dialog-rounded bott-dialog__responsive">
         <div class="row items-center justify-between q-px-md q-py-sm">
@@ -16,17 +15,23 @@
         </div>
 
         <q-card-section class="q-pt-none">
-          <inline-menu :message="data.selectedMessage"></inline-menu>
+          <inline-menu
+            :message="data.selectedMessage"
+            :bot_id="config.bot.id"
+            :token="config.bot.token"
+            :host="config.host"></inline-menu>
         </q-card-section>
       </q-card>
     </div>
   </q-dialog>
 </template>
 <script setup lang="ts">
+import { config } from '../../../../config';
+
 import { useDataStore } from '../../../stores/data/dataStore';
 import { useStatesStore } from '../../../stores/states/statesStore';
 
-import InlineMenu from '../../../../../inline-menu/InlineMenu.vue';
+import InlineMenu from '../../../../../inline/InlineMenu.vue';
 
 const states = useStatesStore();
 const data = useDataStore();

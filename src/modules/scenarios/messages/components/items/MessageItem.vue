@@ -35,7 +35,7 @@
           anchor="top middle"
           self="bottom middle"
         >
-          {{ t('moving-squeeze') }}
+          Зажмите, для перемещения
         </q-tooltip>
       </q-btn>
 
@@ -55,6 +55,19 @@
 
     <div class="row items-center">
       <q-btn
+        v-if="props.message.type.id === 2"
+        flat
+        dense
+        no-caps
+        :href="`/lk/common/messages/feedback/view?bot_id=${config.bot.id}&id=${props.message.id}`"
+        padding="4px"
+        class="rounded col"
+        color="primary"
+        label="Изменить обратную связь"
+      />
+
+      <q-btn
+        v-else
         flat
         dense
         no-caps
@@ -70,6 +83,7 @@
       @click="cancelConnection"
       :showing="cancelConnecting"
       label="Отменить связь"
+      icon="close"
       class="cancel-connection"
       tooltip="Нажмите для отмены связи"
     ></message-shadow>
@@ -79,6 +93,7 @@
       :showing="isConnecting"
       label="Наведите на блок и нажмите на него для связи"
       icon="ads_click"
+      class="add-connection"
       tooltip="Нажмите для связи"
     ></message-shadow>
 
@@ -91,16 +106,15 @@
   </q-card>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { t } from 'src/boot/lang';
+import { computed } from 'vue';
 
-import { fetchMessage, fetchButtons } from '../../api';
+import { fetchButtons } from '../../api';
 
 import { useVectorStore } from '../../stores/vector/vectorStore';
 import { useStatesStore } from '../../stores/states/statesStore';
 import { useDataStore } from '../../stores/data/dataStore';
 
-import { defaultMessage } from '../../stores/deafults';
+import { defaultMessage } from '../../stores/defaults';
 
 import MessageMenu from './sections/MessageMenu.vue';
 import MessageButtons from './sections/MessageButtons.vue';
@@ -108,6 +122,7 @@ import EditTitle from '../edit/EditTitle.vue';
 import DragHorizontal from './sections/DragHorizontal.vue';
 import MessageMain from './sections/MessageMain.vue';
 import MessageShadow from './sections/MessageShadow.vue';
+import { config } from '../../../config';
 
 const props = withDefaults(defineProps<MessageItemProps>(), {
   message: () => defaultMessage,
@@ -118,8 +133,6 @@ const props = withDefaults(defineProps<MessageItemProps>(), {
 const data = useDataStore();
 const states = useStatesStore();
 const vector = useVectorStore();
-
-const loading = ref(false);
 
 const isConnecting = computed(
   () => vector.connection && vector.mountedLine?.message_id !== props.message.id
@@ -170,7 +183,10 @@ interface MessageItemProps {
 </script>
 <style lang="scss">
 .cancel-connection {
-  background: rgba(255, 0, 0, 0.3);
+  background: rgba(214, 40, 40, 0.75);
+}
+.add-connection {
+  background: rgba(255, 255, 255, 0.75);
 }
 .first-message--banner {
   position: absolute;

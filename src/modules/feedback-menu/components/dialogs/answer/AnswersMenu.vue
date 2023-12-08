@@ -1,27 +1,6 @@
 <template>
   <q-menu class="bott-portal-menu">
     <q-list dense>
-      <q-item clickable>
-        <q-item-section avatar>
-          <q-icon name="view_cozy" color="primary" size="22px" />
-        </q-item-section>
-
-        <q-item-section>Количество видимых ответов</q-item-section>
-
-        <q-menu class="bott-portal-menu" fit>
-          <q-list dense separator>
-            <q-item
-              clickable
-              v-for="item of visible"
-              :key="item"
-              @click="store.answersCount.visible = item"
-            >
-              <q-item-section class="text-center"> {{ item }}</q-item-section>
-            </q-item>
-          </q-list>
-        </q-menu>
-      </q-item>
-
       <q-item
         clickable
         v-for="(button, index) of actions"
@@ -46,11 +25,7 @@
 import { computed, ref } from 'vue';
 import { fetchFeedbackAnswer } from '../../../api/queries';
 import { useDialog } from '../../../../file-manager/stores/useDialog';
-import { useFeedbackStore } from '../../../stores/feedbackStore';
 
-const store = useFeedbackStore();
-
-const visible = [3, 6, 8];
 const loading = ref(false);
 
 const readAllAnswers = () => {
@@ -78,7 +53,7 @@ const deleteAllAnswers = () => {
   useDialog('Вы уверены, что хотите удалить все ответы?', true).onOk(() => {
     loading.value = true;
 
-    fetchFeedbackAnswer('delete', { answer_id: [] }).then(() => {
+    fetchFeedbackAnswer('delete-by-status').then(() => {
       loading.value = false;
     });
   });

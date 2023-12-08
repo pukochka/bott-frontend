@@ -1,37 +1,27 @@
 <template>
-  <q-menu
-    touch-position
-    v-if="store.menu.message"
-    max-width="300px"
-    class="bott-portal-menu"
-  >
-    <q-list>
-      <q-item
-        dense
-        clickable
-        v-ripple
-        v-for="(button, index) of buttons"
-        :key="index"
-        v-show="button.condition"
-        @click="button.action"
-      >
-        <q-item-section avatar>
-          <q-icon :name="button.icon" :color="button.color" size="22px" />
-        </q-item-section>
+  <q-list>
+    <q-item
+      dense
+      clickable
+      v-ripple
+      v-for="(button, index) of buttons"
+      :key="index"
+      v-show="button.condition"
+      @click="button.action"
+    >
+      <q-item-section avatar>
+        <q-icon :name="button.icon" :color="button.color" size="22px" />
+      </q-item-section>
 
-        <q-item-section>
-          <q-item-label>{{ button.label }}</q-item-label>
-        </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ button.label }}</q-item-label>
+      </q-item-section>
 
-        <q-inner-loading
-          :showing="loading.delete"
-          v-if="button.icon === 'close'"
-        >
-          <q-spinner size="16px" color="primary" />
-        </q-inner-loading>
-      </q-item>
-    </q-list>
-  </q-menu>
+      <q-inner-loading :showing="loading.delete" v-if="button.icon === 'close'">
+        <q-spinner size="16px" color="primary" />
+      </q-inner-loading>
+    </q-item>
+  </q-list>
 </template>
 
 <script setup lang="ts">
@@ -60,8 +50,11 @@ const withoutCrossroad = computed(() => store.selectedMessage?.type !== 4);
 const openSetting = () => {
   store.menu.message = false;
 
+  store.closeDialog('touch');
+
   if (withoutCrossroad.value) {
     store.openDialog('message');
+
     return;
   }
   store.openDialog('crossroad');
@@ -76,6 +69,7 @@ const deleteMessage = () => {
     }).then(() => {
       store.menu.message = false;
       loading.value.delete = false;
+      store.closeDialog('touch');
     });
   });
 };
@@ -92,11 +86,14 @@ const setStart = () => {
     }).then(() => {
       store.menu.message = false;
       loading.value.start = false;
+      store.closeDialog('touch');
     });
   });
 };
 
 const addMessage = () => {
+  store.closeDialog('touch');
+
   store.action = () => {
     store.menu.message = false;
   };

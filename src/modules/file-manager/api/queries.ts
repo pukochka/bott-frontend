@@ -9,12 +9,13 @@ export async function fetchFile<Q extends keyof FMQueries>(
 ) {
   const data = useFMStore();
 
-  const host = 'v1/bot/manager/' + data.query;
+  const host = 'v1/bot/manager/' + data.message?.type.path ?? 'photos';
 
   const url =
     (query.includes('/')
       ? host.slice(0, host.lastIndexOf('/') + 1)
-      : 'v1/bot/manager/' + data.query + '/') + query;
+      : 'v1/bot/manager/' + (data.message?.type.path ?? 'photos') + '/') +
+    query;
 
   try {
     return await instance({

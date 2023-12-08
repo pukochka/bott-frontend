@@ -9,42 +9,43 @@
   >
     <div
       class="q-pa-xs transition full-height"
-      :style="{ width: open ? '240px' : '170px' }"
+      :style="{ width: open || sm ? '240px' : '170px' }"
     >
-      <q-scroll-area
-        style="width: 100%; height: 100%"
-        visible
-        :thumb-style="thumbStyle"
+      <div
+        class="column no-wrap absolute-full q-pa-xs"
+        :style="{ paddingTop: sm ? '60px' : '' }"
       >
-        <div class="column no-wrap absolute-full">
-          <message-card
-            v-for="(message, index) of messages"
-            :key="index"
-            :message="message"
-            :open="open"
-            @menu="(value) => (menu = value)"
-          ></message-card>
-        </div>
-      </q-scroll-area>
+        <message-card
+          v-for="(message, index) of messages"
+          :key="index"
+          :message="message"
+          :open="open"
+          @menu="(value) => (menu = value)"
+        ></message-card>
+      </div>
     </div>
   </q-card>
 </template>
 
 <script setup lang="ts">
-import { useFeedbackStore } from '../../stores/feedbackStore';
 import { computed, ref } from 'vue';
-import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
+import { useFeedbackStore } from '../../stores/feedbackStore';
+import { useQuasar } from 'quasar';
+
+import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
 
 import MessageCard from '../views/MessageCard.vue';
 
 const store = useFeedbackStore();
+const quasar = useQuasar();
 
 const open = ref(false);
 const menu = ref(false);
 
+const sm = computed(() => quasar.screen.lt.sm);
+
 const openMenu = (value: boolean) => {
-  if (store.onconnection || store.dragging || store.onmessage || menu.value)
-    return;
+  if (store.onconnection || store.dragging || menu.value) return;
 
   open.value = value;
 };
@@ -60,28 +61,24 @@ const messages = computed((): any => [
     label: 'Прощание',
     data: end.value,
     condition: store.feedback.end !== null,
+    desc: 'Сообщения после окончания прохождения формы.',
     method: 'end',
   },
   {
     label: 'Уведомление администратора',
     data: admin.value,
     condition: store.feedback.admin !== null,
+    desc: 'После того как пользователь ответил на вопросы, администратор получит уведомление.',
     method: 'admin',
   },
   {
     label: 'Быстрые ответы для администратора',
     data: answerAdmin.value,
     condition: store.feedback.answerAdmin !== null,
+    desc: 'После того как пользователь ответил на вопросы, администратору будет предложено обработать заявку.',
     method: 'answer',
   },
 ]);
-
-const thumbStyle = {
-  width: '8px',
-  backgroundColor: 'var(--q-primary)',
-  borderRadius: '10px',
-  border: '4px solid rgba(0, 0, 0, 0)',
-};
 </script>
 
 <style scoped lang="scss"></style>

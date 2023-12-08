@@ -9,6 +9,7 @@ export const useCommandsStore = defineStore('data-commands-store', {
         add_action: false,
         add_scenario: false,
         edit_action: false,
+        scenario: false,
       },
 
       types: [],
@@ -16,7 +17,6 @@ export const useCommandsStore = defineStore('data-commands-store', {
       selectedCommand: null,
 
       loading: true,
-      scenario: false,
     } as CommandsStore),
   getters: {
     actions: (state) => state.commands.filter((command) => !command.is_column),

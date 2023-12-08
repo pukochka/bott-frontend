@@ -19,58 +19,48 @@
           Пользователи/ресурсы которым отправляются уведомления
         </div>
 
-        <q-item v-if="!store.notifications.length">
-          <q-item-section class="text-center">
-            Пока нет пользовалелей/ресурсов
-          </q-item-section>
+        <div class="">
+          <q-item v-if="!store.notifications.length">
+            <q-item-section class="text-center">
+              Пока нет пользовалелей/ресурсов
+            </q-item-section>
+          </q-item>
+
+          <q-list
+            dense
+            bordered
+            separator
+            class="rounded overflow-hidden"
+            v-else
+          >
+            <notify-item
+              v-for="notify of store.notifications"
+              :key="notify.id"
+              :item="notify"
+            ></notify-item>
+          </q-list>
+
+          <div class="row q-pt-sm">
+            <q-btn
+              no-caps
+              flat
+              dense
+              size="md"
+              color="primary"
+              class="rounded col"
+              label="Добавить пользователя/ресурс"
+            >
+              <user-search
+                :token="config.bot.token"
+                :bot_id="config.bot.id"
+                @select="addUser"
+              ></user-search>
+            </q-btn>
+          </div>
 
           <q-inner-loading :showing="loading.add">
             <q-spinner size="30px" color="primary" />
           </q-inner-loading>
-        </q-item>
-
-        <q-list dense bordered separator class="rounded overflow-hidden" v-else>
-          <q-item v-for="notify of store.notifications" :key="notify.id">
-            <q-item-section class="text-center text-primary">
-              @{{ notify.user.username }}
-            </q-item-section>
-
-            <q-btn
-              flat
-              dense
-              square
-              color="red"
-              icon="close"
-              class="absolute-right"
-              @click="deleteUser(notify.id)"
-            >
-              <q-tooltip
-                class="bott-tooltip text-center"
-                anchor="top middle"
-                self="bottom middle"
-              >
-                Удалить пользователя/ресурс
-              </q-tooltip>
-            </q-btn>
-          </q-item>
-        </q-list>
-
-        <div class="row">
-          <q-btn
-            no-caps
-            flat
-            dense
-            size="md"
-            color="primary"
-            class="rounded col"
-            label="Добавить пользователя/ресурс"
-          >
-            <user-search
-              :token="config.bot.token"
-              :bot_id="config.bot.id"
-              @select="addUser"
-            ></user-search>
-          </q-btn>
         </div>
 
         <div class="text-caption">
@@ -109,39 +99,28 @@ import { config } from '../../config';
 import { ref } from 'vue';
 
 import { useFeedbackStore } from '../../stores/feedbackStore';
-import { useDialog } from '../../../file-manager/stores/useDialog';
 import { fetchFeedback, fetchFeedbackNotify } from '../../api/queries';
 
 import UserSearch from './notification/UserSearch.vue';
 import RadioItem from '../views/RadioItem.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
+import NotifyItem from './notification/NotifyItem.vue';
 
 const store = useFeedbackStore();
 
 const notice = ref(false);
 const loading = ref({
   show: false,
-  delete: false,
   add: false,
   notify: false,
 });
 
-const deleteUser = (id: any) => {
-  useDialog('Вы уверены, что хотите удалить пользователя?').onOk(() => {
-    loading.value.delete = true;
-
-    fetchFeedbackNotify('delete', { id }).then(
-      () => (loading.value.delete = false)
-    );
-  });
-};
-
 const addUser = (id: any) => {
   loading.value.add = true;
 
-  fetchFeedbackNotify('create', { user_id: Number(id) }).then(
-    () => (loading.value.add = false)
-  );
+  fetchFeedbackNotify('create', { user_id: Number(id) }, (response) => {
+    store.notifications.push(response);
+  }).then(() => (loading.value.add = false));
 };
 
 const updateNotify = (val: boolean) => {

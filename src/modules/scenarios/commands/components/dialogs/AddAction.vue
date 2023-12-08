@@ -33,6 +33,7 @@
           :host="config.host"
           :bot_id="config.bot.id"
           :token="config.bot.token"
+          :message_id="1"
           @change="registerRoute"
         ></action-menu>
       </q-card-section>
@@ -64,6 +65,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
+import { config } from '../../../config';
 import { ref, onBeforeUpdate } from 'vue';
 
 import { fetchCommands } from '../../../messages/api';
@@ -72,7 +74,6 @@ import { useCommandsStore } from '../../stores/commandsStore';
 
 import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
-import config from '../../../config';
 
 const commands = useCommandsStore();
 

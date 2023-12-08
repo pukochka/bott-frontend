@@ -19,13 +19,10 @@
         Нажмите чтобы изменить
       </q-tooltip>
 
-      <q-popup-proxy
-        cover
-        class="bott-portal-menu"
-        @before-show="text = item.value"
-      >
+      <q-menu cover class="bott-portal-menu" @before-show="text = item.value">
         <q-input
           dense
+          autofocus
           outlined
           mask="#####"
           class="bott-input--rounded"
@@ -43,7 +40,7 @@
             />
           </template>
         </q-input>
-      </q-popup-proxy>
+      </q-menu>
     </q-btn>
   </q-item>
 </template>

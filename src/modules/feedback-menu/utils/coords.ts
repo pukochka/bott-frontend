@@ -39,11 +39,11 @@ export function setCenter() {
   const minY = Math.min(...y);
 
   if (Math.abs(maxX - minX) > store.view.viewSize.width) {
-    store.view.zoom = 0.25;
+    store.view.zoom = 0.4;
   }
 
   if (Math.abs(maxY - minY) > store.view.viewSize.height) {
-    store.view.zoom = 0.25;
+    store.view.zoom = 0.4;
   }
 
   const max = new Point(maxX, maxY);

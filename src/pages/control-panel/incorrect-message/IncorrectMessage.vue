@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import InlineMenu from 'src/modules/inline-menu';
+import InlineMenu from 'src/modules/inline';
 </script>
 
 <style lang="scss" scoped></style>

@@ -13,10 +13,10 @@
 
     <div>
       <div class="row justify-center">
-        <q-icon :name="props.icon" size="32px" />
+        <q-icon :name="props.icon" size="32px" color="black" />
       </div>
 
-      <div class="text-h6 text-center q-py-sm white-space--normal">
+      <div class="text-h6 text-center q-py-sm white-space--normal text-black">
         {{ props.label }}
       </div>
     </div>

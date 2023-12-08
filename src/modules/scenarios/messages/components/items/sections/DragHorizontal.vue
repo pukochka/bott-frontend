@@ -4,16 +4,14 @@
       @mouseup="sortMessage"
       class="full-width"
       :style="floating ? { top: '-30px', left: 0 } : ''"
-      :class="[floating ? ' absolute' : 'relative-position']"
-    >
+      :class="[floating ? ' absolute' : 'relative-position']">
       <q-tooltip
         transition-show="fade"
         transition-hide="fade"
         anchor="center middle"
         self="center middle"
-        class="bg-red rounded"
-      >
-        {{ t('move') }}
+        class="bg-red rounded">
+        Отпустите чтобы переместить
       </q-tooltip>
 
       <svg width="370" height="4">
@@ -23,8 +21,6 @@
   </transition>
 </template>
 <script lang="ts" setup>
-import { t } from 'src/boot/lang';
-
 import { fetchColumn } from '../../../api';
 
 import { useDataStore } from '../../../stores/data/dataStore';

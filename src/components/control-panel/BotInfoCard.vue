@@ -12,9 +12,10 @@
           </div>
 
           <q-tooltip
-            class="bott-tooltip text-center"
+            `class="bott-tooltip text-center"
             anchor="top middle"
             self="bottom middle"
+            `
           >
             <div>Соотношение активных/всех пользователей</div>
 

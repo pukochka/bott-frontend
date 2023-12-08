@@ -6,8 +6,17 @@
   >
     <canvas
       id="feedback-layer"
-      :style="{ width: quasar.screen.width - 60 + 'px' }"
+      :style="{ width: quasar.screen.width - (sm ? 60 : 0) + 'px' }"
     ></canvas>
+
+    <q-menu
+      touch-position
+      v-if="visible"
+      max-width="300px"
+      class="bott-portal-menu"
+    >
+      <component :is="menu[opened]"></component>
+    </q-menu>
 
     <create-menu></create-menu>
 
@@ -15,11 +24,37 @@
 
     <message-menu></message-menu>
 
-    <top-section></top-section>
+    <transition
+      :name="
+        store.mobile.setting
+          ? 'q-transition--slide-down'
+          : 'q-transition--slide-up'
+      "
+    >
+      <top-section v-if="sm || store.mobile.setting"></top-section>
+    </transition>
 
-    <start-section></start-section>
+    <transition
+      :name="
+        store.mobile.end
+          ? 'q-transition--slide-left'
+          : 'q-transition--slide-right'
+      "
+    >
+      <end-section v-if="sm || store.mobile.end"></end-section>
+    </transition>
 
-    <end-section></end-section>
+    <transition
+      :name="
+        store.mobile.start
+          ? 'q-transition--slide-right'
+          : 'q-transition--slide-left'
+      "
+    >
+      <start-section v-if="sm || store.mobile.start"></start-section>
+    </transition>
+
+    <mobile-section v-if="!sm"></mobile-section>
 
     <q-inner-loading
       :showing="store.loading"
@@ -45,10 +80,12 @@
 
   <crossroad-option></crossroad-option>
 
+  <touch-menu></touch-menu>
+
   <q-inner-loading
     v-close-popup
     @click="closeMenu"
-    :showing="visible"
+    :showing="visible && desktop"
     class="bg-alpha cursor-default"
   >
     <div class="absolute-full"></div>
@@ -57,7 +94,7 @@
 
 <script setup lang="ts">
 import { config } from './config';
-import { computed, onBeforeMount } from 'vue';
+import { computed, onBeforeMount, onUpdated } from 'vue';
 import { fetchMessage } from './api/queries';
 import { useFeedbackStore } from './stores/feedbackStore';
 import { useQuasar } from 'quasar';
@@ -79,17 +116,42 @@ import NotifySetting from './components/dialogs/NotifySetting.vue';
 import MessageFreeSetting from './components/dialogs/MessageFreeSetting.vue';
 import CrossroadSetting from './components/dialogs/CrossroadSetting.vue';
 import CrossroadOption from './components/dialogs/CrossroadOption.vue';
+import MobileSection from './components/sections/MobileSection.vue';
+import TouchMenu from './components/menu/TouchMenu.vue';
 
 const store = useFeedbackStore();
 const quasar = useQuasar();
 
+const opened = computed(
+  () =>
+    Object.entries(store.menu)
+      .filter(([_, value]) => value)
+      .map(([key]) => key)?.[0] ?? 'create'
+);
+
+const menu = computed(() => ({
+  create: CreateMenu,
+  message: MessageMenu,
+  link: LinkMenu,
+}));
+
+const sm = computed(() => !quasar.screen.lt.sm);
+const desktop = computed(() => quasar.platform.is.desktop);
+
+const classes = computed(
+  () =>
+    (store.dragging ? ' cursor-grabbing' : '') +
+    (store.onconnection ? ' cursor-grab' : '') +
+    (store.clickable ? ' cursor-pointer' : '')
+);
+
 const visible = computed(() =>
-  Object.entries(store.menu)
-    .map(([_, value]) => value)
+  Object.values(store.menu)
+    .map((value) => value)
     .includes(true)
 );
 const closeMenu = () => {
-  Object.entries(store.menu).forEach(([key]) => {
+  Object.keys(store.menu).forEach((key) => {
     store.menu[<MenuNames>key] = false;
 
     if (store.action) {
@@ -99,12 +161,9 @@ const closeMenu = () => {
   });
 };
 
-const classes = computed(
-  () =>
-    (store.dragging ? ' cursor-grabbing' : '') +
-    (store.onmessage || store.onconnection ? ' cursor-grab' : '') +
-    (store.clickable ? ' cursor-pointer' : '')
-);
+onUpdated(() => {
+  console.log(visible.value && !store.dialogs.touch);
+});
 
 onBeforeMount(() => {
   fetchMessage('get', { message_id: config.message_id });
@@ -116,6 +175,7 @@ canvas {
   width: 100%;
   height: 100%;
 }
+
 .cursor-grabbing {
   cursor: grabbing !important;
 }

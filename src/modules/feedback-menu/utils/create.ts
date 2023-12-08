@@ -26,7 +26,7 @@ export function install() {
   store.loading = false;
 
   store.view.onMouseDrag = (event: any) => {
-    if (store.dragging || store.onconnection || store.onmessage) return;
+    if (store.dragging || store.onconnection) return;
 
     store.view.translate(event.delta.subtract(oldDelta));
     oldDelta = oldDelta.subtract(event.delta);

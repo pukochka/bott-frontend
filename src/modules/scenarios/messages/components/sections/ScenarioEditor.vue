@@ -18,7 +18,7 @@
         no-caps
         class="full-width rounded"
         color="primary"
-        :label="t('add-message')"
+        label="Добавить сообщение"
         @click="addMessage"
       />
     </div>
@@ -26,9 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUpdated, nextTick } from 'vue';
-
-import { t } from 'src/boot/lang';
+import { onMounted, onUpdated } from 'vue';
 
 import { useDataStore } from '../../stores/data/dataStore';
 import { useStatesStore } from '../../stores/states/statesStore';
@@ -53,8 +51,7 @@ async function mountingLines() {
 }
 
 onMounted(mountingLines);
-
-onUpdated(() => nextTick(vector.updateConnections));
+onUpdated(vector.updateConnections);
 </script>
 
 <style lang="scss" scoped></style>

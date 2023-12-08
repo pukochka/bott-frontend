@@ -33,6 +33,13 @@ interface SCTypeParam {
   type: number;
 }
 
+interface SCTypeMessageParam {
+  /**
+   * Тип сообщения
+   * */
+  message_type: number;
+}
+
 interface SCMessageTypeParam {
   /**
    * Тип сообщения
@@ -88,14 +95,14 @@ declare interface SCColumnQueries {
   /**
    * Создать колонну
    * */
-  create: SCRouteIdParam & SCTypeParam;
+  create: SCRouteIdParam & SCTypeMessageParam;
 
   /**
    * Добавить сообщение в колонну
    * */
   'add-message-in-column': SCRouteIdParam &
     SCColumnIdParam &
-    SCMessageTypeParam;
+    SCTypeMessageParam;
 
   /**
    * Переместить сообщение между колоннами/внутри колонны
@@ -133,7 +140,7 @@ declare interface SCCommandQueries {
   /**
    * Обновление пути у маршрута
    * */
-  'update-route': SCRouteIdParam & SCRouteParam;
+  'update-route': SCRouteIdParam & SCRouteParam & SCMessageParam;
 
   /**
    * Удаление маршрута

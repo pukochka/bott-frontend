@@ -15,6 +15,7 @@ instance.interceptors.request.use(function (request) {
   request.data = {
     bot_id: config.bot.id,
     message_id: store.message.id,
+    feedback_id: store.feedback.id,
     ...request.data,
   };
 
@@ -23,10 +24,22 @@ instance.interceptors.request.use(function (request) {
 
 instance.interceptors.response.use(
   function (response) {
+    const url = response.config.url ?? '';
+    const cut = url.lastIndexOf('/');
+
     if (!response.data.result) {
       useDialog(
         response.data?.message ?? 'Что-то пошло не так, обратитесь в поддержку.'
       );
+
+      if (
+        ['set-crossroad-option-next', 'set-input-next'].includes(
+          url.slice(cut + 1)
+        )
+      ) {
+        return response;
+      }
+
       return Promise.reject('error');
     }
 

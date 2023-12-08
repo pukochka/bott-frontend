@@ -3,26 +3,23 @@
     clickable
     class="items-center justify-between no-focus-item"
     :class="{ reverse: targetReverse }"
-    @click="select"
-  >
+    @click="select">
     <div class="">
       <q-icon
         name="warning"
         color="orange"
         size="26px"
-        v-if="button.type === 6"
-      >
+        v-if="button.type === 6">
         <q-tooltip
           class="bott-tooltip text-center"
           anchor="top middle"
-          self="bottom middle"
-        >
-          {{ t('notify-add-active-button') }}
+          self="bottom middle">
+          Добавите связь / путь, чтобы кнопка была активна
         </q-tooltip>
       </q-icon>
     </div>
 
-    <div class="absolute-center ellipsis" style="max-width: 40%">
+    <div class="absolute-center ellipsis" style="max-width: 75%">
       <q-item-label class="q-pa-none ellipsis" header>
         {{ button.text }}
       </q-item-label>
@@ -34,23 +31,20 @@
       anchor="bottom right"
       self="top right"
       class="rounded bott-portal-menu"
-      v-model="menu_state"
-    >
+      v-model="menu_state">
       <button-menu-list
         :message="props.message"
-        :button="props.button"
-      ></button-menu-list>
+        :button="props.button"></button-menu-list>
     </q-menu>
   </q-item>
 </template>
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { t } from 'src/boot/lang';
 
 import { useVectorStore } from '../../stores/vector/vectorStore';
 import { useDataStore } from '../../stores/data/dataStore';
 
-import { defaultButton, defaultMessage } from '../../stores/deafults';
+import { defaultButton, defaultMessage } from '../../stores/defaults';
 
 import ButtonCheckbox from './sections/ButtonCheckbox.vue';
 import ButtonMenuList from './sections/ButtonMenuList.vue';

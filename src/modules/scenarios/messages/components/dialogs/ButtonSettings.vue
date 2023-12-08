@@ -77,7 +77,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import config from '../../../config';
+import { config } from '../../../config';
 
 import { ref } from 'vue';
 import { fetchButtons } from '../../api';
@@ -86,10 +86,7 @@ import { useStatesStore } from '../../stores/states/statesStore';
 import { useDataStore } from '../../stores/data/dataStore';
 
 import SelectType from 'src/components/select-type/SelectType.vue';
-import {
-  inlineButtons,
-  inlineTypes,
-} from '../../../../inline-menu/stores/buttons';
+import { inlineButtons, inlineTypes } from '../../../../inline/stores/buttons';
 
 const states = useStatesStore();
 const data = useDataStore();

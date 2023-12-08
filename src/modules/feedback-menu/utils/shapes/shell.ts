@@ -59,11 +59,13 @@ export function createShell(
     store.notopen = false;
   };
 
-  platform.onClick = () => {
+  platform.onClick = (event: any) => {
     if (store.notopen) return;
     store.selectedMessage = message;
 
-    store.openMenu('message');
+    const touch = !!event.event?.changedTouches?.[0];
+
+    store.openMenu('message', undefined, touch);
   };
 
   platform.data = message;

@@ -6,8 +6,7 @@
     class="rounded"
     icon="more_vert"
     color="primary"
-    @click="data.selectedMessage = props.message"
-  >
+    @click="data.selectedMessage = props.message">
     <q-tooltip class="rounded" anchor="top middle" self="bottom middle">
       Настройки сообщения
     </q-tooltip>
@@ -16,8 +15,7 @@
       anchor="bottom right"
       self="top right"
       class="rounded bott-portal-menu"
-      v-model="menu_state"
-    >
+      v-model="menu_state">
       <q-list separator>
         <q-item
           dense
@@ -27,8 +25,7 @@
           :key="index"
           v-close-popup="button.close"
           v-show="button.condition"
-          @click="button.action"
-        >
+          @click="button.action">
           <q-icon :name="button.icon" :color="button.color" size="22px" />
 
           <div class="text-center q-ml-md flex-grow">{{ button.label }}</div>
@@ -51,7 +48,7 @@ import { fetchMessage, fetchCommands } from '../../../api';
 import { useDataStore } from '../../../stores/data/dataStore';
 import { useStatesStore } from '../../../stores/states/statesStore';
 
-import { defaultMessage } from '../../../stores/deafults';
+import { defaultMessage } from '../../../stores/defaults';
 
 const props = withDefaults(defineProps<MessageMenuProps>(), {
   message: () => defaultMessage,

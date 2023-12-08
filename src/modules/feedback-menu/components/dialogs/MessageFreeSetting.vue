@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { config } from '../../config';
 import { useFeedbackStore } from '../../stores/feedbackStore';
-import InlineMenu from '../../../inline-menu/InlineMenu.vue';
+import InlineMenu from '../../../inline/InlineMenu.vue';
 import DialogHeader from '../../../../components/dialogs-sections/DialogHeader.vue';
 
 const store = useFeedbackStore();

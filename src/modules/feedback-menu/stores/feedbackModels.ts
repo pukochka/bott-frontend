@@ -39,6 +39,12 @@ export interface FeedbackModels {
   notopen: boolean;
   linking: boolean;
 
+  mobile: {
+    start: boolean;
+    setting: boolean;
+    end: boolean;
+  };
+
   dialogs: Record<DialogsNames, boolean>;
 
   selectedType: number;
@@ -61,7 +67,8 @@ export type DialogsNames =
   | 'message'
   | 'message_free'
   | 'crossroad'
-  | 'crossroad_option';
+  | 'crossroad_option'
+  | 'touch';
 export type MenuNames = 'create' | 'link' | 'message';
 
 export interface MessageFeedbackItemPreview extends MessageFeedbackItem {
@@ -75,9 +82,9 @@ export interface MessageFeedbackItemPreview extends MessageFeedbackItem {
 }
 
 export const statuses: Record<number, { label: string; color: string }> = {
-  0: { label: 'В процессе ответа', color: 'primary' },
+  0: { label: 'В процессе ответа', color: 'warning' },
   1: { label: 'Не прочитан', color: 'red' },
-  2: { label: 'Прочитан', color: 'warning' },
+  2: { label: 'Прочитан', color: 'primary' },
   3: { label: 'Отвечен', color: 'positive' },
 };
 
@@ -151,4 +158,18 @@ export const defaultFeedback: MessageFeedback<MessageFeedbackItemPreview> = {
   start: null,
   setting: defaultFeedbackSetting,
   inputs: [],
+};
+
+export const defaultNotify: FeedbackNotification = {
+  id: 0,
+  user: {
+    id: 1,
+    type: '',
+    first_name: '',
+    link: '',
+    last_name: '',
+    username: '',
+    telegram_id: 1,
+  },
+  status: true,
 };

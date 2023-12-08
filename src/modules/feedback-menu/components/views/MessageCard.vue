@@ -5,7 +5,7 @@
       style="min-height: 28px"
     >
       <transition name="q-transition--fade">
-        <div class="absolute-left row items-center" v-if="props.open">
+        <div class="absolute-left row items-center" v-if="props.open || sm">
           <q-btn
             flat
             size="12px"
@@ -13,7 +13,16 @@
             color="primary"
             icon="help_center"
             class="rounded"
-          />
+          >
+            <q-menu
+              v-model="info"
+              @update:model-value="$emit('menu', info)"
+              max-width="300px"
+              class="bott-portal-menu"
+            >
+              <div class="q-pa-sm">{{ props.message.desc }}</div>
+            </q-menu>
+          </q-btn>
         </div>
       </transition>
 
@@ -24,7 +33,7 @@
       <transition name="q-transition--fade">
         <div
           class="absolute-right row items-center"
-          v-if="message.condition && props.open"
+          v-if="(message.condition && props.open) || sm"
         >
           <q-btn
             flat
@@ -88,12 +97,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { defaultMessage } from '../../../scenarios/messages/stores/deafults';
+import { computed, ref } from 'vue';
+
 import { fetchFeedback } from '../../api/queries';
 import { useFeedbackStore } from '../../stores/feedbackStore';
-import MessageMenu from './MessageMenu.vue';
 import { useDialog } from '../../../file-manager/stores/useDialog';
+
+import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
+
+import MessageMenu from './MessageMenu.vue';
+import { useQuasar } from 'quasar';
 
 const props = withDefaults(defineProps<MessageCardProps>(), {
   open: false,
@@ -103,17 +116,22 @@ const props = withDefaults(defineProps<MessageCardProps>(), {
       label: '',
       condition: false,
       method: 'hello',
+      desc: '',
     };
   },
 });
 
 const store = useFeedbackStore();
+const quasar = useQuasar();
 
 const menu = ref(false);
+const info = ref(false);
 const loading = ref({
   add: false,
   drop: false,
 });
+
+const sm = computed(() => quasar.screen.lt.sm);
 
 const messageAction = (prefix: 'add' | 'drop') => {
   loading.value[prefix] = true;
@@ -148,6 +166,7 @@ interface MessageCardProps {
     label: string;
     condition: boolean;
     method: 'hello';
+    desc: string;
   };
 }
 </script>

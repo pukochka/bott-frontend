@@ -6,18 +6,12 @@
           <q-tabs
             dense
             v-model="tab"
-            class="text-primary bott-tab__indicator overflow-hidden fit"
-          >
-            <q-tab name="all" no-caps :label="$t('all')" class="col" />
+            class="text-primary bott-tab__indicator overflow-hidden fit">
+            <q-tab name="all" no-caps label="Все" class="col" />
 
-            <q-tab name="actions" no-caps :label="$t('actions')" class="col" />
+            <q-tab name="actions" no-caps label="Действия" class="col" />
 
-            <q-tab
-              name="scenarios"
-              no-caps
-              :label="$t('scenarios')"
-              class="col"
-            />
+            <q-tab name="scenarios" no-caps label="Сценарии" class="col" />
           </q-tabs>
         </q-card>
       </div>
@@ -28,8 +22,7 @@
           v-model="search"
           label="Поиск..."
           outlined
-          class="bott-input--rounded fit"
-        >
+          class="bott-input--rounded fit">
           <template #append>
             <q-icon name="search" color="primary" size="24px" />
           </template>
@@ -39,23 +32,25 @@
   </div>
 
   <div class="relative-position" style="min-height: 200px">
-    <div class="row q-col-gutter-md" v-if="commands.commands?.length">
+    <div
+      class="row q-col-gutter-md"
+      v-if="commands.commands?.length && !commands.loading">
       <command-item
         v-for="command of filtered"
         :key="command.id"
-        :command="command"
-      ></command-item>
+        :command="command"></command-item>
     </div>
 
     <div
-      v-else
-      class="flex flex-center absolute-full text-center text-primary text-h6"
-    >
-      {{ $t('create-scenarios-action') }}
+      v-if="!commands.commands?.length && !commands.loading"
+      class="flex flex-center absolute-full text-center text-primary text-h6">
+      У Вас пока нет сценариев
     </div>
 
     <transition name="q-transition--fade">
-      <div class="absolute-full flex flex-center" v-if="!filtered.length">
+      <div
+        class="absolute-full flex flex-center"
+        v-if="commands.commands?.length && !filtered.length && !commands.loading ">
         <div class="column items-center">
           <q-icon name="search" color="primary" size="32px" />
 

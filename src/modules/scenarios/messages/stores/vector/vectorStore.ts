@@ -1,9 +1,9 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
+import { useConnect, useMove } from '../../../utils';
 import { getRect } from 'src/utils/helpers/dom';
 import { handlerUpdate } from 'src/utils/helpers/handles';
-import { useConnect, useMove } from '../../../utils';
 
 import { Connection } from '../classes';
 
@@ -98,13 +98,15 @@ export const useVectorStore = defineStore({
     endMove(end: number) {
       document.removeEventListener('mousemove', this.moving, false);
 
-      this.mountedLine!.line = useConnect(
-        end,
-        this.mountedLine?.button_id ?? 0
-      );
-      this.applyConnection(end, this.mountedLine?.button_id ?? 0);
+      if (this.mountedLine) {
+        this.mountedLine.line = useConnect(
+          end,
+          this.mountedLine?.button_id ?? 0
+        );
+        this.applyConnection(end, this.mountedLine?.button_id ?? 0);
 
-      this.mountedLine = null;
+        this.mountedLine = null;
+      }
     },
     /**
      *

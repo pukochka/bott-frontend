@@ -29,7 +29,7 @@
               class="rounded overflow-hidden relative-position"
             >
               <div class="text-center text-body1 text-primary q-py-xs q-px-md">
-                Натройки защиты от спама
+                Натройки лимитов
               </div>
 
               <q-btn
@@ -39,7 +39,7 @@
                 color="warning"
                 icon="refresh"
                 class="rounded absolute-top-right q-ma-xs"
-                @click="refreshSpam"
+                @click="refresh"
               >
                 <q-tooltip
                   class="bott-tooltip text-center"
@@ -52,37 +52,6 @@
 
               <notify-edit-item
                 v-for="(item, index) of spam"
-                :key="index"
-                :item="item"
-                @update="updateItem"
-              ></notify-edit-item>
-
-              <div
-                class="text-center text-body1 text-primary q-py-xs q-px-md relative-position"
-              >
-                Натройки напоминаний
-
-                <q-btn
-                  flat
-                  size="13px"
-                  padding="2px"
-                  color="warning"
-                  icon="refresh"
-                  class="rounded absolute-top-right q-ma-xs"
-                  @click="refreshReminder"
-                >
-                  <q-tooltip
-                    class="bott-tooltip text-center"
-                    anchor="top middle"
-                    self="bottom middle"
-                  >
-                    Сбросить настройки
-                  </q-tooltip>
-                </q-btn>
-              </div>
-
-              <notify-edit-item
-                v-for="(item, index) of reminders"
                 :key="index"
                 :item="item"
                 @update="updateItem"
@@ -133,10 +102,10 @@ import { fetchFeedback } from '../../api/queries';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 import { defaultFeedbackSetting } from '../../stores/feedbackModels';
 
-import ConstantsSection from '../../../inline-menu/components/settings/ConstantsSection.vue';
-import FaqSection from '../../../inline-menu/components/settings/FaqSection.vue';
+import ConstantsSection from '../../../inline/components/settings/ConstantsSection.vue';
+import FaqSection from '../../../inline/components/settings/FaqSection.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
-import NotifyEditItem from './notification/NotifyEditItem.vue';
+import NotifyEditItem from './notification/LimitItem.vue';
 
 const store = useFeedbackStore();
 
@@ -149,7 +118,7 @@ const updateItem = (item: any, text: any) => {
   updateSettings();
 };
 
-const refreshSpam = () => {
+const refresh = () => {
   useDialog(
     'Вы уверены, что хотите сбросить настройки защиты от спама?',
     true
@@ -158,21 +127,6 @@ const refreshSpam = () => {
       .map((item) => item.prop)
       .forEach((key) => {
         setting.value[<SpamPropName>key] = 0;
-      });
-
-    updateSettings();
-  });
-};
-
-const refreshReminder = () => {
-  useDialog(
-    'Вы уверены, что хотите сбросить настройки напоминаний?',
-    true
-  ).onOk(() => {
-    reminders.value
-      .map((item) => item.prop)
-      .forEach((key) => {
-        setting.value[<ReminderPropName>key] = 0;
       });
 
     updateSettings();
@@ -208,28 +162,30 @@ const spam = computed(
       value: setting.value.period,
       prop: 'period',
     },
+    {
+      label: 'Время в минутах до автоудаления неотвеченной заявки',
+      value: setting.value.time_cancel,
+      prop: 'time_cancel',
+    },
+    {
+      label: 'Время в минутах до отправки напоминания',
+      value: setting.value.time_notice,
+      prop: 'time_notice',
+    },
   ]
 );
-
-const reminders = computed((): Setting<ReminderPropName>[] => [
-  {
-    label: 'Время в минутах до автоудаления неотвеченной заявки',
-    value: setting.value.time_cancel,
-    prop: 'time_cancel',
-  },
-  {
-    label: 'Время в минутах до отправки напоминания',
-    value: setting.value.time_notice,
-    prop: 'time_notice',
-  },
-]);
 
 interface Setting<P> {
   label: string;
   value: any;
   prop: P;
 }
-type SpamPropName = 'limit_in_period' | 'user_limit' | 'period';
+type SpamPropName =
+  | 'limit_in_period'
+  | 'user_limit'
+  | 'period'
+  | 'time_notice'
+  | 'time_cancel';
 type ReminderPropName = 'time_notice' | 'time_cancel';
 </script>
 

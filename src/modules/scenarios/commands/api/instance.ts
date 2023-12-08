@@ -1,8 +1,8 @@
 import axios from 'axios';
-import config from '../../config';
+import { config } from '../../config';
 
 import { useCommandsStore } from '../stores/commandsStore';
-import { useDialog } from 'src/utils/use/useDialog';
+import { useDialog } from '../../../file-manager/stores/useDialog';
 
 const instance = axios.create({
   baseURL: config.host,
@@ -23,8 +23,11 @@ instance.interceptors.response.use(
     commands.loading = false;
 
     if (!response.data.result) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const message = response.message;
       useDialog(
-        response.data.message ??
+        message ??
           'Попробуйте перезагрузить страницу - это должно помочь.' +
             '\n' +
             response.config.url

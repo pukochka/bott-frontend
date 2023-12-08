@@ -32,10 +32,10 @@
           index
           static
           :route="route"
-          :actions="config.routes"
           :host="config.host"
           :bot_id="config.bot.id"
           :token="config.bot.token"
+          :message_id="1"
           @change="registerRoute"
         ></action-menu>
       </q-card-section>
@@ -67,7 +67,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import config from '../../../config';
+import { config } from '../../../config';
 
 import { computed, ref } from 'vue';
 
@@ -105,16 +105,18 @@ function registerRoute(value: string | null) {
 const editRoute = () => {
   loading.value = true;
 
-  Promise.all([
-    fetchCommands('update-route', {
+  fetchCommands(
+    'update-route',
+    {
       route: route.value ?? '',
-      route_id: commands.selectedCommand?.id ?? 0,
-    }),
-    fetchCommands('update-message', {
       message: text.value.value,
       route_id: commands.selectedCommand?.id ?? 0,
-    }),
-  ]).then(() => {
+    },
+    (response) => {
+      commands.selectedCommand.route = response.data.data?.route ?? '';
+      commands.selectedCommand.label = response.data.data?.label ?? '';
+    }
+  ).then(() => {
     loading.value = false;
     commands.closeDialog('edit_action');
   });

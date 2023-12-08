@@ -8,20 +8,18 @@
       v-show="button.condition"
       v-for="(button, index) in menuButtons"
       :key="index"
-      @click="button.action"
-    >
+      @click="button.action">
       <q-icon :name="button.icon" :color="button.color" size="22px" />
 
       <div
         class="text-center q-ml-md flex-grow transition"
-        :class="[button.loading ? ' text-transparent' : '']"
-      >
+        :class="[button.loading ? ' text-transparent' : '']">
         {{ button.label }}
       </div>
 
       <transition name="fade">
         <div class="absolute-full flex flex-center" v-if="button.loading">
-          <q-spinner color="primary" size="26px" />
+          <q-spinner color="primary" size="22px" />
         </div>
       </transition>
     </q-item>
@@ -36,7 +34,7 @@ import { useVectorStore } from '../../../stores/vector/vectorStore';
 import { useStatesStore } from '../../../stores/states/statesStore';
 import { useDataStore } from '../../../stores/data/dataStore';
 
-import { defaultButton, defaultMessage } from '../../../stores/deafults';
+import { defaultButton, defaultMessage } from '../../../stores/defaults';
 
 const props = withDefaults(defineProps<ButtonMenuListProps>(), {
   button: () => defaultButton,

@@ -20,6 +20,7 @@
         v-for="item of result"
         :key="item.id"
         @click="select(item.id)"
+        v-close-popup
       >
         <q-item-section class="text-center q-pa-lg" v-if="empty">
           Ничего не нашлось...

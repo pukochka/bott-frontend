@@ -3,32 +3,31 @@
     class="q-px-md flex justify-between items-center no-wrap"
     style="height: 50px"
   >
-    <bott-breadcrumbs></bott-breadcrumbs>
-    <!--    <q-btn v-if="sm" flat round size="md" color="primary" icon="more_vert">-->
-    <!--      <q-menu max-width="200px" class="bott-portal-menu q-pa-xs">-->
-    <!--        <q-breadcrumbs>-->
-    <!--          <q-breadcrumbs-el-->
-    <!--            class="q-px-xs rounded"-->
-    <!--            :label="bread.label"-->
-    <!--            @click="bread.action"-->
-    <!--            v-clickable="bread.clickable"-->
-    <!--            v-for="(bread, index) of breadcrumbs"-->
-    <!--            :key="index"-->
-    <!--          />-->
-    <!--        </q-breadcrumbs>-->
-    <!--      </q-menu>-->
-    <!--    </q-btn>-->
+    <q-btn v-if="sm" flat round size="md" color="primary" icon="more_vert">
+      <q-menu max-width="200px" class="bott-portal-menu q-pa-xs">
+        <q-breadcrumbs>
+          <q-breadcrumbs-el
+            class="q-px-xs rounded"
+            :label="bread.label"
+            @click="bread.action"
+            v-clickable="bread.clickable"
+            v-for="(bread, index) of breadcrumbs"
+            :key="index"
+          />
+        </q-breadcrumbs>
+      </q-menu>
+    </q-btn>
 
-    <!--    <q-breadcrumbs v-else>-->
-    <!--      <q-breadcrumbs-el-->
-    <!--        class="q-px-xs rounded"-->
-    <!--        :label="bread.label"-->
-    <!--        @click="bread.action"-->
-    <!--        v-clickable="bread.clickable"-->
-    <!--        v-for="(bread, index) of breadcrumbs"-->
-    <!--        :key="index"-->
-    <!--      />-->
-    <!--    </q-breadcrumbs>-->
+    <q-breadcrumbs v-else>
+      <q-breadcrumbs-el
+        class="q-px-xs rounded"
+        :label="bread.label"
+        @click="bread.action"
+        v-clickable="bread.clickable"
+        v-for="(bread, index) of breadcrumbs"
+        :key="index"
+      />
+    </q-breadcrumbs>
 
     <q-card flat bordered class="rounded">
       <q-btn
@@ -42,7 +41,12 @@
           {{ data.scenarioValue?.label ?? 'Загрузка...' }}
         </div>
 
-        <q-menu anchor="top right" self="bottom right" class="bott-portal-menu">
+        <q-menu
+          fit
+          anchor="bottom left"
+          self="top left"
+          class="bott-portal-menu"
+        >
           <q-list separator dense>
             <q-item
               clickable
@@ -66,29 +70,27 @@
   </div>
 </template>
 <script setup lang="ts">
-import { t } from 'src/boot/lang';
-
+import { config } from '../../../config';
+import { computed } from 'vue';
 import { useStatesStore } from '../../stores/states/statesStore';
 import { useDataStore } from '../../stores/data/dataStore';
 
-import BottBreadcrumbs from 'layouts/sections/BottBreadcrumbs.vue';
-import { deleteQueryParam } from '../../../../../utils/helpers/string';
+import { historyGo } from '../../../../inline/stores/helpers';
+
+import { deleteQueryParam } from 'src/utils/helpers/string';
 import { useCommandsStore } from '../../../commands/stores/commandsStore';
-import { historyGo } from '../../../../inline-menu/stores/helpers';
-import config from '../../../config';
-import { computed } from 'vue';
 import { useQuasar } from 'quasar';
 
 const states = useStatesStore();
-const commands = useCommandsStore();
 const data = useDataStore();
+const commands = useCommandsStore();
 const quasar = useQuasar();
 
 const sm = computed(() => quasar.screen.lt.sm);
 
 const menuButtons = [
   {
-    label: t('edit-title'),
+    label: 'Изменить название',
     color: 'primary',
     icon: 'edit',
     href: undefined,
@@ -119,7 +121,7 @@ const breadcrumbs = computed(() => [
     action() {
       deleteQueryParam('route_id');
 
-      // commands.closeDialog('scenario');
+      commands.closeDialog('scenario');
     },
     clickable: true,
   },

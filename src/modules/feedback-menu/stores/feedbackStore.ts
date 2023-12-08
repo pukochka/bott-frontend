@@ -7,8 +7,9 @@ import {
   MessageFeedbackItemPreview,
 } from './feedbackModels';
 import { Link } from '../utils/lines/link';
-import { defaultMessageFree } from '../../inline-menu/stores/inlineModels';
+import { defaultMessageFree } from '../../inline/stores/inlineModels';
 import { Point } from 'paper';
+import { update } from '../utils/create';
 
 export const useFeedbackStore = defineStore('paper-store', {
   state: () =>
@@ -32,6 +33,12 @@ export const useFeedbackStore = defineStore('paper-store', {
       shells: [],
       loading: true,
 
+      mobile: {
+        start: false,
+        setting: false,
+        end: false,
+      },
+
       dragging: false,
       onmessage: false,
       onconnection: false,
@@ -47,6 +54,7 @@ export const useFeedbackStore = defineStore('paper-store', {
         message: false,
         message_free: false,
         crossroad: false,
+        touch: false,
       },
 
       selectedType: 1,
@@ -154,9 +162,16 @@ export const useFeedbackStore = defineStore('paper-store', {
 
       connect.forEach((item) => item.group.move(message));
     },
-    openMenu(name: MenuNames, action?: () => void) {
+    openMenu(name: MenuNames, action?: () => void, touch?: boolean) {
       if (action !== void 0) this.action = action;
+
       this.menu[name] = true;
+
+      if (touch) {
+        this.openDialog('touch');
+
+        return;
+      }
     },
     openDialog(name: DialogsNames) {
       this.dialogs[name] = true;
@@ -165,8 +180,8 @@ export const useFeedbackStore = defineStore('paper-store', {
       this.dialogs[name] = false;
     },
     hideMenu() {
-      Object.entries(this.menu).forEach(
-        ([name]: any) => (this.menu[<MenuNames>name] = false)
+      Object.keys(this.menu).forEach(
+        (name) => (this.menu[<MenuNames>name] = false)
       );
     },
 
@@ -180,6 +195,14 @@ export const useFeedbackStore = defineStore('paper-store', {
       if (message[0] !== void 0) {
         this.selectedMessage = message[0];
       }
+    },
+
+    updateFeedback(response: any) {
+      this._feedback = response.feedback;
+      this.selectedMessage = null;
+      this.selectedMessageNext = null;
+
+      update();
     },
   },
 });

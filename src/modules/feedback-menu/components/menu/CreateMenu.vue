@@ -1,10 +1,5 @@
 <template>
-  <q-menu
-    touch-position
-    v-if="store.menu.create"
-    max-width="350px"
-    class="bott-portal-menu"
-  >
+  <div class="relative-position">
     <div class="q-pa-xs text-subtitle1 text-center">Выберите тип вопроса</div>
 
     <q-separator></q-separator>
@@ -14,7 +9,7 @@
     <q-inner-loading :showing="loading">
       <q-spinner size="50px" color="primary" />
     </q-inner-loading>
-  </q-menu>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -41,6 +36,8 @@ const createMessage = (type: any) => {
     }).then(() => {
       loading.value = false;
       store.menu.create = false;
+      store.onconnection = false;
+      store.closeDialog('touch');
     });
 
     return;
