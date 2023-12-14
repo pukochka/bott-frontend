@@ -1,6 +1,7 @@
+import Compress from 'compress.js';
 import { defineStore } from 'pinia';
 
-import { FMStore } from './FMmodels';
+import { FMStore } from './fileModels';
 
 import 'src/utils/polifils/dimension';
 import { useDialog } from './useDialog';
@@ -13,18 +14,7 @@ import {
   compareUpDate,
 } from './helpers';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import Compress from 'compress.js';
-
-const paths = {
-  1: 'photos',
-  3: 'files',
-  4: 'videos',
-  5: 'animations',
-};
-
-export const useFMStore = defineStore('file-manager-data', {
+export const useFileStore = defineStore('file-manager-data', {
   state: () =>
     ({
       usersFiles: [],
@@ -84,8 +74,6 @@ export const useFMStore = defineStore('file-manager-data', {
     loadCount: (state) => state.usersFiles?.length ?? 0,
 
     filesCount: (state) => state.usersFiles?.length ?? 0,
-
-    query: (state) => paths[state.message?.type?.id ?? 1],
 
     files: (state) =>
       state.usersFiles
@@ -152,11 +140,17 @@ export const useFMStore = defineStore('file-manager-data', {
     },
 
     async loadFiles(ev: any) {
+      console.log(ev);
+
       if (!ev?.target?.files && !ev?.dataTransfer?.files) return;
 
       const files: any = Array.from(
         ev?.target?.files ?? ev?.dataTransfer?.files
       );
+
+      console.log('accept length');
+
+      if (!files.length) return;
 
       const sizeFiles = files
         .map((item: any) => item.size)
@@ -167,19 +161,14 @@ export const useFMStore = defineStore('file-manager-data', {
       this.uploadMenu = true;
 
       for (const file of files) {
+        const alpha = await hasAlpha(file);
+
         if (
           this.paths !== 'photos' ||
           file?.type === 'image/gif' ||
-          !this.compress
+          !this.compress ||
+          alpha
         ) {
-          this.notCompressFile(file);
-
-          continue;
-        }
-
-        const alpha = await hasAlpha(file);
-
-        if (alpha) {
           this.notCompressFile(file);
 
           continue;

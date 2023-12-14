@@ -5,24 +5,24 @@
     @before-show="updateShow"
   >
     <q-card flat bordered class="dialog-rounded" style="width: 100%">
-      <dialog-header label="Настройки уведомлений пользователя"></dialog-header>
+      <dialog-header label="Настройки уведомлений"></dialog-header>
 
       <q-card-section class="q-py-none q-gutter-y-sm">
         <radio-item
           label="Отправка уведомлений"
-          desc="Отправлять ли уведомления ответов администраторам"
+          desc="Отправлять ли уведомления об ответах администраторам/ресурсам"
           :model="notice"
           @update="updateNotify"
         ></radio-item>
 
         <div class="">
-          Пользователи/ресурсы которым отправляются уведомления
+          Администраторы/ресурсы которым отправляются уведомления
         </div>
 
         <div class="">
           <q-item v-if="!store.notifications.length">
             <q-item-section class="text-center">
-              Пока нет пользовалелей/ресурсов
+              Пока нет администраторов/ресурсов
             </q-item-section>
           </q-item>
 
@@ -48,7 +48,7 @@
               size="md"
               color="primary"
               class="rounded col"
-              label="Добавить пользователя/ресурс"
+              label="Добавить администратора/ресурс"
             >
               <user-search
                 :token="config.bot.token"

@@ -139,7 +139,7 @@ const store = useFeedbackStore();
 const text = ref({
   value: '',
   max: 64,
-  min: 2,
+  min: 1,
   get required() {
     return this.value.length >= this.min && this.value.length <= this.max;
   },

@@ -20,6 +20,7 @@
           :key="index"
           :message="message"
           :open="open"
+          bordered
           @menu="(value) => (menu = value)"
         ></message-card>
       </div>
@@ -51,7 +52,7 @@ const openMenu = (value: boolean) => {
 };
 
 const hello = computed(() => store.feedback.hello ?? defaultMessage);
-const startAdmin = computed(() => store.feedback.startAdmin ?? defaultMessage);
+const end = computed(() => store.feedback.end ?? defaultMessage);
 const cancel = computed(() => store.feedback.cancel ?? defaultMessage);
 
 const messages = computed((): any => [
@@ -63,11 +64,11 @@ const messages = computed((): any => [
     method: 'hello',
   },
   {
-    label: 'Стартовое для администратора',
-    data: startAdmin.value,
-    condition: store.feedback.startAdmin !== null,
-    desc: 'Когда пользователь начнёт проходить форму, администратор получит уведомление.',
-    method: 'start-admin',
+    label: 'Прощание',
+    data: end.value,
+    condition: store.feedback.end !== null,
+    desc: 'Сообщения после окончания прохождения формы.',
+    method: 'end',
   },
   {
     label: 'Сообщение при отмене',

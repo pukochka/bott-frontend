@@ -8,12 +8,12 @@ export const setting: Record<
   { title: string; icon: string; color: string }
 > = {
   1: {
-    title: 'Сообщение',
+    title: 'Текстовый',
     icon: mdiMessage,
     color: '#a3b18a',
   },
   2: {
-    title: 'Сообщение\nс файлом',
+    title: 'Файловый',
     icon: mdiFile,
     color: '#ffc971',
   },
@@ -23,7 +23,7 @@ export const setting: Record<
     color: '#cd5d67',
   },
   4: {
-    title: 'Несколько\nответов',
+    title: 'Выбор ответа',
     icon: '',
     color: '#ac9e9e',
   },
@@ -96,12 +96,13 @@ export function createText(
   diff?: number,
   radius?: number,
   color?: string,
-  justification?: string
+  justification?: string,
+  weight?: number
 ) {
   const content = new PointText({
     content: message,
     fillColor: 'black',
-    fontWeight: 600,
+    fontWeight: weight ?? 600,
     fontSize: fontSize ?? 30,
     fontFamily: 'Yandex Sans Text',
   });

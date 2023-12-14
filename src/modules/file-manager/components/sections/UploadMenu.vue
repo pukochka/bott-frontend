@@ -4,7 +4,14 @@
       <q-card-section class="row items-center justify-between q-pt-sm">
         <div class="text-h6">Загрузка файлов...</div>
 
-        <q-btn flat round size="md" icon="close" v-close-popup />
+        <q-btn
+          flat
+          round
+          size="md"
+          icon="close"
+          color="primary"
+          v-close-popup
+        />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -19,9 +26,10 @@
         <q-scroll-area style="max-height: 280px; height: 140px">
           <div class="row q-col-gutter-sm">
             <upload-card
-              v-for="(file, index) in data.uploadFiles"
+              v-for="(file, index) of data.uploadFiles"
               :key="index"
-              :item="file"></upload-card>
+              :item="file"
+            ></upload-card>
           </div>
         </q-scroll-area>
       </q-card-section>
@@ -37,7 +45,8 @@
             color="red"
             label="Отмена"
             @click="data.uploadFiles = []"
-            v-close-popup />
+            v-close-popup
+          />
         </div>
 
         <div class="col">
@@ -50,7 +59,8 @@
             color="primary"
             label="Загрузить"
             :loading="!!data.uploadStack.length"
-            @click="upload" />
+            @click="upload"
+          />
         </div>
       </q-card-section>
     </q-card>
@@ -60,11 +70,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { fetchFile } from '../../api/queries';
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
 import UploadCard from '../UploadCard.vue';
 
-const data = useFMStore();
+const data = useFileStore();
 
 const maxSize = computed(() => data.file_max_size.dimension());
 
@@ -88,7 +98,7 @@ const upload = () => {
 
         if (!data.uploadStack.length) {
           fetchFile('index', undefined, () => {
-            const data = useFMStore();
+            const data = useFileStore();
             data.uploadMenu = false;
           });
         }

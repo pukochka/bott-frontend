@@ -9,7 +9,7 @@
   >
     <div
       class="q-pa-xs transition full-height"
-      :style="{ width: open || sm ? '240px' : '170px' }"
+      :style="{ width: (open || sm) && !notifyDisabled ? '240px' : '170px' }"
     >
       <div
         class="column no-wrap absolute-full q-pa-xs"
@@ -20,10 +20,27 @@
           :key="index"
           :message="message"
           :open="open"
+          bordered
           @menu="(value) => (menu = value)"
         ></message-card>
       </div>
     </div>
+
+    <q-inner-loading :showing="notifyDisabled">
+      <div class="q-pa-md text-center text-weight-bold">
+        Уведомления отключены
+      </div>
+
+      <q-btn
+        no-caps
+        flat
+        color="primary"
+        padding="4px"
+        label="Включить"
+        class="rounded"
+        @click="store.openDialog('notify')"
+      />
+    </q-inner-loading>
   </q-card>
 </template>
 
@@ -43,14 +60,21 @@ const open = ref(false);
 const menu = ref(false);
 
 const sm = computed(() => quasar.screen.lt.sm);
+const notifyDisabled = computed(() => !store.feedback.setting.is_notice);
 
 const openMenu = (value: boolean) => {
-  if (store.onconnection || store.dragging || menu.value) return;
+  if (
+    store.onconnection ||
+    store.dragging ||
+    menu.value ||
+    notifyDisabled.value
+  )
+    return;
 
   open.value = value;
 };
 
-const end = computed(() => store.feedback.end ?? defaultMessage);
+const startAdmin = computed(() => store.feedback.startAdmin ?? defaultMessage);
 const admin = computed(() => store.feedback.admin ?? defaultMessage);
 const answerAdmin = computed(
   () => store.feedback.answerAdmin ?? defaultMessage
@@ -58,11 +82,11 @@ const answerAdmin = computed(
 
 const messages = computed((): any => [
   {
-    label: 'Прощание',
-    data: end.value,
-    condition: store.feedback.end !== null,
-    desc: 'Сообщения после окончания прохождения формы.',
-    method: 'end',
+    label: 'Стартовое для администратора',
+    data: startAdmin.value,
+    condition: store.feedback.startAdmin !== null,
+    desc: 'Когда пользователь начнёт проходить форму, администратор получит уведомление.',
+    method: 'start-admin',
   },
   {
     label: 'Уведомление администратора',

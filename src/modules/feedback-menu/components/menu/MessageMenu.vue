@@ -30,6 +30,7 @@ import { computed, ref } from 'vue';
 
 import { fetchFeedback } from '../../api/queries';
 import { useDialog } from '../../../file-manager/stores/useDialog';
+import { mdiSourceBranchRemove } from '@quasar/extras/mdi-v7';
 
 const store = useFeedbackStore();
 
@@ -37,6 +38,7 @@ const loading = ref({
   delete: false,
   start: false,
   between: false,
+  next: false,
 });
 
 const start = computed(
@@ -46,6 +48,7 @@ const start = computed(
 );
 
 const withoutCrossroad = computed(() => store.selectedMessage?.type !== 4);
+const withoutNext = computed(() => store.selectedMessage?.next);
 
 const openSetting = () => {
   store.menu.message = false;
@@ -71,6 +74,24 @@ const deleteMessage = () => {
       loading.value.delete = false;
       store.closeDialog('touch');
     });
+  });
+};
+
+const deleteNext = () => {
+  loading.value.next = true;
+  fetchFeedback(
+    'set-input-next',
+    {
+      input_id: store.selectedMessage?.id ?? 0,
+      type: store.selectedMessage?.type ?? 1,
+      next_id: null,
+      next_type: null,
+    },
+    store.updateFeedback
+  ).then(() => {
+    store.menu.message = false;
+    loading.value.next = false;
+    store.closeDialog('touch');
   });
 };
 
@@ -121,6 +142,13 @@ const buttons = computed(() => [
     icon: 'edit',
     color: 'warning',
     condition: true,
+  },
+  {
+    label: 'Удалить связь',
+    action: deleteNext,
+    icon: mdiSourceBranchRemove,
+    color: 'red',
+    condition: withoutNext.value,
   },
   {
     label: 'Удалить',

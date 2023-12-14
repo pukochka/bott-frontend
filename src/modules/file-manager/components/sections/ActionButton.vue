@@ -20,15 +20,15 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
-import { defaultActionButton } from '../../stores/FMmodels';
+import { defaultActionButton } from '../../stores/fileModels';
 
 const props = withDefaults(defineProps<ActionButtonProps>(), {
   button: () => defaultActionButton,
 });
 
-const data = useFMStore();
+const data = useFileStore();
 
 const icon = computed(() =>
   props.button?.sortable === 'compress'

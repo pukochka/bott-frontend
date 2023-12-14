@@ -6,23 +6,24 @@
     @error="onErr"
     spinner-color="primary"
     spinner-size="42px"
-    :img-style="err !== 'img' ? style : {}">
+    :img-style="err !== 'img' ? style : {}"
+  >
     <slot></slot>
   </q-img>
 </template>
 
 <script setup lang="ts">
 import { computed, onBeforeMount, ref, watch } from 'vue';
-import { extensions } from '../../stores/FMmodels';
+import { extensions } from '../../stores/fileModels';
 
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
 const props = withDefaults(defineProps<ImageImgProps>(), {
   link: '',
   name: '',
 });
 
-const data = useFMStore();
+const data = useFileStore();
 
 const current = ref('');
 const err = ref<'file' | 'img' | 'err'>('file');

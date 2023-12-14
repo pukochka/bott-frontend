@@ -57,11 +57,11 @@
       @click="openExplorer"
     >
       <input
+        multiple
         ref="uploadFiles"
         type="file"
-        :accept="data.extensions"
         class="upload-input"
-        multiple
+        :accept="data.extensions"
         @change="data.loadFiles"
       />
     </q-btn>
@@ -69,16 +69,16 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { defaultFileCard } from '../../stores/FMmodels';
+import { defaultFileCard } from '../../stores/fileModels';
 
 import { fetchFile } from '../../api/queries';
 import { useDialog } from '../../stores/useDialog';
 
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
 import TuneMenu from '../sections/TuneMenu.vue';
 
-const data = useFMStore();
+const data = useFileStore();
 
 const uploadFiles = ref<any>(null);
 const loading = ref(false);
@@ -168,7 +168,7 @@ const leftActions = computed(() => [
     visible: true,
   },
   {
-    label: 'Информация',
+    label: 'Сведения',
     color: 'primary',
     icon: 'info',
     loading: false,

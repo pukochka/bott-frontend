@@ -1,85 +1,10 @@
-import { ref } from 'vue';
+import { defaultMessageFree } from '../inline/stores/inlineModels';
 
-const paths = {
-  1: 'photos',
-  3: 'files',
-  4: 'videos',
-  5: 'animations',
-};
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+defaultMessageFree.photos = { id: 360405 };
 
-const message = {
-  id: 1599246,
-  title: 'Сообщение c анимацией(gif)',
-  text: '<span class="tg-spoiler" style="color:red" >проверка работы</span>',
-  text_length: 1024,
-  photos: {
-    id: 335890,
-    code: 'AgACAgQAAxkDAAEDClllPXaJq2M-zv24wknJL-rpb2rYdAAC67ExG1jY5FFTHGYWn110DwEAAwIAA3MAAzAE',
-    host: '230925_podpiskabotpng.png',
-    abs_path:
-      'https://storage.yandexcloud.net/bottstorage/bot/886/photos/afzalov29101701.jpg',
-    is_disable_notification: null,
-    is_protect_content: null,
-    is_spoiler: null,
-  },
-  files: null,
-  videos: null,
-  feedback: null,
-  animations: null,
-  type: {
-    id: 1,
-    type: 1,
-  },
-  color: null,
-  specType: {
-    id: 1,
-    title: '',
-  },
-  sort: null,
-  column_id: null,
-  active: false,
-  menu: null,
-  is_generate_default: false,
-  is_copy: true,
-  is_support_menu: true,
-  support_types: {
-    '0': 0,
-    '1': 1,
-    '2': 2,
-    '3': 3,
-    '4': 4,
-    '5': 5,
-  },
-  constants: {
-    FIRST_NAME: 'Строго имя пользователя',
-    SECOND_NAME: 'Строго фамилия пользователя',
-    USER_TELEGRAM_ID: 'Telegram id',
-    USERNAME: 'Ник пользователя',
-    NAME: 'Имя-ссылка/ник пользователя',
-    USER_ID: 'ID пользователя в боте',
-    BALANCE: 'Баланс пользователя',
-    BALANCE_WITHOUT_CURRENCY: 'Баланс пользователя без значка валюты',
-    BOT_USER_CREATED_DATETIME: 'Дата и время регистрации пользователя в боте',
-    MESSAGE_TITLE: 'Название сообщения',
-    MESSAGE_TYPE: 'Тип сообщения',
-  },
-  constantAnswers: {
-    TITLE: 'Название сообщения',
-    ANSWERS: 'Вопросы и ответы',
-    TIME_ANSWER: 'Время ответа на вопрос',
-    BOT_ID: 'Уникальный идентификатор бота',
-    BOT_NAME: 'Ссылка на бота',
-    BOT_TITLE: 'Имя бота',
-    FIRST_NAME: 'Строго имя пользователя',
-    SECOND_NAME: 'Строго фамилия пользователя',
-    USER_TELEGRAM_ID: 'Telegram id',
-    USERNAME: 'Ник пользователя',
-    NAME: 'Имя-ссылка/ник пользователя',
-  },
-  faq: '<br><a href="https://bot-t.com/faq/HELP/tipy_soobshcheniy"><b>Полная информация по свободным кнопкам</b></a>',
-};
-
-export const config = ref({
+export const config = {
   host: 'https://api.bot-t.com/',
   bot: {
     id: 886,
@@ -106,9 +31,7 @@ export const config = ref({
     recurrent_check_id: null,
     is_free: null,
   },
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  query: paths[message?.type?.id] ?? 'photos',
-  message: message,
-  dialog: true,
-});
+  query: 'photos',
+  message: defaultMessageFree,
+  dialog: false,
+};

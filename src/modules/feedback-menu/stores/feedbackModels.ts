@@ -103,6 +103,7 @@ export const defaultFeedbackSetting: MessageFeedbackSetting = {
   template_answer: '',
   limit_in_period: 0,
   period: 0,
+  button_cancel: '',
 };
 
 export const defaultAnswer: FeedbackAnswer = {

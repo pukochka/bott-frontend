@@ -181,9 +181,11 @@ export class Connection {
     };
 
     this.group.onMouseDrag = (event: any) => {
+      this.drag = true;
+
       const prev = this.isNewConnect;
       const child = event.target?.children?.[3];
-      this.drag = true;
+
       if (this.line) this.line.visible = true;
 
       this.group.position.x += event.delta.x;

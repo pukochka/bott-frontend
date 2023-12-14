@@ -30,6 +30,8 @@ declare interface MessageFeedbackSetting {
   limit_in_period: number;
   /** Период в минутах; 0 - безлимит */
   period: number;
+  /** Текст в кнопке, когда отвечают на вопрос. После клика на кнопку ответ будет отменен. И отправится сообщение cancel (Если создано) */
+  button_cancel: string;
 }
 
 declare interface MessageFeedbackItem {

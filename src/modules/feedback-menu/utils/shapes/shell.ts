@@ -21,14 +21,24 @@ export function createShell(
   }
 
   const platform = createPlatform(message, coords);
-  const text = createText(message.setting.title, coords, 18, 0, 100);
+  const text = createText(message.setting.title, coords, 22, 0, 83);
+  const answerText = createText(
+    sliceAnswerText(message.text),
+    coords,
+    12,
+    0,
+    110,
+    'grey',
+    undefined,
+    400
+  );
 
   if (!message.next && !message.crossroad?.options.length) {
     const connection = new Connection(message, platform);
     shell.addChild(connection.group);
   }
 
-  shell.addChildren([platform, text]);
+  shell.addChildren([platform, text, answerText]);
 
   platform.onMouseDrag = (event: any) => {
     store.dragMessage(message);
@@ -73,4 +83,14 @@ export function createShell(
   store.shells.push(platform);
 
   return { shell, platform };
+}
+
+function sliceAnswerText(text: string) {
+  return (
+    text
+      .slice(0, 34)
+      .split('')
+      .map((char, index) => (index === 15 ? '\n' + char : char))
+      .join('') + (text.length > 34 ? '...' : '')
+  );
 }

@@ -5,16 +5,19 @@
     side="right"
     behavior="desktop"
     :mini="data.drawerInfo"
-    v-model="drawer">
+    v-model="drawer"
+  >
     <q-list>
       <q-item
         clickable
         @click="data.drawerInfo = !data.drawerInfo"
-        :disable="data.selectedFiles.length !== 1">
+        :disable="data.selectedFiles.length !== 1"
+      >
         <q-item-section avatar class="text-primary">
           <q-icon
             :name="data.drawerInfo ? 'info' : 'chevron_right'"
-            size="24px"></q-icon>
+            size="24px"
+          ></q-icon>
         </q-item-section>
       </q-item>
     </q-list>
@@ -25,18 +28,21 @@
           flat
           bordered
           class="rounded overflow-hidden"
-          style="height: 150px; max-height: 150px">
+          style="height: 150px; max-height: 150px"
+        >
           <component
             :is="component"
             :link="file?.link"
-            :name="file?.name"></component>
+            :name="file?.name"
+          ></component>
         </q-card>
 
         <q-list dense>
           <q-item
             v-for="(item, index) of info"
             :key="index"
-            class="text-caption">
+            class="text-caption"
+          >
             <q-item-section>
               <q-item-label class="ellipsis">
                 {{ item.label }}
@@ -54,14 +60,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
-import { defaultFileCard } from '../../stores/FMmodels';
+import { defaultFileCard } from '../../stores/fileModels';
 
 import FileImg from '../extension/FileImg.vue';
 import VideoPreview from '../extension/VideoPreview.vue';
 
-const data = useFMStore();
+const data = useFileStore();
 
 const drawer = ref(true);
 

@@ -80,15 +80,15 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { defaultFileCard } from '../../stores/FMmodels';
+import { defaultFileCard } from '../../stores/fileModels';
 
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
 import { fetchFile } from '../../api/queries';
 import { useDialog } from '../../stores/useDialog';
 import { useQuasar } from 'quasar';
 
-const data = useFMStore();
+const data = useFileStore();
 const quasar = useQuasar();
 
 const text = ref('');

@@ -2,7 +2,8 @@
   <div class="col-4">
     <div
       class="row justify-center items-center q-mb-sm relative-position"
-      style="min-height: 28px">
+      style="min-height: 28px"
+    >
       <transition name="q-transition--fade">
         <div class="absolute-left row items-center" v-if="props.open || sm">
           <q-btn
@@ -11,12 +12,14 @@
             padding="2px"
             color="primary"
             icon="help_center"
-            class="rounded">
+            class="rounded"
+          >
             <q-menu
               v-model="info"
               @update:model-value="$emit('menu', info)"
               max-width="300px"
-              class="bott-portal-menu">
+              class="bott-portal-menu"
+            >
               <div class="q-pa-sm">{{ props.message.desc }}</div>
             </q-menu>
           </q-btn>
@@ -30,21 +33,25 @@
       <transition name="q-transition--fade">
         <div
           class="absolute-right row items-center"
-          v-if="(message.condition && props.open) || sm">
+          v-if="(message.condition && props.open) || sm"
+        >
           <q-btn
             flat
             size="12px"
             padding="2px"
             color="primary"
             icon="more_vert"
-            class="rounded">
+            class="rounded"
+          >
             <q-menu
               v-model="menu"
               @update:model-value="$emit('menu', menu)"
-              class="bott-portal-menu">
+              class="bott-portal-menu"
+            >
               <message-menu
                 @drop="messageAction('drop')"
-                :message="props.message"></message-menu>
+                :message="props.message"
+              ></message-menu>
             </q-menu>
           </q-btn>
         </div>
@@ -53,16 +60,17 @@
 
     <q-card
       flat
-      bordered
+      :bordered="props.bordered"
       class="my-card q-pa-xs rounded"
-      v-if="message.condition">
+      v-if="message.condition"
+    >
       <div class="ellipsis-3-lines text-caption word-break-all">
         {{ message.data.text }}
       </div>
     </q-card>
 
     <div class="" v-else>
-      <div class="text-caption text-center q-pb-lg">Пока нет...</div>
+      <div class="text-caption text-center q-pb-sm">Пока нет...</div>
 
       <div class="row justify-center">
         <q-btn
@@ -73,11 +81,13 @@
           icon="add_circle"
           class="rounded col-6"
           :loading="loading.add"
-          @click="messageAction('add')">
+          @click="messageAction('add')"
+        >
           <q-tooltip
             class="bott-tooltip text-center"
             anchor="top middle"
-            self="bottom middle">
+            self="bottom middle"
+          >
             Добавить
           </q-tooltip>
         </q-btn>
@@ -100,6 +110,7 @@ import { useQuasar } from 'quasar';
 
 const props = withDefaults(defineProps<MessageCardProps>(), {
   open: false,
+  bordered: false,
   message: () => {
     return {
       data: defaultMessage,
@@ -151,6 +162,7 @@ const messageAction = (prefix: 'add' | 'drop') => {
 
 interface MessageCardProps {
   open: boolean;
+  bordered: boolean;
   message: {
     data: MessageFree;
     label: string;

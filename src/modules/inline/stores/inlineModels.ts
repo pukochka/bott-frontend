@@ -50,6 +50,7 @@ export const defaultMessageFree: MessageFree = {
     type: 0,
     label: '',
     description: '',
+    path: 'photos',
   },
   color: null,
   specType: {

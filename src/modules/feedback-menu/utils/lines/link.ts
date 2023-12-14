@@ -55,7 +55,7 @@ export class Link {
     if (crossroad) this.crossroad = crossroad;
 
     this.mountLink();
-    this.mountLineGroup();
+    this.mountLine();
   }
 
   get from() {
@@ -83,21 +83,19 @@ export class Link {
     this.group.insertChild(0, this.text.value);
 
     const start = moveToPoint(this.from, this.to, 40);
-    this.arrowStart = new Arrow(start, this.points.end);
-    this.startMessage.platform?.insertChild(4, this.arrowStart.group);
-
     const end = moveToPoint(this.to, this.from, 40);
 
+    this.arrowStart = new Arrow(start, this.points.end);
     this.arrowEnd = new Arrow(end, this.points.end);
 
-    this.arrowEnd.group.rotate(180);
-
+    this.startMessage.platform?.insertChild(4, this.arrowStart.group);
     this.endMessage.platform?.insertChild(4, this.arrowEnd.group);
 
+    this.arrowEnd.group.rotate(180);
     this.group.addChildren([this.startCircle, this.endCircle]);
   }
 
-  mountLineGroup() {
+  mountLine() {
     const store = useFeedbackStore();
 
     this.lineStart = dashLine(

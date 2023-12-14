@@ -42,14 +42,14 @@
 import { computed } from 'vue';
 import { mdiSelectAll } from '@quasar/extras/mdi-v7';
 
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
 import { fetchFile } from '../../api/queries';
 import { useDialog } from '../../stores/useDialog';
 
 import ActionButton from './ActionButton.vue';
 
-const data = useFMStore();
+const data = useFileStore();
 
 const paginationCounts = [5, 10, 15, 20];
 

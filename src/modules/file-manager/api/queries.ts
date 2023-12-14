@@ -1,5 +1,5 @@
 import instance from './instance';
-import { useFMStore } from '../stores/FMStrore';
+import { useFileStore } from '../stores/fileStore';
 import { debounce } from 'quasar';
 
 export async function fetchFile<Q extends keyof FMQueries>(
@@ -7,7 +7,7 @@ export async function fetchFile<Q extends keyof FMQueries>(
   params?: FMParams<Q>,
   action?: () => void
 ) {
-  const data = useFMStore();
+  const data = useFileStore();
 
   const host = 'v1/bot/manager/' + data.message?.type.path ?? 'photos';
 
@@ -58,7 +58,7 @@ export async function fetchFile<Q extends keyof FMQueries>(
 export const updateFiles = debounce(
   () =>
     fetchFile('index', undefined, () => {
-      const data = useFMStore();
+      const data = useFileStore();
       data.uploadMenu = false;
     }),
   700

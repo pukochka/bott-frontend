@@ -38,7 +38,7 @@ import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import { fetchFeedback } from '../../api/queries';
 
-import { mdiMessagePlus } from '@quasar/extras/mdi-v7';
+import { mdiMessagePlus, mdiSourceBranchRemove } from '@quasar/extras/mdi-v7';
 import TypesQuestionList from '../views/TypesQuestionList.vue';
 
 const store = useFeedbackStore();
@@ -82,7 +82,7 @@ const addBeforeMessage = (type: number) => {
   );
 };
 
-const deleteLink = () => {
+const deleteNext = () => {
   loading.value.delete = true;
 
   if (store.selectedMessage?.type !== 4) {
@@ -131,10 +131,10 @@ const buttons = computed(() => [
   },
   {
     label: 'Удалить связь',
-    icon: 'close',
+    icon: mdiSourceBranchRemove,
     color: 'red',
     condition: true,
-    action: deleteLink,
+    action: deleteNext,
   },
 ]);
 </script>

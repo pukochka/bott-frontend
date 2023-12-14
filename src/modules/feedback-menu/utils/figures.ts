@@ -107,7 +107,7 @@ export class CrossroadText {
   get away() {
     return (this.sign >= 0 ? [1, 4] : [2, 3]).indexOf(this.vector.quadrant) !=
       -1
-      ? 28
+      ? 36
       : 20;
   }
 
@@ -129,6 +129,8 @@ export class CrossroadText {
       content: text,
       justification: 'center',
       fontFamily: 'Yandex Sans Text',
+      fontWeight: 600,
+      fontSize: 22,
     });
 
     this.value.rotate(this.textAngle);

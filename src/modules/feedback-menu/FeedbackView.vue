@@ -94,7 +94,7 @@
 
 <script setup lang="ts">
 import { config } from './config';
-import { computed, onBeforeMount, onUpdated } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 import { fetchMessage } from './api/queries';
 import { useFeedbackStore } from './stores/feedbackStore';
 import { useQuasar } from 'quasar';
@@ -160,10 +160,6 @@ const closeMenu = () => {
     }
   });
 };
-
-onUpdated(() => {
-  console.log(visible.value && !store.dialogs.touch);
-});
 
 onBeforeMount(() => {
   fetchMessage('get', { message_id: config.message_id });

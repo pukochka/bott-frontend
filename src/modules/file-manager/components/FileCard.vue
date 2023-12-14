@@ -40,9 +40,9 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import { useFMStore } from '../stores/FMStrore';
+import { useFileStore } from '../stores/fileStore';
 
-import { defaultFileCard } from '../stores/FMmodels';
+import { defaultFileCard } from '../stores/fileModels';
 
 import FileImg from './extension/FileImg.vue';
 import VideoPreview from './extension/VideoPreview.vue';
@@ -51,7 +51,7 @@ const props = withDefaults(defineProps<FileCardProps>(), {
   item: () => defaultFileCard,
 });
 
-const data = useFMStore();
+const data = useFileStore();
 
 const classes = computed(() =>
   data.paths === 'videos' ? 'q-img__content' : ''

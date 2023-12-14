@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 import { useDialog } from '../stores/useDialog';
-import { useFMStore } from '../stores/FMStrore';
+import { useFileStore } from '../stores/fileStore';
 
 const instance = axios.create({
   method: 'post',
 });
 
 instance.interceptors.request.use(function (request) {
-  const data = useFMStore();
+  const data = useFileStore();
 
   request.params = { token: data.token };
   request.data = { bot_id: data.bot_id, ...request.data };
@@ -22,15 +22,15 @@ instance.interceptors.request.use(function (request) {
 
 instance.interceptors.response.use(
   function (response) {
-    const data = useFMStore();
+    const data = useFileStore();
+
+    const section = response.config.url?.slice(
+      response.config.url.lastIndexOf('/') + 1
+    );
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    data.loadings[
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      response.config.url.slice(response.config.url.lastIndexOf('/') + 1)
-    ] = false;
+    data.loadings[section] = false;
 
     if (!response.data.result || response.status !== 200) {
       data.loadings.index = false;
@@ -38,9 +38,7 @@ instance.interceptors.response.use(
 
       useDialog(
         response.data.message ??
-          'Попробуйте перезагрузить страницу - это должно помочь.' +
-            '\n' +
-            response.config.url
+          'Попробуйте перезагрузить страницу - это должно помочь.'
       );
 
       return Promise.reject('err');
@@ -49,7 +47,7 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    const data = useFMStore();
+    const data = useFileStore();
 
     data.uploadMenu = false;
 

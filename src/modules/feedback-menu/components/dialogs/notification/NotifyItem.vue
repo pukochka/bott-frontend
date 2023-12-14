@@ -19,7 +19,7 @@
         anchor="top middle"
         self="bottom middle"
       >
-        Удалить пользователя/ресурс
+        Удалить администратора/ресурс
       </q-tooltip>
     </q-btn>
   </q-item>
@@ -41,15 +41,17 @@ const store = useFeedbackStore();
 const loading = ref(false);
 
 const deleteUser = () => {
-  useDialog('Вы уверены, что хотите удалить пользователя?', true).onOk(() => {
-    loading.value = true;
+  useDialog('Вы уверены, что хотите удалить администратора/ресурс?', true).onOk(
+    () => {
+      loading.value = true;
 
-    fetchFeedbackNotify('delete', { id: props.item.id }, () => {
-      store.notifications = store.notifications.filter(
-        (item) => item.id !== props.item.id
-      );
-    }).then(() => (loading.value = false));
-  });
+      fetchFeedbackNotify('delete', { id: props.item.id }, () => {
+        store.notifications = store.notifications.filter(
+          (item) => item.id !== props.item.id
+        );
+      }).then(() => (loading.value = false));
+    }
+  );
 };
 
 interface NotifyItemProps {

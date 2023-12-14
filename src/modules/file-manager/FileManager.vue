@@ -31,9 +31,10 @@ import { computed, onBeforeMount, ref, watch } from 'vue';
 import { defaultMessageFree } from '../inline/stores/inlineModels';
 
 import { fetchFile } from './api/queries';
-import { useFMStore } from './stores/FMStrore';
+import { useFileStore } from './stores/fileStore';
 
 import FileManagerCard from './FileManagerCard.vue';
+import { config } from './config';
 
 const props = withDefaults(defineProps<FileManagerProps>(), {
   message: () => defaultMessageFree,
@@ -45,7 +46,7 @@ const props = withDefaults(defineProps<FileManagerProps>(), {
 
 const dialog = ref(false);
 
-const data = useFMStore();
+const data = useFileStore();
 
 const btnText = computed(
   () => text[data.message?.type.path ?? 'photos'] ?? 'картинку'
@@ -69,6 +70,18 @@ const updateShow = () => {
 };
 
 onBeforeMount(() => {
+  if (props.bot_id === 0 || props.bot_id === void 0) {
+    data.dialog = false;
+    data.host = config.host;
+    data.bot_id = config.bot.id;
+    data.token = config.bot.token;
+    data.message = config.message;
+
+    fetchFile('index');
+
+    return;
+  }
+
   data.message = props.message;
   data.dialog = props.dialog;
   data.bot_id = props.bot_id ?? 0;

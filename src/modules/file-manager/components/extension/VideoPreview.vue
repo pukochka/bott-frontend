@@ -6,7 +6,8 @@
   <q-responsive class="absolute-full" v-else>
     <video
       muted
-      :style="{ 'object-fit': data.imageFit, 'object-position': '50% 50%' }">
+      :style="{ 'object-fit': data.imageFit, 'object-position': '50% 50%' }"
+    >
       <source :src="props.link" />
 
       Ваш браузер не поддерживает видео HTML5.
@@ -19,8 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import { useFMStore } from '../../stores/FMStrore';
 import { computed } from 'vue';
+import { useFileStore } from '../../stores/fileStore';
+
 import FileImg from './FileImg.vue';
 
 const props = withDefaults(defineProps<VideoPreviewProps>(), {
@@ -28,7 +30,7 @@ const props = withDefaults(defineProps<VideoPreviewProps>(), {
   name: '',
 });
 
-const data = useFMStore();
+const data = useFileStore();
 
 const aviExt = computed(
   () => props.name.slice(props.name.lastIndexOf('.') + 1) === 'avi'

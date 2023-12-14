@@ -12,6 +12,22 @@
 
         <q-card-section class="q-pt-none row q-col-gutter-sm">
           <div class="col-12 col-md-7 q-gutter-y-sm">
+            <div class="">
+              <div class="row q-col-gutter-sm">
+                <div
+                  class="col-12 col-sm-6"
+                  v-for="(card, index) of cards"
+                  :key="index"
+                >
+                  <message-card
+                    class="rounded bordered fit"
+                    :message="card"
+                    :open="true"
+                  ></message-card>
+                </div>
+              </div>
+            </div>
+
             <q-input
               outlined
               autogrow
@@ -20,6 +36,16 @@
               label="Общий текст уведомления"
               :maxlength="1024"
               v-model="setting.template_answer"
+            />
+
+            <q-input
+              outlined
+              autogrow
+              counter
+              class="bott-input--rounded"
+              label="Текст в кнопке отмены ответа"
+              :maxlength="64"
+              v-model="setting.button_cancel"
             />
 
             <q-list
@@ -38,7 +64,7 @@
                 padding="2px"
                 color="warning"
                 icon="refresh"
-                class="rounded absolute-top-right q-ma-xs"
+                class="rounded absolute-top-right q-ma-xs q-mr-md"
                 @click="refresh"
               >
                 <q-tooltip
@@ -46,7 +72,7 @@
                   anchor="top middle"
                   self="bottom middle"
                 >
-                  Сбросить настройки
+                  Отключить настройки
                 </q-tooltip>
               </q-btn>
 
@@ -56,6 +82,14 @@
                 :item="item"
                 @update="updateItem"
               ></notify-edit-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label caption>
+                    Значение 0 - настройка отключена
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
             </q-list>
           </div>
 
@@ -86,7 +120,7 @@
             color="primary"
             class="rounded"
             label="Сохранить"
-            :loading="loading"
+            :loading="loading.update"
             @click="updateSettings"
           />
         </q-card-section>
@@ -101,16 +135,44 @@ import { useFeedbackStore } from '../../stores/feedbackStore';
 import { fetchFeedback } from '../../api/queries';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 import { defaultFeedbackSetting } from '../../stores/feedbackModels';
+import { defaultMessageFree } from '../../../inline/stores/inlineModels';
 
 import ConstantsSection from '../../../inline/components/settings/ConstantsSection.vue';
 import FaqSection from '../../../inline/components/settings/FaqSection.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import NotifyEditItem from './notification/LimitItem.vue';
+import MessageCard from '../views/MessageCard.vue';
 
 const store = useFeedbackStore();
 
-const loading = ref(false);
+const loading = ref({
+  notice: false,
+  update: false,
+  'notice-admin': false,
+});
 const setting = ref<MessageFeedbackSetting>(defaultFeedbackSetting);
+
+const notice = computed(() => store.feedback.notice ?? defaultMessageFree);
+const noticeAdmin = computed(
+  () => store.feedback.noticeAdmin ?? defaultMessageFree
+);
+
+const cards = computed(() => [
+  {
+    label: 'Напоминание для пользователя',
+    data: notice.value,
+    condition: store.feedback.notice !== null,
+    desc: 'Уведолмение для пользователя, которое отправляется через установленное время.',
+    method: 'notice',
+  },
+  {
+    label: 'Напоминание для администратора',
+    data: noticeAdmin.value,
+    condition: store.feedback.noticeAdmin !== null,
+    desc: 'Уведолмение для администраторов, которое отправляется через установленное время.',
+    method: 'notice-admin',
+  },
+]);
 
 const updateItem = (item: any, text: any) => {
   setting.value[<'is_notice'>item.prop] = text;
@@ -119,14 +181,11 @@ const updateItem = (item: any, text: any) => {
 };
 
 const refresh = () => {
-  useDialog(
-    'Вы уверены, что хотите сбросить настройки защиты от спама?',
-    true
-  ).onOk(() => {
+  useDialog('Вы уверены, что хотите отключить настройки?', true).onOk(() => {
     spam.value
       .map((item) => item.prop)
       .forEach((key) => {
-        setting.value[<SpamPropName>key] = 0;
+        setting.value[<PropName>key] = 0;
       });
 
     updateSettings();
@@ -134,10 +193,10 @@ const refresh = () => {
 };
 
 const updateSettings = () => {
-  loading.value = true;
+  loading.value.update = true;
 
   fetchFeedback('update-setting', setting.value).then(
-    () => (loading.value = false)
+    () => (loading.value.update = false)
   );
 };
 
@@ -146,7 +205,7 @@ const updateShow = () => {
 };
 
 const spam = computed(
-  (): Array<Setting<SpamPropName>> => [
+  (): Array<Setting<PropName>> => [
     {
       label: 'Сколько раз клиент может ответить на форму, всего',
       value: setting.value.user_limit,
@@ -180,13 +239,12 @@ interface Setting<P> {
   value: any;
   prop: P;
 }
-type SpamPropName =
+type PropName =
   | 'limit_in_period'
   | 'user_limit'
   | 'period'
   | 'time_notice'
   | 'time_cancel';
-type ReminderPropName = 'time_notice' | 'time_cancel';
 </script>
 
 <style scoped lang="scss"></style>

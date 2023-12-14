@@ -4,9 +4,11 @@
       <component
         :is="component"
         :link="props.item.result"
-        :name="props.item.name">
+        :name="props.item.name"
+      >
         <div
-          class="absolute-bottom text-caption text-center image-padding-none">
+          class="absolute-bottom text-caption text-center image-padding-none"
+        >
           <div class="ellipsis">{{ item.name }}</div>
         </div>
       </component>
@@ -20,7 +22,8 @@
         icon="close"
         class="q-ma-xs absolute-top-right"
         v-if="!loading && !onload"
-        @click="deleteUpload" />
+        @click="deleteUpload"
+      />
 
       <q-inner-loading :showing="loading && !onload">
         <q-spinner-gears size="50px" color="primary" />
@@ -36,7 +39,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import { useFMStore } from '../stores/FMStrore';
+import { useFileStore } from '../stores/fileStore';
 
 import FileImg from './extension/FileImg.vue';
 import VideoPreview from './extension/VideoPreview.vue';
@@ -52,7 +55,7 @@ const props = withDefaults(defineProps<UploadCardProps>(), {
   },
 });
 
-const data = useFMStore();
+const data = useFileStore();
 
 const component = computed(() =>
   data.paths === 'videos' ? VideoPreview : FileImg

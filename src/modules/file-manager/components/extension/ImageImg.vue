@@ -12,14 +12,14 @@
 </template>
 
 <script setup lang="ts">
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
 const props = withDefaults(defineProps<ImageImgProps>(), {
   link: '',
   name: '',
 });
 
-const data = useFMStore();
+const data = useFileStore();
 
 interface ImageImgProps {
   link: string;

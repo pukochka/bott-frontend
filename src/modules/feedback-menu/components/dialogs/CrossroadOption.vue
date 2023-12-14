@@ -70,7 +70,7 @@ const loading = ref(false);
 const type = ref(1);
 const text = ref({
   value: '',
-  min: 2,
+  min: 1,
   max: 64,
   get required() {
     return this.value.length >= this.min && this.value.length <= this.max;

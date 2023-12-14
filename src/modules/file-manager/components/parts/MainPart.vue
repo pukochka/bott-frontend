@@ -32,12 +32,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { useFMStore } from '../../stores/FMStrore';
+import { useFileStore } from '../../stores/fileStore';
 
 import NotifySection from '../sections/NotifySection.vue';
 import FileCard from '../FileCard.vue';
 
-const data = useFMStore();
+const data = useFileStore();
 
 const sortBy = computed(
   () => Object.values(data.sortable).includes(!null) || data.tabs !== 'all'
