@@ -18,10 +18,11 @@
       </q-item-section>
 
       <q-checkbox
-        v-if="props.selected"
-        class="absolute-top-right"
-        :model-value="props.selected === Number(type)"
         size="30px"
+        class="absolute-top-right"
+        v-if="props.selected"
+        :model-value="props.selected === Number(type)"
+        @click="emit('create', Number(type))"
       />
     </q-item>
   </q-list>

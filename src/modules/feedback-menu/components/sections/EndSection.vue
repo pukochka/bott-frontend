@@ -28,7 +28,7 @@
 
     <q-inner-loading :showing="notifyDisabled">
       <div class="q-pa-md text-center text-weight-bold">
-        Уведомления отключены
+        Уведомления и напоминания отключены
       </div>
 
       <q-btn

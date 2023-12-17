@@ -15,15 +15,36 @@
             <div class="">
               <div class="row q-col-gutter-sm">
                 <div
-                  class="col-12 col-sm-6"
+                  class="col-12 col-sm-6 relative-position"
                   v-for="(card, index) of cards"
                   :key="index"
                 >
                   <message-card
-                    class="rounded bordered fit"
+                    class="rounded bordered fit q-pa-sm"
                     :message="card"
                     :open="true"
                   ></message-card>
+
+                  <q-inner-loading
+                    :showing="
+                      !store.feedback.setting.is_notice &&
+                      card.method === 'notice-admin'
+                    "
+                  >
+                    <div class="text-center text-weight-bold q-pa-md">
+                      Уведомления и напоминания отключены
+                    </div>
+
+                    <q-btn
+                      no-caps
+                      flat
+                      color="primary"
+                      padding="4px"
+                      label="Включить"
+                      class="rounded"
+                      @click="store.openDialog('notify')"
+                    />
+                  </q-inner-loading>
                 </div>
               </div>
             </div>
@@ -58,24 +79,6 @@
                 Натройки лимитов
               </div>
 
-              <q-btn
-                flat
-                size="13px"
-                padding="2px"
-                color="warning"
-                icon="refresh"
-                class="rounded absolute-top-right q-ma-xs q-mr-md"
-                @click="refresh"
-              >
-                <q-tooltip
-                  class="bott-tooltip text-center"
-                  anchor="top middle"
-                  self="bottom middle"
-                >
-                  Отключить настройки
-                </q-tooltip>
-              </q-btn>
-
               <notify-edit-item
                 v-for="(item, index) of spam"
                 :key="index"
@@ -89,6 +92,24 @@
                     Значение 0 - настройка отключена
                   </q-item-label>
                 </q-item-section>
+
+                <q-btn
+                  flat
+                  square
+                  color="warning"
+                  icon="refresh"
+                  class="absolute-right"
+                  padding="0 14px"
+                  @click="refresh"
+                >
+                  <q-tooltip
+                    class="bott-tooltip text-center"
+                    anchor="top middle"
+                    self="bottom middle"
+                  >
+                    Отключить настройки
+                  </q-tooltip>
+                </q-btn>
               </q-item>
             </q-list>
           </div>
@@ -157,7 +178,7 @@ const noticeAdmin = computed(
   () => store.feedback.noticeAdmin ?? defaultMessageFree
 );
 
-const cards = computed(() => [
+const cards = computed((): any => [
   {
     label: 'Напоминание для пользователя',
     data: notice.value,

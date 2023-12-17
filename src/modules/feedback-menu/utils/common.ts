@@ -1,7 +1,11 @@
 import { PaperItem, PaperPoint, PaperSize } from '../stores/feedbackModels';
 import { Color, Item, Path, Point, PointText, Shape, Size } from 'paper';
 import { getTextPoints } from './coords';
-import { mdiMessage, mdiFile, mdiAnimation } from '@quasar/extras/mdi-v7';
+import {
+  mdiMessageText,
+  mdiFileDocument,
+  mdiAnimation,
+} from '@quasar/extras/mdi-v7';
 
 export const setting: Record<
   number,
@@ -9,12 +13,12 @@ export const setting: Record<
 > = {
   1: {
     title: 'Текстовый',
-    icon: mdiMessage,
+    icon: mdiMessageText,
     color: '#a3b18a',
   },
   2: {
     title: 'Файловый',
-    icon: mdiFile,
+    icon: mdiFileDocument,
     color: '#ffc971',
   },
   3: {

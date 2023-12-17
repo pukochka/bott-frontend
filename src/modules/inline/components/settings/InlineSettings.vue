@@ -3,7 +3,8 @@
     <panel-header
       v-if="inline.settings.length"
       label="Настройки сообщения"
-      icon="tune"></panel-header>
+      icon="tune"
+    ></panel-header>
 
     <q-list v-if="inline.settings.length">
       <component
@@ -11,7 +12,8 @@
         :is="components[setting.type]"
         :setting="setting"
         v-for="(setting, index) of inline.settings"
-        :key="index"></component>
+        :key="index"
+      ></component>
     </q-list>
 
     <div class="row q-col-gutter-sm q-pa-sm">
@@ -23,11 +25,12 @@
           size="md"
           color="orange"
           label="Изменить тип сообщения"
-          @click="inline.openDialog('edit_type_message')" />
+          @click="inline.openDialog('edit_type_message')"
+        />
       </div>
 
       <div class="col-12 col-sm-6 row q-col-gutter-x-sm">
-        <div class="col">
+        <div class="col" v-if="inline.message.is_test">
           <q-btn
             flat
             class="rounded fit"
@@ -35,28 +38,32 @@
             color="green"
             :icon="laTelegram"
             :loading="loading.send"
-            @click="sendTestMessage">
+            @click="sendTestMessage"
+          >
             <q-tooltip
               class="bott-tooltip"
               anchor="top middle"
-              self="bottom middle">
+              self="bottom middle"
+            >
               Отправить тестовое сообщение в ЛС
             </q-tooltip>
           </q-btn>
         </div>
 
-        <div class="col">
+        <div class="col" v-if="inline.message.is_copy">
           <q-btn
             flat
             class="rounded fit"
             size="md"
             color="primary"
             icon="content_copy"
-            @click="copy">
+            @click="copy"
+          >
             <q-tooltip
               class="bott-tooltip text-center"
               anchor="top middle"
-              self="bottom middle">
+              self="bottom middle"
+            >
               Копировать ссылку на сообщение
             </q-tooltip>
           </q-btn>
