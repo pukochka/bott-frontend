@@ -1,5 +1,6 @@
 import axios from 'axios';
-import config from '../config';
+import { config } from '../config';
+import { useDialog } from '../../file-manager/stores/useDialog';
 
 const instance = axios.create({
   baseURL: config.host,
@@ -26,6 +27,10 @@ instance.interceptors.response.use(
     } catch (e) {}
 
     if (!jsonData) {
+      useDialog(
+        response.data?.message ?? 'Что-то пошло не так, обратитесь в поддержку.'
+      );
+
       return Promise.reject('error');
     }
 

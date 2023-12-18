@@ -22,7 +22,8 @@ export function useState(selected: RoutesMenu) {
 
 export function useParse(route: string | null) {
   const menu = useMenuStore();
-  for (const search of menu.search) {
+
+  for (const search of menu.all) {
     let is_end = false;
 
     if (search.route === route) {
@@ -38,7 +39,7 @@ export function useParse(route: string | null) {
                 ? item
                 : undefined;
 
-          if (find_item !== null && find_item !== undefined) {
+          if (find_item !== null && find_item !== void 0) {
             useState(find_item);
             menu.selectedOption = <OptionsMenu>search;
             is_end = true;
@@ -60,7 +61,7 @@ export function useParse(route: string | null) {
 }
 
 export function useRoutes(data: RoutesMenu[]) {
-  let allRoutes: (RoutesMenu | OptionsMenu)[] = [];
+  const allRoutes: (RoutesMenu | OptionsMenu)[] = [];
 
   for (const item of data) {
     allRoutes.push(item);
@@ -75,16 +76,14 @@ export function useRoutes(data: RoutesMenu[]) {
     }
   }
 
-  allRoutes.sort((a, b) => {
-    if (a.text > b.text) return 1;
-    else return -1;
-  });
+  allRoutes.sort((a, b) => (a.text > b.text ? 1 : -1));
 
-  allRoutes = allRoutes.filter((item) => isNaN(Number(item.text)));
-
-  return allRoutes.filter(
+  const all = allRoutes;
+  const search = allRoutes.filter(
     (item) => item.type_value !== 2 && item.type_value !== 1
   );
+
+  return { all, search };
 }
 
 export const defaultState: any = {
@@ -120,9 +119,3 @@ export const defaultState: any = {
     return this.main.item?.text_value ?? 'Выбор вложенного действия';
   },
 };
-
-function actionsCheck(value: string | null) {
-  const url = new URL('http://bot-t/' + value ?? '');
-
-  return url.pathname.slice(1);
-}

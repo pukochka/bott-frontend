@@ -21,7 +21,10 @@ export async function fetchMenu(
 
       menu.routes = response.data.data ?? [];
 
-      menu.search = useRoutes(menu.routes);
+      const { all, search } = useRoutes(menu.routes);
+
+      menu.search = search;
+      menu.all = all;
 
       action();
     });

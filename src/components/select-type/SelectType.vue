@@ -11,7 +11,8 @@
             class="col-grow rounded fit"
             :color="selected === button.type ? 'primary' : 'item'"
             :label="button.label"
-            @click="select(button.type)" />
+            @click="select(button.type)"
+          />
         </div>
       </div>
     </div>
@@ -25,11 +26,9 @@
       :token="props.token"
       :host="props.host"
       :is="selectedType.component"
-      :label="selectedType.label"
-      :hint="selectedType.hint"
-      :grow="selectedType.grow"
-      :default="selectedType.default"
-      @change="update"></component>
+      v-bind="selectedType"
+      @change="update"
+    ></component>
   </div>
 </template>
 
@@ -81,7 +80,7 @@ interface SelectTypesProps {
   buttons: Array<{ label: string; type: number }>;
   types: Record<number, any>;
   bot_id: number;
-  message_id: number;
+  message_id?: number;
   token: string;
   host: string;
 }

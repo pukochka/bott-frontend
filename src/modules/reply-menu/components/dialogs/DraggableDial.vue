@@ -1,5 +1,10 @@
 <template>
-  <q-dialog v-model="main.dialogs.drag" position="bottom" persistent full-width>
+  <q-dialog
+    v-model="reply.dialogs.drag"
+    position="bottom"
+    persistent
+    full-width
+  >
     <q-card
       style="width: 100%; overflow-x: hidden"
       class="relative-position dialog-rounded"
@@ -61,6 +66,7 @@
 
         <q-btn
           flat
+          no-caps
           class="rounded"
           size="md"
           label="Закрыть"
@@ -71,9 +77,7 @@
 
       <q-slide-transition :duration="100" class="absolute-top">
         <div v-show="helpClassTop">
-          <div
-            class="bg-primary q-pa-md text-center text-white rounded"
-          >
+          <div class="bg-primary q-pa-md text-center text-white rounded">
             Отпустите, для перемещения, в верхнюю линию!
           </div>
         </div>
@@ -81,9 +85,7 @@
 
       <q-slide-transition :duration="100" class="absolute-bottom">
         <div v-show="helpClassBottom">
-          <div
-            class="bg-primary q-pa-md text-center text-white rounded"
-          >
+          <div class="bg-primary q-pa-md text-center text-white rounded">
             Отпустите, для перемещения, в нижниюю линию!
           </div>
         </div>
@@ -96,7 +98,7 @@ import { VueDraggableNext } from 'vue-draggable-next';
 import { ref, computed, PropType } from 'vue';
 
 import { fetchMenu } from '../../api/queries';
-import { useMainStore } from '../../stores/mainStore';
+import { useReplyStore } from '../../stores/replyStore';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
@@ -112,7 +114,7 @@ const moving_element = ref<RMButton | null>(null);
 const helpClassTop = ref(false);
 const helpClassBottom = ref(false);
 
-const main = useMainStore();
+const reply = useReplyStore();
 
 const dragStart = (e: CustomEvent) => {
   moving_element.value = e.item._underlying_vm_;

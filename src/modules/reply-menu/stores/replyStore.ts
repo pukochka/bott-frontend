@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 
-import { MainStore, DialogsNames } from './model';
-import { defaultMenu } from './defaults';
+import { ReplyStore, DialogsNames } from './replyModels';
+import { defaultMenu } from '../utils/defaults';
 
-export const useMainStore = defineStore('MainStore', {
+export const useReplyStore = defineStore('reply', {
   state: () =>
     ({
       menuValue: null,
@@ -17,11 +17,10 @@ export const useMainStore = defineStore('MainStore', {
         drag: false,
         main: false,
       },
-    } as MainStore),
+    } as ReplyStore),
   getters: {
     menu: (state): RMMenu => state.menuValue ?? defaultMenu,
-    replyMenu: (state): RMMenu | null => state.menuValue,
-    replyLines: (state): RMLine[] => state.menuValue?.lines ?? [],
+    lines: (state): RMLine[] => state.menuValue?.lines ?? [],
   },
   actions: {
     openDialog(name: DialogsNames) {

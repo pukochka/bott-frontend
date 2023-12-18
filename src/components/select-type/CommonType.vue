@@ -21,15 +21,17 @@ import { onMounted, ref, watch } from 'vue';
 
 const props = withDefaults(defineProps<GeneralTypeProps>(), {
   regexp: () => /^/,
-  action: () => null,
-  label: () => '',
-  grow: () => false,
-  default: () => '',
-  hint: () => '',
-  error: () => 'Введено неверное количество символов',
+  action: null,
+  label: '',
+  grow: false,
+  default: '',
+  hint: '',
+  error: 'Введено неверное количество символов',
   webs: [],
   actions: [],
   route: '',
+  index: false,
+  static: false,
 });
 
 const emit = defineEmits<{
@@ -38,7 +40,7 @@ const emit = defineEmits<{
 
 const text = ref({
   value: '',
-  min: 2,
+  min: 1,
   max: 256,
   get required() {
     return (
@@ -71,6 +73,12 @@ onMounted(() => {
 interface GeneralTypeProps {
   label: string;
   action: string | null;
+  bot_id: number;
+  message_id: number;
+  token: string;
+  host: string;
+  index?: boolean;
+  static?: boolean;
   regexp?: RegExp;
   grow?: boolean;
   default?: string;
@@ -79,10 +87,6 @@ interface GeneralTypeProps {
   webs?: any;
   actions?: any;
   route?: any;
-  bot_id: number;
-  message_id: number;
-  token: string;
-  host: string;
 }
 </script>
 

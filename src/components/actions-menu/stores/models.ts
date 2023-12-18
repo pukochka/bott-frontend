@@ -6,4 +6,5 @@ export interface MenuStore {
   selectedOption: OptionsMenu | null;
 
   search: Array<RoutesMenu | OptionsMenu>;
+  all: Array<RoutesMenu | OptionsMenu>;
 }

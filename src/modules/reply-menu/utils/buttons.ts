@@ -2,6 +2,7 @@ import CommonType from 'src/components/select-type/CommonType.vue';
 import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';
 import WebModule from 'src/components/select-type/WebModule.vue';
 import InfoType from 'src/components/info/InfoType.vue';
+import { config } from '../config';
 
 export const replyButtons = [
   {
@@ -29,6 +30,8 @@ export const replyButtons = [
 export const replyTypes: Record<number, any> = {
   0: {
     component: ActionMenu,
+    index: true,
+    static: true,
   },
   1: {
     component: WebModule,
@@ -47,8 +50,14 @@ export const replyTypes: Record<number, any> = {
   },
   5: {
     label:
-      'Кнопка принадлежит к маршруту, который поддерживает свободные сообщения',
+      'Кнопка при нажатии на которую будет выполняться сценарий. Сценарий будет называться так же как и кнопка',
     component: InfoType,
+    buttons: [
+      {
+        label: 'Настройки сценариев',
+        link: `/lk/common/premium/route?bot_id=${config.bot.id}`,
+      },
+    ],
   },
   6: {
     label: 'Неактивная кнопка',

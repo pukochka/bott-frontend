@@ -10,6 +10,7 @@ export const useMenuStore = defineStore('action-menu-store', {
       selectedMain: null,
       selectedOption: null,
       search: [],
+      all: [],
     } as MenuStore),
   getters: {
     route(): string | null {

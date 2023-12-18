@@ -1,8 +1,8 @@
-export interface MainStore {
+export interface ReplyStore {
   menuValue: RMMenu | null;
 
   selectedButton: RMButton | null;
-  selectedLine: RMLine | null;
+  selectedLine: number | null;
 
   dialogs: Record<DialogsNames, boolean>;
 }

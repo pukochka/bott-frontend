@@ -34,7 +34,7 @@
             flat
             bordered
             class="rounded col ellipsis q-py-sm q-px-md text-bold text-center ellipsis cursor-pointer flex flex-center"
-            v-for="button in line.buttons"
+            v-for="button of line.buttons"
             :key="button.id"
             style="height: 50px"
             @click="emit('select-button', button)"
@@ -44,7 +44,7 @@
               anchor="top middle"
               self="bottom middle"
             >
-              Насторойки названия/маршрута
+              Насторойки кнопки
             </q-tooltip>
 
             {{ button.text }}
@@ -91,7 +91,7 @@ const thumbStyle = {
 };
 
 interface ButtonsSectionProps {
-  menu: IMMenu;
+  menu: IMMenu | RMMenu;
   loading: boolean;
 }
 </script>

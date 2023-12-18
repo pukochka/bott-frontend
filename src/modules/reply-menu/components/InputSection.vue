@@ -1,6 +1,6 @@
 <template>
   <div class="row items-center q-gutter-x-sm">
-    <div v-if="size_sm">
+    <div v-if="!sm">
       <q-fab
         style="z-index: 10"
         unelevated
@@ -17,14 +17,14 @@
           padding="5px"
           color="primary"
           label="Настройки меню"
-          @click="main.openDialog('main')"
+          @click="reply.openDialog('main')"
         />
 
         <q-fab-action
           padding="5px"
           color="primary"
           label="Расположение кнопок"
-          @click="main.openDialog('drag')"
+          @click="reply.openDialog('drag')"
         />
       </q-fab>
     </div>
@@ -38,8 +38,8 @@
       color="primary"
       class="rounded"
       label="Настройки меню"
-      v-if="!size_sm"
-      @click="main.openDialog('main')"
+      v-if="sm"
+      @click="reply.openDialog('main')"
     >
       <q-tooltip
         class="bott-tooltip text-center"
@@ -61,8 +61,8 @@
       color="primary"
       class="rounded"
       label="Расположение кнопок"
-      v-if="!size_sm"
-      @click="main.openDialog('drag')"
+      v-if="sm"
+      @click="reply.openDialog('drag')"
     >
       <q-tooltip
         class="bott-tooltip text-center"
@@ -79,17 +79,17 @@
 import { computed, ref } from 'vue';
 
 import { useQuasar } from 'quasar';
-import { useMainStore } from '../stores/mainStore';
+import { useReplyStore } from '../stores/replyStore';
 
 const fab = ref(false);
 
 const quasar = useQuasar();
-const main = useMainStore();
+const reply = useReplyStore();
 
-const size_sm = computed(() => quasar.screen.lt.sm);
+const sm = computed(() => !quasar.screen.lt.sm);
 
 const placeholder = computed(
-  () => main.replyMenu?.input_field_placeholder ?? 'Пусто'
+  () => reply.menu.input_field_placeholder ?? 'Пусто'
 );
 </script>
 

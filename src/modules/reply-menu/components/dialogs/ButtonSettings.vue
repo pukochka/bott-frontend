@@ -1,11 +1,10 @@
 <template>
   <q-dialog
-    v-model="main.dialogs.button_settings"
+    v-model="reply.dialogs.button_settings"
     position="bottom"
     no-esc-dismiss
     persistent
     no-shake
-    @keydown="enterDown"
     @before-show="updateState"
   >
     <q-card style="width: 100%" class="dialog-rounded" bordered flat>
@@ -32,11 +31,13 @@
 
       <q-card-section class="q-pt-none q-gutter-y-sm">
         <select-type
-          :routes="config.routes"
+          :bot_id="config.bot.id"
+          :token="config.bot.token"
+          :host="config.host"
           :webs="config.webs"
           :buttons="replyButtons"
           :types="replyTypes"
-          :button="main.selectedButton"
+          :button="reply.selectedButton"
           @update="update"
         ></select-type>
       </q-card-section>
@@ -49,7 +50,7 @@
           size="md"
           label="Удалить"
           color="red"
-          :loading="loading.delete"
+          :loading="loading['delete-button']"
           @click="deleteButton"
         />
 
@@ -71,7 +72,7 @@
           label="Изменить"
           color="primary"
           :disable="condition"
-          :loading="loading.update"
+          :loading="loading['update-data-and-type']"
           @click="updateButton"
         />
       </q-card-section>
@@ -80,17 +81,18 @@
 </template>
 
 <script setup lang="ts">
-import config from '../../config';
+import { config } from '../../config';
 import { ref, computed } from 'vue';
 
 import { fetchMenu } from '../../api/queries';
-import { useMainStore } from '../../stores/mainStore';
+import { useReplyStore } from '../../stores/replyStore';
 
-import { replyTypes, replyButtons } from '../../stores/buttons';
+import { replyTypes, replyButtons } from '../../utils/buttons';
 
 import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
 import SelectType from 'src/components/select-type/SelectType.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
+import { useDialog } from '../../../file-manager/stores/useDialog';
 
 const text = ref({
   value: '',
@@ -101,13 +103,12 @@ const text = ref({
   },
 });
 
-const main = useMainStore();
+const reply = useReplyStore();
 
 const loading = ref({
-  delete: false,
-  update: false,
+  'delete-button': false,
+  'update-data-and-type': false,
 });
-const route = ref<null | string>(null);
 const type = ref(0);
 const change = ref(false);
 
@@ -116,52 +117,55 @@ const state = ref({
   type: 0,
 });
 
-const condition = computed(() => route.value === null || !text.value.required);
+const condition = computed(
+  () =>
+    (state.value.type === 5 ? false : state.value.action === null) ||
+    !text.value.required
+);
 
 const update = (value: any) => (state.value = value);
 
 const addEmoji = (value: string) => (text.value.value += value);
 
-const updateButton = () => {
-  if (main.selectedButton?.type === 5) {
-    /****/
-  } else {
-    loading.value.update = true;
+const request = (query: 'delete-button' | 'update-data-and-type') => {
+  loading.value[query] = true;
 
-    fetchMenu('update-data-and-type', {
-      id: main.selectedButton?.id ?? 0,
-      message: text.value.value,
-      route: state.value.action ?? '',
-      type: type.value,
-    }).then(() => {
-      loading.value.update = false;
-      main.closeDialog('button_settings');
-    });
+  fetchMenu(query, {
+    id: reply.selectedButton?.id ?? 0,
+    message: text.value.value,
+    route: state.value.action ?? '',
+    type: state.value.type,
+  }).then(() => {
+    loading.value[query] = false;
+    reply.closeDialog('button_settings');
+  });
+};
+
+const updateButton = () => {
+  if (reply.selectedButton?.type === 5) {
+    useDialog(
+      'Вы уверены, что хотите изменить кнопку со сценарием? При изменении типа кнопки, сценарий связанный с кнопкой удалиться.',
+      true
+    ).onOk(() => request('update-data-and-type'));
+
+    return;
   }
+
+  request('update-data-and-type');
 };
 
 const deleteButton = () => {
-  if (main.selectedButton?.type === 5) {
-  } else {
-    loading.value.delete = true;
+  useDialog('Вы уверены, что хотите удалить кнопку?', true).onOk(() =>
+    request('delete-button')
+  );
 
-    fetchMenu('delete-button', {
-      id: main.selectedButton?.id ?? 0,
-    }).then(() => {
-      loading.value.delete = false;
-      main.closeDialog('button_settings');
-    });
-  }
-};
-
-const enterDown = (ev: KeyboardEvent) => {
-  if (ev.key === 'Enter' && !condition.value) updateButton();
+  return;
 };
 
 const updateState = () => {
   change.value = false;
-  text.value.value = main.selectedButton?.text ?? '';
-  type.value = main.selectedButton?.type ?? 0;
+  text.value.value = reply.selectedButton?.text ?? '';
+  type.value = reply.selectedButton?.type ?? 0;
 };
 </script>
 

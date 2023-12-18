@@ -140,15 +140,11 @@ export const useFileStore = defineStore('file-manager-data', {
     },
 
     async loadFiles(ev: any) {
-      console.log(ev);
-
       if (!ev?.target?.files && !ev?.dataTransfer?.files) return;
 
       const files: any = Array.from(
         ev?.target?.files ?? ev?.dataTransfer?.files
       );
-
-      console.log('accept length');
 
       if (!files.length) return;
 

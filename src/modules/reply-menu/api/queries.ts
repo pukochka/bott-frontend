@@ -1,12 +1,13 @@
 import instance from './interseptor';
 
-import { useMainStore } from '../stores/mainStore';
+import { useReplyStore } from '../stores/replyStore';
 
 export async function fetchMenu<Q extends keyof RMQueries>(
   query: Q,
-  params?: RMParams<Q>
+  params?: RMParams<Q>,
+  action?: (response: any) => void
 ) {
-  const main = useMainStore();
+  const reply = useReplyStore();
   try {
     return await instance({
       url: '/v1/bot/keyboard/reply-keyboard/' + query,
@@ -14,7 +15,11 @@ export async function fetchMenu<Q extends keyof RMQueries>(
     }).then((response) => {
       /** */
 
-      main.menuValue = JSON.parse(response.data).data[0];
+      const data = JSON.parse(response.data).data[0];
+
+      if (action !== void 0) action(data);
+
+      reply.menuValue = data;
 
       /** */
     });
