@@ -1,0 +1,44 @@
+.sticky-virtscroll-table {
+  thead tr th {
+    position: sticky;
+    z-index: 1;
+    background: var(--q-primary);
+    padding: 0;
+  }
+
+  thead tr:first-child th {
+    top: 0;
+  }
+  tbody {
+    scroll-margin-top: 48px;
+  }
+
+  .q-table thead tr{
+    height: auto !important;
+  }
+
+  //.q-table tbody td:first-child:before{
+  //  background: transparent;
+  //}
+
+  .q-table tbody td:not:first-child{
+    cursor: pointer;
+  }
+
+  thead tr:first-child th {
+    top: 0;
+    z-index: 1;
+  }
+  tr:first-child th:first-child {
+    z-index: 3;
+  }
+  td:first-child {
+    z-index: 1;
+    background: inherit;
+  }
+
+  td:first-child, th:first-child {
+    position: sticky;
+    left: 0
+  }
+}

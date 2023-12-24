@@ -6,4 +6,5 @@ export default {
   requiredParams: [],
 
   drawer: menu,
+  withoutFooter: true,
 };

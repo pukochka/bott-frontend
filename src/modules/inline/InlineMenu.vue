@@ -8,7 +8,23 @@
 
     <div class="row q-col-gutter-sm" v-show="!loading.start">
       <div class="col-12 col-sm-7 q-gutter-y-md">
-        <q-card class="rounded q-pa-md q-gutter-y-sm" flat bordered>
+        <q-card
+          class="rounded q-gutter-y-sm"
+          flat
+          bordered
+          :class="[!props['no-breadcrumbs'] ? ' q-px-md q-pb-md' : ' q-pa-md']"
+        >
+          <q-breadcrumbs v-if="!props['no-breadcrumbs']">
+            <q-breadcrumbs-el
+              class="rounded q-px-xs"
+              v-for="(breadcrumb, index) of breadcrumbs"
+              :key="index"
+              v-clickable="index !== breadcrumbs.length - 1"
+              :label="breadcrumb.label"
+              @click="breadcrumb.action"
+            />
+          </q-breadcrumbs>
+
           <div class="row items-center justify-between q-ma-none">
             <top-section></top-section>
 
@@ -66,13 +82,15 @@
   <draggable-dial :elements="inline.inlineLines"></draggable-dial>
 </template>
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue';
+import config from './config';
+import { computed, onBeforeMount, ref } from 'vue';
 
 import { fetchMenu, fetchMessage, fetchSettings } from './api/queries';
 import { getQueryParam } from 'src/utils/helpers/string';
 
 import { useInlineStore } from './stores/inlineStore';
 import { useDialog } from '../file-manager/stores/useDialog';
+import { historyGo } from './stores/helpers';
 
 import AddButton from './components/dialogs/AddButton.vue';
 import ButtonSettings from './components/dialogs/ButtonSettings.vue';
@@ -95,6 +113,7 @@ const props = withDefaults(defineProps<InlineMenuProps>(), {
   bot_id: 0,
   host: '',
   token: '',
+  'no-breadcrumbs': false,
 });
 
 const inline = useInlineStore();
@@ -147,6 +166,21 @@ onBeforeMount(() => {
   ]).then(() => (loading.value.start = false));
 });
 
+const breadcrumbs = computed(() => [
+  {
+    label: 'Панель управления',
+    action: () => historyGo(`/shop/desktop/index?bot_id=${config.bot.id}`),
+  },
+  {
+    label: 'Платные настройки',
+    action: () => historyGo(`/lk/common/main/redirect?bot_id=${config.bot.id}`),
+  },
+  {
+    label: inline.message.title ?? 'Сообщение',
+    action: '',
+  },
+]);
+
 const windowProps = () => {
   if (props.bot_id && props.token && props.host) {
     inline.bot_id = props.bot_id;
@@ -168,6 +202,7 @@ interface InlineMenuProps {
   bot_id?: number;
   host?: string;
   token?: string;
+  'no-breadcrumbs'?: boolean;
 }
 </script>
 

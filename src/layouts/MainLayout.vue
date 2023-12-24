@@ -54,6 +54,7 @@
         <div
           class="row justify-start no-wrap fit relative-position"
           :class="[visible ? ' active' : '']"
+          style="min-height: inherit"
         >
           <div
             :class="[

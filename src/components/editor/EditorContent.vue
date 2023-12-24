@@ -18,14 +18,14 @@
           v-if="state.link_state"
         ></div>
 
-        <Transition name="fade">
+        <transition name="fade">
           <textarea
             v-model="state.code_content"
             class="bg-grey-8 text-grey-4 absolute-full rounded reset"
             v-if="state.code_state"
           >
           </textarea>
-        </Transition>
+        </transition>
       </div>
     </div>
 
@@ -38,16 +38,19 @@
           : '',
       ]"
     >
-      <q-btn
-        unelevated
-        dense
-        class="rounded"
-        padding="0 8px"
-        color="primary"
-        no-caps
-        :href="`/lk/common/messages/main/old-browser?bot_id=${props.id}&id=${props.message_id}`"
-        :label="t('edit-text-in-editor')"
-      />
+      <div class="">
+        <q-btn
+          unelevated
+          dense
+          class="rounded"
+          padding="0 8px"
+          color="primary"
+          no-caps
+          v-if="props['no-without-editor']"
+          :href="`/lk/common/messages/main/old-browser?bot_id=${props.id}&id=${props.message_id}`"
+          :label="t('edit-text-in-editor')"
+        />
+      </div>
 
       <q-item-label header class="q-py-none">
         {{ editor.storage.characterCount.characters() }} /
@@ -83,6 +86,7 @@ const props = withDefaults(defineProps<EditorProps>(), {
   message_id: 0,
   maxValue: () => 1024,
   config: () => null,
+  'no-without-editor': false,
 });
 
 const emit = defineEmits<{
@@ -157,6 +161,7 @@ interface EditorProps {
   id: number;
   message_id: number;
   maxValue?: number;
+  'no-without-editor'?: boolean;
 }
 </script>
 

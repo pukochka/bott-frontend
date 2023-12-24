@@ -4,6 +4,7 @@
 @import 'text';
 @import 'responsive';
 @import 'editor';
+@import "table";
 
 body {
   font-family: 'Yandex Sans Text', serif !important;
@@ -384,4 +385,8 @@ body.body--dark {
 .bott-dialog__virtual-scroll .q-virtual-scroll__content {
   margin-left: -8px;
   margin-top: -8px;
+}
+
+.rounded-top{
+  border-radius: 10px 10px 0 0;
 }

@@ -7,8 +7,6 @@
         </div>
 
         <q-btn square dense flat size="md" color="primary" icon="more_vert">
-          <ticket-menu :ticket="props.ticket"></ticket-menu>
-
           <q-tooltip
             class="bott-tooltip"
             anchor="top middle"
@@ -21,35 +19,36 @@
 
       <q-separator />
 
-      <router-link to="/control-panel/categories-question/ticket">
-        <q-list separator dense v-clickable>
-          <q-tooltip
-            class="bott-tooltip"
-            anchor="top middle"
-            self="bottom middle"
-          >
-            Перейти к работе
-          </q-tooltip>
+      <q-list dense v-clickable @click="work.chat = true">
+        <q-tooltip
+          class="bott-tooltip"
+          anchor="top middle"
+          self="bottom middle"
+        >
+          Перейти в чат
+        </q-tooltip>
 
-          <q-item v-for="(item, index) of info" :key="index">
-            <q-item-section>{{ item.label }}</q-item-section>
+        <q-item v-for="(item, index) of info" :key="index">
+          <q-item-section>{{ item.label }}</q-item-section>
 
-            <q-item-section side>{{ item.value }}</q-item-section>
-          </q-item>
-        </q-list>
-      </router-link>
+          <q-item-section side>{{ item.value }}</q-item-section>
+        </q-item>
+      </q-list>
     </q-card>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { date } from 'quasar';
-import TicketMenu from './TicketMenu.vue';
+
+import { useWorkStore } from '../../stores/workStore';
 
 const props = withDefaults(defineProps<CategoryTicketProps>(), {
   ticket: null,
   classes: 'col-12 col-sm-6',
 });
+
+const work = useWorkStore();
 
 const info = [
   {
