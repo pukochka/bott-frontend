@@ -113,6 +113,7 @@ export class Connection {
       if (this.canConnect.length && this.prev) {
         const next = this.canConnect[0];
 
+        console.log('adsdasdasdasd');
         const removeLink = this.removePrevLink.bind(this);
         const removeConnection = this.removeConnection.bind(this);
 
