@@ -49,15 +49,15 @@
               </div>
             </div>
 
-            <q-input
-              outlined
-              autogrow
-              counter
-              class="bott-input--rounded"
-              label="Общий текст уведомления"
-              :maxlength="1024"
-              v-model="setting.template_answer"
-            />
+            <div class="">Текст шаблона ответа</div>
+            <editor-content
+              :content="text"
+              no-without-editor
+              :id="0"
+              :message_id="0"
+              :max-value="1024"
+              @update="updateTemplate"
+            ></editor-content>
 
             <q-input
               outlined
@@ -163,6 +163,8 @@ import FaqSection from '../../../inline/components/settings/FaqSection.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import NotifyEditItem from './notification/LimitItem.vue';
 import MessageCard from '../views/MessageCard.vue';
+import EditorContent from '../../../../components/editor/EditorContent.vue';
+import { encodeText } from '../../../inline/stores/helpers';
 
 const store = useFeedbackStore();
 
@@ -172,6 +174,7 @@ const loading = ref({
   'notice-admin': false,
 });
 const setting = ref<MessageFeedbackSetting>(defaultFeedbackSetting);
+const text = ref(setting.value.template_answer);
 
 const notice = computed(() => store.feedback.notice ?? defaultMessageFree);
 const noticeAdmin = computed(
@@ -195,6 +198,10 @@ const cards = computed((): any => [
   },
 ]);
 
+const updateTemplate = (val: string) => {
+  text.value = encodeText(val);
+};
+
 const updateItem = (item: any, text: any) => {
   setting.value[<'is_notice'>item.prop] = text;
 
@@ -215,6 +222,7 @@ const refresh = () => {
 
 const updateSettings = () => {
   loading.value.update = true;
+  setting.value.template_answer = text.value;
 
   fetchFeedback('update-setting', setting.value).then(
     () => (loading.value.update = false)
@@ -223,6 +231,7 @@ const updateSettings = () => {
 
 const updateShow = () => {
   setting.value = store.feedback.setting;
+  text.value = setting.value.template_answer;
 };
 
 const spam = computed(

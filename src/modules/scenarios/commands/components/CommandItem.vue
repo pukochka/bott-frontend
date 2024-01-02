@@ -1,14 +1,25 @@
 <template>
   <div class="col-12 col-sm-4 col-md-3">
-    <q-card flat bordered class="rounded" v-clickable @click="openAction">
+    <q-card
+      flat
+      bordered
+      class="rounded overflow-hidden"
+      v-clickable
+      @click="openAction"
+    >
+      <div
+        class="absolute-full"
+        style="opacity: 0.2"
+        :class="['bg-' + hint.color]"
+      ></div>
       <q-card-section class="q-pa-sm">
         <div class="text-primary ellipsis">{{ command.label }}</div>
       </q-card-section>
 
       <q-separator />
 
-      <q-card-section class="text-body2 q-pa-sm text-item">
-        {{ hint }}
+      <q-card-section class="text-body2 q-pa-sm relative-position text-item">
+        {{ hint.name }}
       </q-card-section>
 
       <q-tooltip
@@ -35,12 +46,34 @@ const props = withDefaults(defineProps<CommandItemProps>(), {
 
 const commands = useCommandsStore();
 
-const hint = computed(() => {
-  if (props.command.is_column) return 'Сценарий';
-  else if (props.command.is_menu && !props.command.is_column)
-    return 'Действие (привязано к меню)';
-  else return 'Действие';
-});
+const hint = computed(
+  () =>
+    [
+      {
+        name: 'Сценарий',
+        condition: props.command.is_column && !props.command.is_menu,
+        color: 'white',
+      },
+      {
+        name: 'Сценарий (привязан к главному меню)',
+        condition: props.command.is_column && props.command.is_menu,
+        color: 'primary',
+      },
+      {
+        name: 'Действие',
+        condition: !props.command.is_column && !props.command.is_menu,
+        color: 'white',
+      },
+      {
+        name: 'Действие (привязано к главному меню)',
+        condition: !props.command.is_column && props.command.is_menu,
+        color: 'warning',
+      },
+    ].filter((item) => item.condition)?.[0] ?? {
+      name: 'Сценарий',
+      color: 'primary',
+    }
+);
 
 const openAction = () => {
   commands.selectedCommand = props.command;

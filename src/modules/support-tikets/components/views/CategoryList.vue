@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-col-gutter-md relative-position q-px-md">
+  <div class="row relative-position">
     <div class="text-center col q-pa-xl" v-if="!tickets.length">
       Тикетов в категории
       <span class="text-primary">
@@ -51,6 +51,10 @@
                 >
                   Действия
                 </q-tooltip>
+
+                <q-menu class="bott-portal-menu">
+                  <ticket-menu></ticket-menu>
+                </q-menu>
               </q-btn>
 
               <q-btn
@@ -89,7 +93,12 @@
             :auto-width="col?.autoWidth"
             :class="[' text-' + (col.align ?? 'center')]"
           >
-            <div class="font-14">{{ col?.field(props.row) }}</div>
+            <ticket-status
+              :status="props.row.status"
+              v-if="col.name === 'status'"
+            ></ticket-status>
+
+            <div class="font-14" v-else>{{ col?.field(props.row) }}</div>
           </q-td>
         </q-tr>
       </template>
@@ -116,14 +125,23 @@
           </q-th>
         </q-tr>
       </template>
+
+      <template v-slot:item="props">
+        <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+          <ticket-grid-item :props="props"></ticket-grid-item>
+        </div>
+      </template>
     </q-table>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { useWorkStore } from '../../stores/workStore';
 import { mdiBriefcase } from '@quasar/extras/mdi-v7';
+import TicketGridItem from '../items/TicketGridItem.vue';
+import TicketMenu from '../items/sections/TicketMenu.vue';
+import TicketStatus from '../items/sections/TicketStatus.vue';
 
 const work = useWorkStore();
 

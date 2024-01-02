@@ -68,12 +68,7 @@ export function update(start?: boolean) {
   }
 
   for (let i = 0; i < store.feedback.inputs.length; i++) {
-    const coords = makeAutoAlign();
-
-    const { shell, platform } = createShell(
-      store.feedback.inputs[i],
-      coords[i]
-    );
+    const { shell, platform } = createShell(store.feedback.inputs[i], [0, 0]);
 
     store.feedback.inputs[i] = Object.assign(store.feedback.inputs[i], {
       shell,

@@ -5,8 +5,6 @@
         clickable
         v-for="(button, index) of buttons"
         :key="index"
-        :href="button.link"
-        :target="button.link ? '_blank' : ''"
         v-show="button.condition"
         @click="button.action"
       >
@@ -41,16 +39,19 @@ const store = useFeedbackStore();
 
 const loading = ref(false);
 
-const params = computed(
-  () =>
-    `?bot_id=${config.bot.id}&id=${store.message.id}&answer_id=${props.answer.id}`
+const answer = computed(() =>
+  props.answer.answer === ''
+    ? '<span class="text-red">Нет ответа</span>'
+    : (props.answer.answer ?? '').replace(/\n/gi, '<br>')
 );
 
 const readAnswer = () => {
   loading.value = true;
 
   fetchFeedbackAnswer('read', { answer_id: props.answer.id }).then(() => {
-    loading.value = false;
+    store.updateAnswers(() => {
+      loading.value = false;
+    });
   });
 };
 
@@ -63,7 +64,9 @@ const deleteAnswer = () => {
         (item) => item.id !== props.answer.id
       );
     }).then(() => {
-      loading.value = false;
+      store.updateAnswers(() => {
+        loading.value = false;
+      });
     });
   });
 };
@@ -73,15 +76,16 @@ const buttons = computed(() => [
     label: 'Ответить',
     color: 'primary',
     icon: 'send',
-    link: `/lk/common/messages/feedback/answer-answer${params.value}`,
-    action: undefined,
+    action: () => {
+      store.selectedAnswer = props.answer;
+      store.openDialog('administrator_answer');
+    },
     condition: true,
   },
   {
     label: 'Отметить прочитанным',
     color: 'positive',
     icon: 'check',
-    link: undefined,
     action: readAnswer,
     condition: props.answer.status.id === 1,
   },
@@ -89,15 +93,15 @@ const buttons = computed(() => [
     label: 'Просмотреть ответ',
     color: 'warning',
     icon: 'visibility',
-    link: `lk/common/messages/feedback/answers${params.value}`,
-    action: undefined,
+    action: () => {
+      useDialog(answer.value);
+    },
     condition: true,
   },
   {
     label: 'Удалить',
     color: 'red',
     icon: 'close',
-    link: undefined,
     action: deleteAnswer,
     condition: true,
   },

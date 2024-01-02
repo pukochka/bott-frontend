@@ -10,6 +10,7 @@ import { Link } from '../utils/lines/link';
 import { defaultMessageFree } from '../../inline/stores/inlineModels';
 import { Point } from 'paper';
 import { update } from '../utils/create';
+import { fetchFeedbackAnswer } from '../api/queries';
 
 export const useFeedbackStore = defineStore('paper-store', {
   state: () =>
@@ -55,12 +56,14 @@ export const useFeedbackStore = defineStore('paper-store', {
         message_free: false,
         crossroad: false,
         touch: false,
+        administrator_answer: false,
       },
 
       selectedType: 1,
       selectedMessage: null,
       selectedOption: null,
       selectedMessageFree: null,
+      selectedAnswer: null,
 
       menu: { create: false, link: false, message: false },
       action: null,
@@ -203,6 +206,29 @@ export const useFeedbackStore = defineStore('paper-store', {
       this.selectedMessageNext = null;
 
       update();
+    },
+
+    updateAnswers(action?: () => void) {
+      return Promise.all([
+        fetchFeedbackAnswer('index'),
+        fetchFeedbackAnswer(
+          'count',
+          undefined,
+          (response) => (this.answersCount.all = response)
+        ),
+        fetchFeedbackAnswer(
+          'count',
+          { status: 0 },
+          (response) => (this.answersCount.unfinished = response)
+        ),
+        fetchFeedbackAnswer(
+          'count',
+          { status: 1 },
+          (response) => (this.answersCount.unread = response)
+        ),
+      ]).then(() => {
+        if (action !== void 0) action();
+      });
     },
   },
 });

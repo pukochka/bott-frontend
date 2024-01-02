@@ -28,11 +28,12 @@
           Перейти в чат
         </q-tooltip>
 
-        <q-item v-for="(item, index) of info" :key="index">
-          <q-item-section>{{ item.label }}</q-item-section>
-
-          <q-item-section side>{{ item.value }}</q-item-section>
-        </q-item>
+        <component
+          v-for="(item, index) of info"
+          :key="index"
+          :item="item"
+          :is="item.component"
+        ></component>
       </q-list>
     </q-card>
   </div>
@@ -42,6 +43,8 @@
 import { date } from 'quasar';
 
 import { useWorkStore } from '../../stores/workStore';
+import TicketInfo from './sections/TicketInfo.vue';
+import TicketStatusView from './sections/TicketStatusView.vue';
 
 const props = withDefaults(defineProps<CategoryTicketProps>(), {
   ticket: null,
@@ -53,18 +56,22 @@ const work = useWorkStore();
 const info = [
   {
     label: 'Статус',
+    component: TicketStatusView,
     value: props.ticket.status,
   },
   {
     label: 'Запрос от',
+    component: TicketInfo,
     value: props.ticket.request_from,
   },
   {
     label: 'Исполнитель',
+    component: TicketInfo,
     value: props.ticket.executor,
   },
   {
     label: 'Время создания',
+    component: TicketInfo,
     value: date.formatDate(
       Number(props.ticket.create_at + '000'),
       'DD-MM-YYYY hh:mm'

@@ -1,28 +1,56 @@
 <template>
-  <div class="absolute-top" :class="[sm ? ' q-mx-xxl' : ' q-mt-xxl q-mx-sm']">
-    <q-card
-      bordered
-      flat
-      :square="!sm"
-      class="overflow-hidden"
-      :class="[sm ? ' row' : ' column rounded']"
-    >
-      <div class="col" v-for="(button, index) of buttons" :key="index">
-        <q-btn
-          square
-          no-caps
-          flat
-          class="fit"
-          size="13px"
-          :icon="button.icon"
-          :color="button.color"
-          :label="button.label"
-          @click="button.action"
-        />
-      </div>
+  <div
+    class="absolute-top"
+    :class="[sm ? ' q-mx-xxl q-mt-sm' : ' q-mt-xxl q-mx-sm']"
+  >
+    <div class="row justify-center">
+      <q-card
+        bordered
+        flat
+        class="overflow-hidden rounded"
+        :class="[sm ? ' col-6' : 'col-10']"
+      >
+        <div class="text-body2 q-pa-xs">
+          <q-breadcrumbs>
+            <q-breadcrumbs-el
+              class="rounded q-px-xs"
+              v-for="(breadcrumb, index) of breadcrumbs"
+              :key="index"
+              v-clickable="index !== breadcrumbs.length - 1"
+              :label="breadcrumb.label"
+              @click="breadcrumb.action"
+            />
+          </q-breadcrumbs>
+        </div>
 
-      <div class="absolute-full" v-if="disabled"></div>
-    </q-card>
+        <div :class="[sm ? ' row' : ' column rounded']">
+          <div class="col" v-for="(button, index) of buttons" :key="index">
+            <q-btn
+              square
+              no-caps
+              flat
+              class="fit"
+              size="13px"
+              :icon="button.icon"
+              :color="button.color"
+              :label="sm ? '' : button.label"
+              @click="button.action"
+            >
+              <q-tooltip
+                v-if="sm"
+                class="bott-tooltip text-center"
+                anchor="bottom middle"
+                self="top middle"
+              >
+                {{ button.label }}
+              </q-tooltip>
+            </q-btn>
+          </div>
+        </div>
+
+        <div class="absolute-full" v-if="disabled"></div>
+      </q-card>
+    </div>
 
     <warning-start warning></warning-start>
   </div>
@@ -40,6 +68,8 @@ import {
 
 import WarningStart from '../views/WarningStart.vue';
 import { useQuasar } from 'quasar';
+import { historyGo } from '../../../inline/stores/helpers';
+import { config } from '../../../reply-menu/config';
 
 const store = useFeedbackStore();
 const quasar = useQuasar();
@@ -48,9 +78,24 @@ const sm = computed(() => !quasar.screen.lt.sm);
 
 const disabled = computed(() => store.onconnection || store.dragging);
 
+const breadcrumbs = computed(() => [
+  {
+    label: 'Панель управления',
+    action: () => historyGo(`/shop/desktop/index?bot_id=${config.bot.id}`),
+  },
+  {
+    label: 'Платные настройки',
+    action: () => historyGo(`/lk/common/main/redirect?bot_id=${config.bot.id}`),
+  },
+  {
+    label: store.message.title ?? '',
+    action: '',
+  },
+]);
+
 const buttons = computed(() => [
   {
-    label: 'Смотреть ответы',
+    label: 'Смотреть заявки',
     action: () => store.openDialog('answers'),
     icon: mdiForum,
     color: 'primary',

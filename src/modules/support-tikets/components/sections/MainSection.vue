@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div :class="[work.section !== 'list' ? ' q-pa-md' : ' q-px-md']">
     <component :is="section"></component>
   </div>
 </template>

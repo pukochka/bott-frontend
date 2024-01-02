@@ -6,7 +6,7 @@
     <q-card
       flat
       bordered
-      class="q-mt-lg rounded row items-center justify-center"
+      class="q-mt-lg rounded row items-center justify-center overflow-hidden"
     >
       <div class="text-center q-px-sm q-py-xs">Нет стартового сообщения!</div>
 

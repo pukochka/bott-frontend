@@ -25,14 +25,16 @@
 import { computed, ref } from 'vue';
 import { fetchFeedbackAnswer } from '../../../api/queries';
 import { useDialog } from '../../../../file-manager/stores/useDialog';
+import { useFeedbackStore } from '../../../stores/feedbackStore';
 
 const loading = ref(false);
+const store = useFeedbackStore();
 
 const readAllAnswers = () => {
   loading.value = true;
 
   fetchFeedbackAnswer('read-all').then(() => {
-    loading.value = false;
+    store.updateAnswers(() => (loading.value = false));
   });
 };
 
@@ -44,7 +46,7 @@ const deleteAllUnfinished = () => {
     loading.value = true;
 
     fetchFeedbackAnswer('delete-by-status', { status: 1 }).then(() => {
-      loading.value = false;
+      store.updateAnswers(() => (loading.value = false));
     });
   });
 };
@@ -54,7 +56,7 @@ const deleteAllAnswers = () => {
     loading.value = true;
 
     fetchFeedbackAnswer('delete-by-status').then(() => {
-      loading.value = false;
+      store.updateAnswers(() => (loading.value = false));
     });
   });
 };

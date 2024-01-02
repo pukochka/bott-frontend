@@ -18,12 +18,6 @@
       <component :is="menu[opened]"></component>
     </q-menu>
 
-    <create-menu></create-menu>
-
-    <link-menu></link-menu>
-
-    <message-menu></message-menu>
-
     <transition
       :name="
         store.mobile.setting
@@ -82,6 +76,8 @@
 
   <touch-menu></touch-menu>
 
+  <administrator-answer></administrator-answer>
+
   <q-inner-loading
     v-close-popup
     @click="closeMenu"
@@ -118,6 +114,7 @@ import CrossroadSetting from './components/dialogs/CrossroadSetting.vue';
 import CrossroadOption from './components/dialogs/CrossroadOption.vue';
 import MobileSection from './components/sections/MobileSection.vue';
 import TouchMenu from './components/menu/TouchMenu.vue';
+import AdministratorAnswer from './components/dialogs/answer/AdministratorAnswer.vue';
 
 const store = useFeedbackStore();
 const quasar = useQuasar();

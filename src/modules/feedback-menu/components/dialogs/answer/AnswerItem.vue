@@ -16,6 +16,10 @@
       <div v-html="answer"></div>
     </q-item-section>
 
+    <q-item-section>
+      <div v-html="answerAdmin"></div>
+    </q-item-section>
+
     <q-item-section v-for="(info, index) of data" :key="index">
       <q-btn
         flat
@@ -26,7 +30,7 @@
         class="rounded"
         @click="info.action"
       >
-        <div class="ellipsis">{{ info.value }}</div>
+        <div class="ellipsis" v-html="info.value"></div>
       </q-btn>
     </q-item-section>
   </q-item>
@@ -51,8 +55,14 @@ const status = computed(
 
 const answer = computed(() =>
   props.answer.answer === ''
-    ? '<span class="text-red">Не ответа</span>'
-    : props.answer.answer
+    ? '<span class="text-red">Нет ответа</span>'
+    : (props.answer.answer ?? '').replace(/\n/gi, '<br>')
+);
+
+const answerAdmin = computed(() =>
+  props.answer.adminAnswer?.text
+    ? props.answer.adminAnswer.text ?? ''
+    : '<span class="text-red">Нет ответа</span>'
 );
 
 const copyUsername = () => {

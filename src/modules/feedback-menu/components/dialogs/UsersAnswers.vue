@@ -16,7 +16,29 @@
         >
           <answers-statistics @filter="updatePagination"></answers-statistics>
 
-          <div class="q-py-xs">Все ответы</div>
+          <div class="row justify-between items-center q-py-xs">
+            <div class="">Все ответы</div>
+
+            <q-btn
+              flat
+              size="md"
+              color="primary"
+              icon="filter_list_off"
+              class="rounded"
+              padding="4px"
+              v-if="filtered"
+              :loading="loading.off"
+              @click="offFilter"
+            >
+              <q-tooltip
+                class="bott-tooltip text-center"
+                anchor="top middle"
+                self="bottom middle"
+              >
+                Убрать фильтры
+              </q-tooltip>
+            </q-btn>
+          </div>
 
           <div class="scroll-x bordered rounded">
             <q-list style="min-width: 600px">
@@ -43,13 +65,22 @@
                 </q-item-section>
 
                 <q-item-section>Ответ</q-item-section>
+
                 <q-item-section class="text-center">
-                  Пользователь
+                  Ответ администратора
                 </q-item-section>
-                <q-item-section class="text-center">
-                  Время ответа
-                </q-item-section>
-                <q-item-section class="text-center">Статус</q-item-section>
+
+                <user-filter @filter="filtered = true"></user-filter>
+
+                <date-filter
+                  @filter="filtered = true"
+                  :update="filtered"
+                ></date-filter>
+
+                <status-filter
+                  @filter="filtered = true"
+                  :update="filtered"
+                ></status-filter>
               </q-item>
 
               <q-separator />
@@ -114,22 +145,27 @@
 import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import { fetchFeedbackAnswer } from '../../api/queries';
+import { useQuasar } from 'quasar';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import AnswersStatistics from './answer/AnswersStatistics.vue';
 import AnswerItem from './answer/AnswerItem.vue';
 import AnswersMenu from './answer/AnswersMenu.vue';
-import { useQuasar } from 'quasar';
+import StatusFilter from './answer/filters/StatusFilter.vue';
+import DateFilter from './answer/filters/DateFilter.vue';
+import UserFilter from './answer/filters/UserFilter.vue';
 
 const store = useFeedbackStore();
 const quasar = useQuasar();
 
+const filtered = ref(false);
 const loading = ref({
   show: true,
   next: false,
   prev: false,
   last: false,
   first: false,
+  off: false,
 });
 
 const page = ref(1);
@@ -153,6 +189,13 @@ const pages = computed(() =>
   Math.ceil(store.answersCount[statuses?.[filter.value] ?? 'all'] / 5)
 );
 
+const offFilter = () => {
+  filtered.value = false;
+  loading.value.off = true;
+
+  store.updateAnswers(() => (loading.value.off = false));
+};
+
 const updatePagination = (value?: any) => {
   filter.value = value;
 
@@ -166,24 +209,7 @@ const updateShow = () => {
 
   loading.value.show = true;
 
-  Promise.all([
-    fetchFeedbackAnswer('index'),
-    fetchFeedbackAnswer(
-      'count',
-      undefined,
-      (response) => (store.answersCount.all = response)
-    ),
-    fetchFeedbackAnswer(
-      'count',
-      { status: 0 },
-      (response) => (store.answersCount.unfinished = response)
-    ),
-    fetchFeedbackAnswer(
-      'count',
-      { status: 1 },
-      (response) => (store.answersCount.unread = response)
-    ),
-  ]).then(() => (loading.value.show = false));
+  store.updateAnswers(() => (loading.value.show = false));
 };
 
 const nextPage = () => {

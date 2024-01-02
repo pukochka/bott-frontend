@@ -23,32 +23,14 @@
         </q-btn>
       </div>
 
-      <!--        <q-menu class="bott-portal-menu" anchor="bottom right" self="top end">-->
-      <!--          <q-list dense style="max-width: 250px">-->
-      <!--            <q-item-->
-      <!--              clickable-->
-      <!--              v-close-popup-->
-      <!--              v-for="(button, index) of categoryButtons"-->
-      <!--              :key="index"-->
-      <!--              @click="button.action"-->
-      <!--            >-->
-      <!--              <q-item-section avatar>-->
-      <!--                <q-icon :name="button.icon" :color="button.color" size="22px" />-->
-      <!--              </q-item-section>-->
-
-      <!--              <q-item-section>{{ button.label }}</q-item-section>-->
-      <!--            </q-item>-->
-      <!--          </q-list>-->
-      <!--        </q-menu>-->
-
       <q-btn
         no-caps
         unelevated
         class="rounded absolute-center"
         padding="0 8px"
         size="13px"
-        color="positive"
-        label="Активна"
+        :color="status.color"
+        :label="status.label"
       >
         <q-menu
           anchor="bottom middle"
@@ -115,8 +97,13 @@ import {
 } from '@quasar/extras/mdi-v7';
 import { computed } from 'vue';
 import { useDialog } from '../../../file-manager/stores/useDialog';
+import { categoryStatues } from '../../utils/statuses';
 
 const work = useWorkStore();
+
+const status = computed(
+  () => categoryStatues[work.selectedCategory?.status ?? 0]
+);
 
 const closeSection = () => {
   if (['log', 'manager', 'edit'].includes(work.section)) {

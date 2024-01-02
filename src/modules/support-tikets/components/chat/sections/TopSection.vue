@@ -5,7 +5,7 @@
         <q-btn
           flat
           square
-          v-for="(button, index) of actions"
+          v-for="(button, index) of buttons"
           :key="index"
           :color="button.color"
           :icon="button.icon"
@@ -38,55 +38,45 @@
 <script setup lang="ts">
 import { useWorkStore } from '../../../stores/workStore';
 import { computed } from 'vue';
-import {
-  mdiBriefcase,
-  mdiBriefcaseArrowUpDown,
-  mdiTagCheck,
-  mdiTagRemove,
-  mdiTransfer,
-  mdiCog,
-} from '@quasar/extras/mdi-v7';
+
+import { ticketMenu, TicketMenuNames } from '../../../utils/ticket-menu';
 
 const work = useWorkStore();
 
-const actions = computed(() => [
-  {
-    label: 'Взять в работу тикет',
-    action: '',
-    icon: mdiBriefcase,
-    color: 'positive',
-  },
-  {
-    label: 'Передать другому исполнителю',
-    action: '',
-    icon: mdiBriefcaseArrowUpDown,
-    color: 'info',
-  },
-  {
-    label: 'Переместить тикет в другую категорию',
-    action: '',
-    icon: mdiTransfer,
-    color: 'secondary',
-  },
-  {
-    label: 'Предложить закрыть тикет',
-    action: '',
-    icon: mdiTagCheck,
-    color: 'warning',
-  },
-  {
-    label: 'Редактровать настройки тикета',
-    action: '',
-    icon: mdiCog,
-    color: 'primary',
-  },
-  {
-    label: 'Удалить тикет',
-    action: '',
-    icon: mdiTagRemove,
-    color: 'negative',
-  },
-]);
+const buttons = computed(() =>
+  Object.entries(ticketMenu).map(([key, value]) =>
+    Object.assign(actions.value[<TicketMenuNames>key], value)
+  )
+);
+
+const actions = computed(
+  (): Record<TicketMenuNames, any> => ({
+    pick: {
+      action: '',
+      condition: '',
+    },
+    transfer: {
+      action: '',
+      condition: '',
+    },
+    offer: {
+      action: '',
+      condition: '',
+    },
+    move: {
+      action: '',
+      condition: '',
+    },
+    delete: {
+      action: '',
+      condition: '',
+    },
+    edit: {
+      action: '',
+      condition: '',
+    },
+  })
+);
 </script>
 
 <style scoped lang="scss"></style>

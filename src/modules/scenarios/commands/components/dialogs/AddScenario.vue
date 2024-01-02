@@ -30,7 +30,12 @@
       <q-card-section class="q-pt-none">
         <div class="q-pb-sm">Тип первого сообщения</div>
 
-        <edit-type @select="update"></edit-type>
+        <edit-type
+          v-if="types.length"
+          @select="update"
+          :types="types"
+          :type="selected"
+        ></edit-type>
       </q-card-section>
 
       <q-card-section class="q-pt-none row justify-end q-gutter-sm">
@@ -60,19 +65,23 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { fetchCommands } from '../../../messages/api';
 
 import { useCommandsStore } from '../../stores/commandsStore';
 
-import EditType from '../../../messages/components/edit/EditType.vue';
+import EditType from '../../../../inline/components/settings/EditType.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
 const commands = useCommandsStore();
 
 const loading = ref(false);
 const selected = ref(0);
+
+const types = computed(() =>
+  Object.entries(support).map(([_, value]) => value)
+);
 
 const update = (id: number) => {
   selected.value = id;
@@ -106,6 +115,51 @@ const addRoute = () => {
     loading.value = false;
     commands.closeDialog('add_scenario');
   });
+};
+
+const support = {
+  '0': {
+    id: 0,
+    type: 0,
+    label: 'Текстовое сообщение',
+    description: 'Сообщение содержащее только текст',
+    path: 'texts',
+  },
+  '1': {
+    id: 1,
+    type: 1,
+    label: 'Сообщение с картинкой',
+    description: 'Сообщение содержащее одну картинку',
+    path: 'photos',
+  },
+  '2': {
+    id: 2,
+    type: 2,
+    label: 'Обратная связь',
+    description: 'Форма для сбора данных от клиентов путем ответов на вопросы',
+    path: null,
+  },
+  '3': {
+    id: 3,
+    type: 3,
+    label: 'Сообщение-файл',
+    description: 'Документ с описанием(Отправка файла)',
+    path: 'files',
+  },
+  '4': {
+    id: 4,
+    type: 4,
+    label: 'Сообщение c видео',
+    description: 'Сообщение содержащее видео',
+    path: 'videos',
+  },
+  '5': {
+    id: 5,
+    type: 5,
+    label: 'Сообщение c анимацией(gif)',
+    description: 'Сообщение содержащее анимацию(GIF)',
+    path: 'animations',
+  },
 };
 
 const updateShow = () => {

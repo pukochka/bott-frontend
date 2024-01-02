@@ -52,6 +52,7 @@ export interface FeedbackModels {
   selectedMessageNext: MessageFeedbackItemPreview | null;
   selectedOption: any | null;
   selectedMessageFree: MessageFree | null;
+  selectedAnswer: FeedbackAnswer | null;
 
   menu: Record<MenuNames, boolean>;
 
@@ -68,6 +69,7 @@ export type DialogsNames =
   | 'message_free'
   | 'crossroad'
   | 'crossroad_option'
+  | 'administrator_answer'
   | 'touch';
 export type MenuNames = 'create' | 'link' | 'message';
 

@@ -57,8 +57,9 @@ export const inlineTypes: Record<number, any> = {
     component: InfoType,
     buttons: [
       {
-        label: 'Настройки сценариев',
+        label: 'Раздел сценариев',
         link: `/lk/common/premium/route?bot_id=${config.bot.id}`,
+        type: 'scenario', // TODO Костыль
       },
     ],
   },

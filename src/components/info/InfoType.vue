@@ -22,13 +22,35 @@ import { computed } from 'vue';
 const props = withDefaults(defineProps<InfoTypeProps>(), {
   label: '',
   buttons: () => [],
+  route: '',
 });
 
-const info = computed(() => props.buttons ?? []);
+// TODO Костыль
+const info = computed(() =>
+  (props.buttons ?? []).map((item) => {
+    let link = item.link;
+    let label = item.label;
+
+    if (
+      (props.route ?? '').includes('system/free?id=') &&
+      item.type === 'scenario'
+    ) {
+      const index = props.route.indexOf('=') + 1;
+      link += `&route_id=${props.route.slice(index)}`;
+      label = 'Управление сценарием';
+    }
+
+    return {
+      label: label,
+      link: link,
+    };
+  })
+);
 
 interface InfoTypeProps {
   label: string;
-  buttons: Array<{ label: string; link: string }>;
+  route: string;
+  buttons: Array<{ label: string; link: string; type: string }>;
 }
 </script>
 

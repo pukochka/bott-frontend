@@ -6,7 +6,8 @@
           dense
           clickable
           class="bordered rounded fit"
-          @click="select(tp.type)">
+          @click="select(tp.type)"
+        >
           <q-item-section avatar v-if="!sm">
             <q-icon :name="icons[tp.type]" color="primary" size="24px" />
           </q-item-section>
@@ -23,7 +24,8 @@
             toggle-indeterminate
             v-if="selected === tp.type"
             class="absolute-top-right"
-            :model-value="checkbox === tp.type" />
+            :model-value="checkbox === tp.type"
+          />
         </q-item>
       </div>
     </q-list>
@@ -36,9 +38,6 @@ import { useQuasar } from 'quasar';
 
 const props = withDefaults(defineProps<EditTypeProps>(), {
   type: 0,
-  host: '',
-  bot_id: 0,
-  token: '',
   types: () => [],
 });
 
@@ -75,9 +74,6 @@ onBeforeMount(() => {
 
 interface EditTypeProps {
   type?: number;
-  token: string;
-  host: string;
-  bot_id: number;
   types: Array<any>;
 }
 </script>

@@ -14,7 +14,14 @@ import { Link } from './link';
 import { overlap } from '../common';
 import { fetchFeedback } from '../../api/queries';
 import { update } from '../create';
+
 const { noColor } = colors;
+
+const userAgent = navigator.userAgent.toLowerCase();
+const isMobile =
+  /mobile|iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(
+    userAgent
+  );
 
 export class Connection {
   message: MessageFeedbackItemPreview = defaultInput;
@@ -96,8 +103,6 @@ export class Connection {
 
     this.group.onMouseDown = () => {
       store.connecting = true;
-
-      if (this.canCreateConnectCircle) return;
 
       this.openConnection();
     };
@@ -194,6 +199,7 @@ export class Connection {
       if (this.isNewConnect && !prev) {
         this.removeConnectCircle();
       }
+
       if (!this.isNewConnect && prev) {
         this.createConnectCircle();
       }
@@ -255,7 +261,7 @@ export class Connection {
       return;
     }
 
-    const touch = !!event.event?.changedTouches?.[0];
+    const touch = !!event.event?.changedTouches?.[0] || isMobile;
 
     store.openMenu('create', undefined, touch);
   }

@@ -64,9 +64,10 @@
       class="my-card q-pa-xs rounded"
       v-if="message.condition"
     >
-      <div class="ellipsis-3-lines text-caption word-break-all">
-        {{ message.data.text }}
-      </div>
+      <div
+        class="ellipsis-3-lines text-caption word-break-all"
+        v-html="message.data.text"
+      ></div>
     </q-card>
 
     <div class="" v-else>
@@ -162,7 +163,7 @@ const messageAction = (prefix: 'add' | 'drop') => {
 
 interface MessageCardProps {
   open: boolean;
-  bordered: boolean;
+  bordered?: boolean;
   message: {
     data: MessageFree;
     label: string;

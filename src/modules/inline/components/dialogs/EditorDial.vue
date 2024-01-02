@@ -82,7 +82,7 @@ const saveText = () => {
       text: content,
     },
     () => {
-      inline.message.text = text.value ?? inline.message.text;
+      inline.message.text = content ?? inline.message.text;
     }
   ).then(() => {
     loading.value = false;

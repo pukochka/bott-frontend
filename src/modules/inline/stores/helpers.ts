@@ -2,9 +2,10 @@ import { Notify } from 'quasar';
 
 export function encodeText(text: string) {
   return text
-    .replace(/<p\/>/gi, '')
-    .replace(/<p>/gi, '<br>')
-    .replace(/<p><\/p>/gi, '<br>');
+    .replace(/<br>/gi, '')
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<p>/gi, '')
+    .replace(/<p><\/p>/gi, '\n');
 }
 
 export function useNotify(message: string) {
@@ -21,10 +22,4 @@ export function historyGo(to: string) {
   el.href = to;
 
   el.click();
-}
-
-export function replaceBr() {
-  document.querySelector('.editor-text')!.innerHTML = document
-    .querySelector('.editor-text')!
-    .innerHTML.replace(/<p><\/p>/gi, '<br>');
 }
