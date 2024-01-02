@@ -43,6 +43,7 @@ export interface FeedbackModels {
     start: boolean;
     setting: boolean;
     end: boolean;
+    connect: boolean;
   };
 
   dialogs: Record<DialogsNames, boolean>;
@@ -71,7 +72,7 @@ export type DialogsNames =
   | 'crossroad_option'
   | 'administrator_answer'
   | 'touch';
-export type MenuNames = 'create' | 'link' | 'message';
+export type MenuNames = 'create' | 'link' | 'message' | 'touch';
 
 export interface MessageFeedbackItemPreview extends MessageFeedbackItem {
   platform?: PaperGroup;

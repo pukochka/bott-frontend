@@ -74,7 +74,7 @@
 
   <crossroad-option></crossroad-option>
 
-  <touch-menu></touch-menu>
+  <touch-dialog></touch-dialog>
 
   <administrator-answer></administrator-answer>
 
@@ -113,7 +113,7 @@ import MessageFreeSetting from './components/dialogs/MessageFreeSetting.vue';
 import CrossroadSetting from './components/dialogs/CrossroadSetting.vue';
 import CrossroadOption from './components/dialogs/CrossroadOption.vue';
 import MobileSection from './components/sections/MobileSection.vue';
-import TouchMenu from './components/menu/TouchMenu.vue';
+import TouchDialog from './components/dialogs/TouchDialog.vue';
 import AdministratorAnswer from './components/dialogs/answer/AdministratorAnswer.vue';
 
 const store = useFeedbackStore();

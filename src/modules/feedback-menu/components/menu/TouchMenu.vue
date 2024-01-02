@@ -1,39 +1,74 @@
 <template>
-  <q-dialog v-model="store.dialogs.touch" @before-hide="updateHide">
-    <q-card bordered flat class="rounded">
-      <component :is="menu[opened]"></component>
-    </q-card>
-  </q-dialog>
+  <q-list>
+    <q-item
+      dense
+      clickable
+      v-ripple
+      v-for="(button, index) of buttons"
+      :key="index"
+      v-show="button.condition"
+      @click="button.action"
+    >
+      <q-item-section avatar>
+        <q-icon :name="button.icon" :color="button.color" size="22px" />
+      </q-item-section>
+
+      <q-item-section>
+        <q-item-label>{{ button.label }}</q-item-label>
+      </q-item-section>
+
+      <q-inner-loading :showing="loading.delete" v-if="button.icon === 'close'">
+        <q-spinner size="16px" color="primary" />
+      </q-inner-loading>
+    </q-item>
+  </q-list>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 
-import CreateMenu from './CreateMenu.vue';
-import MessageMenu from './MessageMenu.vue';
-import LinkMenu from './LinkMenu.vue';
+import { mdiTransitConnectionHorizontal } from '@quasar/extras/mdi-v7';
 
 const store = useFeedbackStore();
 
-const opened = computed(
-  () =>
-    Object.entries(store.menu)
-      .filter(([_, value]) => value)
-      .map(([key]) => key)?.[0] ?? 'create'
-);
+const loading = ref({
+  delete: false,
+  start: false,
+  between: false,
+  next: false,
+});
 
-const menu = computed(() => ({
-  create: CreateMenu,
-  message: MessageMenu,
-  link: LinkMenu,
-}));
+const withoutCrossroad = computed(() => store.selectedMessage?.type !== 4);
 
-const updateHide = () => {
-  store.hideMenu();
-
-  if (store.action !== null) store.action();
+const connectWith = () => {
+  store.closeDialog('touch');
+  store.menu.touch = false;
+  store.mobile.connect = true;
 };
+
+const addMessage = () => {
+  store.closeDialog('touch');
+  store.menu.touch = false;
+  store.openMenu('create', undefined, true);
+};
+
+const buttons = computed(() => [
+  {
+    label: 'Добавить новое сообщение',
+    action: addMessage,
+    icon: 'add',
+    color: 'primary',
+    condition: true,
+  },
+  {
+    label: 'Соеденить с сообщением',
+    action: connectWith,
+    icon: mdiTransitConnectionHorizontal,
+    color: 'positive',
+    condition: withoutCrossroad,
+  },
+]);
 </script>
 
 <style scoped lang="scss"></style>

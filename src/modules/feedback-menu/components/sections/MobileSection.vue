@@ -19,6 +19,31 @@
     </q-card>
 
     <warning-start></warning-start>
+
+    <div class="row justify-center" v-if="store.mobile.connect">
+      <q-card
+        flat
+        bordered
+        class="q-mt-sm rounded row items-center justify-center overflow-hidden"
+      >
+        <div class="">
+          <div class="text-center q-px-sm q-py-xs text-primary">
+            Нажмите на сообщение, чтобы соединить!
+          </div>
+
+          <q-btn
+            flat
+            no-caps
+            size="md"
+            color="red"
+            icon="close"
+            label="Отменить"
+            class="rounded full-width"
+            @click="store.mobile.connect = false"
+          />
+        </div>
+      </q-card>
+    </div>
   </div>
 </template>
 

@@ -52,7 +52,7 @@
       </q-card>
     </div>
 
-    <warning-start warning></warning-start>
+    <warning-start v-if="!store.isMobile"></warning-start>
   </div>
 </template>
 

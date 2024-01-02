@@ -17,12 +17,6 @@ import { update } from '../create';
 
 const { noColor } = colors;
 
-const userAgent = navigator.userAgent.toLowerCase();
-const isMobile =
-  /mobile|iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(
-    userAgent
-  );
-
 export class Connection {
   message: MessageFeedbackItemPreview = defaultInput;
   group: PaperGroup = new Group();
@@ -101,6 +95,22 @@ export class Connection {
     this.groupConnection.opacity = 0;
     this.groupConnection.remove();
 
+    if (store.isMobile) {
+      this.group.onClick = () => {
+        store.selectedMessage = this.message;
+
+        store.connecting = true;
+
+        store.openMenu(
+          'touch',
+          () => {
+            store.onconnection = false;
+          },
+          true
+        );
+      };
+    }
+
     this.group.onMouseDown = () => {
       store.connecting = true;
 
@@ -113,7 +123,6 @@ export class Connection {
       if (this.canConnect.length && this.prev) {
         const next = this.canConnect[0];
 
-        console.log('adsdasdasdasd');
         const removeLink = this.removePrevLink.bind(this);
         const removeConnection = this.removeConnection.bind(this);
 
@@ -262,7 +271,7 @@ export class Connection {
       return;
     }
 
-    const touch = !!event.event?.changedTouches?.[0] || isMobile;
+    const touch = !!event.event?.changedTouches?.[0] || store.isMobile;
 
     store.openMenu('create', undefined, touch);
   }
@@ -371,7 +380,7 @@ export class FirstConnection {
     };
 
     front.onClick = (event: any) => {
-      const touch = !!event.event?.changedTouches?.[0];
+      const touch = !!event.event?.changedTouches?.[0] || store.isMobile;
 
       store.openMenu(
         'create',

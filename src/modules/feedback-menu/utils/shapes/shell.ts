@@ -8,6 +8,7 @@ import {
   PaperPoint,
 } from '../../stores/feedbackModels';
 import { fetchFeedback } from '../../api/queries';
+import { update } from '../create';
 
 export function createShell(
   message: MessageFeedbackItemPreview,
@@ -70,10 +71,31 @@ export function createShell(
   };
 
   platform.onClick = (event: any) => {
+    if (store.mobile.connect) {
+      fetchFeedback(
+        'set-input-next',
+        {
+          input_id: store.selectedMessage?.id ?? 0,
+          type: store.selectedMessage?.type ?? 0,
+          next_id: message.id ?? null,
+          next_type: message.type ?? null,
+        },
+        (response) => {
+          store._feedback = response.feedback;
+          store.selectedMessage = null;
+          store.mobile.connect = false;
+
+          update();
+        }
+      ).then();
+
+      return;
+    }
+
     if (store.notopen) return;
     store.selectedMessage = message;
 
-    const touch = !!event.event?.changedTouches?.[0];
+    const touch = !!event.event?.changedTouches?.[0] || store.isMobile;
 
     store.openMenu('message', undefined, touch);
   };

@@ -38,6 +38,7 @@ export const useFeedbackStore = defineStore('paper-store', {
         start: false,
         setting: false,
         end: false,
+        connect: false,
       },
 
       dragging: false,
@@ -65,12 +66,16 @@ export const useFeedbackStore = defineStore('paper-store', {
       selectedMessageFree: null,
       selectedAnswer: null,
 
-      menu: { create: false, link: false, message: false },
+      menu: { create: false, link: false, message: false, touch: false },
       action: null,
 
       cursor: new Point(0, 0),
     } as unknown as FeedbackModels),
   getters: {
+    isMobile: () =>
+      /mobile|iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(
+        navigator.userAgent.toLowerCase()
+      ),
     alignCount: (state) => state._feedback.inputs.length,
     message: (state): MessageFree => state._message ?? defaultMessageFree,
     feedback: (state): MessageFeedback<MessageFeedbackItemPreview> =>
@@ -89,6 +94,18 @@ export const useFeedbackStore = defineStore('paper-store', {
     },
   },
   actions: {
+    openDialog(name: DialogsNames) {
+      this.dialogs[name] = true;
+    },
+    closeDialog(name: DialogsNames) {
+      this.dialogs[name] = false;
+    },
+    hideMenu() {
+      Object.keys(this.menu).forEach(
+        (name) => (this.menu[<MenuNames>name] = false)
+      );
+    },
+
     mountLink() {
       this.feedback.inputs.forEach((item) => {
         const end = this.feedback.inputs.find(
@@ -175,17 +192,6 @@ export const useFeedbackStore = defineStore('paper-store', {
 
         return;
       }
-    },
-    openDialog(name: DialogsNames) {
-      this.dialogs[name] = true;
-    },
-    closeDialog(name: DialogsNames) {
-      this.dialogs[name] = false;
-    },
-    hideMenu() {
-      Object.keys(this.menu).forEach(
-        (name) => (this.menu[<MenuNames>name] = false)
-      );
     },
 
     updateQuestion() {

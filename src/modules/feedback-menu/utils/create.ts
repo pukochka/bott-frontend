@@ -1,6 +1,6 @@
 import Paper, { Point } from 'paper';
 import { useFeedbackStore } from '../stores/feedbackStore';
-import { makeAutoAlign, setCenter } from './coords';
+import { setCenter } from './coords';
 
 import { createShell } from './shapes/shell';
 import { setting } from './common';

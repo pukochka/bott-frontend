@@ -1,7 +1,7 @@
 <template>
   <div
     class="q-mx-xxl text-red row justify-center"
-    v-if="!store.feedback.start && props.warning"
+    v-if="!store.feedback.start"
   >
     <q-card
       flat

@@ -126,7 +126,7 @@ export class Link {
       store.selectedMessageNext = this.endMessage;
       store.selectedOption = this.crossroad;
 
-      const touch = !!event.event?.changedTouches?.[0];
+      const touch = !!event.event?.changedTouches?.[0] || store.isMobile;
 
       store.openMenu('link', undefined, touch);
     };
