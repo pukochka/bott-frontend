@@ -18,6 +18,7 @@
       selection="multiple"
       class="bg-transparent no-shadow q-pa-none fit sticky-virtscroll-table"
       :rows-per-page-options="[0]"
+      :grid="work.view === 'grid'"
       v-model:rows="tickets"
       v-model:columns="columns"
       v-model:selected="selected"

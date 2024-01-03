@@ -5,6 +5,7 @@
       v-close-popup
       v-for="(button, index) of buttons"
       :key="index"
+      @click="button.action"
     >
       <q-item-section avatar>
         <q-icon :name="button.icon" :color="button.color" size="22px" />
@@ -19,6 +20,9 @@
 import { computed } from 'vue';
 
 import { ticketMenu, TicketMenuNames } from '../../../utils/ticket-menu';
+import { useWorkStore } from '../../../stores/workStore';
+
+const work = useWorkStore();
 
 const buttons = computed(() =>
   Object.entries(ticketMenu).map(([key, value]) =>
@@ -33,7 +37,7 @@ const actions = computed(
       condition: '',
     },
     transfer: {
-      action: '',
+      action: () => (work.dialogs.executor_transfer = true),
       condition: '',
     },
     offer: {
@@ -41,7 +45,7 @@ const actions = computed(
       condition: '',
     },
     move: {
-      action: '',
+      action: () => (work.dialogs.transfer_ticket = true),
       condition: '',
     },
     delete: {
@@ -49,7 +53,7 @@ const actions = computed(
       condition: '',
     },
     edit: {
-      action: '',
+      action: () => (work.dialogs.edit_ticket = true),
       condition: '',
     },
   })

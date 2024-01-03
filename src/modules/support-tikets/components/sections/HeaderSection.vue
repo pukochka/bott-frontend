@@ -6,7 +6,11 @@
       class="row items-center rounded-top overflow-hidden transition"
       v-for="category of work.categories"
       :key="category.id"
-      :class="[work.selectedCategory?.id === category.id ? ' bg-blue-3' : '']"
+      :class="[
+        work.selectedCategory?.id === category.id
+          ? ' bg-primary text-white'
+          : '',
+      ]"
     >
       <div class="row items-center">
         <q-btn

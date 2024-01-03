@@ -38,8 +38,22 @@
           class="bott-portal-menu"
         >
           <q-list dense>
-            <q-item clickable class="text-red" v-if="work.selectedCategory">
+            <q-item
+              clickable
+              class="text-red"
+              v-if="work.selectedCategory?.status === 1"
+              @click="disableCategory"
+            >
               <q-item-section>Отключить</q-item-section>
+            </q-item>
+
+            <q-item
+              clickable
+              class="text-positive"
+              v-else
+              @click="activateCategory"
+            >
+              <q-item-section>Включить</q-item-section>
             </q-item>
           </q-list>
         </q-menu>
@@ -54,6 +68,7 @@
           :icon="button.icon"
           v-for="(button, index) of topActions"
           :key="index"
+          @click="button.action"
         >
           <q-tooltip
             class="bott-tooltip text-center"
@@ -62,23 +77,23 @@
           >
             {{ button.label }}
           </q-tooltip>
-        </q-btn>
 
-        <q-btn
-          dense
-          square
-          flat
-          color="primary"
-          icon="close"
-          @click="closeSection"
-        >
-          <q-tooltip
-            class="bott-tooltip text-center"
-            anchor="top middle"
-            self="bottom middle"
-          >
-            Закрыть
-          </q-tooltip>
+          <q-menu class="bott-portal-menu" v-if="button.menu.length">
+            <q-list dense>
+              <q-item
+                clickable
+                v-for="(item, index) of button.menu"
+                :key="index"
+                @click="item.action"
+              >
+                <q-item-section>{{ item.label }}</q-item-section>
+
+                <q-item-section avatar v-if="item.condition">
+                  <q-icon name="check" color="primary" size="26px" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
         </q-btn>
       </div>
     </div>
@@ -125,6 +140,14 @@ const deleteCategory = () => {
   );
 };
 
+const activateCategory = () => {
+  console.log(1);
+};
+
+const disableCategory = () => {
+  console.log(1);
+};
+
 const topActions = computed(() => [
   {
     label: 'Фильтр',
@@ -133,9 +156,26 @@ const topActions = computed(() => [
     menu: [],
   },
   {
-    label: 'Выбор',
+    label: 'Просмотр',
     icon: mdiViewAgenda,
     action: '',
+    menu: [
+      {
+        label: 'Режим таблицы',
+        action: () => (work.view = 'table'),
+        condition: work.view === 'table',
+      },
+      {
+        label: 'Режим плитки',
+        action: () => (work.view = 'grid'),
+        condition: work.view === 'grid',
+      },
+    ],
+  },
+  {
+    label: 'Зактрыть',
+    icon: 'close',
+    action: closeSection,
     menu: [],
   },
 ]);

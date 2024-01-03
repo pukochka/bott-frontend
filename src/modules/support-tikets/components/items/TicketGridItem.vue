@@ -55,9 +55,9 @@
 
       <q-separator />
 
-      <q-list dense>
+      <q-list>
         <div class="" v-for="col of props.cols" :key="col.name">
-          <q-item v-if="col.name !== 'status'">
+          <q-item dense v-if="col.name !== 'status'">
             <q-item-section>
               <q-item-label>{{ col.label }}</q-item-label>
             </q-item-section>

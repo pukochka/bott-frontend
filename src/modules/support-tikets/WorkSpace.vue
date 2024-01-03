@@ -24,6 +24,12 @@
       <chat-section v-if="work.chat" style="z-index: 10"></chat-section>
     </transition>
   </div>
+
+  <transfer-ticket></transfer-ticket>
+
+  <executor-transfer></executor-transfer>
+
+  <edit-ticket></edit-ticket>
 </template>
 
 <script setup lang="ts">
@@ -32,6 +38,10 @@ import MainSection from './components/sections/MainSection.vue';
 import BottomSection from './components/sections/BottomSection.vue';
 import TopSection from './components/sections/TopSection.vue';
 import ChatSection from './components/chat/ChatSpace.vue';
+import TransferTicket from './components/dialogs/TransferTicket.vue';
+import EditTicket from './components/dialogs/EditTicket.vue';
+import ExecutorTransfer from './components/dialogs/ExecutorTransfer.vue';
+
 import { useWorkStore } from './stores/workStore';
 
 const work = useWorkStore();

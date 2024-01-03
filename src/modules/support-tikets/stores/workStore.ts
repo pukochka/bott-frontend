@@ -5,15 +5,25 @@ export const useWorkStore = defineStore('work', {
   state: () =>
     ({
       chat: false,
-      selectedCategory: null,
+
       categories: categories,
 
       section: 'select',
+
+      view: 'table',
 
       drawer: {
         state: true,
         mini: false,
       },
+      dialogs: {
+        edit_ticket: false,
+        executor_transfer: false,
+        transfer_ticket: false,
+      },
+
+      selectedTicket: null,
+      selectedCategory: null,
     } as WorkStore),
   getters: {},
   actions: {},
