@@ -8,7 +8,7 @@
   >
     <div class="row justify-center">
       <q-card class="dialog-rounded bott-dialog__responsive">
-        <dialog-header label="Просмотр ответов пользователей"></dialog-header>
+        <dialog-header label="Просмотр заявок пользователей"></dialog-header>
 
         <q-card-section
           class="q-pt-none q-gutter-y-xs relative-position"
@@ -17,7 +17,7 @@
           <answers-statistics @filter="updatePagination"></answers-statistics>
 
           <div class="row justify-between items-center q-py-xs">
-            <div class="">Все ответы</div>
+            <div class="">Ваши заявки</div>
 
             <q-btn
               flat
@@ -59,16 +59,14 @@
                       anchor="top middle"
                       self="bottom middle"
                     >
-                      Действия с ответами
+                      Действия с заявками
                     </q-tooltip>
                   </q-btn>
                 </q-item-section>
 
-                <q-item-section>Ответ</q-item-section>
+                <q-item-section>Заявка</q-item-section>
 
-                <q-item-section class="text-center">
-                  Ответ администратора
-                </q-item-section>
+                <q-item-section> Ответ администратора </q-item-section>
 
                 <user-filter @filter="filtered = true"></user-filter>
 
@@ -93,7 +91,7 @@
 
               <q-item v-if="!paginationAnswers.length">
                 <q-item-section class="text-center q-pa-md">
-                  Ответов пока нет...
+                  Заявок пока нет...
                 </q-item-section>
               </q-item>
             </q-list>

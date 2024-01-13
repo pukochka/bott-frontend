@@ -90,7 +90,7 @@ const buttons = computed(() => [
     condition: props.answer.status.id === 1,
   },
   {
-    label: 'Просмотреть ответ',
+    label: 'Просмотреть заявку',
     color: 'warning',
     icon: 'visibility',
     action: () => {

@@ -69,7 +69,7 @@ import {
 import WarningStart from '../views/WarningStart.vue';
 import { useQuasar } from 'quasar';
 import { historyGo } from '../../../inline/stores/helpers';
-import { config } from '../../../reply-menu/config';
+import { config } from '../../config';
 
 const store = useFeedbackStore();
 const quasar = useQuasar();

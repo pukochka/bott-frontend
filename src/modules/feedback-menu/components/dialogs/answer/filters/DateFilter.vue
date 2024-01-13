@@ -1,7 +1,7 @@
 <template>
   <q-item-section>
     <div class="row items-center justify-center q-gutter-x-xs">
-      <q-item-label>Время ответа</q-item-label>
+      <q-item-label>Время заявки</q-item-label>
 
       <q-btn
         flat

@@ -91,7 +91,7 @@ const statuses = {
 const data = computed(
   (): Array<InfoItem> => [
     {
-      label: 'Всего ответов',
+      label: 'Всего заявок',
       value: store.answersCount.all,
       tooltip: 'Показать все',
       icon: mdiFilterOffOutline,

@@ -49,7 +49,7 @@
               </div>
             </div>
 
-            <div class="">Текст шаблона ответа</div>
+            <div class="">Текст шаблона заявки</div>
             <editor-content
               :content="text"
               no-without-editor
@@ -64,7 +64,7 @@
               autogrow
               counter
               class="bott-input--rounded"
-              label="Текст в кнопке отмены ответа"
+              label="Текст в кнопке отмены заявки"
               :maxlength="64"
               v-model="setting.button_cancel"
             />
@@ -163,7 +163,7 @@ import FaqSection from '../../../inline/components/settings/FaqSection.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import NotifyEditItem from './notification/LimitItem.vue';
 import MessageCard from '../views/MessageCard.vue';
-import EditorContent from '../../../../components/editor/EditorContent.vue';
+import EditorContent from 'src/components/editor/EditorContent.vue';
 import { encodeText } from '../../../inline/stores/helpers';
 
 const store = useFeedbackStore();
@@ -242,7 +242,7 @@ const spam = computed(
       prop: 'user_limit',
     },
     {
-      label: 'Период в минутах, между ответами',
+      label: 'Период в минутах, между заявками',
       value: setting.value.limit_in_period,
       prop: 'limit_in_period',
     },

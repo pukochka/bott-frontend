@@ -52,7 +52,7 @@ const deleteAllUnfinished = () => {
 };
 
 const deleteAllAnswers = () => {
-  useDialog('Вы уверены, что хотите удалить все ответы?', true).onOk(() => {
+  useDialog('Вы уверены, что хотите удалить все заявки?', true).onOk(() => {
     loading.value = true;
 
     fetchFeedbackAnswer('delete-by-status').then(() => {
@@ -75,7 +75,7 @@ const actions = computed(() => [
     action: deleteAllUnfinished,
   },
   {
-    label: 'Удалить все ответы',
+    label: 'Удалить все заявки',
     icon: 'remove_done',
     color: 'red',
     action: deleteAllAnswers,

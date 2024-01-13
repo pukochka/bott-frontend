@@ -18,10 +18,10 @@
           class="bott-input--rounded"
         />
 
-        <div class="">Изменение ответов</div>
+        <div class="">Изменение заявок</div>
 
         <div class="text-center q-pa-md" v-if="!buttons.length">
-          Пока нет ответов
+          Пока нет заявок
         </div>
 
         <div class="row" v-else>
