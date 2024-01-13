@@ -21,7 +21,7 @@
       :grid="work.view === 'grid'"
       v-model:rows="tickets"
       v-model:columns="columns"
-      v-model:selected="selected"
+      v-model:selected="work.selected"
     >
       <template v-slot:header-selection="scope">
         <q-checkbox dense v-model="scope.selected" />
@@ -34,6 +34,7 @@
             auto-width
             @mouseenter="updateHover(props.row, true)"
             @mouseleave="updateHover(props.row, false)"
+            class="bott-page__background"
           >
             <div class="row no-wrap items-center q-gutter-x-xs">
               <q-checkbox dense v-model="props.selected" />
@@ -87,19 +88,26 @@
           </q-tooltip>
 
           <q-td
+            class="cursor-pointer"
+            :auto-width="col?.autoWidth"
             v-for="col of props.cols"
             :key="props.row[col.name]"
-            class="cursor-pointer"
-            @click="work.chat = true"
-            :auto-width="col?.autoWidth"
             :class="[' text-' + (col.align ?? 'center')]"
+            @click="work.chat = true"
           >
             <ticket-status
               :status="props.row.status"
               v-if="col.name === 'status'"
             ></ticket-status>
 
-            <div class="font-14" v-else>{{ col?.field(props.row) }}</div>
+            <div
+              class="font-14"
+              :style="col?.style"
+              :class="col?.classes"
+              v-else
+            >
+              {{ col?.field(props.row) }}
+            </div>
           </q-td>
         </q-tr>
       </template>
@@ -121,6 +129,7 @@
             :key="col.name"
             :props="props"
             :auto-width="col?.autoWidth"
+            :style="col?.style"
           >
             <div class="text-subtitle1 text-white">{{ col.label }}</div>
           </q-th>
@@ -180,6 +189,17 @@ const columns: Array<any> = [
     hover: false,
   },
   {
+    autoWidth: true,
+    name: 'message',
+    align: 'center',
+    label: 'Сообщение',
+    classes: 'ellipsis-3-lines text-wrap',
+    style: 'min-width: 200px',
+    field: () =>
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus distinctio eum omnis quibusdam. Amet aspernatur blanditiis deserunt distinctio dolorem dolorum eos maiores minus necessitatibus, optio placeat provident recusandae reiciendis sint?',
+    hover: false,
+  },
+  {
     name: 'status',
     align: 'center',
     label: 'Статус',
@@ -200,7 +220,18 @@ const columns: Array<any> = [
     field: (row: any) => row.name,
     hover: false,
   },
+  {
+    name: 'time',
+    align: 'center',
+    label: 'Время создания',
+    field: (row: any) => row.create_at,
+    hover: false,
+  },
 ];
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.text-wrap {
+  white-space: normal !important;
+}
+</style>

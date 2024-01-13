@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { WorkStore } from './workModels';
+import { DialogNames, WorkStore } from './workModels';
 
 export const useWorkStore = defineStore('work', {
   state: () =>
@@ -18,15 +18,24 @@ export const useWorkStore = defineStore('work', {
       },
       dialogs: {
         edit_ticket: false,
+        select_category: false,
         executor_transfer: false,
         transfer_ticket: false,
       },
 
+      selected: [],
       selectedTicket: null,
       selectedCategory: null,
     } as WorkStore),
   getters: {},
-  actions: {},
+  actions: {
+    openDialog(name: DialogNames) {
+      this.dialogs[name] = true;
+    },
+    closeDialog(name: DialogNames) {
+      this.dialogs[name] = false;
+    },
+  },
 });
 
 const categories = [
@@ -441,5 +450,35 @@ const categories = [
         create_at: 1720777483,
       },
     ],
+  },
+  {
+    id: 423,
+    label: 'Основные тикеты',
+    status: 0,
+    tickets: [],
+  },
+  {
+    id: 5433222,
+    label: 'Основные тикеты',
+    status: 0,
+    tickets: [],
+  },
+  {
+    id: 45555555,
+    label: 'Основные тикеты',
+    status: 0,
+    tickets: [],
+  },
+  {
+    id: 656867899,
+    label: 'Основные тикеты',
+    status: 0,
+    tickets: [],
+  },
+  {
+    id: 657333,
+    label: 'Основные тикеты',
+    status: 0,
+    tickets: [],
   },
 ];

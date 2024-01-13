@@ -1,18 +1,21 @@
 <template>
-  <div class="" v-if="!['create', 'select'].includes(work.section)">
-    <div class="row justify-between items-center q-px-md relative-position">
-      <div class="row">
+  <div class="q-px-md" v-if="!['create', 'select'].includes(work.section)">
+    <div class="">
+      <div class="row justify-center q-gutter-xs">
         <q-btn
           dense
           no-caps
-          square
-          flat
+          :flat="sm"
+          :unelevated="!sm"
           :icon="button.icon"
           :color="button.color"
+          :class="sm ? ' col-12 rounded' : ' rounded-bottom'"
+          :padding="sm ? '' : '2px 32px'"
+          @click="button.action"
           v-for="(button, index) of categoryButtons"
           :key="index"
-          @click="button.action"
         >
+          <div class="">{{ sm ? button.label : '' }}</div>
           <q-tooltip
             class="bott-tooltip text-center"
             anchor="top middle"
@@ -22,7 +25,9 @@
           </q-tooltip>
         </q-btn>
       </div>
+    </div>
 
+    <div class="row justify-between items-center relative-position">
       <q-btn
         no-caps
         unelevated
@@ -113,12 +118,16 @@ import {
 import { computed } from 'vue';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 import { categoryStatues } from '../../utils/statuses';
+import { useQuasar } from 'quasar';
 
 const work = useWorkStore();
+const quasar = useQuasar();
 
 const status = computed(
   () => categoryStatues[work.selectedCategory?.status ?? 0]
 );
+
+const sm = computed(() => quasar.screen.lt.sm);
 
 const closeSection = () => {
   if (['log', 'manager', 'edit'].includes(work.section)) {
@@ -212,4 +221,8 @@ const categoryButtons = computed(() => [
 ]);
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.rounded-bottom {
+  border-radius: 0 0 10px 10px;
+}
+</style>

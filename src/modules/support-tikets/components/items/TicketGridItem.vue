@@ -1,10 +1,19 @@
 <template>
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
-    <q-card bordered flat class="rounded">
+    <q-card
+      bordered
+      flat
+      class="rounded transition"
+      :style="{ transform: `scale(${vmProps.props.selected ? '0.95' : '1'})` }"
+    >
       <div class="q-pa-xs">
         <div class="row no-wrap items-center q-col-gutter-x-xs">
           <div class="col row justify-center">
-            <q-checkbox dense :model-value="props.selected" />
+            <q-checkbox
+              dense
+              :model-value="vmProps.props.selected"
+              @update:model-value="updateSelected"
+            />
           </div>
 
           <div class="col">
@@ -55,33 +64,68 @@
 
       <q-separator />
 
-      <q-list>
+      <q-list class="relative-position overflow-hidden">
         <div class="" v-for="col of props.cols" :key="col.name">
           <q-item dense v-if="col.name !== 'status'">
             <q-item-section>
               <q-item-label>{{ col.label }}</q-item-label>
             </q-item-section>
 
-            <q-item-section side>
+            <q-item-section
+              side
+              :style="{ maxWidth: percents + '%' }"
+              class="ellipsis-3-lines"
+            >
               <q-item-label caption>{{ col.value }}</q-item-label>
             </q-item-section>
           </q-item>
 
           <ticket-status-view v-else :item="col"></ticket-status-view>
         </div>
+
+        <div class="absolute-full" v-clickable @click="work.chat = true"></div>
+
+        <q-tooltip
+          class="bott-tooltip text-center"
+          anchor="top middle"
+          self="bottom middle"
+        >
+          Перейти в чат
+        </q-tooltip>
       </q-list>
     </q-card>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useQuasar } from 'quasar';
+
 import { mdiBriefcase } from '@quasar/extras/mdi-v7';
 import TicketMenu from './sections/TicketMenu.vue';
 import TicketStatusView from './sections/TicketStatusView.vue';
+import { useWorkStore } from '../../stores/workStore';
 
 const vmProps = withDefaults(defineProps<TicketGridItemProps>(), {
   props: () => ({}),
 });
+
+const work = useWorkStore();
+const quasar = useQuasar();
+
+const percents = computed(() => (quasar.screen.lt.sm ? 60 : 70));
+
+const updateSelected = () => {
+  if (vmProps.props.selected) {
+    work.selected = work.selected.filter(
+      (item) => vmProps.props.row.id !== item.id
+    );
+
+    return;
+  }
+
+  work.selected.push(vmProps.props.row);
+};
 
 interface TicketGridItemProps {
   props: any;

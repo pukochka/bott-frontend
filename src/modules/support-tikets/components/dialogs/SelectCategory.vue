@@ -1,19 +1,22 @@
 <template>
-  <q-dialog persistent position="bottom" v-model="work.dialogs.transfer_ticket">
+  <q-dialog v-model="work.dialogs.select_category" position="bottom" persistent>
     <q-card style="width: 100%" class="dialog-rounded">
       <dialog-header label="Выбор категории"></dialog-header>
 
       <q-card-section class="q-pt-none">
         <q-list bordered separator class="rounded overflow-hidden">
-          <q-item tag="label" v-for="category of categories" :key="category.id">
-            <q-item-section class="text-body1">
-              {{ category.label }}
-            </q-item-section>
+          <q-item
+            tag="label"
+            clickable
+            v-for="category of work.categories"
+            :key="category.id"
+          >
+            <q-item-section>{{ category.label }}</q-item-section>
 
-            <q-item-section avatar>
+            <q-item-section side>
               <q-checkbox
-                @update:model-value="selected = category.id"
-                :model-value="selected === category.id"
+                @update:model-value="updateCategory(category)"
+                :model-value="work.selectedCategory?.id === category.id"
                 color="primary"
               />
             </q-item-section>
@@ -27,18 +30,9 @@
           flat
           size="md"
           class="rounded"
-          color="red"
+          color="primary"
           label="Закрыть"
           v-close-popup
-        />
-
-        <q-btn
-          no-caps
-          unelevated
-          size="md"
-          class="rounded"
-          color="primary"
-          label="Переместить"
         />
       </q-card-section>
     </q-card>
@@ -46,19 +40,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-
 import { useWorkStore } from '../../stores/workStore';
-
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
 const work = useWorkStore();
 
-const selected = ref('');
-
-const categories = computed(() =>
-  work.categories.filter((item) => item.id !== work.selectedCategory?.id)
-);
+const updateCategory = (category: any) => {
+  work.closeDialog('select_category');
+  work.selectedCategory = category;
+  work.section = 'list';
+};
 </script>
 
 <style scoped lang="scss"></style>

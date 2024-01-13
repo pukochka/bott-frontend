@@ -113,6 +113,10 @@ body.body--light {
   border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
 
+.bott-page__background{
+  background: #fafafa !important;
+}
+
 body.body--dark {
   .bg-title {
     background: $bg-neutral-dark;
@@ -132,6 +136,10 @@ body.body--dark {
 
   .header-btn {
     color: #929397;
+  }
+
+  .bott-page__background{
+    background: #0d1b2a !important;
   }
 
   .header-btn:not(.disabled):hover {
@@ -239,6 +247,8 @@ body.body--dark {
 .bott-drawer {
   border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
+
+
 
 .bott-drawer .q-scrollarea__container {
   min-height: inherit;

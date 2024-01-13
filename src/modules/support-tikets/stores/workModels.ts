@@ -14,6 +14,8 @@ export interface WorkStore {
 
   dialogs: Record<DialogNames, boolean>;
 
+  selected: Array<any>;
+
   selectedTicket: any | null;
   selectedCategory: Category | null;
 }
@@ -21,6 +23,7 @@ export interface WorkStore {
 export type DialogNames =
   | 'transfer_ticket'
   | 'executor_transfer'
+  | 'select_category'
   | 'edit_ticket';
 
 export type SectionNames =
