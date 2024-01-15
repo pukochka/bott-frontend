@@ -19,8 +19,12 @@
       </div>
     </div>
 
-    <div style="max-height: 200px" v-if="video.length">
-      <file-img :link="video" :name="'.mp4'"></file-img>
+    <div
+      style="max-height: 200px"
+      v-if="video.length"
+      class="rounded overflow-hidden"
+    >
+      <q-video loading="lazy" :src="video"></q-video>
     </div>
   </q-card>
 </template>
@@ -29,7 +33,6 @@
 import { computed } from 'vue';
 
 import PanelHeader from '../PanelHeader.vue';
-import FileImg from '../../../file-manager/components/extension/FileImg.vue';
 
 const props = withDefaults(defineProps<FaqSectionProps>(), {
   faq: () => ({

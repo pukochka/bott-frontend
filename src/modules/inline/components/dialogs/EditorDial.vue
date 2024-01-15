@@ -66,7 +66,7 @@ const inline = useInlineStore();
 
 const loading = ref(false);
 
-const text = ref(inline.message.text);
+const text = ref('');
 
 const updateText = (value: string) => (text.value = value);
 

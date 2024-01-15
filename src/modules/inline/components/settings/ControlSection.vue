@@ -1,6 +1,6 @@
 <template>
   <q-card flat bordered class="rounded q-px-sm q-pb-sm" v-if="visible">
-    <panel-header icon="settings" label="Панель упраления"></panel-header>
+    <panel-header icon="settings" label="Панель управления"></panel-header>
 
     <div class="row q-col-gutter-sm">
       <div

@@ -68,6 +68,26 @@
             </q-tooltip>
           </q-btn>
         </div>
+
+        <div class="col" v-if="inline.message.is_generate_default">
+          <q-btn
+            flat
+            class="rounded fit"
+            size="md"
+            color="red"
+            icon="refresh"
+            :loading="loading.refresh"
+            @click="refreshMessage"
+          >
+            <q-tooltip
+              class="bott-tooltip text-center"
+              anchor="top middle"
+              self="bottom middle"
+            >
+              Сбросить сообщение
+            </q-tooltip>
+          </q-btn>
+        </div>
       </div>
     </div>
 
@@ -93,12 +113,14 @@ import SettingDate from './types/SettingDate.vue';
 import SettingDateTime from './types/SettingDateTime.vue';
 
 import PanelHeader from '../PanelHeader.vue';
+import { useDialog } from '../../../file-manager/stores/useDialog';
 
 const inline = useInlineStore();
 
 const loading = ref({
   setting: false,
   send: false,
+  refresh: false,
 });
 
 const update = (value: boolean) => (loading.value.setting = value);
@@ -108,6 +130,17 @@ const copy = () => {
     'https://t.me/' + config.bot.name + '?start=f_' + inline.message.id
   ).then(() => {
     useNotify('Ссылка скопированна!');
+  });
+};
+
+const refreshMessage = () => {
+  useDialog('Вы уверены, что хотите сбросить сообщение?', true).onOk(() => {
+    loading.value.refresh = true;
+    fetchMessage('reset', { message_id: inline.message.id }, (response) => {
+      inline.message = response;
+    }).then(() => {
+      loading.value.refresh = false;
+    });
   });
 };
 

@@ -1,6 +1,6 @@
 <template>
   <div class="row items-center no-wrap" style="max-width: 48%">
-    <q-item-label class="text-body1 ellipsis">
+    <q-item-label class="text-body1 ellipsis text-weight-bold">
       {{ inline.message.title }}
     </q-item-label>
 
@@ -10,13 +10,11 @@
       padding="2px"
       size="13px"
       color="primary"
-      icon="edit"
-    >
+      icon="edit">
       <q-tooltip
         class="bott-tooltip text-center"
         anchor="top middle"
-        self="bottom middle"
-      >
+        self="bottom middle">
         Изменить название
       </q-tooltip>
 
@@ -24,16 +22,14 @@
         cover
         class="bott-portal-menu"
         v-model="menu"
-        @before-show="updateText"
-      >
+        @before-show="updateText">
         <q-input
           autofocus
           outlined
           maxlength="64"
           v-model="text.value"
           label="Название сообщения"
-          class="bott-input--rounded"
-        >
+          class="bott-input--rounded">
           <template #append>
             <q-btn
               flat
@@ -44,8 +40,7 @@
               icon="check"
               :disable="!text.required"
               :loading="loading"
-              @click="updateTitle"
-            />
+              @click="updateTitle" />
           </template>
         </q-input>
       </q-menu>

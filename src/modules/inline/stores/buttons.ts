@@ -1,8 +1,9 @@
+import config from '../config';
+
 import CommonType from 'src/components/select-type/CommonType.vue';
 import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';
 import WebModule from 'src/components/select-type/WebModule.vue';
 import InfoType from 'src/components/info/InfoType.vue';
-import config from '../config';
 
 export const inlineButtons = [
   {

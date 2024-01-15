@@ -189,6 +189,11 @@ declare interface SCMessageQueries {
   types: undefined;
 
   /**
+   * Сбрасывает сообщение на стандратное. Не у всех сообщений можно сбросить!
+   * */
+  reset: SCMessageIdParam;
+
+  /**
    * Отправялет тестовое сообщение пользователю user_id
    * */
   test: SCMessageIdParam & SCUserIdParam;

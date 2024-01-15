@@ -161,7 +161,7 @@ onBeforeMount(() => {
   const message_id = Number(getQueryParam('id')) ?? 1;
 
   Promise.all([
-    fetchMessage('get', { message_id: 1 }),
+    fetchMessage('get', { message_id: message_id }),
     fetchSettings('settings', message_id),
   ]).then(() => (loading.value.start = false));
 });
@@ -191,9 +191,9 @@ const windowProps = () => {
   }
 
   try {
-    inline.bot_id = config.bot.id;
-    inline.token = config.bot.token;
-    inline.host = config.host;
+    // inline.bot_id = bot.id;
+    // inline.token = bot.token;
+    // inline.host = host;
   } catch (e) {}
 };
 

@@ -29,6 +29,7 @@
 
       <q-card-section class="q-pt-none">
         <select-type
+          static
           :bot_id="inline.bot_id"
           :token="inline.token"
           :message_id="inline.message.id"
