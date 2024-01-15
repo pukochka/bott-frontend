@@ -18,6 +18,12 @@ export interface WorkStore {
 
   selectedTicket: any | null;
   selectedCategory: Category | null;
+
+  pagination: {
+    page: number;
+    count: number;
+    offset: number;
+  };
 }
 
 export type DialogNames =

@@ -8,6 +8,10 @@ $letter-spacing-sizes: 40, 100, 225, 263, 12, 20;
   border-radius: 10px !important;
 }
 
+.bott-btn__outline .q-btn--outline:before {
+  border: 2px solid currentColor !important;
+}
+
 @each $size in $font-sizes {
   .font-#{$size} {
     font-size: #{$size}px !important;

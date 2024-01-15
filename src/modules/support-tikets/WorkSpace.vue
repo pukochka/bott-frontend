@@ -1,12 +1,12 @@
 <template>
-  <div class="fit q-py-sm relative-position" style="min-height: inherit">
-    <div class="bott-page__title q-px-md q-py-lg">Категории вопросов</div>
+  <div class="fit q-py-sm relative-position">
+    <!--    <div class="bott-page__title q-px-md q-py-lg">Категории вопросов</div>-->
 
-    <q-breadcrumbs class="q-pa-md text-subtitle2">
-      <q-breadcrumbs-el label="Home" />
-      <q-breadcrumbs-el label="Components" />
-      <q-breadcrumbs-el label="Breadcrumbs" />
-    </q-breadcrumbs>
+    <!--    <q-breadcrumbs class="q-pa-md text-subtitle2">-->
+    <!--      <q-breadcrumbs-el label="Home" />-->
+    <!--      <q-breadcrumbs-el label="Components" />-->
+    <!--      <q-breadcrumbs-el label="Breadcrumbs" />-->
+    <!--    </q-breadcrumbs>-->
 
     <div class="row">
       <header-section></header-section>

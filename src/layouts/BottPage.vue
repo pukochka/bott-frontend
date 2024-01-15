@@ -26,6 +26,7 @@ const props = withDefaults(defineProps<BottPageProps>(), {
   drawer: () => [],
   toc: () => [],
   withoutFooter: false,
+  withoutRight: false,
   requiredParams: () => [],
 });
 
@@ -52,6 +53,7 @@ interface BottPageProps {
   drawer?: BOTTDrawerButtons[];
   toc?: [];
   withoutFooter?: boolean;
+  withoutRight?: boolean;
   requiredParams?: Array<string>;
 }
 </script>

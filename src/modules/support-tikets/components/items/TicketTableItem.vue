@@ -44,7 +44,7 @@ import { date } from 'quasar';
 
 import { useWorkStore } from '../../stores/workStore';
 import TicketInfo from './sections/TicketInfo.vue';
-import TicketStatusView from './sections/TicketStatusView.vue';
+import TicketStatusView from './sections/TicketStatusGrid.vue';
 
 const props = withDefaults(defineProps<CategoryTicketProps>(), {
   ticket: null,

@@ -1,10 +1,18 @@
 import { t } from 'src/boot/lang';
 import menu from 'layouts/content/menu';
+import { faqContent } from 'layouts/content/faq';
 
 export default {
   title: t('category-questions'),
   requiredParams: [],
 
   drawer: menu,
-  withoutFooter: true,
+  withoutRight: true,
+
+  toc: [
+    {
+      title: 'FAQ',
+      buttons: () => faqContent['/'],
+    },
+  ],
 };

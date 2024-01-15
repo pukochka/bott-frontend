@@ -1,5 +1,11 @@
 <template>
-  <div class="q-px-md" v-if="!['create', 'select'].includes(work.section)">
+  <q-card
+    flat
+    class="q-mx-md rounded"
+    v-if="!['create', 'select'].includes(work.section)"
+  >
+    <q-separator v-if="!md" />
+
     <div class="">
       <div class="row justify-center q-gutter-xs">
         <q-btn
@@ -11,6 +17,7 @@
           :color="button.color"
           :class="sm ? ' col-12 rounded' : ' rounded-bottom'"
           :padding="sm ? '' : '2px 32px'"
+          v-show="button.condition"
           @click="button.action"
           v-for="(button, index) of categoryButtons"
           :key="index"
@@ -101,10 +108,20 @@
           </q-menu>
         </q-btn>
       </div>
+
+      <q-btn flat dense color="primary" icon="close" @click="closeSection">
+        <q-tooltip
+          class="bott-tooltip text-center"
+          anchor="top middle"
+          self="bottom middle"
+        >
+          Закрыть
+        </q-tooltip>
+      </q-btn>
     </div>
 
-    <q-separator inset />
-  </div>
+    <q-separator />
+  </q-card>
 </template>
 
 <script setup lang="ts">
@@ -113,6 +130,7 @@ import {
   mdiAccountTie,
   mdiEyeOutline,
   mdiFilter,
+  mdiStickerOutline,
   mdiViewAgenda,
 } from '@quasar/extras/mdi-v7';
 import { computed } from 'vue';
@@ -128,6 +146,7 @@ const status = computed(
 );
 
 const sm = computed(() => quasar.screen.lt.sm);
+const md = computed(() => quasar.screen.lt.md);
 
 const closeSection = () => {
   if (['log', 'manager', 'edit'].includes(work.section)) {
@@ -170,53 +189,54 @@ const topActions = computed(() => [
     action: '',
     menu: [
       {
-        label: 'Режим таблицы',
+        label: 'Таблица',
         action: () => (work.view = 'table'),
         condition: work.view === 'table',
       },
       {
-        label: 'Режим плитки',
+        label: 'Плитка',
         action: () => (work.view = 'grid'),
         condition: work.view === 'grid',
       },
     ],
   },
-  {
-    label: 'Зактрыть',
-    icon: 'close',
-    action: closeSection,
-    menu: [],
-  },
 ]);
 
 const categoryButtons = computed(() => [
+  {
+    label: 'Просмотр тикетов',
+    icon: mdiStickerOutline,
+    action: () => (work.section = 'list'),
+    color: 'primary',
+    condition: work.selectedCategory !== null && work.section !== 'list',
+  },
   {
     label: 'Просмотр менеджеров категории',
     icon: mdiAccountTie,
     action: () => (work.section = 'manager'),
     color: 'grey',
-    condition: '',
+    condition: true,
   },
   {
     label: 'Просмотр лога категории',
     icon: mdiEyeOutline,
     action: () => (work.section = 'log'),
     color: 'orange',
-    condition: '',
+    condition: true,
   },
   {
     label: 'Редактирование категории',
     icon: 'edit',
     action: () => (work.section = 'edit'),
-    color: 'primary',
-    condition: '',
+    color: 'info',
+    condition: true,
   },
   {
     label: 'Удалить категорию',
     icon: 'close',
     action: deleteCategory,
     color: 'red',
-    condition: '',
+    condition: true,
   },
 ]);
 </script>

@@ -1,18 +1,35 @@
 <template>
-  <q-item>
-    <q-item-section>{{ item.label }}</q-item-section>
+  <q-item class="items-center">
+    <q-item-section>{{ label }}</q-item-section>
 
-    <q-item-section side>{{ item.value }}</q-item-section>
+    <q-item-section
+      side
+      :style="{ maxWidth: percents + '%' }"
+      class="ellipsis-3-lines"
+    >
+      <q-item-label caption>
+        {{ value }}
+      </q-item-label>
+    </q-item-section>
   </q-item>
 </template>
 
 <script setup lang="ts">
+import { useQuasar } from 'quasar';
+import { computed } from 'vue';
+
 withDefaults(defineProps<TicketInfoProps>(), {
-  item: () => ({ label: '', value: '' }),
+  label: '',
+  value: '',
 });
 
+const quasar = useQuasar();
+
+const percents = computed(() => (quasar.screen.lt.sm ? 60 : 70));
+
 interface TicketInfoProps {
-  item: { label: string; value: string };
+  label: any;
+  value: any;
 }
 </script>
 

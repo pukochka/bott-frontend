@@ -26,6 +26,12 @@ export const useWorkStore = defineStore('work', {
       selected: [],
       selectedTicket: null,
       selectedCategory: null,
+
+      pagination: {
+        page: 1,
+        count: 1,
+        offset: 0,
+      },
     } as WorkStore),
   getters: {},
   actions: {

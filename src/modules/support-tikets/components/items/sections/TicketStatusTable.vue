@@ -10,15 +10,6 @@
       :label="view.label"
     />
   </div>
-
-  <!--  <div class="row justify-center">-->
-  <!--    <div-->
-  <!--      class="q-px-sm q-py-xs rounded text-white text-weight-bold"-->
-  <!--      :class="['bg-' + view.color]"-->
-  <!--    >-->
-  <!--      {{ view.label }}-->
-  <!--    </div>-->
-  <!--  </div>-->
 </template>
 
 <script setup lang="ts">

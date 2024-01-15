@@ -1,11 +1,13 @@
 <template>
   <q-scroll-area
     class="text-weight-medium text-size-13"
+    style="width: 270px; height: 100%"
     :thumb-style="style.thumbStyle"
     :content-style="{ minHeight: 'inherit' }"
   >
     <div class="q-pa-sm">
       <q-list
+        style="max-width: 270px"
         dense
         class="q-gutter-y-xs q-pa-sm"
         v-for="(section, index) in tocSections"
@@ -21,13 +23,14 @@
           v-for="(button, index) in section.buttons(data.botData.type)"
           :to="button.link"
           :key="index"
+          style="max-width: 270px"
           class="rounded header-btn bott-layout-menu"
         >
           <q-item-section avatar v-if="button.icon">
             <q-icon :name="button.icon" size="20px" />
           </q-item-section>
 
-          <q-item-section>
+          <q-item-section style="white-space: normal">
             {{ button.label }}
           </q-item-section>
         </q-item>

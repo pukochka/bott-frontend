@@ -8,12 +8,27 @@
     >
       <div class="q-pa-xs">
         <div class="row no-wrap items-center q-col-gutter-x-xs">
-          <div class="col row justify-center">
-            <q-checkbox
+          <div class="col">
+            <q-item
               dense
-              :model-value="vmProps.props.selected"
-              @update:model-value="updateSelected"
-            />
+              clickable
+              class="rounded row justify-center"
+              tag="label"
+            >
+              <q-checkbox
+                dense
+                :model-value="vmProps.props.selected"
+                @update:model-value="updateSelected"
+              />
+
+              <q-tooltip
+                class="bott-tooltip text-center"
+                anchor="top middle"
+                self="bottom middle"
+              >
+                {{ vmProps.props.selected ? 'Убрать' : 'Выбрать' }}
+              </q-tooltip>
+            </q-item>
           </div>
 
           <div class="col">
@@ -65,23 +80,30 @@
       <q-separator />
 
       <q-list class="relative-position overflow-hidden">
-        <div class="" v-for="col of props.cols" :key="col.name">
-          <q-item dense v-if="col.name !== 'status'">
-            <q-item-section>
-              <q-item-label>{{ col.label }}</q-item-label>
-            </q-item-section>
+        <component
+          v-for="col of props.cols"
+          :key="col.name"
+          :is="col.component"
+          :label="col.label"
+          :value="col.value"
+        ></component>
+        <!--        <div class="" v-for="col of props.cols" :key="col.name">-->
+        <!--          <q-item dense v-if="col.name !== 'status'">-->
+        <!--            <q-item-section>-->
+        <!--              <q-item-label>{{ col.label }}</q-item-label>-->
+        <!--            </q-item-section>-->
 
-            <q-item-section
-              side
-              :style="{ maxWidth: percents + '%' }"
-              class="ellipsis-3-lines"
-            >
-              <q-item-label caption>{{ col.value }}</q-item-label>
-            </q-item-section>
-          </q-item>
+        <!--            <q-item-section-->
+        <!--              side-->
+        <!--              :style="{ maxWidth: percents + '%' }"-->
+        <!--              class="ellipsis-3-lines"-->
+        <!--            >-->
+        <!--              <q-item-label caption>{{ col.value }}</q-item-label>-->
+        <!--            </q-item-section>-->
+        <!--          </q-item>-->
 
-          <ticket-status-view v-else :item="col"></ticket-status-view>
-        </div>
+        <!--          <ticket-status-view v-else :item="col"></ticket-status-view>-->
+        <!--        </div>-->
 
         <div class="absolute-full" v-clickable @click="work.chat = true"></div>
 
@@ -99,12 +121,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import { useQuasar } from 'quasar';
+import { useWorkStore } from '../../stores/workStore';
 
 import { mdiBriefcase } from '@quasar/extras/mdi-v7';
+
 import TicketMenu from './sections/TicketMenu.vue';
-import TicketStatusView from './sections/TicketStatusView.vue';
-import { useWorkStore } from '../../stores/workStore';
 
 const vmProps = withDefaults(defineProps<TicketGridItemProps>(), {
   props: () => ({}),
@@ -112,8 +135,6 @@ const vmProps = withDefaults(defineProps<TicketGridItemProps>(), {
 
 const work = useWorkStore();
 const quasar = useQuasar();
-
-const percents = computed(() => (quasar.screen.lt.sm ? 60 : 70));
 
 const updateSelected = () => {
   if (vmProps.props.selected) {

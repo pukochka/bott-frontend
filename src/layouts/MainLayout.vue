@@ -81,9 +81,7 @@
             class="bott-drawer__container row justify-center col-grow"
             :class="[!viewToc ? ' bott-menu__toc' : '']"
           >
-            <bott-toc
-              style="width: 270px; min-height: inherit; height: 100%"
-            ></bott-toc>
+            <bott-toc></bott-toc>
           </div>
         </div>
 
