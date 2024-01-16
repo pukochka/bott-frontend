@@ -153,3 +153,46 @@ export async function fetchFeedbackNotify<
     });
   } catch (e) {}
 }
+
+export async function fetchFeedbackIntegrations<
+  Q extends keyof FeedbackIntegrationsQueries
+>(
+  query: Q,
+  data?: FeedbackIntegrationsParams<Q>,
+  action?: (response: any) => void
+) {
+  try {
+    const store = useFeedbackStore();
+
+    return await instance({
+      url: 'v1/bot/messagenew/feedback/api/' + query,
+      data,
+    }).then((response) => {
+      /** */
+
+      if (action !== void 0) action(response.data.data);
+
+      if (query === 'index') {
+        /** */
+
+        store.indexIntegrations = response.data.data;
+
+        /** */
+      } else if (query === 'access') {
+        /** */
+
+        store.accessIntegrations = response.data.data;
+
+        /** */
+      } else if (query === 'count') {
+        /** */
+
+        store.countIntegrations = response.data.data;
+
+        /** */
+      }
+
+      /** */
+    });
+  } catch (e) {}
+}

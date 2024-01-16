@@ -13,9 +13,9 @@
         <div class="text-body2 q-pa-xs">
           <q-breadcrumbs>
             <q-breadcrumbs-el
+              :key="index"
               class="rounded q-px-xs"
               v-for="(breadcrumb, index) of breadcrumbs"
-              :key="index"
               v-clickable="index !== breadcrumbs.length - 1"
               :label="breadcrumb.label"
               @click="breadcrumb.action"
@@ -52,7 +52,7 @@
       </q-card>
     </div>
 
-    <warning-start v-if="!store.isMobile"></warning-start>
+    <warning-start v-if="!store.isMobile && !md"></warning-start>
   </div>
 </template>
 
@@ -61,6 +61,7 @@ import { computed } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import {
+  mdiApi,
   mdiBellCog,
   mdiForum,
   mdiMessageSettings,
@@ -75,6 +76,7 @@ const store = useFeedbackStore();
 const quasar = useQuasar();
 
 const sm = computed(() => !quasar.screen.lt.sm);
+const md = computed(() => quasar.screen.lt.md);
 
 const disabled = computed(() => store.onconnection || store.dragging);
 
@@ -84,8 +86,9 @@ const breadcrumbs = computed(() => [
     action: () => historyGo(`/shop/desktop/index?bot_id=${config.bot.id}`),
   },
   {
-    label: 'Платные настройки',
-    action: () => historyGo(`/lk/common/main/redirect?bot_id=${config.bot.id}`),
+    label: 'Свободные сообщения',
+    action: () =>
+      historyGo(`/lk/common/messages/main/index?bot_id=${config.bot.id}`),
   },
   {
     label: store.message.title ?? '',
@@ -110,6 +113,12 @@ const buttons = computed(() => [
     label: 'Настройки обратной связи',
     action: () => store.openDialog('settings'),
     icon: mdiMessageSettings,
+    color: 'primary',
+  },
+  {
+    label: 'Готовые интеграции',
+    action: () => store.openDialog('api'),
+    icon: mdiApi,
     color: 'primary',
   },
 ]);

@@ -2,8 +2,8 @@ import axios from 'axios';
 import { config } from '../../config';
 
 import { useDialog } from '../../../file-manager/stores/useDialog';
-import { useVectorStore } from 'scenarios/messages/stores/vector/vectorStore';
 
+console.log();
 const instance = axios.create({
   baseURL: config.host,
   method: 'post',

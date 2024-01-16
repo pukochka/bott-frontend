@@ -10,7 +10,8 @@ import { Link } from '../utils/lines/link';
 import { defaultMessageFree } from '../../inline/stores/inlineModels';
 import { Point } from 'paper';
 import { update } from '../utils/create';
-import { fetchFeedbackAnswer } from '../api/queries';
+import { fetchFeedbackAnswer, fetchFeedbackIntegrations } from '../api/queries';
+import { config } from '../config';
 
 export const useFeedbackStore = defineStore('paper-store', {
   state: () =>
@@ -57,8 +58,15 @@ export const useFeedbackStore = defineStore('paper-store', {
         message_free: false,
         crossroad: false,
         touch: false,
+        api: false,
+        api_edit: false,
         administrator_answer: false,
       },
+
+      countIntegrations: 0,
+      indexIntegrations: [],
+      accessIntegrations: [],
+      selectedIntegration: null,
 
       selectedType: 1,
       selectedMessage: null,
@@ -212,6 +220,14 @@ export const useFeedbackStore = defineStore('paper-store', {
       this.selectedMessageNext = null;
 
       update();
+    },
+
+    updateIntegrations() {
+      return Promise.all([
+        fetchFeedbackIntegrations('index', { message_id: config.message_id }),
+        fetchFeedbackIntegrations('access', { message_id: config.message_id }),
+        fetchFeedbackIntegrations('count', { message_id: config.message_id }),
+      ]);
     },
 
     updateAnswers(action?: () => void) {

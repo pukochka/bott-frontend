@@ -78,6 +78,10 @@
 
   <administrator-answer></administrator-answer>
 
+  <api-integrations></api-integrations>
+
+  <integration-edit></integration-edit>
+
   <q-inner-loading
     v-close-popup
     @click="closeMenu"
@@ -115,6 +119,8 @@ import CrossroadOption from './components/dialogs/CrossroadOption.vue';
 import MobileSection from './components/sections/MobileSection.vue';
 import TouchDialog from './components/dialogs/TouchDialog.vue';
 import AdministratorAnswer from './components/dialogs/answer/AdministratorAnswer.vue';
+import ApiIntegrations from './components/dialogs/ApiIntegrations.vue';
+import IntegrationEdit from './components/dialogs/integrations/IntegrationEdit.vue';
 
 const store = useFeedbackStore();
 const quasar = useQuasar();

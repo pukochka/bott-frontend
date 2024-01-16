@@ -48,6 +48,11 @@ export interface FeedbackModels {
 
   dialogs: Record<DialogsNames, boolean>;
 
+  countIntegrations: number;
+  indexIntegrations: Array<FeedbackIntegrationIndex>;
+  accessIntegrations: Array<FeedbackIntegrationAccess>;
+  selectedIntegration: FeedbackIntegrationIndex | null;
+
   selectedType: number;
   selectedMessage: MessageFeedbackItemPreview | null;
   selectedMessageNext: MessageFeedbackItemPreview | null;
@@ -71,6 +76,8 @@ export type DialogsNames =
   | 'crossroad'
   | 'crossroad_option'
   | 'administrator_answer'
+  | 'api'
+  | 'api_edit'
   | 'touch';
 export type MenuNames = 'create' | 'link' | 'message' | 'touch';
 
