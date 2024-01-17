@@ -1,7 +1,7 @@
 <template>
   <div class="text-weight-bold text-center text-h6">
     Менеджеры категории
-    <span class="text-primary"> {{ work.selectedCategory?.label ?? '' }}</span>
+    <span class="text-primary"> {{ work.selectedCategory?.title ?? '' }}</span>
   </div>
 
   <div class="q-pt-md">

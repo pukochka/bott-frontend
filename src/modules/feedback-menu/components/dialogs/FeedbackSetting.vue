@@ -7,7 +7,7 @@
     @before-show="updateShow"
   >
     <div class="row justify-center">
-      <q-card class="dialog-rounded bott-dialog__responsive">
+      <q-card class="dialog-rounded bott-dialog__responsive" bordered flat>
         <dialog-header label="Настройки обратной связи"></dialog-header>
 
         <q-card-section class="q-pt-none row q-col-gutter-sm">
@@ -120,6 +120,18 @@
             <constants-section
               :constants="store.message.constants"
             ></constants-section>
+
+            <div class="row">
+              <q-btn
+                flat
+                no-caps
+                size="md"
+                color="warning"
+                class="rounded col"
+                label="Сбросить обратную связь"
+                @click="resetFeedback"
+              />
+            </div>
           </div>
         </q-card-section>
 
@@ -153,7 +165,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
-import { fetchFeedback } from '../../api/queries';
+import { fetchFeedback, fetchMessage } from '../../api/queries';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 import { defaultFeedbackSetting } from '../../stores/feedbackModels';
 import { defaultMessageFree } from '../../../inline/stores/inlineModels';
@@ -171,6 +183,7 @@ const store = useFeedbackStore();
 const loading = ref({
   notice: false,
   update: false,
+  reset: false,
   'notice-admin': false,
 });
 const setting = ref<MessageFeedbackSetting>(defaultFeedbackSetting);
@@ -197,6 +210,18 @@ const cards = computed((): any => [
     method: 'notice-admin',
   },
 ]);
+
+const resetFeedback = () => {
+  useDialog('Вы уверены, что хотите сбросить обратную связь?', true).onOk(
+    () => {
+      loading.value.reset = true;
+
+      fetchMessage('reset', { message_id: store.message.id }, (response) => {
+        store._message = response;
+      }).then(() => (loading.value.reset = false));
+    }
+  );
+};
 
 const updateTemplate = (val: string) => {
   text.value = encodeText(val);

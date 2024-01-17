@@ -14,11 +14,11 @@
           <q-breadcrumbs>
             <q-breadcrumbs-el
               :key="index"
-              class="rounded q-px-xs"
+              class="rounded q-px-xs text-primary"
+              :href="breadcrumb.link"
               v-for="(breadcrumb, index) of breadcrumbs"
-              v-clickable="index !== breadcrumbs.length - 1"
+              v-clickable
               :label="breadcrumb.label"
-              @click="breadcrumb.action"
             />
           </q-breadcrumbs>
         </div>
@@ -59,6 +59,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
+import { useQuasar } from 'quasar';
 
 import {
   mdiApi,
@@ -68,9 +69,6 @@ import {
 } from '@quasar/extras/mdi-v7';
 
 import WarningStart from '../views/WarningStart.vue';
-import { useQuasar } from 'quasar';
-import { historyGo } from '../../../inline/stores/helpers';
-import { config } from '../../config';
 
 const store = useFeedbackStore();
 const quasar = useQuasar();
@@ -80,21 +78,7 @@ const md = computed(() => quasar.screen.lt.md);
 
 const disabled = computed(() => store.onconnection || store.dragging);
 
-const breadcrumbs = computed(() => [
-  {
-    label: 'Панель управления',
-    action: () => historyGo(`/shop/desktop/index?bot_id=${config.bot.id}`),
-  },
-  {
-    label: 'Свободные сообщения',
-    action: () =>
-      historyGo(`/lk/common/messages/main/index?bot_id=${config.bot.id}`),
-  },
-  {
-    label: store.message.title ?? '',
-    action: '',
-  },
-]);
+const breadcrumbs = computed(() => store.message?.breadcrumbs?.crumbs);
 
 const buttons = computed(() => [
   {

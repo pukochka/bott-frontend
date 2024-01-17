@@ -24,6 +24,7 @@ declare interface MessageFree {
   is_duplicate: boolean;
   is_test: boolean;
 
+  breadcrumbs: { crumbs: Array<{ label: string; link: string }> };
   support_types: Record<string, MessageType>;
   constants: Record<string, string>;
   constantAnswers: Record<string, string>;

@@ -3,7 +3,7 @@
     <div class="text-weight-bold text-center text-h6">
       Редактирование категории
       <span class="text-primary">
-        {{ work.selectedCategory?.label ?? '' }}</span
+        {{ work.selectedCategory?.title ?? '' }}</span
       >
     </div>
 
@@ -20,15 +20,6 @@
               label="Название категории"
               class="bott-input--rounded"
             />
-
-            <div class="q-pt-md">
-              <div class="">Шаблон категории</div>
-
-              <editor-content
-                content="nniljnlknl"
-                no-without-editor
-              ></editor-content>
-            </div>
           </q-card>
         </div>
 

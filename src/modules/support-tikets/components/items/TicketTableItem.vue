@@ -62,20 +62,17 @@ const info = [
   {
     label: 'Запрос от',
     component: TicketInfo,
-    value: props.ticket.request_from,
+    value: props.ticket.user.link,
   },
   {
     label: 'Исполнитель',
     component: TicketInfo,
-    value: props.ticket.executor,
+    value: props.ticket.manager.link,
   },
   {
     label: 'Время создания',
     component: TicketInfo,
-    value: date.formatDate(
-      Number(props.ticket.create_at + '000'),
-      'DD-MM-YYYY hh:mm'
-    ),
+    value: props.ticket.create_at,
   },
 ];
 

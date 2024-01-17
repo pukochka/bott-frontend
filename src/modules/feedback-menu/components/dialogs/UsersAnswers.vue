@@ -7,7 +7,7 @@
     @before-show="updateShow"
   >
     <div class="row justify-center">
-      <q-card class="dialog-rounded bott-dialog__responsive">
+      <q-card bordered flat class="dialog-rounded bott-dialog__responsive">
         <dialog-header label="Просмотр заявок пользователей"></dialog-header>
 
         <q-card-section

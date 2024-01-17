@@ -8,7 +8,7 @@
           no-caps
           size="md"
           color="primary"
-          :label="work.selectedCategory?.label ?? 'Выбрать категорию'"
+          :label="work.selectedCategory?.title ?? 'Выбрать категорию'"
           class="rounded-top col"
           @click="work.openDialog('select_category')"
         />
@@ -45,7 +45,7 @@
               padding="4px 12px"
               @click="selectCategory(category)"
             >
-              <div class="text-weight-bold ellipsis">{{ category.label }}</div>
+              <div class="text-weight-bold ellipsis">{{ category.title }}</div>
             </q-btn>
 
             <q-separator vertical class="q-my-xs" />
@@ -77,15 +77,33 @@
 import { useWorkStore } from '../../stores/workStore';
 import { useQuasar } from 'quasar';
 import { computed } from 'vue';
+import { fetchSupportTicket } from '../../api/queries';
 
 const work = useWorkStore();
 const quasar = useQuasar();
 
 const md = computed(() => quasar.screen.lt.md);
 
-const selectCategory = (category: any) => {
-  work.selectedCategory = category;
+const selectCategory = (category: SupportCategory) => {
+  work.loading.category = true;
+
+  work.tickets = [];
   work.section = 'list';
+  work.selectedCategory = category;
+
+  fetchSupportTicket(
+    'index',
+    {
+      category_id: category.id,
+      offset: 25,
+      limit: 25,
+    },
+    (response) => {
+      work.tickets = response;
+    }
+  ).then(() => {
+    work.loading.category = false;
+  });
 };
 
 const createCategory = () => {

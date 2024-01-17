@@ -1,7 +1,8 @@
 export interface WorkStore {
   chat: boolean;
 
-  categories: Array<any>;
+  categories: Array<SupportCategory>;
+  tickets: Array<SupportTicket>;
 
   section: SectionNames;
 
@@ -12,12 +13,17 @@ export interface WorkStore {
     mini: boolean;
   };
 
+  loading: {
+    start: boolean;
+    category: boolean;
+  };
+
   dialogs: Record<DialogNames, boolean>;
 
   selected: Array<any>;
 
-  selectedTicket: any | null;
-  selectedCategory: Category | null;
+  selectedTicket: SupportTicket | null;
+  selectedCategory: SupportCategory | null;
 
   pagination: {
     page: number;

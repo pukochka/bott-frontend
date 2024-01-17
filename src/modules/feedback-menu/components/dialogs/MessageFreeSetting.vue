@@ -6,7 +6,7 @@
     v-model="store.dialogs.message_free"
   >
     <div class="row justify-center">
-      <q-card class="dialog-rounded bott-dialog__responsive">
+      <q-card bordered flat class="dialog-rounded bott-dialog__responsive">
         <dialog-header label="Меню сообщения"></dialog-header>
 
         <q-card-section class="q-pt-none">

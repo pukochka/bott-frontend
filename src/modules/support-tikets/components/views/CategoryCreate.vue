@@ -3,7 +3,7 @@
     <div class="text-h6 text-center">Добавить категорию</div>
 
     <div class="row justify-center">
-      <div class="col-12 col-sm-4">
+      <div class="col-12 col-sm-6 col-xl-4">
         <q-input
           dense
           v-model="text"
@@ -30,6 +30,8 @@
             color="primary"
             label="Добавить"
             class="rounded"
+            :loading="loading"
+            @click="createCategory"
           />
         </div>
       </div>
@@ -40,10 +42,29 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useWorkStore } from '../../stores/workStore';
+import { fetchSupportCategory, fetchSupportTicket } from '../../api/queries';
 
 const work = useWorkStore();
 
 const text = ref('');
+const loading = ref(false);
+
+const createCategory = () => {
+  loading.value = true;
+
+  fetchSupportCategory('create', { title: text.value }, (response) => {
+    work.categories = response;
+    work.selectedCategory = work.categories[work.categories.length - 1];
+
+    fetchSupportTicket(
+      'index',
+      { category_id: work.selectedCategory?.id ?? -1, limit: 25, offset: 25 },
+      () => {
+        work.section = 'list';
+      }
+    ).then(() => (loading.value = false));
+  });
+};
 </script>
 
 <style scoped lang="scss"></style>

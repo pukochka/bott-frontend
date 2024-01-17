@@ -1,6 +1,6 @@
 import TicketInfo from '../components/items/sections/TicketInfo.vue';
 import TicketStatusGrid from '../components/items/sections/TicketStatusGrid.vue';
-import UserView from '../components/items/sections/UserView.vue';
+import UserView from '../components/items/sections/GridUserView.vue';
 
 export const columns: Array<any> = [
   {
@@ -36,7 +36,7 @@ export const columns: Array<any> = [
     name: 'executor',
     align: 'center',
     label: 'Исполнитель',
-    field: (row: any) => row.executor,
+    field: (row: any) => row?.manager?.link,
     hover: false,
     component: UserView,
   },
@@ -44,7 +44,7 @@ export const columns: Array<any> = [
     name: 'name',
     align: 'center',
     label: 'Запрос от',
-    field: (row: any) => row.name,
+    field: (row: any) => row?.user?.link,
     hover: false,
     component: UserView,
   },

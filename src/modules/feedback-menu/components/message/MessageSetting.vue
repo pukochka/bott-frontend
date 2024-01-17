@@ -7,7 +7,7 @@
     v-model="store.dialogs.message"
   >
     <div class="row justify-center">
-      <q-card class="dialog-rounded bott-dialog__responsive">
+      <q-card bordered flat class="dialog-rounded bott-dialog__responsive">
         <dialog-header label="Настройка вопроса"></dialog-header>
 
         <q-card-section class="q-pt-none q-gutter-sm">
@@ -40,8 +40,8 @@
           />
 
           <radio-item
-            label="Обязательный вопрос"
-            desc="Этот вопрос нельзя будет пропустить"
+            label="Разрешить пропустить вопрос"
+            desc="Пользователь сможет нажать на кнопку пропуска вопроса и перейти к следующему вопросу"
             :model="confirm"
             @update="(val) => (confirm = val)"
           ></radio-item>

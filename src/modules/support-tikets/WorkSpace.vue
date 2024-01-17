@@ -1,5 +1,5 @@
 <template>
-  <div class="fit q-py-sm relative-position">
+  <div class="fit q-py-sm relative-position" style="min-height: 200px">
     <!--    <div class="bott-page__title q-px-md q-py-lg">Категории вопросов</div>-->
 
     <!--    <q-breadcrumbs class="q-pa-md text-subtitle2">-->
@@ -8,21 +8,39 @@
     <!--      <q-breadcrumbs-el label="Breadcrumbs" />-->
     <!--    </q-breadcrumbs>-->
 
-    <div class="row">
+    <div class="">
       <header-section></header-section>
 
       <q-separator inset class="col-12" />
 
-      <top-section class="col-12"></top-section>
+      <div class="relative-position">
+        <top-section class="col-12"></top-section>
 
-      <main-section class="col-12"></main-section>
+        <main-section class="col-12"></main-section>
 
-      <bottom-section class="col-12"></bottom-section>
+        <bottom-section class="col-12"></bottom-section>
+
+        <q-inner-loading
+          transition-show="none"
+          :showing="work.loading.category"
+          class="bott-page__background"
+        >
+          <q-spinner-gears size="80px" color="primary" />
+        </q-inner-loading>
+      </div>
     </div>
 
     <transition name="q-transition--fade">
       <chat-section v-if="work.chat" style="z-index: 10"></chat-section>
     </transition>
+
+    <q-inner-loading
+      transition-show="none"
+      :showing="work.loading.start"
+      class="bott-page__background"
+    >
+      <q-spinner size="70px" color="primary" />
+    </q-inner-loading>
   </div>
 
   <transfer-ticket></transfer-ticket>
@@ -46,8 +64,16 @@ import TransferTicket from './components/dialogs/TransferTicket.vue';
 import EditTicket from './components/dialogs/EditTicket.vue';
 import ExecutorTransfer from './components/dialogs/ExecutorTransfer.vue';
 import SelectCategory from './components/dialogs/SelectCategory.vue';
+import { onBeforeMount } from 'vue';
+import { fetchSupportCategory } from './api/queries';
 
 const work = useWorkStore();
+
+onBeforeMount(() => {
+  fetchSupportCategory('index', undefined, () => {
+    work.loading.start = false;
+  });
+});
 </script>
 
 <style scoped lang="scss"></style>

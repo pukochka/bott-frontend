@@ -18,6 +18,11 @@ interface STStatusParam {
   status: number;
 }
 
+interface STIdParam {
+  /**  */
+  id: number;
+}
+
 interface STUserIdParam {
   /**  */
   user_id: number;
@@ -33,9 +38,14 @@ interface STOffsetParam {
   offset: number;
 }
 
+interface STLimitParam {
+  /** */
+  limit: number;
+}
+
 interface STTitleParam {
   /** */
-  offset: number;
+  title: string;
 }
 
 /**
@@ -62,7 +72,7 @@ declare interface SupportCategoryQueries {
  * */
 declare interface SupportTicketQueries {
   /** Получить все тикеты выбранной категории */
-  index: STCategoryIdParam;
+  index: STCategoryIdParam & STOffsetParam & STLimitParam;
   /** Изменение названия тикета */
   'update-title': STTitleParam & STTicketIdParam;
   /** Изменение статуса тикета */

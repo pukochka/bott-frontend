@@ -99,6 +99,11 @@
                   v-if="col.name === 'status'"
                 ></ticket-status>
 
+                <table-user-view
+                  :value="props.row.manager.link"
+                  v-else-if="['executor', 'name'].includes(col.name)"
+                ></table-user-view>
+
                 <div
                   class="font-14"
                   :style="col?.style"
@@ -125,12 +130,11 @@
               </q-th>
 
               <q-th
-                class="q-pa-none"
-                v-for="col of props.cols"
-                :key="col.name"
                 :props="props"
                 :auto-width="col?.autoWidth"
                 :style="col?.style"
+                v-for="col of props.cols"
+                :key="col.name"
               >
                 <div class="text-subtitle1 text-white">{{ col.label }}</div>
               </q-th>
@@ -151,18 +155,10 @@
         >
           Тикетов в категории
           <span class="text-primary">
-            {{ work.selectedCategory?.label ?? '' }}
+            {{ work.selectedCategory?.title ?? '' }}
           </span>
           пока нет...
         </div>
-
-        <q-inner-loading
-          :showing="true"
-          style="z-index: 6"
-          class="bott-page__background"
-        >
-          <q-spinner-gears size="80px" color="primary" />
-        </q-inner-loading>
       </q-scroll-area>
     </div>
   </div>
@@ -180,6 +176,7 @@ import { mdiBriefcase } from '@quasar/extras/mdi-v7';
 import TicketGridItem from '../items/TicketGridItem.vue';
 import TicketMenu from '../items/sections/TicketMenu.vue';
 import TicketStatus from '../items/sections/TicketStatusTable.vue';
+import TableUserView from '../items/sections/TableUserView.vue';
 
 const work = useWorkStore();
 
@@ -187,11 +184,7 @@ const table = ref();
 const height = ref(300);
 const hover = ref(false);
 
-const tickets = computed(
-  () =>
-    work.categories.filter((item) => item.id === work.selectedCategory?.id)?.[0]
-      ?.tickets
-);
+const tickets = computed(() => work.tickets);
 
 const updateHover = (row: any, val: boolean) => {
   hover.value = val;

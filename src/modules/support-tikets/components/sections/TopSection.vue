@@ -18,6 +18,7 @@
           :class="sm ? ' col-12 rounded' : ' rounded-bottom'"
           :padding="sm ? '' : '2px 32px'"
           v-show="button.condition"
+          :loading="button.loading"
           @click="button.action"
           v-for="(button, index) of categoryButtons"
           :key="index"
@@ -54,7 +55,7 @@
               clickable
               class="text-red"
               v-if="work.selectedCategory?.status === 1"
-              @click="disableCategory"
+              @click="changeStatus(0)"
             >
               <q-item-section>Отключить</q-item-section>
             </q-item>
@@ -63,7 +64,7 @@
               clickable
               class="text-positive"
               v-else
-              @click="activateCategory"
+              @click="changeStatus(1)"
             >
               <q-item-section>Включить</q-item-section>
             </q-item>
@@ -133,13 +134,18 @@ import {
   mdiStickerOutline,
   mdiViewAgenda,
 } from '@quasar/extras/mdi-v7';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 import { categoryStatues } from '../../utils/statuses';
 import { useQuasar } from 'quasar';
+import { fetchSupportCategory } from '../../api/queries';
 
 const work = useWorkStore();
 const quasar = useQuasar();
+
+const loading = ref({
+  delete: false,
+});
 
 const status = computed(
   () => categoryStatues[work.selectedCategory?.status ?? 0]
@@ -162,18 +168,41 @@ const closeSection = () => {
 const deleteCategory = () => {
   useDialog(
     `Вы уверены, что хотите удалить категорию <span class="text-primary">${
-      work.selectedCategory?.label ?? ''
+      work.selectedCategory?.title ?? ''
     }</span>?`,
     true
-  );
+  ).onOk(() => {
+    loading.value.delete = true;
+
+    fetchSupportCategory(
+      'delete',
+      {
+        category_id: work.selectedCategory?.id ?? -1,
+      },
+      (response) => {
+        work.section = 'select';
+        work.selectedCategory = null;
+        work.tickets = [];
+        work.categories = response;
+      }
+    ).then(() => (loading.value.delete = false));
+  });
 };
 
-const activateCategory = () => {
-  console.log(1);
-};
-
-const disableCategory = () => {
-  console.log(1);
+const changeStatus = (status: number) => {
+  fetchSupportCategory(
+    'change-status',
+    {
+      category_id: work.selectedCategory?.id ?? -1,
+    },
+    () => {
+      if (work.selectedCategory) {
+        work.selectedCategory.status = status;
+      }
+    }
+  ).then(() => {
+    console.log();
+  });
 };
 
 const topActions = computed(() => [
@@ -209,6 +238,7 @@ const categoryButtons = computed(() => [
     action: () => (work.section = 'list'),
     color: 'primary',
     condition: work.selectedCategory !== null && work.section !== 'list',
+    loading: false,
   },
   {
     label: 'Просмотр менеджеров категории',
@@ -216,6 +246,7 @@ const categoryButtons = computed(() => [
     action: () => (work.section = 'manager'),
     color: 'grey',
     condition: true,
+    loading: false,
   },
   {
     label: 'Просмотр лога категории',
@@ -223,6 +254,7 @@ const categoryButtons = computed(() => [
     action: () => (work.section = 'log'),
     color: 'orange',
     condition: true,
+    loading: false,
   },
   {
     label: 'Редактирование категории',
@@ -230,6 +262,7 @@ const categoryButtons = computed(() => [
     action: () => (work.section = 'edit'),
     color: 'info',
     condition: true,
+    loading: false,
   },
   {
     label: 'Удалить категорию',
@@ -237,6 +270,7 @@ const categoryButtons = computed(() => [
     action: deleteCategory,
     color: 'red',
     condition: true,
+    loading: loading.value.delete,
   },
 ]);
 </script>

@@ -49,6 +49,7 @@ export const defaultMessageFree: MessageFree = {
     is_spoiler: false,
     host: '',
   },
+  breadcrumbs: { crumbs: [] },
   files: null,
   videos: null,
   feedback: null,
@@ -63,7 +64,6 @@ export const defaultMessageFree: MessageFree = {
   color: null,
   specType: {
     id: 0,
-    title: '',
   },
   sort: null,
   column_id: null,

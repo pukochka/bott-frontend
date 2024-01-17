@@ -9,7 +9,11 @@ export const instance = axios.create({
 
 instance.interceptors.request.use(function (request) {
   request.params = { token: config.bot.token };
-  request.data = { bot_id: config.bot.id };
+
+  request.data = Object.assign(request.data ?? {}, {
+    bot_id: config.bot.id,
+    id: config.id,
+  });
 
   return request;
 });

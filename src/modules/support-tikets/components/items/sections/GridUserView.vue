@@ -3,15 +3,9 @@
     <q-item-section>{{ label }}</q-item-section>
 
     <q-item-section side style="z-index: 1">
-      <q-btn
-        no-caps
-        dense
-        flat
-        size="md"
-        color="primary"
-        class="rounded"
-        :label="'@' + value"
-      >
+      <q-btn no-caps dense flat size="md" color="primary" class="rounded">
+        <div v-html="value"></div>
+
         <q-tooltip
           class="bott-tooltip"
           anchor="top middle"
