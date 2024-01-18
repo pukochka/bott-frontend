@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import WorkSpace from 'src/modules/support-tikets/WorkSpace.vue';
+import WorkSpace from 'src/modules/support/WorkSpace.vue';
 import NoteBlock from 'src/components/note/NoteBlock.vue';
 </script>
 
