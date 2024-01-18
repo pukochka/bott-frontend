@@ -8,7 +8,7 @@
     <q-card style="width: 100%" flat bordered class="rounded dialog-rounded">
       <dialog-header label="Настройки кнопки"></dialog-header>
 
-      <q-card-section class="q-pt-none">
+      <q-card-section class="q-pt-none" v-if="inline.message.is_support_menu">
         <q-input
           class="bott-input--rounded"
           v-model="text.value"
@@ -27,7 +27,11 @@
         </q-input>
       </q-card-section>
 
-      <q-card-section class="q-pt-none">
+      <div class="text-center q-pa-lg" v-if="!inline.message.is_support_menu">
+        Эту кнопку незьзя изменить
+      </div>
+
+      <q-card-section class="q-pt-none" v-if="inline.message.is_support_menu">
         <select-type
           static
           :bot_id="inline.bot_id"
@@ -50,6 +54,7 @@
           size="md"
           label="Удалить"
           color="red"
+          v-if="inline.message.is_support_menu"
           :loading="loading.delete"
           @click="deleteButton"
         />
@@ -71,6 +76,7 @@
           size="md"
           label="Изменить"
           color="primary"
+          v-if="inline.message.is_support_menu"
           :disable="condition"
           :loading="loading.update"
           @click="updateButton"

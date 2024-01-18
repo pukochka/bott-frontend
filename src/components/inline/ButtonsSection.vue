@@ -12,6 +12,7 @@
         color="primary"
         icon="delete"
         :loading="props.loading"
+        v-if="props.is_support_menu"
         @click="emit('delete-line', line.id)"
       >
         <q-tooltip
@@ -58,6 +59,7 @@
         class="rounded"
         color="primary"
         icon="add"
+        v-if="props.is_support_menu"
         @click="emit('add-button', line.id)"
       >
         <q-tooltip
@@ -76,6 +78,7 @@
 const props = withDefaults(defineProps<ButtonsSectionProps>(), {
   menu: () => ({ id: 0, lines: [] }),
   loading: false,
+  is_support_menu: true,
 });
 
 const emit = defineEmits<{
@@ -93,6 +96,7 @@ const thumbStyle = {
 interface ButtonsSectionProps {
   menu: IMMenu | RMMenu;
   loading: boolean;
+  is_support_menu?: boolean;
 }
 </script>
 

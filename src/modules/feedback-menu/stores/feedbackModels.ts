@@ -193,7 +193,7 @@ export const defaultIntegrationIndex: FeedbackIntegrationIndex = {
     description: '',
     name: '',
   },
-  settings: {
+  setting: {
     id: -1,
     public_key: '',
     private_key: '',

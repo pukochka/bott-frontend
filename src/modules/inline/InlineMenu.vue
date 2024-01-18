@@ -49,6 +49,7 @@
           v-if="inline.inlineMenu && inline.inlineLines.length > 0"
           :menu="inline.inlineMenu"
           :loading="loading.delete"
+          :is_support_menu="inline.message.is_support_menu"
           @select-button="openSettings"
           @add-button="addButtonInLine"
           @delete-line="deleteLine"

@@ -50,7 +50,7 @@ declare interface FeedbackIntegrationIndex {
   /** */
   type: FeedbackIntegrationAccess;
   /** */
-  settings: FIPublicPrivateParams & FIIdParam;
+  setting: FIPublicPrivateParams & FIIdParam;
 }
 
 declare interface FeedbackIntegrationAccess {

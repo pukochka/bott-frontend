@@ -98,10 +98,10 @@ const inputs = ref([
 ]);
 
 const updateShow = () => {
-  inputs.value[0].value = store.selectedIntegration?.settings.public_key ?? '';
-  inputs.value[1].value = store.selectedIntegration?.settings.private_key ?? '';
+  inputs.value[0].value = store.selectedIntegration?.setting.public_key ?? '';
+  inputs.value[1].value = store.selectedIntegration?.setting.private_key ?? '';
   inputs.value[2].value =
-    store.selectedIntegration?.settings.private_key_2 ?? '';
+    store.selectedIntegration?.setting.private_key_2 ?? '';
 };
 
 interface FIPublicPrivateParams {

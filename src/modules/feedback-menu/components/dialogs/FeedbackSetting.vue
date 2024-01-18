@@ -121,7 +121,7 @@
               :constants="store.message.constants"
             ></constants-section>
 
-            <div class="row">
+            <div class="row" v-if="store.message.is_generate_default">
               <q-btn
                 flat
                 no-caps
