@@ -1,9 +1,8 @@
-.sticky-virtscroll-table {
+.sticky-virtual-scroll-table {
   thead tr th {
     position: sticky;
     z-index: 1;
     background: var(--q-primary);
-    padding: 0;
   }
 
   thead tr:first-child th {
@@ -20,6 +19,15 @@
   //.q-table tbody td:first-child:before{
   //  background: transparent;
   //}
+
+  tr th {
+    position: sticky;
+    z-index: 2;
+  }
+
+  tbody {
+    scroll-margin-top: 48px
+  }
 
   .q-table tbody td:not:first-child{
     cursor: pointer;

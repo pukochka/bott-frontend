@@ -5,7 +5,7 @@
     v-model="work.dialogs.edit_ticket"
     @before-show="updateShow"
   >
-    <q-card style="width: 100%" class="dialog-rounded">
+    <q-card flat bordered style="width: 100%" class="dialog-rounded">
       <dialog-header label="Настройки тикета"></dialog-header>
 
       <q-card-section class="q-pt-none q-gutter-y-sm">

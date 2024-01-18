@@ -120,7 +120,6 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from 'quasar';
 import { useWorkStore } from '../../stores/workStore';
 
 import { mdiBriefcase } from '@quasar/extras/mdi-v7';
@@ -132,7 +131,6 @@ const vmProps = withDefaults(defineProps<TicketGridItemProps>(), {
 });
 
 const work = useWorkStore();
-const quasar = useQuasar();
 
 const updateSelected = () => {
   if (vmProps.props.selected) {

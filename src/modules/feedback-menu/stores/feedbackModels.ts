@@ -184,3 +184,19 @@ export const defaultNotify: FeedbackNotification = {
   },
   status: true,
 };
+
+export const defaultIntegrationIndex: FeedbackIntegrationIndex = {
+  id: -1,
+  type: {
+    id: -1,
+    image: '',
+    description: '',
+    name: '',
+  },
+  settings: {
+    id: -1,
+    public_key: '',
+    private_key: '',
+    private_key_2: '',
+  },
+};

@@ -47,6 +47,10 @@ declare type FeedbackIntegrationsParams<
 declare interface FeedbackIntegrationIndex {
   /**  */
   id: number;
+  /** */
+  type: FeedbackIntegrationAccess;
+  /** */
+  settings: FIPublicPrivateParams & FIIdParam;
 }
 
 declare interface FeedbackIntegrationAccess {

@@ -1,17 +1,32 @@
 <template>
   <div class="col-12 q-px-md">
     <div class="" v-if="md">
-      <div class="row q-pb-xs bott-btn__outline">
-        <q-btn
-          outline
-          no-wrap
-          no-caps
-          size="md"
-          color="primary"
-          :label="work.selectedCategory?.title ?? 'Выбрать категорию'"
-          class="rounded-top col"
-          @click="work.openDialog('select_category')"
-        />
+      <div class="row no-wrap q-pb-xs q-col-gutter-x-sm bott-btn__outline">
+        <div class="col-11">
+          <q-btn
+            outline
+            no-wrap
+            no-caps
+            size="md"
+            color="primary"
+            :label="work.selectedCategory?.title ?? 'Выбрать категорию'"
+            class="rounded-top fit"
+            @click="work.openDialog('select_category')"
+          />
+        </div>
+
+        <div class="col">
+          <q-btn
+            outline
+            no-wrap
+            no-caps
+            size="md"
+            color="primary"
+            icon="add"
+            class="rounded-top fit"
+            @click="createCategory"
+          />
+        </div>
       </div>
     </div>
 
@@ -95,7 +110,7 @@ const selectCategory = (category: SupportCategory) => {
     'index',
     {
       category_id: category.id,
-      offset: 25,
+      offset: 0,
       limit: 25,
     },
     (response) => {

@@ -4,7 +4,7 @@
     position="bottom"
     v-model="work.dialogs.executor_transfer"
   >
-    <q-card style="width: 100%" class="dialog-rounded">
+    <q-card flat bordered style="width: 100%" class="dialog-rounded">
       <dialog-header label="Выбор другого исполнителя"></dialog-header>
 
       <q-card-section class="q-pt-none">

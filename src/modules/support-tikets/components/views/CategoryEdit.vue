@@ -11,31 +11,45 @@
       <div class="row q-col-gutter-md">
         <div class="col-12 col-sm-8 col-xl-10">
           <q-card flat bordered class="rounded q-pa-md">
-            <div class="q-pb-sm">Название категории</div>
-
             <q-input
               outlined
+              counter
               v-model="text"
-              :maxlength="64"
+              :maxlength="48"
+              :rules="[
+                (val) =>
+                  val.length >= 1 || 'Введено неверное количество символов',
+              ]"
               label="Название категории"
               class="bott-input--rounded"
-            />
+            >
+              <template #append>
+                <q-btn
+                  no-caps
+                  flat
+                  size="md"
+                  color="primary"
+                  icon="check"
+                  class="rounded"
+                  :loading="loading"
+                  :disable="text.length < 1"
+                  @click="updateTitle"
+                >
+                  <q-tooltip
+                    class="bott-tooltip text-center"
+                    anchor="top middle"
+                    self="bottom middle"
+                  >
+                    Изменить
+                  </q-tooltip>
+                </q-btn>
+              </template>
+            </q-input>
           </q-card>
         </div>
 
         <div class="col-12 col-sm-4 col-xl-2">
           <constants-section :constants="constants"></constants-section>
-
-          <div class="row justify-end q-pt-md">
-            <q-btn
-              no-caps
-              unelevated
-              size="md"
-              color="primary"
-              label="Сохранить"
-              class="rounded"
-            />
-          </div>
         </div>
       </div>
     </div>
@@ -43,14 +57,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+
 import { useWorkStore } from '../../stores/workStore';
-import EditorContent from '../../../../components/editor/EditorContent.vue';
+import { fetchSupportCategory } from '../../api/queries';
+
 import ConstantsSection from '../../../inline/components/settings/ConstantsSection.vue';
 
 const work = useWorkStore();
 
 const text = ref('');
+const loading = ref(false);
 
 const constants = {
   TICKET_ID: 'ID Тикета',
@@ -58,6 +75,26 @@ const constants = {
   MESSAGE: 'Сообщение отправленное пользователем',
   NAME: 'Имя-ссылка/ник пользователя',
 };
+
+const updateTitle = () => {
+  loading.value = true;
+  fetchSupportCategory(
+    'update-title',
+    {
+      category_id: work.selectedCategory?.id ?? -1,
+      title: text.value,
+    },
+    (response) => {
+      if (work.selectedCategory) {
+        work.selectedCategory.title = response;
+      }
+    }
+  ).then(() => (loading.value = false));
+};
+
+onMounted(() => {
+  text.value = work.selectedCategory?.title ?? '';
+});
 </script>
 
 <style scoped lang="scss"></style>

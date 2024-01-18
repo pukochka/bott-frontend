@@ -2,14 +2,14 @@
   <q-item>
     <q-item-section avatar>
       <q-avatar>
-        <img :src="integration.image" :alt="integration.name" />
+        <img :src="item.type?.image" :alt="item.type?.name" />
       </q-avatar>
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ integration.name }}</q-item-label>
+      <q-item-label>{{ item.type?.name }}</q-item-label>
 
-      <q-item-label caption>{{ integration.description }}</q-item-label>
+      <q-item-label caption>{{ item.type?.description }}</q-item-label>
     </q-item-section>
 
     <q-item-section side>
@@ -44,29 +44,22 @@
 </template>
 
 <script setup lang="ts">
+import { config } from '../../../config';
 import { computed, ref } from 'vue';
+
 import { useFeedbackStore } from '../../../stores/feedbackStore';
 import { useDialog } from '../../../../file-manager/stores/useDialog';
 import { fetchFeedbackIntegrations } from '../../../api/queries';
-import { config } from '../../../config';
+
+import { defaultIntegrationIndex } from '../../../stores/feedbackModels';
 
 const props = withDefaults(defineProps<IntegrationIndexItemProps>(), {
-  item: () => ({ id: -1 }),
+  item: () => defaultIntegrationIndex,
 });
 
 const store = useFeedbackStore();
 
 const loading = ref(false);
-
-const integration = computed(
-  () =>
-    store.accessIntegrations.find((item) => item.id === props.item.id) ?? {
-      id: -1,
-      description: '',
-      image: '',
-      name: '',
-    }
-);
 
 const deleteIntegration = () => {
   useDialog('Вы уверены, что хотите удалить интеграцию?', true).onOk(() => {

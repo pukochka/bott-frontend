@@ -11,8 +11,6 @@
     <div class="">
       <header-section></header-section>
 
-      <q-separator inset class="col-12" />
-
       <div class="relative-position">
         <top-section class="col-12"></top-section>
 

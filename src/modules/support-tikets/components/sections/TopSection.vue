@@ -1,21 +1,21 @@
 <template>
   <q-card
     flat
+    bordered
     class="q-mx-md rounded"
     v-if="!['create', 'select'].includes(work.section)"
   >
-    <q-separator v-if="!md" />
-
     <div class="">
       <div class="row justify-center q-gutter-xs">
         <q-btn
           dense
           no-caps
+          square
           :flat="sm"
           :unelevated="!sm"
           :icon="button.icon"
           :color="button.color"
-          :class="sm ? ' col-12 rounded' : ' rounded-bottom'"
+          :class="sm ? ' col-12' : ' rounded-bottom'"
           :padding="sm ? '' : '2px 32px'"
           v-show="button.condition"
           :loading="button.loading"
@@ -24,7 +24,9 @@
           :key="index"
         >
           <div class="">{{ sm ? button.label : '' }}</div>
+
           <q-tooltip
+            v-if="!sm"
             class="bott-tooltip text-center"
             anchor="top middle"
             self="bottom middle"
@@ -120,8 +122,6 @@
         </q-tooltip>
       </q-btn>
     </div>
-
-    <q-separator />
   </q-card>
 </template>
 

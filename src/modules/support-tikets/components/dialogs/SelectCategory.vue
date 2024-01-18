@@ -1,6 +1,6 @@
 <template>
   <q-dialog v-model="work.dialogs.select_category" position="bottom" persistent>
-    <q-card bordered style="width: 100%" class="dialog-rounded">
+    <q-card flat bordered style="width: 100%" class="dialog-rounded">
       <dialog-header label="Выбор категории"></dialog-header>
 
       <q-card-section class="q-pt-none">

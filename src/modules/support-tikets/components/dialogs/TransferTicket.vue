@@ -1,13 +1,13 @@
 <template>
   <q-dialog persistent position="bottom" v-model="work.dialogs.transfer_ticket">
-    <q-card style="width: 100%" class="dialog-rounded">
+    <q-card flat bordered style="width: 100%" class="dialog-rounded">
       <dialog-header label="Выбор категории"></dialog-header>
 
       <q-card-section class="q-pt-none">
         <q-list bordered separator class="rounded overflow-hidden">
           <q-item tag="label" v-for="category of categories" :key="category.id">
             <q-item-section class="text-body1">
-              {{ category.label }}
+              {{ category.title }}
             </q-item-section>
 
             <q-item-section avatar>
@@ -54,7 +54,7 @@ import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
 const work = useWorkStore();
 
-const selected = ref('');
+const selected = ref(0);
 
 const categories = computed(() =>
   work.categories.filter((item) => item.id !== work.selectedCategory?.id)

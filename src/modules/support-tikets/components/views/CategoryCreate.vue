@@ -5,11 +5,15 @@
     <div class="row justify-center">
       <div class="col-12 col-sm-6 col-xl-4">
         <q-input
-          dense
-          v-model="text"
-          label="Название новой категории"
+          counter
           outlined
+          label="Название новой категории"
           class="bott-input--rounded"
+          :maxlength="48"
+          :rules="[
+            (val) => val.length >= 1 || 'Введено неверное количество символов',
+          ]"
+          v-model="text"
         />
 
         <div class="row justify-end q-gutter-x-sm q-pt-sm">
@@ -31,6 +35,7 @@
             label="Добавить"
             class="rounded"
             :loading="loading"
+            :disable="text.length < 1"
             @click="createCategory"
           />
         </div>
@@ -58,7 +63,7 @@ const createCategory = () => {
 
     fetchSupportTicket(
       'index',
-      { category_id: work.selectedCategory?.id ?? -1, limit: 25, offset: 25 },
+      { category_id: work.selectedCategory?.id ?? -1, limit: 25, offset: 0 },
       () => {
         work.section = 'list';
       }

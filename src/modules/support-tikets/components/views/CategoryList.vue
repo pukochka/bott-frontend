@@ -15,7 +15,7 @@
           virtual-scroll
           row-key="id"
           selection="multiple"
-          class="bg-transparent no-shadow q-pa-none fit sticky-virtscroll-table"
+          class="bg-transparent no-shadow q-pa-none fit sticky-virtual-scroll-table"
           :rows-per-page-options="[0]"
           :grid="work.view === 'grid'"
           v-model:rows="tickets"
@@ -100,7 +100,11 @@
                 ></ticket-status>
 
                 <table-user-view
-                  :value="props.row.manager.link"
+                  :value="
+                    col.name === 'executor'
+                      ? props.row?.manager?.link
+                      : props.row?.user?.link
+                  "
                   v-else-if="['executor', 'name'].includes(col.name)"
                 ></table-user-view>
 
@@ -171,12 +175,12 @@ import { columns } from '../../utils/columns';
 
 import { useWorkStore } from '../../stores/workStore';
 
-import { mdiBriefcase } from '@quasar/extras/mdi-v7';
-
 import TicketGridItem from '../items/TicketGridItem.vue';
 import TicketMenu from '../items/sections/TicketMenu.vue';
 import TicketStatus from '../items/sections/TicketStatusTable.vue';
 import TableUserView from '../items/sections/TableUserView.vue';
+
+import { mdiBriefcase } from '@quasar/extras/mdi-v7';
 
 const work = useWorkStore();
 
