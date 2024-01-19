@@ -9,14 +9,17 @@ export function makeAutoAlign() {
     length: store.alignCount,
   }).fill([0, 0]);
 
-  const width = store.view.viewSize.width;
-  const height = store.view.viewSize.height;
+  const { width, height } = document
+    .getElementById('feedback-layer')
+    ?.getBoundingClientRect() ?? { width: 1000, height: 600 };
+
+  console.log(width, height);
 
   const ratioW = width / store.alignCount;
 
   return coords.map((_, index) => {
-    const circleX = ratioW * index + ratioW / 2;
-    const circleY = height / 2;
+    const circleX = index * 300;
+    const circleY = 0;
 
     return [circleX, circleY];
   });

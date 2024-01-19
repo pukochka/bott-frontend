@@ -31,7 +31,7 @@
     </div>
 
     <div class="row items-center" v-else>
-      <q-separator vertical inset class="q-mx-sm" />
+      <q-separator vertical class="q-my-xs" />
 
       <q-scroll-area
         visible

@@ -38,6 +38,7 @@ export type DialogNames =
   | 'transfer_ticket'
   | 'executor_transfer'
   | 'select_category'
+  | 'select_implementer'
   | 'edit_ticket';
 
 export type SectionNames =

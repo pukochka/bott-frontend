@@ -31,7 +31,7 @@
           flat
           size="md"
           class="rounded"
-          color="red"
+          color="primary"
           label="Закрыть"
           v-close-popup
         />

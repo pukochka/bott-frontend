@@ -1,5 +1,9 @@
 <template>
-  <q-card flat square class="absolute-top card-border__bottom">
+  <q-card
+    flat
+    square
+    class="absolute-top card-border__bottom bott-page__background"
+  >
     <div class="row justify-between relative-position">
       <div class="row">
         <q-btn
@@ -9,6 +13,7 @@
           :key="index"
           :color="button.color"
           :icon="button.icon"
+          @click="button.action"
         >
           <q-tooltip
             class="bott-tooltip text-center"
@@ -40,6 +45,7 @@ import { useSupportStore } from '../../../stores/supportStore';
 import { computed } from 'vue';
 
 import { ticketMenu, TicketMenuNames } from '../../../utils/ticket-menu';
+import { useDialog } from '../../../../file-manager/stores/useDialog';
 
 const support = useSupportStore();
 
@@ -49,6 +55,17 @@ const buttons = computed(() =>
   )
 );
 
+const deleteTicket = () => {
+  useDialog(
+    'Вы уверены, что хотите удалить тикет ' +
+      support.selectedTicket?.title +
+      '?',
+    true
+  ).onOk(() => {
+    console.log(1);
+  });
+};
+
 const actions = computed(
   (): Record<TicketMenuNames, any> => ({
     pick: {
@@ -56,7 +73,7 @@ const actions = computed(
       condition: '',
     },
     transfer: {
-      action: '',
+      action: () => (support.dialogs.executor_transfer = true),
       condition: '',
     },
     offer: {
@@ -64,19 +81,28 @@ const actions = computed(
       condition: '',
     },
     move: {
-      action: '',
+      action: () => (support.dialogs.transfer_ticket = true),
       condition: '',
     },
     delete: {
-      action: '',
+      action: deleteTicket,
       condition: '',
     },
     edit: {
-      action: '',
+      action: () => (support.dialogs.edit_ticket = true),
       condition: '',
     },
   })
 );
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.card-border__bottom {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+body.body--dark {
+  .card-border__bottom {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  }
+}
+</style>

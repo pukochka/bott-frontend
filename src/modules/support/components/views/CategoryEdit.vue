@@ -9,7 +9,7 @@
 
     <div class="">
       <div class="row q-col-gutter-md">
-        <div class="col-12 col-sm-8 col-xl-10">
+        <div class="col-12">
           <q-card flat bordered class="rounded q-pa-md">
             <q-input
               outlined
@@ -46,38 +46,64 @@
               </template>
             </q-input>
           </q-card>
+
+          <div class="relative-position q-pt-sm" style="min-height: 200px">
+            <inline-menu
+              v-if="!loading.message"
+              :token="config.bot.token"
+              :bot_id="config.bot.id"
+              :host="config.host"
+              :message="message"
+            ></inline-menu>
+
+            <q-inner-loading
+              :showing="loading.message"
+              class="bott-page__background"
+            >
+              <q-spinner size="50px" color="primary" />
+            </q-inner-loading>
+          </div>
         </div>
 
-        <div class="col-12 col-sm-4 col-xl-2">
-          <constants-section :constants="constants"></constants-section>
-        </div>
+        <!--        <div class="col-12 col-sm-4 col-xl-2">-->
+        <!--          <constants-section :constants="constants"></constants-section>-->
+        <!--        </div>-->
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { config } from '../../config';
+
 import { onMounted, ref } from 'vue';
 
 import { useSupportStore } from '../../stores/supportStore';
-import { fetchSupportCategory } from '../../api/queries';
+import { fetchMessage, fetchSupportCategory } from '../../api/queries';
 
-import ConstantsSection from '../../../inline/components/settings/ConstantsSection.vue';
+import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
+
+import InlineMenu from '../../../inline/InlineMenu.vue';
 
 const support = useSupportStore();
 
 const text = ref('');
-const loading = ref(false);
+const message = ref(defaultMessage);
+const loading = ref({
+  title: false,
+  message: true,
+});
 
-const constants = {
-  TICKET_ID: 'ID Тикета',
-  CATEGORY_TITLE: 'Название категории',
-  MESSAGE: 'Сообщение отправленное пользователем',
-  NAME: 'Имя-ссылка/ник пользователя',
-};
+// const constants = {
+//   TICKET_ID: 'ID Тикета',
+//   CATEGORY_TITLE: 'Название категории',
+//   MESSAGE: 'Сообщение отправленное пользователем',
+//   NAME: 'Имя-ссылка/ник пользователя',
+// };
 
 const updateTitle = () => {
-  loading.value = true;
+  loading.value.title = true;
+
   fetchSupportCategory(
     'update-title',
     {
@@ -89,11 +115,22 @@ const updateTitle = () => {
         support.selectedCategory.title = response;
       }
     }
-  ).then(() => (loading.value = false));
+  ).then(() => (loading.value.title = false));
 };
 
 onMounted(() => {
   text.value = support.selectedCategory?.title ?? '';
+  loading.value.message = true;
+
+  fetchMessage(
+    'get',
+    {
+      message_id: support.selectedCategory?.view_category_id ?? -1,
+    },
+    (response) => {
+      message.value = response;
+    }
+  ).then(() => (loading.value.message = false));
 });
 </script>
 

@@ -89,6 +89,10 @@ declare interface SupportTicketQueries {
   /** Изменение менеджера тикета */
   'change-manager': STTicketIdParam & STManagerIdParam & STChangeIdParam;
   /** Удаление тикета */
+  'mass-transfer': STImplementerIdParam & STCategoryIdParam & STChangeIdParam;
+  /** Удаление тикета */
+  'mass-offer': STImplementerIdParam & STCategoryIdParam;
+  /** Удаление тикета */
   delete: STTicketIdParam;
 }
 

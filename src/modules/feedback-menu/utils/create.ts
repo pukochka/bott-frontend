@@ -1,6 +1,6 @@
 import Paper, { Point } from 'paper';
 import { useFeedbackStore } from '../stores/feedbackStore';
-import { setCenter } from './coords';
+import { makeAutoAlign, setCenter } from './coords';
 
 import { createShell } from './shapes/shell';
 import { setting } from './common';
@@ -67,13 +67,31 @@ export function update(start?: boolean) {
     Object.assign(input, { setting: elSetting });
   }
 
+  const coords = makeAutoAlign();
+
   for (let i = 0; i < store.feedback.inputs.length; i++) {
-    const { shell, platform } = createShell(store.feedback.inputs[i], [0, 0]);
+    console.log(coords[i]);
+
+    const { shell, platform } = createShell(
+      store.feedback.inputs[i],
+      store.feedback.inputs.length === 1 ? [0, 0] : coords[i]
+    );
 
     store.feedback.inputs[i] = Object.assign(store.feedback.inputs[i], {
       shell,
       platform,
     });
+  }
+
+  if (start) {
+    const center = setCenter();
+
+    if (center.x === 0 && center.y === 0 && store.feedback.inputs.length >= 2) {
+      store.view.center = new Point([
+        ((store.feedback.inputs.length - 1) * 300) / 2,
+        0,
+      ]);
+    }
   }
 
   store.mountLink();

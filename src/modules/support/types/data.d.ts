@@ -10,8 +10,8 @@ declare interface SupportCategory {
   status: number;
   /** Дефолтная категория 1 - да 0 - нет */
   default: number;
-  /** Шаблон категории */
-  template: string;
+  /** */
+  view_category_id: number;
 }
 /**
  * DTO Тикета

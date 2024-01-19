@@ -24,12 +24,15 @@ const store = useFeedbackStore();
 const loading = ref(false);
 const createMessage = (type: any) => {
   const message = store.selectedMessage;
+  const x = store.feedback.inputs.length
+    ? (message?.platform?.position.x ?? 0) + 300
+    : 0;
 
   if (message?.type !== 4) {
     loading.value = true;
     fetchFeedback('create-input', {
       type: type,
-      pos_x: (message?.platform?.position.x ?? 0) + 300,
+      pos_x: x,
       pos_y: message?.platform?.position.y ?? 0,
       after_id: message?.id ?? null,
       after_type: message?.type ?? null,

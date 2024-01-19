@@ -106,17 +106,11 @@ onMounted(() => {
 
   loading.value.start = true;
 
-  fetchSupportImplementer(
-    'index',
-    {
-      category_id: support.selectedCategory?.id ?? -1,
-      offset: 0,
-      limit: 25,
-    },
-    (response) => {
-      support.implementers = response ?? [];
-    }
-  ).then(() => {
+  fetchSupportImplementer('index', {
+    category_id: support.selectedCategory?.id ?? -1,
+    offset: 0,
+    limit: 25,
+  }).then(() => {
     loading.value.start = false;
   });
 });

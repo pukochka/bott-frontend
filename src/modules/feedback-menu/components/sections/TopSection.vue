@@ -13,12 +13,17 @@
         <div class="text-body2 q-pa-xs">
           <q-breadcrumbs>
             <q-breadcrumbs-el
-              :key="index"
-              class="rounded q-px-xs text-primary"
-              :href="breadcrumb.link"
-              v-for="(breadcrumb, index) of breadcrumbs"
               v-clickable
+              class="rounded q-px-xs text-primary"
+              v-for="(breadcrumb, index) of breadcrumbs"
+              :key="index"
+              :href="breadcrumb.link"
               :label="breadcrumb.label"
+            />
+
+            <q-breadcrumbs-el
+              class="rounded q-px-xs"
+              :label="store.message.title"
             />
           </q-breadcrumbs>
         </div>

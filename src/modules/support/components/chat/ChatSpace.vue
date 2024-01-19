@@ -7,15 +7,25 @@
     <top-section></top-section>
 
     <bottom-section></bottom-section>
+
+    <q-inner-loading
+      :showing="loading"
+      class="bott-page__background"
+      transition-show="none"
+    >
+      <q-spinner size="50px" color="primary" />
+    </q-inner-loading>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 
 import MessagesSection from './sections/MessagesSection.vue';
 import TopSection from './sections/TopSection.vue';
 import BottomSection from './sections/BottomSection.vue';
+
+const loading = ref(true);
 
 const colors = [
   'linear-gradient(90deg, hsla(186, 33%, 94%, 0.6) 0%, hsla(216, 41%, 79%, 0.6) 100%)',
@@ -26,19 +36,17 @@ const colors = [
 
 const color = ref(Math.floor(Math.random() * colors.length));
 
+onMounted(() => {
+  loading.value = true;
+
+  setTimeout(() => (loading.value = false), 3000);
+});
+
 onBeforeMount(() => (color.value = Math.floor(Math.random() * colors.length)));
 </script>
 
 <style lang="scss" scoped>
 .bg-page {
   background: #fafafa;
-}
-.card-border__bottom {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-body.body--dark {
-  .card-border__bottom {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.28);
-  }
 }
 </style>

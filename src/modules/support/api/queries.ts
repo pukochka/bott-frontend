@@ -75,15 +75,30 @@ export async function fetchSupportImplementer<
 
       if (action !== void 0) action(response.data.data);
 
-      // if (query === 'index') {
-      //   /** */
-      //
-      //   support.tickets = response.data.data;
-      //
-      //   /** */
-      // }
+      if (query === 'index') {
+        /** */
+
+        support.implementers = response.data.data;
+
+        /** */
+      }
 
       /** */
+    });
+  } catch (e) {}
+}
+
+export async function fetchMessage<Q extends keyof SCMessageQueries>(
+  query: Q,
+  params?: SCMessageParams<Q>,
+  action?: (response: any) => void
+) {
+  try {
+    return await instance({
+      url: 'v1/bot/messagenew/message/' + query,
+      data: params,
+    }).then((response) => {
+      if (action) action(response.data.data);
     });
   } catch (e) {}
 }

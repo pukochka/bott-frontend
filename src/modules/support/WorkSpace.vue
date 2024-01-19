@@ -43,14 +43,19 @@
 
   <transfer-ticket></transfer-ticket>
 
-  <executor-transfer></executor-transfer>
+  <transfer-implementer></transfer-implementer>
 
   <edit-ticket></edit-ticket>
 
   <select-category></select-category>
+
+  <select-implementer></select-implementer>
 </template>
 
 <script setup lang="ts">
+import { onBeforeMount } from 'vue';
+
+import { fetchSupportCategory } from './api/queries';
 import { useSupportStore } from './stores/supportStore';
 
 import HeaderSection from './components/sections/HeaderSection.vue';
@@ -60,10 +65,9 @@ import TopSection from './components/sections/TopSection.vue';
 import ChatSection from './components/chat/ChatSpace.vue';
 import TransferTicket from './components/dialogs/TransferTicket.vue';
 import EditTicket from './components/dialogs/EditTicket.vue';
-import ExecutorTransfer from './components/dialogs/ExecutorTransfer.vue';
+import TransferImplementer from './components/dialogs/TransferImplementer.vue';
 import SelectCategory from './components/dialogs/SelectCategory.vue';
-import { onBeforeMount } from 'vue';
-import { fetchSupportCategory } from './api/queries';
+import SelectImplementer from './components/dialogs/SelectImplementer.vue';
 
 const support = useSupportStore();
 

@@ -49,7 +49,38 @@
               </div>
             </div>
 
+            <q-input
+              outlined
+              autogrow
+              counter
+              class="bott-input--rounded"
+              label="Название обратной связи"
+              :maxlength="64"
+              v-model="title"
+            >
+              <template #append>
+                <q-btn
+                  flat
+                  dense
+                  color="primary"
+                  icon="check"
+                  class="rounded"
+                  :loading="loading.title"
+                  @click="updateTitle"
+                >
+                  <q-tooltip
+                    class="bott-tooltip text-center"
+                    anchor="top middle"
+                    self="bottom middle"
+                  >
+                    Изменить
+                  </q-tooltip>
+                </q-btn>
+              </template>
+            </q-input>
+
             <div class="">Текст шаблона заявки</div>
+
             <editor-content
               :content="text"
               no-without-editor
@@ -184,10 +215,12 @@ const loading = ref({
   notice: false,
   update: false,
   reset: false,
+  title: false,
   'notice-admin': false,
 });
 const setting = ref<MessageFeedbackSetting>(defaultFeedbackSetting);
 const text = ref(setting.value.template_answer);
+const title = ref(setting.value.template_answer);
 
 const notice = computed(() => store.feedback.notice ?? defaultMessageFree);
 const noticeAdmin = computed(
@@ -223,6 +256,21 @@ const resetFeedback = () => {
   );
 };
 
+const updateTitle = () => {
+  loading.value.title = true;
+
+  fetchMessage(
+    'update-title',
+    {
+      title: title.value,
+      message_id: store.message.id,
+    },
+    (response) => {
+      store._message.title = response;
+    }
+  ).then(() => (loading.value.title = false));
+};
+
 const updateTemplate = (val: string) => {
   text.value = encodeText(val);
 };
@@ -255,6 +303,7 @@ const updateSettings = () => {
 };
 
 const updateShow = () => {
+  title.value = store.message.title;
   setting.value = store.feedback.setting;
   text.value = setting.value.template_answer;
 };

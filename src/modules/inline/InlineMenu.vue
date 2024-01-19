@@ -55,7 +55,9 @@
           @delete-line="deleteLine"
         ></buttons-section>
 
-        <setting-section></setting-section>
+        <setting-section
+          v-if="inline.message.is_support_menu"
+        ></setting-section>
       </div>
 
       <div class="col-12 col-sm-5 q-gutter-y-sm">
