@@ -65,15 +65,17 @@
 
 <script setup lang="ts">
 import { config } from '../../config';
+import { computed, onMounted, ref } from 'vue';
 
-import { onMounted, ref } from 'vue';
 import { useSupportStore } from '../../stores/supportStore';
+import { useQuasar } from 'quasar';
+import { fetchSupportImplementer } from '../../api/queries';
 
 import UserSearch from 'src/components/search/UserSearch.vue';
-import { fetchSupportImplementer } from '../../api/queries';
 import ImplementorItem from '../items/ImplementorItem.vue';
 
 const support = useSupportStore();
+const quasar = useQuasar();
 
 const loading = ref({
   start: false,
@@ -82,6 +84,8 @@ const loading = ref({
 
 const height = ref(300);
 const table = ref();
+
+const sm = computed(() => quasar.screen.lt.sm);
 
 const addImplementer = (id: string) => {
   loading.value.add = true;
@@ -99,9 +103,11 @@ const addImplementer = (id: string) => {
 };
 
 onMounted(() => {
+  const offset = sm.value ? 80 : 60;
+
   height.value =
     window.innerHeight -
-    30 -
+    offset -
     (table.value?.$el?.getBoundingClientRect().y ?? 300);
 
   loading.value.start = true;

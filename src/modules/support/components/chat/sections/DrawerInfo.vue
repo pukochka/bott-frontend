@@ -2,19 +2,18 @@
   <q-drawer
     bordered
     side="right"
-    v-model="support.drawer.state"
-    :width="350"
-    :breakpoint="500"
-    :mini="support.drawer.mini"
+    :width="width"
     :mini-width="70"
+    :mini="support.drawer.mini"
+    v-model="support.drawer.state"
   >
     <div style="margin: 40px 0 57px 0" class="absolute-full">
       <q-list class="full-height">
         <q-item
           clickable
-          @click="support.drawer.mini = !support.drawer.mini"
           class="transition"
           :class="[support.drawer.mini ? ' absolute-full' : '']"
+          @click="toggleDrawer"
         >
           <q-item-section avatar>
             <q-icon
@@ -30,11 +29,13 @@
         </q-item>
 
         <div class="" v-if="!support.drawer.mini">
-          <q-item v-for="(item, index) of info" :key="index" class="font-14">
-            <q-item-section>{{ item.label }}</q-item-section>
-
-            <q-item-section side>{{ item.value }}</q-item-section>
-          </q-item>
+          <component
+            v-for="(item, index) of info"
+            :key="index"
+            :is="item.component"
+            :label="item.label"
+            :value="item.value"
+          ></component>
         </div>
       </q-list>
     </div>
@@ -42,39 +43,64 @@
 </template>
 
 <script setup lang="ts">
-import { useSupportStore } from '../../../stores/supportStore';
 import { computed } from 'vue';
 
+import { useSupportStore } from '../../../stores/supportStore';
+
+import TicketStatusGrid from '../../items/sections/TicketStatusGrid.vue';
+import TicketInfo from '../../items/sections/TicketInfo.vue';
+import GridUserView from '../../items/sections/GridUserView.vue';
+import { useQuasar } from 'quasar';
+
 const support = useSupportStore();
+const quasar = useQuasar();
+
+const sm = computed(() => quasar.screen.lt.sm);
+const md = computed(() => quasar.screen.lt.sm);
+const width = computed(() => (sm.value ? 300 : 350));
+
+const toggleDrawer = () => {
+  support.drawer.mini = md.value ? false : !support.drawer.mini;
+  support.drawer.state = !md.value;
+};
 
 const info = computed(() => [
   {
     label: 'Статус',
-    value: '1',
+    value: support.selectedTicket?.status ?? 0,
+    component: TicketStatusGrid,
   },
   {
     label: 'Запрос от',
-    value: '333',
+    value: support.selectedTicket?.user?.link,
+    component: GridUserView,
   },
   {
     label: 'Исполнитель',
-    value: 'csde',
+    value:
+      support.selectedTicket?.manager?.link ??
+      '<span class="text-red">Нет</span>',
+    component: GridUserView,
   },
   {
     label: 'Время создания',
-    value: '21 дек. 2023г., 21:33:57',
+    value: support.selectedTicket?.created_at ?? '',
+    component: TicketInfo,
   },
   {
     label: 'Время принятия в работу',
-    value: '21 дек. 2023г., 21:33:57',
+    value: support.selectedTicket?.accepted_at ?? '',
+    component: TicketInfo,
   },
   {
     label: 'Время закрытия',
-    value: '21 дек. 2023г., 21:33:57',
+    value: support.selectedTicket?.closed_at ?? '',
+    component: TicketInfo,
   },
   {
     label: 'Время автоматического удаления',
-    value: '21 дек. 2023г., 21:33:57',
+    value: support.selectedTicket?.deleted_at ?? '',
+    component: TicketInfo,
   },
 ]);
 </script>

@@ -31,7 +31,7 @@
                   color="primary"
                   icon="check"
                   class="rounded"
-                  :loading="loading"
+                  :loading="loading.title"
                   :disable="text.length < 1"
                   @click="updateTitle"
                 >

@@ -1,6 +1,8 @@
 <template>
-  <div class="absolute-full relative-position bg-page">
+  <div class="absolute-full relative-position bott-page__background">
     <div class="absolute-full" :style="{ background: colors[color] }"></div>
+
+    <div class="absolute-full"></div>
 
     <messages-section></messages-section>
 

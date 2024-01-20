@@ -4,6 +4,7 @@
       borderless
       autogrow
       v-model="text"
+      style="max-height: 150px"
       input-class="font-16 q-py-none"
       placeholder="Написать сообщение..."
     >

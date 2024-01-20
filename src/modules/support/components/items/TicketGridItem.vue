@@ -87,28 +87,11 @@
           :label="col.label"
           :value="col.value"
         ></component>
-        <!--        <div class="" v-for="col of props.cols" :key="col.name">-->
-        <!--          <q-item dense v-if="col.name !== 'status'">-->
-        <!--            <q-item-section>-->
-        <!--              <q-item-label>{{ col.label }}</q-item-label>-->
-        <!--            </q-item-section>-->
-
-        <!--            <q-item-section-->
-        <!--              side-->
-        <!--              :style="{ maxWidth: percents + '%' }"-->
-        <!--              class="ellipsis-3-lines"-->
-        <!--            >-->
-        <!--              <q-item-label caption>{{ col.value }}</q-item-label>-->
-        <!--            </q-item-section>-->
-        <!--          </q-item>-->
-
-        <!--          <ticket-status-view v-else :item="col"></ticket-status-view>-->
-        <!--        </div>-->
 
         <div
           class="absolute-full"
           v-clickable
-          @click="support.chat = true"
+          @click="support.openChat(vmProps.props?.row)"
         ></div>
 
         <q-tooltip

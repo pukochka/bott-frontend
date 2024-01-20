@@ -24,6 +24,7 @@ export const useSupportStore = defineStore('support', {
         select_category: false,
         executor_transfer: false,
         transfer_ticket: false,
+        select_implementer: false,
       },
 
       selected: [],
@@ -49,6 +50,14 @@ export const useSupportStore = defineStore('support', {
     },
     closeDialog(name: DialogNames) {
       this.dialogs[name] = false;
+    },
+    openChat(ticket: any) {
+      this.selectedTicket = ticket;
+      this.chat = true;
+    },
+    closeChat() {
+      this.selectedTicket = null;
+      this.chat = false;
     },
 
     selectCategory(category: SupportCategory) {

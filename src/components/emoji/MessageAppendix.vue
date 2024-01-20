@@ -16,8 +16,15 @@
 
 <style scoped lang="scss">
 .corner {
-  fill: #0d1b2a;
+  fill: #ffffff;
 }
+
+body.body--dark {
+  .corner {
+    fill: #0d1b2a;
+  }
+}
+
 .svg-appendix {
   position: absolute;
   bottom: -0.0625rem;

@@ -92,7 +92,7 @@
                 v-for="col of props.cols"
                 :key="props.row[col.name]"
                 :class="[' text-' + (col.align ?? 'center')]"
-                @click="support.chat = true"
+                @click="support.openChat(props.row)"
               >
                 <ticket-status
                   :status="props.row.status"
@@ -183,13 +183,16 @@ import TicketStatus from '../items/sections/TicketStatusTable.vue';
 import TableUserView from '../items/sections/TableUserView.vue';
 
 import { mdiBriefcase } from '@quasar/extras/mdi-v7';
+import { useQuasar } from 'quasar';
 
 const support = useSupportStore();
+const quasar = useQuasar();
 
 const table = ref();
 const height = ref(300);
 const hover = ref(false);
 
+const sm = computed(() => quasar.screen.lt.sm);
 const tickets = computed(() => support.tickets);
 
 const updateHover = (row: any, val: boolean) => {
@@ -208,9 +211,11 @@ const notHover = (val: any, row: any) => {
 };
 
 onMounted(() => {
+  const offset = sm.value ? 150 : 60;
+
   height.value =
     window.innerHeight -
-    60 -
+    offset -
     (table.value?.$el?.getBoundingClientRect().y ?? 300);
 });
 
