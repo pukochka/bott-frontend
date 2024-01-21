@@ -21,11 +21,16 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+
+import { fetchSupportMessages } from '../../api/queries';
+import { useSupportStore } from '../../stores/supportStore';
 
 import MessagesSection from './sections/MessagesSection.vue';
 import TopSection from './sections/TopSection.vue';
 import BottomSection from './sections/BottomSection.vue';
+
+const support = useSupportStore();
 
 const loading = ref(true);
 
@@ -38,10 +43,13 @@ const colors = [
 
 const color = ref(Math.floor(Math.random() * colors.length));
 
-onMounted(() => {
+onBeforeMount(() => {
   loading.value = true;
 
-  setTimeout(() => (loading.value = false), 3000);
+  fetchSupportMessages('get-messages', {
+    ticket_id: support.selectedTicket?.id ?? -1,
+    limit: 50,
+  }).then(() => (loading.value = false));
 });
 
 onBeforeMount(() => (color.value = Math.floor(Math.random() * colors.length)));

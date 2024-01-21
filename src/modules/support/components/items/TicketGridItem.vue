@@ -38,6 +38,8 @@
               color="primary"
               class="rounded fit"
               icon="more_vert"
+              :loading="loading"
+              @click="support.selectedTicket = vmProps.props.row"
             >
               <q-tooltip
                 class="bott-tooltip text-center"
@@ -52,7 +54,10 @@
                 anchor="bottom middle"
                 self="top middle"
               >
-                <ticket-menu></ticket-menu>
+                <ticket-menu
+                  :ticket="vmProps.props.row"
+                  @loading="(value) => (loading = value)"
+                ></ticket-menu>
               </q-menu>
             </q-btn>
           </div>
@@ -107,6 +112,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
 import { useSupportStore } from '../../stores/supportStore';
 
 import { mdiBriefcase } from '@quasar/extras/mdi-v7';
@@ -118,6 +125,8 @@ const vmProps = withDefaults(defineProps<TicketGridItemProps>(), {
 });
 
 const support = useSupportStore();
+
+const loading = ref(false);
 
 const updateSelected = () => {
   if (vmProps.props.selected) {

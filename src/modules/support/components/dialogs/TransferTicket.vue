@@ -43,6 +43,9 @@
           class="rounded"
           color="primary"
           label="Переместить"
+          :disable="selected === 0"
+          :loading="loading"
+          @click="transferTicket"
         />
       </q-card-section>
     </q-card>
@@ -55,14 +58,30 @@ import { computed, ref } from 'vue';
 import { useSupportStore } from '../../stores/supportStore';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
+import { fetchSupportTicket } from '../../api/queries';
+import { config } from '../../config';
 
 const support = useSupportStore();
 
 const selected = ref(0);
+const loading = ref(false);
 
 const categories = computed(() =>
   support.categories.filter((item) => item.id !== support.selectedCategory?.id)
 );
+
+const transferTicket = () => {
+  loading.value = true;
+  fetchSupportTicket('move-category', {
+    category_id: selected.value,
+    ticket_id: support.selectedTicket?.id ?? -1,
+    user_id: config.user_id,
+  }).then(() => {
+    support
+      .updateCategory(support.selectedCategory?.id ?? -1)
+      .then(() => (loading.value = false));
+  });
+};
 </script>
 
 <style scoped lang="scss"></style>

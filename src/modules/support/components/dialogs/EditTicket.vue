@@ -17,16 +17,6 @@
           label="Название тикета"
           class="bott-input--rounded"
         />
-
-        <q-input
-          v-model="desc"
-          outlined
-          counter
-          autogrow
-          :maxlength="512"
-          label="Описание тикета"
-          class="bott-input--rounded"
-        />
       </q-card-section>
 
       <q-card-section class="row justify-end q-gutter-x-sm q-pt-none">
@@ -37,6 +27,7 @@
           class="rounded"
           color="primary"
           label="Закрыть"
+          v-close-popup
         />
 
         <q-btn
@@ -46,6 +37,9 @@
           class="rounded"
           color="primary"
           label="Сохранить"
+          :loading="loading"
+          :disable="name.length > 64 || name.length < 1"
+          @clic="updateTicket"
         />
       </q-card-section>
     </q-card>
@@ -56,14 +50,28 @@
 import { useSupportStore } from '../../stores/supportStore';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import { ref } from 'vue';
+import { fetchSupportTicket } from '../../api/queries';
 
 const support = useSupportStore();
 
 const name = ref('');
 const desc = ref('');
+const loading = ref(false);
+
+const updateTicket = () => {
+  loading.value = true;
+  fetchSupportTicket('update-title', {
+    ticket_id: support.selectedTicket?.id ?? -1,
+    title: name.value,
+  }).then(() => {
+    support
+      .updateCategory(support.selectedCategory?.id ?? -1)
+      .then(() => (loading.value = false));
+  });
+};
 
 const updateShow = () => {
-  name.value = support.selectedTicket?.name ?? '';
+  name.value = support.selectedTicket?.title ?? '';
 };
 </script>
 

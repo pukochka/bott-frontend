@@ -53,6 +53,11 @@ interface STImplementerIdParam {
   implementer_id: number;
 }
 
+interface STTextParam {
+  /** */
+  text: string;
+}
+
 /**
  * Общие параметры для всех запросов:
  * - bot_id
@@ -88,10 +93,14 @@ declare interface SupportTicketQueries {
   'move-category': STUserIdParam & STCategoryIdParam & STTicketIdParam;
   /** Изменение менеджера тикета */
   'change-manager': STTicketIdParam & STManagerIdParam & STChangeIdParam;
-  /** Удаление тикета */
+  /** Массовый перенос незакрытых тикетов на выбранного сотрудника */
   'mass-transfer': STImplementerIdParam & STCategoryIdParam & STChangeIdParam;
-  /** Удаление тикета */
+  /** Предложить закрыть ВСЕ открытые тикеты данной категории */
   'mass-offer': STImplementerIdParam & STCategoryIdParam;
+  /** Получить все сообщения тикета */
+  'get-messages': STTicketIdParam & STLimitParam;
+  /** Написать сообщение от исполнителя */
+  'implementer-write': STTextParam & STTicketIdParam & STLimitParam;
   /** Удаление тикета */
   delete: STTicketIdParam;
 }

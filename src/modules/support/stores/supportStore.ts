@@ -10,6 +10,7 @@ export const useSupportStore = defineStore('support', {
       categories: [],
       tickets: [],
       implementers: [],
+      messages: [],
 
       section: 'select',
 
@@ -70,11 +71,15 @@ export const useSupportStore = defineStore('support', {
       this.pagination.count = 0;
       this.selectedCategory = category;
 
-      Promise.all([
+      this.updateCategory(category.id, true).then();
+    },
+
+    updateCategory(id: number, loading?: boolean) {
+      return Promise.all([
         fetchSupportTicket(
           'index',
           {
-            category_id: category.id,
+            category_id: id,
             offset: this.pagination.offset,
             limit: this.pagination.limit,
           },
@@ -82,17 +87,13 @@ export const useSupportStore = defineStore('support', {
             this.tickets = response;
           }
         ),
-        fetchSupportTicket(
-          'count',
-          { category_id: category.id },
-          (response) => {
-            const count = Number(response);
+        fetchSupportTicket('count', { category_id: id }, (response) => {
+          const count = Number(response);
 
-            this.pagination.count = !isNaN(count) ? count : 0;
-          }
-        ),
+          this.pagination.count = !isNaN(count) ? count : 0;
+        }),
       ]).then(() => {
-        this.loading.category = false;
+        if (loading) this.loading.category = false;
       });
     },
   },

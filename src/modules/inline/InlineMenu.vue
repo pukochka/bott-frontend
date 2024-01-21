@@ -12,9 +12,9 @@
           class="rounded q-gutter-y-sm"
           flat
           bordered
-          :class="[!props['no-breadcrumbs'] ? ' q-px-md q-pb-md' : ' q-pa-md']"
+          :class="[!props.breadcrumbs ? ' q-px-md q-pb-md' : ' q-pa-md']"
         >
-          <q-breadcrumbs v-if="!props['no-breadcrumbs']">
+          <q-breadcrumbs v-if="!props.breadcrumbs">
             <q-breadcrumbs-el
               class="rounded q-px-xs"
               v-for="(breadcrumb, index) of breadcrumbs"
@@ -116,7 +116,7 @@ const props = withDefaults(defineProps<InlineMenuProps>(), {
   bot_id: 0,
   host: '',
   token: '',
-  'no-breadcrumbs': false,
+  breadcrumbs: false,
 });
 
 const inline = useInlineStore();
@@ -205,7 +205,7 @@ interface InlineMenuProps {
   bot_id?: number;
   host?: string;
   token?: string;
-  'no-breadcrumbs'?: boolean;
+  breadcrumbs?: boolean;
 }
 </script>
 

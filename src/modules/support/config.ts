@@ -2,6 +2,7 @@ export const config = {
   host: 'https://api.bot-t.com/',
   id: 1,
   user_id: 2876811,
+  telegram_id: 1028741753,
   bot: {
     id: 15195,
     user_id: 2378608,

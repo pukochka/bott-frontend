@@ -5,6 +5,7 @@ import {
   mdiTagRemove,
   mdiTransfer,
   mdiCog,
+  mdiTagOff,
 } from '@quasar/extras/mdi-v7';
 
 export interface TicketMenuView {
@@ -19,12 +20,18 @@ export type TicketMenuNames =
   | 'move'
   | 'offer'
   | 'edit'
+  | 'close'
   | 'delete';
 
 export const ticketMenu: Record<TicketMenuNames, TicketMenuView> = {
   pick: {
     label: 'Взять в работу тикет',
     icon: mdiBriefcase,
+    color: 'accent',
+  },
+  close: {
+    label: 'Закрыть тикет',
+    icon: mdiTagCheck,
     color: 'positive',
   },
   transfer: {
@@ -39,7 +46,7 @@ export const ticketMenu: Record<TicketMenuNames, TicketMenuView> = {
   },
   offer: {
     label: 'Предложить закрыть тикет',
-    icon: mdiTagCheck,
+    icon: mdiTagOff,
     color: 'warning',
   },
   edit: {
@@ -53,3 +60,11 @@ export const ticketMenu: Record<TicketMenuNames, TicketMenuView> = {
     color: 'negative',
   },
 };
+
+/**
+ * 1 - move pick edit delete
+ * 2 - transfer move offer edit delete
+ * 3 - move transfer pick close edit delete
+ * 4 - transfer move pick edit delete
+ * 5 - move pick edit delete
+ * */

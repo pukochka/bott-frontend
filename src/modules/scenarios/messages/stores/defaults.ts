@@ -8,6 +8,7 @@ export const defaultMessage: MessageFree = {
   videos: null,
   feedback: null,
   animations: null,
+  breadcrumbs: { crumbs: [] },
   type: {
     id: 0,
     type: 0,

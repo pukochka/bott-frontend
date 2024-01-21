@@ -44,6 +44,8 @@
                     color="primary"
                     class="rounded"
                     icon="more_vert"
+                    :loading="loading"
+                    @click="support.selectedTicket = props.row"
                   >
                     <q-tooltip
                       class="bott-tooltip text-center"
@@ -54,15 +56,19 @@
                     </q-tooltip>
 
                     <q-menu class="bott-portal-menu">
-                      <ticket-menu></ticket-menu>
+                      <ticket-menu
+                        :ticket="props.row"
+                        @loading="(value) => (loading = value)"
+                      ></ticket-menu>
                     </q-menu>
                   </q-btn>
 
                   <q-btn
                     flat
                     padding="4px"
-                    color="positive"
+                    color="accent"
                     class="rounded"
+                    v-if="![2].includes(props.row.status)"
                     :icon="mdiBriefcase"
                   >
                     <q-tooltip
@@ -71,6 +77,23 @@
                       self="bottom middle"
                     >
                       Взять в работу
+                    </q-tooltip>
+                  </q-btn>
+
+                  <q-btn
+                    flat
+                    padding="4px"
+                    color="positive"
+                    class="rounded"
+                    v-else
+                    :icon="mdiTagCheck"
+                  >
+                    <q-tooltip
+                      class="bott-tooltip text-center"
+                      anchor="top middle"
+                      self="bottom middle"
+                    >
+                      Закрыть тикет
                     </q-tooltip>
                   </q-btn>
                 </div>
@@ -182,7 +205,7 @@ import TicketMenu from '../items/sections/TicketMenu.vue';
 import TicketStatus from '../items/sections/TicketStatusTable.vue';
 import TableUserView from '../items/sections/TableUserView.vue';
 
-import { mdiBriefcase } from '@quasar/extras/mdi-v7';
+import { mdiBriefcase, mdiTagCheck } from '@quasar/extras/mdi-v7';
 import { useQuasar } from 'quasar';
 
 const support = useSupportStore();
@@ -191,6 +214,7 @@ const quasar = useQuasar();
 const table = ref();
 const height = ref(300);
 const hover = ref(false);
+const loading = ref(false);
 
 const sm = computed(() => quasar.screen.lt.sm);
 const tickets = computed(() => support.tickets);

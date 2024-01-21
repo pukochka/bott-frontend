@@ -54,6 +54,7 @@
               :bot_id="config.bot.id"
               :host="config.host"
               :message="message"
+              breadcrumbs
             ></inline-menu>
 
             <q-inner-loading
@@ -64,10 +65,6 @@
             </q-inner-loading>
           </div>
         </div>
-
-        <!--        <div class="col-12 col-sm-4 col-xl-2">-->
-        <!--          <constants-section :constants="constants"></constants-section>-->
-        <!--        </div>-->
       </div>
     </div>
   </div>

@@ -1,9 +1,12 @@
+import { defaultMessage } from '../../scenarios/messages/stores/defaults';
+
 export interface WorkStore {
   chat: boolean;
 
   categories: Array<SupportCategory>;
   tickets: Array<SupportTicket>;
   implementers: Array<SupportImplementer>;
+  messages: Array<SupportTicketMessage>;
 
   section: SectionNames;
 
@@ -68,4 +71,43 @@ export const defaultImplementer: SupportImplementer = {
     last_name: '',
     username: '',
   },
+};
+
+export const defaultTicket: SupportTicket = {
+  deleted_at: '',
+  id: 0,
+  category_id: 0,
+  accepted_at: '',
+  closed_at: '',
+  created_at: '',
+  offered_at: '',
+  user: {
+    id: 0,
+    type: '',
+    telegram_id: 0,
+    first_name: '',
+    link: '',
+    last_name: '',
+    username: '',
+  },
+  title: '',
+  manager: null,
+  status: 0,
+};
+
+export const defaultTicketMessage: SupportTicketMessage = {
+  id: 0,
+  user: {
+    id: 0,
+    type: '',
+    telegram_id: 0,
+    first_name: '',
+    link: '',
+    last_name: '',
+    username: '',
+  },
+  message: defaultMessage,
+  ticket_id: 0,
+  created_at: '',
+  author: 'implementer',
 };

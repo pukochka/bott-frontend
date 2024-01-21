@@ -57,6 +57,33 @@ export async function fetchSupportTicket<Q extends keyof SupportTicketQueries>(
   } catch (e) {}
 }
 
+export async function fetchSupportMessages<
+  Q extends keyof SupportTicketQueries
+>(query: Q, data?: SupportTicketParams<Q>, action?: (response: any) => void) {
+  try {
+    const support = useSupportStore();
+
+    return await instance({
+      url: 'v1/support/ticket-message/' + query,
+      data: data,
+    }).then((response) => {
+      /** */
+
+      if (action !== void 0) action(response.data.data);
+
+      if (query === 'get-messages') {
+        /** */
+
+        support.messages = response.data.data;
+
+        /** */
+      }
+
+      /** */
+    });
+  } catch (e) {}
+}
+
 export async function fetchSupportImplementer<
   Q extends keyof SupportImplementerQueries
 >(

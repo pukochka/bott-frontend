@@ -28,7 +28,7 @@ declare interface SupportTicket {
   /** Название тикета */
   title: string;
   /** Статус тикета 1 - закрыт 2 - открыт 3 - ожидает закрытия 4 - повторно открыт 5 - ожидает менеджера */
-  status: number | null;
+  status: number;
   /** Дата и время создания тикета (2023-10-13 20:47:35) */
   created_at: string;
   /** Дата и время принятия в работу (2023-10-13 20:47:35) */
@@ -50,4 +50,19 @@ declare interface SupportImplementer {
   category_id: number | null;
   /** Статус получения новых тикетов 1 - получает 0 - не получает */
   status: number;
+}
+
+declare interface SupportTicketMessage {
+  /** ID сообщения тикета */
+  id: number;
+  /** ID тикета */
+  ticket_id: number;
+  /** Чьё сообщение: Исполнитель категории - 'implementer' Пользователь создавший запрос - 'user' */
+  author: 'implementer' | 'user';
+  /** Пользователь чьё сообщение: Исполнитель категории Пользователь создавший запрос */
+  user: BOTTUser;
+  /** Контент сообщения */
+  message: MessageFree;
+  /** Дата и время создания сообщения (2023-10-13 20:47:35) */
+  created_at: string;
 }
