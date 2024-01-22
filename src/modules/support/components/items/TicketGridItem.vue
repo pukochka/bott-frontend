@@ -38,7 +38,6 @@
               color="primary"
               class="rounded fit"
               icon="more_vert"
-              :loading="loading"
               @click="support.selectedTicket = vmProps.props.row"
             >
               <q-tooltip
@@ -54,10 +53,7 @@
                 anchor="bottom middle"
                 self="top middle"
               >
-                <ticket-menu
-                  :ticket="vmProps.props.row"
-                  @loading="(value) => (loading = value)"
-                ></ticket-menu>
+                <ticket-menu :ticket="vmProps.props.row"></ticket-menu>
               </q-menu>
             </q-btn>
           </div>
@@ -66,9 +62,12 @@
             <q-btn
               flat
               padding="4px"
-              color="positive"
+              color="accent"
               class="rounded fit"
               :icon="mdiBriefcase"
+              :loading="loading"
+              v-if="![2].includes(vmProps.props.row.status)"
+              @click="pickTicket"
             >
               <q-tooltip
                 class="bott-tooltip text-center"
@@ -76,6 +75,25 @@
                 self="bottom middle"
               >
                 Взять в работу
+              </q-tooltip>
+            </q-btn>
+
+            <q-btn
+              flat
+              v-else
+              padding="4px"
+              color="positive"
+              class="rounded"
+              :icon="mdiTagCheck"
+              :loading="loading"
+              @click="closeTicket"
+            >
+              <q-tooltip
+                class="bott-tooltip text-center"
+                anchor="top middle"
+                self="bottom middle"
+              >
+                Закрыть тикет
               </q-tooltip>
             </q-btn>
           </div>
@@ -98,14 +116,6 @@
           v-clickable
           @click="support.openChat(vmProps.props?.row)"
         ></div>
-
-        <q-tooltip
-          class="bott-tooltip text-center"
-          anchor="top middle"
-          self="bottom middle"
-        >
-          Перейти в чат
-        </q-tooltip>
       </q-list>
     </q-card>
   </div>
@@ -116,7 +126,7 @@ import { ref } from 'vue';
 
 import { useSupportStore } from '../../stores/supportStore';
 
-import { mdiBriefcase } from '@quasar/extras/mdi-v7';
+import { mdiBriefcase, mdiTagCheck } from '@quasar/extras/mdi-v7';
 
 import TicketMenu from './sections/TicketMenu.vue';
 
@@ -127,6 +137,24 @@ const vmProps = withDefaults(defineProps<TicketGridItemProps>(), {
 const support = useSupportStore();
 
 const loading = ref(false);
+
+const closeTicket = () => {
+  support.workStatus(
+    1,
+    vmProps.props.row.id,
+    () => (loading.value = true),
+    () => (loading.value = false)
+  );
+};
+
+const pickTicket = () => {
+  support.workStatus(
+    2,
+    vmProps.props.row.id,
+    () => (loading.value = true),
+    () => (loading.value = false)
+  );
+};
 
 const updateSelected = () => {
   if (vmProps.props.selected) {

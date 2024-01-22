@@ -4,7 +4,7 @@
 
     <div class="absolute-full"></div>
 
-    <messages-section></messages-section>
+    <messages-section v-if="!loading"></messages-section>
 
     <top-section></top-section>
 
@@ -46,10 +46,7 @@ const color = ref(Math.floor(Math.random() * colors.length));
 onBeforeMount(() => {
   loading.value = true;
 
-  fetchSupportMessages('get-messages', {
-    ticket_id: support.selectedTicket?.id ?? -1,
-    limit: 50,
-  }).then(() => (loading.value = false));
+  support.updateMessages().then(() => (loading.value = false));
 });
 
 onBeforeMount(() => (color.value = Math.floor(Math.random() * colors.length)));

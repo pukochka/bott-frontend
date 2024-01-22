@@ -30,6 +30,8 @@
               :message="message"
               :index="index"
             ></chat-message>
+
+            <div ref="bottom"></div>
           </div>
         </q-scroll-area>
       </q-page>
@@ -46,12 +48,13 @@ import { onMounted, ref } from 'vue';
 const support = useSupportStore();
 
 const chat = ref();
+const bottom = ref();
 
 onMounted(() => {
-  const el = document
-    .querySelector('q-scrollarea__content absolute')
-    ?.getBoundingClientRect() ?? { height: 600 };
-  chat.value.setScrollPosition('vertical', el.height, 200);
+  support.scroll = chat;
+  support.scroll_bottom = bottom;
+
+  support.scrollToBottom();
 });
 
 const thumbStyle = {

@@ -2,7 +2,7 @@
   <q-dialog
     persistent
     position="bottom"
-    v-model="support.dialogs.executor_transfer"
+    v-model="support.dialogs.implementor_transfer"
     @before-show="updateShow"
   >
     <q-card flat bordered style="width: 100%" class="dialog-rounded">
@@ -90,9 +90,10 @@ const transferTicket = () => {
     ticket_id: support.selectedTicket?.id ?? -1,
     manager_id: selected.value,
   }).then(() => {
-    support
-      .updateCategory(support.selectedCategory?.id ?? -1)
-      .then(() => (loading.value.transfer = false));
+    support.updateCategory(support.selectedCategory?.id ?? -1).then(() => {
+      loading.value.transfer = false;
+      support.closeDialog('implementor_transfer');
+    });
   });
 };
 

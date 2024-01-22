@@ -30,4 +30,7 @@ export const config = {
     recurrent_check_id: null,
     is_free: null,
   },
+
+  category_update_time: 10000,
+  messages_update_time: 5000,
 };

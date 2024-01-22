@@ -1,10 +1,5 @@
 <template>
-  <q-card
-    flat
-    bordered
-    class="q-mx-md rounded"
-    v-if="!['create', 'select'].includes(support.section)"
-  >
+  <div class="q-mx-md" v-if="!['create', 'select'].includes(support.section)">
     <div class="">
       <div class="row justify-center q-gutter-xs">
         <q-btn
@@ -117,7 +112,13 @@
         </q-btn>
       </div>
 
-      <q-btn flat dense color="primary" icon="close" @click="closeSection">
+      <q-btn
+        flat
+        dense
+        color="primary"
+        icon="close"
+        @click="support.closeSection"
+      >
         <q-tooltip
           class="bott-tooltip text-center"
           anchor="top middle"
@@ -127,7 +128,7 @@
         </q-tooltip>
       </q-btn>
     </div>
-  </q-card>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -164,18 +165,6 @@ const status = computed(
 );
 
 const sm = computed(() => quasar.screen.lt.sm);
-const md = computed(() => quasar.screen.lt.md);
-
-const closeSection = () => {
-  if (['log', 'manager', 'edit'].includes(support.section)) {
-    support.section = 'list';
-    return;
-  }
-
-  if (support.selectedCategory?.id) support.selectedCategory = null;
-
-  support.section = 'select';
-};
 
 const deleteCategory = () => {
   useDialog(

@@ -77,9 +77,10 @@ const transferTicket = () => {
     ticket_id: support.selectedTicket?.id ?? -1,
     user_id: config.user_id,
   }).then(() => {
-    support
-      .updateCategory(support.selectedCategory?.id ?? -1)
-      .then(() => (loading.value = false));
+    support.updateCategory(support.selectedCategory?.id ?? -1).then(() => {
+      loading.value = false;
+      support.closeDialog('transfer_ticket');
+    });
   });
 };
 </script>

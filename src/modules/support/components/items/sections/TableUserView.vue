@@ -1,11 +1,5 @@
 <template>
-  <q-btn no-caps dense flat size="md" color="primary" class="rounded">
-    <div v-html="value"></div>
-
-    <q-tooltip class="bott-tooltip" anchor="top middle" self="bottom middle">
-      Перейти в телеграм
-    </q-tooltip>
-  </q-btn>
+  <div v-html="value" class="text-primary"></div>
 </template>
 
 <script setup lang="ts">

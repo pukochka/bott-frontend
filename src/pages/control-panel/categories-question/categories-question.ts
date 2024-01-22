@@ -8,11 +8,4 @@ export default {
 
   drawer: menu,
   withoutRight: true,
-
-  toc: [
-    {
-      title: 'FAQ',
-      buttons: () => faqContent['/'],
-    },
-  ],
 };

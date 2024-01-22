@@ -68,10 +68,15 @@ import EditTicket from './components/dialogs/EditTicket.vue';
 import TransferImplementer from './components/dialogs/TransferImplementer.vue';
 import SelectCategory from './components/dialogs/SelectCategory.vue';
 import SelectImplementer from './components/dialogs/SelectImplementer.vue';
+import { has } from '../../utils/helpers/string';
 
 const support = useSupportStore();
 
 onBeforeMount(() => {
+  if (has('id') && has('category_id')) {
+    // support
+  }
+
   fetchSupportCategory('index', undefined, () => {
     support.loading.start = false;
   });

@@ -26,6 +26,18 @@
         </q-btn>
       </div>
 
+      <q-btn
+        v-if="message.message.type.id === 1"
+        no-caps
+        dense
+        flat
+        target="_blank"
+        :href="messageLink"
+        class="rounded full-width q-my-sm"
+        color="primary"
+        label="Просмотреть картинку"
+      />
+
       <div class="column items-end">
         <div
           class="font-14 text-break row justify-start full-width"
@@ -56,6 +68,7 @@ import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
 import { useSupportStore } from '../../stores/supportStore';
 
 import MessageAppendix from '../../../../components/emoji/MessageAppendix.vue';
+import { config } from '../../config';
 
 const props = withDefaults(defineProps<ChatMessageProps>(), {
   message: () => defaultTicketMessage,
@@ -74,6 +87,11 @@ const link = computed(() => {
 
   return 'https://t.me/' + props.message.user.link.slice(1);
 });
+
+const messageLink = computed(
+  () =>
+    'https://t.me/' + config.bot.name + '?start=f_' + props.message.message.id
+);
 
 const name = computed(
   () => props.message?.user.first_name + ' ' + props.message.user.last_name

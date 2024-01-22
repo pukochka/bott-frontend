@@ -44,7 +44,6 @@
                     color="primary"
                     class="rounded"
                     icon="more_vert"
-                    :loading="loading"
                     @click="support.selectedTicket = props.row"
                   >
                     <q-tooltip
@@ -56,58 +55,13 @@
                     </q-tooltip>
 
                     <q-menu class="bott-portal-menu">
-                      <ticket-menu
-                        :ticket="props.row"
-                        @loading="(value) => (loading = value)"
-                      ></ticket-menu>
+                      <ticket-menu :ticket="props.row"></ticket-menu>
                     </q-menu>
                   </q-btn>
 
-                  <q-btn
-                    flat
-                    padding="4px"
-                    color="accent"
-                    class="rounded"
-                    v-if="![2].includes(props.row.status)"
-                    :icon="mdiBriefcase"
-                  >
-                    <q-tooltip
-                      class="bott-tooltip text-center"
-                      anchor="top middle"
-                      self="bottom middle"
-                    >
-                      Взять в работу
-                    </q-tooltip>
-                  </q-btn>
-
-                  <q-btn
-                    flat
-                    padding="4px"
-                    color="positive"
-                    class="rounded"
-                    v-else
-                    :icon="mdiTagCheck"
-                  >
-                    <q-tooltip
-                      class="bott-tooltip text-center"
-                      anchor="top middle"
-                      self="bottom middle"
-                    >
-                      Закрыть тикет
-                    </q-tooltip>
-                  </q-btn>
+                  <table-buttons :ticket="props.row"></table-buttons>
                 </div>
               </q-td>
-
-              <q-tooltip
-                @update:model-value="(val) => notHover(val, props.row)"
-                :model-value="props.row.hover"
-                class="bott-tooltip text-center"
-                anchor="top middle"
-                self="bottom middle"
-              >
-                Перейти в чат
-              </q-tooltip>
 
               <q-td
                 class="cursor-pointer"
@@ -199,14 +153,13 @@ import { computed, onMounted, ref } from 'vue';
 import { columns } from '../../utils/columns';
 
 import { useSupportStore } from '../../stores/supportStore';
+import { useQuasar } from 'quasar';
 
 import TicketGridItem from '../items/TicketGridItem.vue';
 import TicketMenu from '../items/sections/TicketMenu.vue';
 import TicketStatus from '../items/sections/TicketStatusTable.vue';
 import TableUserView from '../items/sections/TableUserView.vue';
-
-import { mdiBriefcase, mdiTagCheck } from '@quasar/extras/mdi-v7';
-import { useQuasar } from 'quasar';
+import TableButtons from '../items/sections/TableButtons.vue';
 
 const support = useSupportStore();
 const quasar = useQuasar();
@@ -214,11 +167,9 @@ const quasar = useQuasar();
 const table = ref();
 const height = ref(300);
 const hover = ref(false);
-const loading = ref(false);
 
 const sm = computed(() => quasar.screen.lt.sm);
 const tickets = computed(() => support.tickets);
-
 const updateHover = (row: any, val: boolean) => {
   hover.value = val;
 

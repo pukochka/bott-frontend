@@ -61,7 +61,7 @@ const width = computed(() => (sm.value ? 300 : 350));
 
 const toggleDrawer = () => {
   support.drawer.mini = md.value ? false : !support.drawer.mini;
-  support.drawer.state = !md.value;
+  support.drawer.state = !support.drawer.state;
 };
 
 const info = computed(() => [

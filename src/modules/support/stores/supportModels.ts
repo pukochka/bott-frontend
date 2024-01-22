@@ -29,6 +29,9 @@ export interface WorkStore {
   selectedTicket: SupportTicket | null;
   selectedCategory: SupportCategory | null;
 
+  scroll: any;
+  scroll_bottom: any;
+
   pagination: {
     page: number;
     count: number;
@@ -39,7 +42,7 @@ export interface WorkStore {
 
 export type DialogNames =
   | 'transfer_ticket'
-  | 'executor_transfer'
+  | 'implementor_transfer'
   | 'select_category'
   | 'select_implementer'
   | 'edit_ticket';

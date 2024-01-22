@@ -36,7 +36,7 @@ export const ticketStatuses: Record<string, StatusView> = {
   3: {
     label: 'Ожидает закрытия',
     color: 'primary',
-    text: '',
+    text: 'Вы уверены, что хотите предложить закрыть тикет?',
   },
   4: {
     label: 'Повторно открыт',

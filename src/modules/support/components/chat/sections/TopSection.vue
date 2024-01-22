@@ -81,14 +81,12 @@
 </template>
 
 <script setup lang="ts">
-import { useSupportStore } from '../../../stores/supportStore';
 import { computed, ref } from 'vue';
 
 import { ticketMenu, TicketMenuNames } from '../../../utils/ticket-menu';
-import { useDialog } from '../../../../file-manager/stores/useDialog';
+
+import { useSupportStore } from '../../../stores/supportStore';
 import { useQuasar } from 'quasar';
-import { fetchSupportTicket } from '../../../api/queries';
-import { ticketStatuses } from '../../../utils/statuses';
 
 const support = useSupportStore();
 const quasar = useQuasar();
@@ -96,8 +94,8 @@ const quasar = useQuasar();
 const md = computed(() => quasar.screen.lt.md);
 
 const loading = ref({
-  1: false,
-  2: false,
+  offer: false,
+  pick: false,
   delete: false,
   close: false,
 });
@@ -113,61 +111,55 @@ const toggleDrawer = () => {
   support.drawer.state = !support.drawer.state;
 };
 
-const work = (status: 1 | 2) => {
-  if (ticketStatuses[status].text.length === 0) {
-    changeStatus(status);
-
-    return;
-  }
-
-  useDialog(ticketStatuses[status].text, true).onOk(() => changeStatus(status));
-};
-
-const changeStatus = (status: 1 | 2) => {
-  loading.value[status] = true;
-  fetchSupportTicket('change-status', {
-    ticket_id: support.selectedTicket?.id ?? -1,
-    manager_id: support.selectedTicket?.manager?.id ?? -1,
-    status: status,
-  }).then(() => (loading.value[status] = false));
+const pickTicket = () => {
+  support.workStatus(
+    2,
+    support.selectedTicket?.id ?? -1,
+    () => (loading.value.pick = true),
+    () => (loading.value.pick = false)
+  );
 };
 
 const offerTicket = () => {
-  useDialog('Вы уверены, что хотите предложить закрыть тикет?', true).onOk(
-    () => {
-      loading.value.offer = true;
-      fetchSupportTicket('change-status', {
-        ticket_id: support.selectedTicket?.id ?? -1,
-        manager_id: support.selectedTicket?.manager?.id ?? -1,
-        status: 1,
-      }).then(() => (loading.value.offer = false));
-    }
+  support.workStatus(
+    3,
+    support.selectedTicket?.id ?? -1,
+    () => (loading.value.offer = true),
+    () => (loading.value.offer = false)
   );
 };
 
 const deleteTicket = () => {
-  useDialog('Вы уверены, что хотите удалить тикет?', true).onOk(() => {
-    loading.value.delete = true;
-    fetchSupportTicket('delete', {
-      ticket_id: support.selectedTicket?.id ?? -1,
-    }).then(() => (loading.value.offer = false));
-  });
+  support.deleteTicket(
+    support.selectedTicket?.id ?? -1,
+    () => (loading.value.delete = true),
+    () => (loading.value.delete = false)
+  );
+};
+
+const closeTicket = () => {
+  support.workStatus(
+    1,
+    support.selectedTicket?.id ?? -1,
+    () => (loading.value.close = true),
+    () => (loading.value.close = false)
+  );
 };
 
 const actions = computed(
   (): Record<TicketMenuNames, any> => ({
     pick: {
-      action: '',
+      action: pickTicket,
       condition: ![2].includes(support.selectedTicket?.status ?? -1),
       loading: loading.value.pick,
     },
     close: {
-      action: '',
+      action: closeTicket,
       condition: [3].includes(support.selectedTicket?.status ?? -1),
       loading: loading.value.close,
     },
     transfer: {
-      action: () => (support.dialogs.executor_transfer = true),
+      action: () => (support.dialogs.implementor_transfer = true),
       condition: [2, 3, 4].includes(support.selectedTicket?.status ?? -1),
       loading: false,
     },
