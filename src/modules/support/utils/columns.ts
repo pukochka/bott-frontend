@@ -8,7 +8,7 @@ export const columns: Array<any> = [
     name: 'id',
     align: 'center',
     label: 'Название',
-    field: (row: any) => 'Тикет №' + row.id,
+    field: (row: any) => row.title,
     hover: false,
     component: TicketInfo,
   },

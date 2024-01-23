@@ -1,5 +1,5 @@
 <template>
-  <div class="q-gutter-y-sm q-pa-lg">
+  <div class="q-gutter-y-sm q-py-lg">
     <div class="text-h6 text-center">Добавить категорию</div>
 
     <div class="row justify-center">

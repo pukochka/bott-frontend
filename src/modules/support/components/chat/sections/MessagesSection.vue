@@ -1,9 +1,5 @@
 <template>
-  <q-layout
-    view="hHh Lpr lff"
-    container
-    class="bott-layout__drawer absolute-full"
-  >
+  <q-layout container class="bott-layout__drawer absolute-full">
     <q-page-container>
       <drawer-info></drawer-info>
 

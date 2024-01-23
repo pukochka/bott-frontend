@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center q-pa-xl text-h6">Выберите категорию</div>
+  <div class="text-center q-py-xl text-h6">Выберите категорию</div>
 </template>
 
 <script setup lang="ts"></script>

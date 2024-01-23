@@ -174,10 +174,12 @@ export const useSupportStore = defineStore('support', {
 
       fetchSupportTicket('change-status', {
         ticket_id: ticket_id,
-        manager_id: config.user_id,
+        implementer_id: config.user_id,
         status: status,
       }).then(() => {
-        if (action2 !== void 0) action2();
+        this.updateCategory(this.selectedCategory?.id ?? -1).then(() => {
+          if (action2 !== void 0) action2();
+        });
       });
     },
 
@@ -205,7 +207,9 @@ export const useSupportStore = defineStore('support', {
     ) {
       useDialog('Вы уверены, что хотите удалить тикет?', true).onOk(() => {
         if (action1 !== void 0) action1();
-        fetchSupportTicket('delete', { ticket_id: ticket_id }).then(() => {
+        fetchSupportTicket('delete', { ticket_id: ticket_id }, (response) => {
+          this.tickets = response;
+        }).then(() => {
           if (action2 !== void 0) action2();
         });
       });

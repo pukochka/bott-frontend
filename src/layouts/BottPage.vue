@@ -2,7 +2,7 @@
   <router-view v-if="props.withoutFooter" />
 
   <div class="bott-page__content" v-else>
-    <div class="q-pa-lg q-py-xl" :class="pageClasses">
+    <div class="q-py-xl" :class="pageClasses">
       <div class="bott-page__title">{{ title }}</div>
 
       <bott-breadcrumbs></bott-breadcrumbs>
@@ -33,8 +33,10 @@ const props = withDefaults(defineProps<BottPageProps>(), {
 const quasar = useQuasar();
 const states = useStatesStore();
 
+const sm = computed(() => quasar.screen.lt.sm);
+
 const pageClasses = computed(() =>
-  quasar.screen.lt.sm ? ' q-gutter-y-sm' : ' q-gutter-y-md'
+  sm.value ? ' q-gutter-y-sm q-pa-sm' : ' q-gutter-y-md q-pa-lg'
 );
 
 const setPageProps = () => {

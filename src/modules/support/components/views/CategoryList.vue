@@ -125,19 +125,19 @@
             </div>
           </template>
         </q-table>
-
-        <div
-          style="z-index: 5"
-          class="text-center col q-pa-xl bott-page__background absolute-full"
-          v-if="!tickets.length"
-        >
-          Тикетов в категории
-          <span class="text-primary">
-            {{ support.selectedCategory?.title ?? '' }}
-          </span>
-          пока нет...
-        </div>
       </q-scroll-area>
+
+      <div
+        style="z-index: 5"
+        class="text-center col q-pa-xl bott-page__background absolute-full"
+        v-if="!tickets.length"
+      >
+        Тикетов в категории
+        <span class="text-primary">
+          {{ support.selectedCategory?.title ?? '' }}
+        </span>
+        пока нет...
+      </div>
     </div>
   </div>
 </template>
@@ -160,7 +160,7 @@ const support = useSupportStore();
 const quasar = useQuasar();
 
 const table = ref();
-const height = ref(300);
+const height = ref(500);
 const hover = ref(false);
 
 const sm = computed(() => quasar.screen.lt.sm);
@@ -177,7 +177,7 @@ onMounted(() => {
   height.value =
     window.innerHeight -
     offset -
-    (table.value?.$el?.getBoundingClientRect().y ?? 300);
+    (table.value?.$el?.getBoundingClientRect().y ?? 200);
 });
 
 const thumbStyle = {

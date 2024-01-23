@@ -76,6 +76,14 @@ export const defaultImplementer: SupportImplementer = {
   },
 };
 
+export const defaultCategory: SupportCategory = {
+  default: 0,
+  id: 0,
+  view_category_id: 0,
+  title: '',
+  status: 0,
+};
+
 export const defaultTicket: SupportTicket = {
   deleted_at: '',
   id: 0,

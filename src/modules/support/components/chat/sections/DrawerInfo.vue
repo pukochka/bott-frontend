@@ -39,6 +39,10 @@
         </div>
       </q-list>
     </div>
+
+    <q-inner-loading :showing="support.loading.category">
+      <q-spinner size="50px" color="primary" />
+    </q-inner-loading>
   </q-drawer>
 </template>
 

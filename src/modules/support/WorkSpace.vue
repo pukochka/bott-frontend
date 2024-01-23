@@ -19,6 +19,7 @@
         <bottom-section class="col-12"></bottom-section>
 
         <q-inner-loading
+          style="z-index: 11"
           transition-show="none"
           :showing="support.loading.category"
           class="bott-page__background"
@@ -68,13 +69,25 @@ import EditTicket from './components/dialogs/EditTicket.vue';
 import TransferImplementer from './components/dialogs/TransferImplementer.vue';
 import SelectCategory from './components/dialogs/SelectCategory.vue';
 import SelectImplementer from './components/dialogs/SelectImplementer.vue';
-import { has } from '../../utils/helpers/string';
+import { getQueryParam, has } from '../../utils/helpers/string';
+import { defaultCategory, defaultTicket } from './stores/supportModels';
 
 const support = useSupportStore();
 
 onBeforeMount(() => {
   if (has('id') && has('category_id')) {
-    // support
+    const id = Number(getQueryParam('id')) ?? 0;
+    const category_id = Number(getQueryParam('category_id')) ?? 0;
+
+    support.selectedTicket = Object.assign({ id }, defaultTicket);
+    support.selectedCategory = Object.assign(
+      { id: category_id },
+      defaultCategory
+    );
+
+    // support.updateCategory(category_id, true);
+
+    support.chat = true;
   }
 
   fetchSupportCategory('index', undefined, () => {

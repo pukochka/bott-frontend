@@ -1,10 +1,10 @@
 <template>
   <div
     class="row justify-center items-center"
-    v-if="support.section === 'list' && support.selectedCategory"
+    v-if="support.section === 'list' && support.tickets.length"
   >
-    <div class="row q-pt-xs items-center">
-      <div class="text-caption q-pr-sm">
+    <div class="row q-pt-xs items-center justify-center">
+      <div class="text-caption q-pr-sm text-center">
         <div class="">{{ rangeLabel }}</div>
       </div>
 
@@ -13,78 +13,77 @@
         bordered
         class="row rounded items-center no-wrap overflow-hidden"
       >
-        <q-btn
-          v-for="(button, index) of leftArrows"
-          :key="index"
-          flat
-          square
-          no-wrap
-          no-caps
-          size="md"
-          color="primary"
-          :dense="sm"
-          :icon="button.icon"
-          :loading="button.loading"
-          :disable="button.condition"
-          @click="button.action"
-        />
+        <div class="col" v-for="(button, index) of leftArrows" :key="index">
+          <q-btn
+            flat
+            square
+            no-wrap
+            no-caps
+            size="md"
+            color="primary"
+            :icon="button.icon"
+            :loading="button.loading"
+            :disable="button.condition"
+            @click="button.action"
+          />
+        </div>
 
-        <q-btn
-          flat
-          square
-          no-wrap
-          no-caps
-          size="md"
-          :dense="sm"
-          :label="countLabel"
-          :loading="loading.page"
-          :disable="support.pagination.count === 1"
-        >
-          <q-menu cover class="bott-portal-menu">
-            <q-input
-              autofocus
-              outlined
-              style="min-width: 200px"
-              mask="####"
-              label="Введите номер страницы"
-              class="bott-input--rounded"
-              v-model="search"
-            >
-              <template #append>
-                <q-btn
-                  dense
-                  flat
-                  size="md"
-                  color="primary"
-                  class="rounded"
-                  icon="check"
-                  v-close-popup
-                  @click="setPage"
-                />
-              </template>
-            </q-input>
-          </q-menu>
-        </q-btn>
+        <div class="col">
+          <q-btn
+            flat
+            square
+            no-wrap
+            no-caps
+            size="md"
+            :label="countLabel"
+            :loading="loading.page"
+            :disable="support.pagination.count === 1"
+          >
+            <q-menu cover class="bott-portal-menu">
+              <q-input
+                autofocus
+                outlined
+                style="min-width: 200px"
+                mask="####"
+                label="Введите номер страницы"
+                class="bott-input--rounded"
+                v-model="search"
+              >
+                <template #append>
+                  <q-btn
+                    dense
+                    flat
+                    size="md"
+                    color="primary"
+                    class="rounded"
+                    icon="check"
+                    v-close-popup
+                    @click="setPage"
+                  />
+                </template>
+              </q-input>
+            </q-menu>
+          </q-btn>
+        </div>
 
-        <q-btn
-          v-for="(button, index) of rightArrows"
-          :key="index"
-          flat
-          square
-          no-wrap
-          no-caps
-          size="md"
-          color="primary"
-          :dense="sm"
-          :icon="button.icon"
-          :loading="button.loading"
-          :disable="button.condition"
-          @click="button.action"
-        />
+        <div class="col" v-for="(button, index) of rightArrows" :key="index">
+          <q-btn
+            flat
+            square
+            no-wrap
+            no-caps
+            size="md"
+            color="primary"
+            :icon="button.icon"
+            :loading="button.loading"
+            :disable="button.condition"
+            @click="button.action"
+          />
+        </div>
       </q-card>
     </div>
 
-    <div class="text-caption q-pl-sm">
+    <div class="text-caption q-pl-sm text-center">
       <div class="">Тикетов</div>
       <div class="">
         в категории

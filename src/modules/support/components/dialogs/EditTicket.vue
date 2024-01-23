@@ -39,7 +39,7 @@
           label="Сохранить"
           :loading="loading"
           :disable="name.length > 64 || name.length < 1"
-          @clic="updateTicket"
+          @click="updateTicket"
         />
       </q-card-section>
     </q-card>
@@ -55,18 +55,26 @@ import { fetchSupportTicket } from '../../api/queries';
 const support = useSupportStore();
 
 const name = ref('');
-const desc = ref('');
 const loading = ref(false);
 
 const updateTicket = () => {
   loading.value = true;
-  fetchSupportTicket('update-title', {
-    ticket_id: support.selectedTicket?.id ?? -1,
-    title: name.value,
-  }).then(() => {
-    support
-      .updateCategory(support.selectedCategory?.id ?? -1)
-      .then(() => (loading.value = false));
+  fetchSupportTicket(
+    'update-title',
+    {
+      ticket_id: support.selectedTicket?.id ?? -1,
+      title: name.value,
+    },
+    (response) => {
+      if (support.selectedTicket) {
+        support.selectedTicket.title = response;
+      }
+    }
+  ).then(() => {
+    support.updateCategory(support.selectedCategory?.id ?? -1).then(() => {
+      loading.value = false;
+      support.closeDialog('edit_ticket');
+    });
   });
 };
 

@@ -2,7 +2,7 @@
   <div class="col-12 q-px-md">
     <div class="" v-if="md">
       <div class="row no-wrap q-pb-xs q-col-gutter-x-sm bott-btn__outline">
-        <div class="col-11">
+        <div class="col-10">
           <q-btn
             outline
             no-wrap
@@ -10,12 +10,12 @@
             size="md"
             color="primary"
             :label="support.selectedCategory?.title ?? 'Выбрать категорию'"
-            class="rounded-top fit"
+            class="rounded fit"
             @click="support.openDialog('select_category')"
           />
         </div>
 
-        <div class="col">
+        <div class="col-2">
           <q-btn
             outline
             no-wrap
@@ -23,7 +23,7 @@
             size="md"
             color="primary"
             icon="add"
-            class="rounded-top fit"
+            class="rounded fit"
             @click="createCategory"
           />
         </div>
