@@ -56,12 +56,12 @@ const support = useSupportStore();
 const quasar = useQuasar();
 
 const sm = computed(() => quasar.screen.lt.sm);
-const md = computed(() => quasar.screen.lt.sm);
+const md = computed(() => quasar.screen.lt.md);
 const width = computed(() => (sm.value ? 300 : 350));
 
 const toggleDrawer = () => {
   support.drawer.mini = md.value ? false : !support.drawer.mini;
-  support.drawer.state = !support.drawer.state;
+  support.drawer.state = md.value ? !support.drawer.state : true;
 };
 
 const info = computed(() => [

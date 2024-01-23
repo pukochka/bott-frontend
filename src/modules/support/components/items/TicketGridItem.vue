@@ -122,7 +122,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { useSupportStore } from '../../stores/supportStore';
 
@@ -167,6 +167,10 @@ const updateSelected = () => {
 
   support.selected.push(vmProps.props.row);
 };
+
+onMounted(() => {
+  console.log(vmProps.props.cols);
+});
 
 interface TicketGridItemProps {
   props: any;

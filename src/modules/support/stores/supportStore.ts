@@ -27,7 +27,7 @@ export const useSupportStore = defineStore('support', {
 
       drawer: {
         state: true,
-        mini: false,
+        mini: true,
       },
       dialogs: {
         edit_ticket: false,

@@ -77,13 +77,8 @@
                 ></ticket-status>
 
                 <table-user-view
-                  :value="
-                    col.name === 'executor'
-                      ? props.row?.manager !== null
-                        ? props.row?.manager?.link
-                        : `<span class='text-red'>Нет</span>`
-                      : props.row?.user?.link
-                  "
+                  :implementer="col.name === 'executor'"
+                  :ticket="props.row"
                   v-else-if="['executor', 'name'].includes(col.name)"
                 ></table-user-view>
 
@@ -174,15 +169,6 @@ const updateHover = (row: any, val: boolean) => {
   hover.value = val;
 
   row.hover = !val;
-};
-
-const notHover = (val: any, row: any) => {
-  if (hover.value) {
-    row.hover = false;
-    return;
-  }
-
-  row.hover = val;
 };
 
 onMounted(() => {

@@ -12,18 +12,6 @@ export const columns: Array<any> = [
     hover: false,
     component: TicketInfo,
   },
-  // {
-  //   autoWidth: true,
-  //   name: 'message',
-  //   align: 'center',
-  //   label: 'Сообщение',
-  //   classes: 'ellipsis-3-lines text-wrap',
-  //   style: 'min-width: 200px',
-  //   field: () =>
-  //     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus distinctio eum omnis quibusdam. Amet aspernatur blanditiis deserunt distinctio dolorem dolorum eos maiores minus necessitatibus, optio placeat provident recusandae reiciendis sint?',
-  //   hover: false,
-  //   component: TicketInfo,
-  // },
   {
     name: 'status',
     align: 'center',
@@ -37,8 +25,8 @@ export const columns: Array<any> = [
     align: 'center',
     label: 'Исполнитель',
     field: (row: any) =>
-      row?.manager !== null
-        ? row?.manager?.link
+      row.manager !== null
+        ? row.manager?.first_name + ' ' + row.manager?.last_name
         : '<span class="text-red">Нет</span>',
     hover: false,
     component: UserView,
@@ -47,7 +35,7 @@ export const columns: Array<any> = [
     name: 'name',
     align: 'center',
     label: 'Запрос от',
-    field: (row: any) => row?.user?.link,
+    field: (row: any) => row.user?.first_name + ' ' + row.user?.last_name,
     hover: false,
     component: UserView,
   },

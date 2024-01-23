@@ -4,7 +4,7 @@
     square
     class="absolute-top card-border__bottom bott-page__background"
   >
-    <div class="row justify-between relative-position">
+    <div class="row justify-between items-center relative-position">
       <q-btn flat square color="primary" icon="more_vert" v-if="md">
         <q-menu class="bott-portal-menu">
           <q-list dense>
@@ -52,7 +52,7 @@
         </q-btn>
       </div>
 
-      <div class="text-h6 text-weight-bold absolute-center">Чат</div>
+      <div class="text-h6 text-weight-bold">Чат</div>
 
       <div class="row">
         <q-btn
