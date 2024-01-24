@@ -34,6 +34,7 @@
         <q-btn
           flat
           square
+          padding="8px 22px"
           v-for="(button, index) of buttons"
           :key="index"
           v-show="button.condition"

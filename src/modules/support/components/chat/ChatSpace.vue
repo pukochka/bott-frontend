@@ -2,8 +2,6 @@
   <div class="absolute-full relative-position bott-page__background">
     <div class="absolute-full" :style="{ background: colors[color] }"></div>
 
-    <div class="absolute-full"></div>
-
     <messages-section v-if="!loading"></messages-section>
 
     <top-section></top-section>
@@ -23,7 +21,6 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
 
-import { fetchSupportMessages } from '../../api/queries';
 import { useSupportStore } from '../../stores/supportStore';
 
 import MessagesSection from './sections/MessagesSection.vue';

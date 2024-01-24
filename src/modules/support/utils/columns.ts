@@ -16,7 +16,7 @@ export const columns: Array<any> = [
     name: 'status',
     align: 'center',
     label: 'Статус',
-    field: (row: any) => row.status,
+    field: (row: any) => row,
     hover: false,
     component: TicketStatusGrid,
   },

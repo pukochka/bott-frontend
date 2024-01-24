@@ -64,7 +64,11 @@ const createCategory = () => {
 
     fetchSupportTicket(
       'index',
-      { category_id: support.selectedCategory?.id ?? -1, limit: 25, offset: 0 },
+      {
+        category_id: support.selectedCategory?.id ?? -1,
+        limit: support.pagination.limit,
+        offset: 0,
+      },
       () => {
         support.section = 'list';
       }

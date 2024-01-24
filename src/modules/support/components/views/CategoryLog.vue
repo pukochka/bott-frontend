@@ -2,8 +2,8 @@
   <div class="text-weight-bold text-center text-h6">
     Лог категории
     <span class="text-primary">
-      {{ support.selectedCategory?.title ?? '' }}</span
-    >
+      {{ support.selectedCategory?.title ?? '' }}
+    </span>
   </div>
 
   <div class="row justify-center q-pt-sm">

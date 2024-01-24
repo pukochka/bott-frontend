@@ -1,5 +1,5 @@
 <template>
-  <div class="fit q-py-sm relative-position" style="min-height: 200px">
+  <div class="fit relative-position" style="min-height: 200px">
     <!--    <div class="bott-page__title q-px-md q-py-lg">Категории вопросов</div>-->
 
     <!--    <q-breadcrumbs class="q-pa-md text-subtitle2">-->

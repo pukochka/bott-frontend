@@ -8,7 +8,7 @@ import { t } from 'src/boot/lang';
 
 export default [
   {
-    label: 'Система транзакций \b (Пополнения/Списания) баланса' + t('re'),
+    label: 'Система транзакций \b (Пополнения/Списания) баланса',
     icon: mdiCreditCardMultipleOutline,
     link: '',
   },

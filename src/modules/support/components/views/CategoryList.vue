@@ -22,10 +22,6 @@
           v-model:columns="columns"
           v-model:selected="support.selected"
         >
-          <template v-slot:header-selection="scope">
-            <q-checkbox dense v-model="scope.selected" />
-          </template>
-
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td
@@ -36,7 +32,7 @@
                 class="bott-page__background"
               >
                 <div class="row no-wrap items-center q-gutter-x-xs">
-                  <q-checkbox dense v-model="props.selected" />
+                  <!--                  <q-checkbox dense v-model="props.selected" />-->
 
                   <q-btn
                     flat
@@ -97,14 +93,14 @@
           <template v-slot:header="props">
             <q-tr :props="props">
               <q-th auto-width>
-                <q-checkbox
-                  dense
-                  v-model="props.selected"
-                  :color="
-                    props.selected || support.selected.length ? 'info' : 'white'
-                  "
-                  keep-color
-                ></q-checkbox>
+                <!--                <q-checkbox-->
+                <!--                  dense-->
+                <!--                  v-model="props.selected"-->
+                <!--                  :color="-->
+                <!--                    props.selected || support.selected.length ? 'info' : 'white'-->
+                <!--                  "-->
+                <!--                  keep-color-->
+                <!--                ></q-checkbox>-->
               </q-th>
 
               <q-th

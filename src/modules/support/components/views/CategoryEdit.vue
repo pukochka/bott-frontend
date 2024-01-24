@@ -91,13 +91,6 @@ const loading = ref({
   message: true,
 });
 
-// const constants = {
-//   TICKET_ID: 'ID Тикета',
-//   CATEGORY_TITLE: 'Название категории',
-//   MESSAGE: 'Сообщение отправленное пользователем',
-//   NAME: 'Имя-ссылка/ник пользователя',
-// };
-
 const updateTitle = () => {
   loading.value.title = true;
 

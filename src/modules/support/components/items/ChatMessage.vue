@@ -40,11 +40,11 @@
 
       <div class="column items-end">
         <div
-          class="font-14 text-break row justify-start full-width"
-          v-html="message.message.text"
+          class="font-14 text-content row justify-start full-width"
+          v-html="textContent"
         ></div>
 
-        <div class="text-caption self-end">{{ message.created_at }}</div>
+        <!--        <span class="text-caption self-end text-grey">{{ format }}</span>-->
       </div>
     </q-card>
 
@@ -57,6 +57,16 @@
       }"
     ></message-appendix>
   </div>
+
+  <q-chip
+    v-if="dateView.length"
+    dense
+    color="grey"
+    text-color="white"
+    class="self-center q-my-md"
+  >
+    {{ dateView }}
+  </q-chip>
 </template>
 
 <script setup lang="ts">
@@ -69,6 +79,7 @@ import { useSupportStore } from '../../stores/supportStore';
 
 import MessageAppendix from '../../../../components/emoji/MessageAppendix.vue';
 import { config } from '../../config';
+import { date } from 'quasar';
 
 const props = withDefaults(defineProps<ChatMessageProps>(), {
   message: () => defaultTicketMessage,
@@ -76,6 +87,12 @@ const props = withDefaults(defineProps<ChatMessageProps>(), {
 });
 
 const support = useSupportStore();
+
+const textContent = computed(
+  () =>
+    props.message.message.text +
+    `<span class="message-meta q-my-xs q-mx-lg"><span class="text-caption self-end text-grey ">${format.value}</span></span>`
+);
 
 const link = computed(() => {
   if (props.message.user.link.includes('tg://user')) {
@@ -101,11 +118,25 @@ const status = computed(
   () => props.message.user.id !== support.selectedTicket?.user?.id
 );
 
+const time = computed(() => Date.parse(props.message.created_at));
+
+const format = computed(() => date.formatDate(time.value, 'HH:mm'));
+
 const appendix = computed(
   () =>
     (support.messages[props.index + 1] ?? defaultMessage)?.user?.id !==
     props.message.user.id
 );
+
+const dateView = computed(() => {
+  const now = date.formatDate(time.value, 'DD');
+  const next = Date.parse(support.messages[props.index + 1]?.created_at);
+
+  const format = date.formatDate(next, 'DD');
+  const formatMonth = date.formatDate(next, 'DD MMM');
+
+  return now !== format && format !== void 0 ? formatMonth : '';
+});
 
 interface ChatMessageProps {
   message: SupportTicketMessage;
@@ -114,10 +145,6 @@ interface ChatMessageProps {
 </script>
 
 <style scoped lang="scss">
-.text-break {
-  word-break: break-word;
-}
-
 .rounded-none-left {
   border-radius: 10px 10px 10px 0;
 }

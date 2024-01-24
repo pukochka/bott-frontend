@@ -7,7 +7,7 @@
     v-if="![2].includes(props.ticket.status)"
     :icon="mdiBriefcase"
     :loading="loading.pick"
-    @click="pickTicket(props.ticket.id)"
+    @click="pickTicket"
   >
     <q-tooltip
       class="bott-tooltip text-center"
@@ -22,18 +22,18 @@
     flat
     v-else
     padding="4px"
-    color="positive"
+    color="warning"
     class="rounded"
-    :icon="mdiTagCheck"
-    :loading="loading.close"
-    @click="closeTicket(props.ticket.id)"
+    :icon="mdiTagOff"
+    :loading="loading.offer"
+    @click="offerTicket"
   >
     <q-tooltip
       class="bott-tooltip text-center"
       anchor="top middle"
       self="bottom middle"
     >
-      Закрыть тикет
+      Предложить закрыть тикет
     </q-tooltip>
   </q-btn>
 </template>
@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { defaultTicket } from '../../../stores/supportModels';
-import { mdiBriefcase, mdiTagCheck } from '@quasar/extras/mdi-v7';
+import { mdiBriefcase, mdiTagOff } from '@quasar/extras/mdi-v7';
 import { useSupportStore } from '../../../stores/supportStore';
 
 const props = withDefaults(defineProps<TableButtonsProps>(), {
@@ -52,22 +52,22 @@ const support = useSupportStore();
 
 const loading = ref({
   pick: false,
-  close: false,
+  offer: false,
 });
 
-const closeTicket = (id: number) => {
+const offerTicket = () => {
   support.workStatus(
-    1,
-    id,
-    () => (loading.value.close = true),
-    () => (loading.value.close = false)
+    3,
+    props.ticket.id,
+    () => (loading.value.offer = true),
+    () => (loading.value.offer = false)
   );
 };
 
-const pickTicket = (id: number) => {
+const pickTicket = () => {
   support.workStatus(
     2,
-    id,
+    props.ticket.id,
     () => (loading.value.pick = true),
     () => (loading.value.pick = false)
   );

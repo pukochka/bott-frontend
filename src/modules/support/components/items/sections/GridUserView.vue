@@ -3,7 +3,10 @@
     <q-item-section>{{ label }}</q-item-section>
 
     <q-item-section side>
-      <div v-html="value" class="text-primary"></div>
+      <div
+        v-html="value"
+        class="text-primary bott-token ellipsis font-13"
+      ></div>
     </q-item-section>
   </q-item>
 </template>

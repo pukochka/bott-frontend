@@ -1,5 +1,5 @@
 <template>
-  <q-layout container class="bott-layout__drawer absolute-full">
+  <q-layout view="lHh lpR lff" container class="bott-layout__drawer">
     <q-page-container>
       <drawer-info></drawer-info>
 
@@ -17,7 +17,7 @@
               text-color="white"
               class="self-center q-my-md"
             >
-              Начало диалога
+              Начало диалога {{ firstMessageDate }}
             </q-chip>
 
             <chat-message
@@ -39,12 +39,17 @@
 import ChatMessage from '../../items/ChatMessage.vue';
 import DrawerInfo from './DrawerInfo.vue';
 import { useSupportStore } from '../../../stores/supportStore';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { date } from 'quasar';
 
 const support = useSupportStore();
 
 const chat = ref();
 const bottom = ref();
+
+const firstMessageDate = computed(() =>
+  date.formatDate(Date.parse(support.messages[0].created_at), 'DD MMM')
+);
 
 onMounted(() => {
   support.scroll = chat;

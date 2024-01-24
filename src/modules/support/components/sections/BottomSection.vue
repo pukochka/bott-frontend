@@ -13,7 +13,7 @@
         bordered
         class="row rounded items-center no-wrap overflow-hidden"
       >
-        <div class="col" v-for="(button, index) of leftArrows" :key="index">
+        <div class="" v-for="(button, index) of leftArrows" :key="index">
           <q-btn
             flat
             square
@@ -28,7 +28,7 @@
           />
         </div>
 
-        <div class="col">
+        <div class="">
           <q-btn
             flat
             square
@@ -66,7 +66,7 @@
           </q-btn>
         </div>
 
-        <div class="col" v-for="(button, index) of rightArrows" :key="index">
+        <div class="" v-for="(button, index) of rightArrows" :key="index">
           <q-btn
             flat
             square
