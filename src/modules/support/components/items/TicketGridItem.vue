@@ -9,29 +9,6 @@
       <div class="q-pa-xs">
         <div class="row no-wrap items-center q-col-gutter-x-xs">
           <div class="col">
-            <q-item
-              dense
-              clickable
-              class="rounded row justify-center"
-              tag="label"
-            >
-              <q-checkbox
-                dense
-                :model-value="vmProps.props.selected"
-                @update:model-value="updateSelected"
-              />
-
-              <q-tooltip
-                class="bott-tooltip text-center"
-                anchor="top middle"
-                self="bottom middle"
-              >
-                {{ vmProps.props.selected ? 'Убрать' : 'Выбрать' }}
-              </q-tooltip>
-            </q-item>
-          </div>
-
-          <div class="col">
             <q-btn
               flat
               padding="4px"

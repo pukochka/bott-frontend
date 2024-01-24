@@ -89,6 +89,8 @@ declare interface SupportTicketQueries {
   count: STCategoryIdParam;
   /** Изменение статуса тикета */
   'change-status': STTicketIdParam & STImplementerIdParam & STStatusParam;
+  /** Получить тикет */
+  'get-ticket': STTicketIdParam;
   /** Изменение категории тикета */
   'move-category': STUserIdParam & STCategoryIdParam & STTicketIdParam;
   /** Изменение менеджера тикета */

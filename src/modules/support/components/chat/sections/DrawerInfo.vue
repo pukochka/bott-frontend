@@ -7,7 +7,7 @@
     :mini="support.drawer.mini"
     v-model="support.drawer.state"
   >
-    <div style="margin: 40px 0 57px 0" class="absolute-full">
+    <div class="absolute-full">
       <q-list class="full-height">
         <q-item
           clickable
@@ -47,14 +47,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 
 import { useSupportStore } from '../../../stores/supportStore';
 
 import TicketStatusGrid from '../../items/sections/TicketStatusGrid.vue';
 import TicketInfo from '../../items/sections/TicketInfo.vue';
 import GridUserView from '../../items/sections/GridUserView.vue';
-import { useQuasar } from 'quasar';
+import { date, useQuasar } from 'quasar';
 
 const support = useSupportStore();
 const quasar = useQuasar();
@@ -68,10 +68,14 @@ const toggleDrawer = () => {
   support.drawer.state = md.value ? !support.drawer.state : true;
 };
 
+onBeforeMount(() => {
+  if (md.value) support.drawer.state = false;
+});
+
 const info = computed(() => [
   {
     label: 'Статус',
-    value: support.selectedTicket?.status ?? 0,
+    value: support.selectedTicket,
     component: TicketStatusGrid,
   },
   {
@@ -88,22 +92,34 @@ const info = computed(() => [
   },
   {
     label: 'Время создания',
-    value: support.selectedTicket?.created_at ?? '',
+    value: date.formatDate(
+      Date.parse(support.selectedTicket?.created_at ?? ''),
+      'DD MMM, YYYY HH:mm'
+    ),
     component: TicketInfo,
   },
   {
     label: 'Время принятия в работу',
-    value: support.selectedTicket?.accepted_at ?? '',
+    value: date.formatDate(
+      Date.parse(support.selectedTicket?.accepted_at ?? ''),
+      'DD MMM, YYYY HH:mm'
+    ),
     component: TicketInfo,
   },
   {
     label: 'Время закрытия',
-    value: support.selectedTicket?.closed_at ?? '',
+    value: date.formatDate(
+      Date.parse(support.selectedTicket?.closed_at ?? ''),
+      'DD MMM, YYYY HH:mm'
+    ),
     component: TicketInfo,
   },
   {
     label: 'Время автоматического удаления',
-    value: support.selectedTicket?.deleted_at ?? '',
+    value: date.formatDate(
+      Date.parse(support.selectedTicket?.deleted_at ?? ''),
+      'DD MMM, YYYY HH:mm'
+    ),
     component: TicketInfo,
   },
 ]);

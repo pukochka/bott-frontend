@@ -45,25 +45,6 @@
           square
           flat
           :padding="padding"
-          :icon="mdiApplicationParentheses"
-          color="positive"
-          v-if="support.selected.length"
-        >
-          <q-tooltip
-            class="bott-tooltip text-center"
-            anchor="top middle"
-            self="bottom middle"
-          >
-            Массовые действия
-          </q-tooltip>
-        </q-btn>
-
-        <q-btn
-          dense
-          no-caps
-          square
-          flat
-          :padding="padding"
           :icon="button.icon"
           :color="button.color"
           v-show="button.condition"

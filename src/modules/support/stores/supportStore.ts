@@ -2,7 +2,11 @@ import { config } from '../config';
 
 import { defineStore } from 'pinia';
 import { DialogNames, WorkStore } from './supportModels';
-import { fetchSupportMessages, fetchSupportTicket } from '../api/queries';
+import {
+  fetchSupportCategory,
+  fetchSupportMessages,
+  fetchSupportTicket,
+} from '../api/queries';
 
 import { useDialog } from '../../file-manager/stores/useDialog';
 import { deleteQueryParam, setQueryParam } from '../../../utils/helpers/string';
@@ -24,6 +28,7 @@ export const useSupportStore = defineStore('support', {
       section: 'select',
 
       view: 'table',
+      main: 'view',
 
       drawer: {
         state: true,
@@ -46,8 +51,9 @@ export const useSupportStore = defineStore('support', {
         category: false,
       },
 
-      scroll: null,
-      scroll_bottom: null,
+      topRef: null,
+      scrollRef: null,
+      chatBottomRef: null,
 
       pagination: {
         page: 1,
@@ -56,7 +62,9 @@ export const useSupportStore = defineStore('support', {
         limit: 25,
       },
     } as WorkStore),
-  getters: {},
+  getters: {
+    offsetTop: (state): number => state.topRef?.offsetTop ?? 500,
+  },
   actions: {
     openDialog(name: DialogNames) {
       this.dialogs[name] = true;
@@ -64,14 +72,13 @@ export const useSupportStore = defineStore('support', {
     closeDialog(name: DialogNames) {
       this.dialogs[name] = false;
     },
-    openChat(ticket: any) {
+    openChat(ticket: SupportTicket) {
       this.selectedTicket = ticket;
-      this.chat = true;
+      this.main = 'chat';
 
       clearInterval(interval);
 
       setQueryParam('id', ticket.id);
-      setQueryParam('category_id', this.selectedCategory?.id ?? 0);
 
       interval = setInterval(
         this.updateMessages.bind(this),
@@ -80,16 +87,25 @@ export const useSupportStore = defineStore('support', {
     },
     closeChat() {
       this.selectedTicket = null;
-      this.chat = false;
+      this.main = 'view';
 
       clearInterval(interval);
 
       deleteQueryParam('id');
-      deleteQueryParam('category_id');
 
-      interval = setInterval(
-        this.updateCategory.bind(this, this.selectedCategory?.id ?? -1),
-        config.category_update_time
+      if (this.categories.length && this.selectedCategory) {
+        interval = setInterval(
+          this.updateCategory.bind(this, this.selectedCategory?.id ?? -1),
+          config.category_update_time
+        );
+
+        return;
+      }
+
+      this.loading.category = true;
+
+      fetchSupportCategory('index', undefined).then(
+        () => (this.loading.category = false)
       );
     },
 
@@ -102,14 +118,17 @@ export const useSupportStore = defineStore('support', {
       if (this.selectedCategory?.id) this.selectedCategory = null;
 
       clearInterval(interval);
+      deleteQueryParam('category_id');
 
       this.section = 'select';
     },
 
     scrollToBottom() {
-      this.scroll.setScrollPosition(
+      if (this.scrollRef === null || this.chatBottomRef === null) return;
+
+      this.scrollRef.setScrollPosition(
         'vertical',
-        this.scroll_bottom.offsetTop ?? 600,
+        this.chatBottomRef.offsetTop ?? 600,
         300
       );
     },
@@ -125,6 +144,7 @@ export const useSupportStore = defineStore('support', {
       this.selectedCategory = category;
 
       clearInterval(interval);
+      setQueryParam('category_id', category.id);
 
       this.updateCategory(category.id, true).then();
 
@@ -189,13 +209,13 @@ export const useSupportStore = defineStore('support', {
       action1?: () => void,
       action2?: () => void
     ) {
-      if (ticketStatuses[status]?.text?.length === 0) {
+      if (ticketStatuses[status].text.length === 0) {
         this.changeStatus(status, ticket_id, action1, action2);
 
         return;
       }
 
-      useDialog(ticketStatuses[status]?.text, true).onOk(() => {
+      useDialog(ticketStatuses[status].text, true).onOk(() => {
         this.changeStatus(status, ticket_id, action1, action2);
       });
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="fit relative-position" style="min-height: 200px">
+  <div class="fit relative-position" style="min-height: 200px" ref="area">
     <!--    <div class="bott-page__title q-px-md q-py-lg">Категории вопросов</div>-->
 
     <!--    <q-breadcrumbs class="q-pa-md text-subtitle2">-->
@@ -8,30 +8,40 @@
     <!--      <q-breadcrumbs-el label="Breadcrumbs" />-->
     <!--    </q-breadcrumbs>-->
 
-    <div class="">
-      <header-section></header-section>
+    <q-tab-panels
+      v-model="support.main"
+      animated
+      class="q-pa-none bg-transparent"
+      transition-next="fade"
+      transition-prev="fade"
+    >
+      <q-tab-panel name="view" class="q-pa-none">
+        <div class="">
+          <header-section></header-section>
 
-      <div class="relative-position">
-        <top-section class="col-12"></top-section>
+          <div class="relative-position">
+            <top-section class="col-12"></top-section>
 
-        <main-section class="col-12"></main-section>
+            <main-section class="col-12"></main-section>
 
-        <bottom-section class="col-12"></bottom-section>
+            <bottom-section class="col-12"></bottom-section>
 
-        <q-inner-loading
-          style="z-index: 11"
-          transition-show="none"
-          :showing="support.loading.category"
-          class="bott-page__background"
-        >
-          <q-spinner-gears size="80px" color="primary" />
-        </q-inner-loading>
-      </div>
-    </div>
+            <q-inner-loading
+              style="z-index: 11"
+              transition-show="none"
+              :showing="support.loading.category"
+              class="bott-page__background"
+            >
+              <q-spinner-gears size="80px" color="primary" />
+            </q-inner-loading>
+          </div>
+        </div>
+      </q-tab-panel>
 
-    <transition name="q-transition--fade">
-      <chat-section v-if="support.chat" style="z-index: 10"></chat-section>
-    </transition>
+      <q-tab-panel name="chat" class="q-pa-none">
+        <chat-section></chat-section>
+      </q-tab-panel>
+    </q-tab-panels>
 
     <q-inner-loading
       transition-show="none"
@@ -54,10 +64,17 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 
-import { fetchSupportCategory } from './api/queries';
+import { defaultCategory, defaultTicket } from './stores/supportModels';
+
+import {
+  fetchSupportCategory,
+  fetchSupportMessages,
+  fetchSupportTicket,
+} from './api/queries';
 import { useSupportStore } from './stores/supportStore';
+import { getQueryParam, has } from '../../utils/helpers/string';
 
 import HeaderSection from './components/sections/HeaderSection.vue';
 import MainSection from './components/sections/MainSection.vue';
@@ -69,25 +86,54 @@ import EditTicket from './components/dialogs/EditTicket.vue';
 import TransferImplementer from './components/dialogs/TransferImplementer.vue';
 import SelectCategory from './components/dialogs/SelectCategory.vue';
 import SelectImplementer from './components/dialogs/SelectImplementer.vue';
-import { getQueryParam, has } from '../../utils/helpers/string';
-import { defaultCategory, defaultTicket } from './stores/supportModels';
 
 const support = useSupportStore();
+const area = ref();
+
+onMounted(() => {
+  support.topRef = area;
+});
 
 onBeforeMount(() => {
-  if (has('id') && has('category_id')) {
+  if (has('id')) {
     const id = Number(getQueryParam('id')) ?? 0;
+
+    support.main = 'chat';
+
+    Promise.all([
+      fetchSupportTicket(
+        'get-ticket',
+        { ticket_id: id },
+        (response) => (support.selectedTicket = response)
+      ),
+      fetchSupportMessages('get-messages', { ticket_id: id, limit: 50 }),
+    ]).then(() => {
+      support.loading.start = false;
+    });
+
+    return;
+  }
+
+  if (has('category_id')) {
     const category_id = Number(getQueryParam('category_id')) ?? 0;
 
-    support.selectedTicket = Object.assign({ id }, defaultTicket);
-    support.selectedCategory = Object.assign(
-      { id: category_id },
-      defaultCategory
-    );
+    Promise.all([
+      support.updateCategory(category_id),
+      fetchSupportCategory('index', undefined),
+    ]).then(() => {
+      const category = support.categories.find(
+        (item) => item.id === category_id
+      );
 
-    // support.updateCategory(category_id, true);
+      if (category !== void 0) {
+        support.selectedCategory = category;
+        support.section = 'list';
+      }
 
-    support.chat = true;
+      support.loading.start = false;
+    });
+
+    return;
   }
 
   fetchSupportCategory('index', undefined, () => {

@@ -11,9 +11,9 @@
     >
       <div
         class="row text-primary"
-        :class="[status ? ' justify-end q-mr-xs' : ' q-ml-xs']"
+        :class="[status ? ' justify-end q-mr-xs' : '']"
       >
-        <q-btn flat padding="0" color="primary" class="rounded">
+        <q-btn outline padding="0 4px" color="primary" class="rounded">
           <div class="text-caption text-weight-bold" v-html="name"></div>
 
           <q-menu class="bott-portal-menu">
@@ -27,7 +27,7 @@
       </div>
 
       <q-btn
-        v-if="message.message.type.id === 1"
+        v-if="![0, 2].includes(message.message.type.id)"
         no-caps
         dense
         flat
@@ -35,7 +35,7 @@
         :href="messageLink"
         class="rounded full-width q-my-sm"
         color="primary"
-        label="Просмотреть картинку"
+        :label="buttonViewLabel"
       />
 
       <div class="column items-end">
@@ -43,8 +43,6 @@
           class="font-14 text-content row justify-start full-width"
           v-html="textContent"
         ></div>
-
-        <!--        <span class="text-caption self-end text-grey">{{ format }}</span>-->
       </div>
     </q-card>
 
@@ -80,6 +78,7 @@ import { useSupportStore } from '../../stores/supportStore';
 import MessageAppendix from '../../../../components/emoji/MessageAppendix.vue';
 import { config } from '../../config';
 import { date } from 'quasar';
+import { btnViewText, telegramLink } from '../../utils/common';
 
 const props = withDefaults(defineProps<ChatMessageProps>(), {
   message: () => defaultTicketMessage,
@@ -88,10 +87,14 @@ const props = withDefaults(defineProps<ChatMessageProps>(), {
 
 const support = useSupportStore();
 
+const buttonViewLabel = computed(
+  () => 'Просмотреть ' + (btnViewText[props.message.message.type.type] ?? '')
+);
+
 const textContent = computed(
   () =>
     props.message.message.text +
-    `<span class="message-meta q-my-xs q-mx-lg"><span class="text-caption self-end text-grey ">${format.value}</span></span>`
+    `<span class="message-meta"><span class="text-caption self-end text-grey q-mx-xs">${format.value}</span></span>`
 );
 
 const link = computed(() => {
@@ -102,12 +105,11 @@ const link = computed(() => {
     return props.message.user.link.slice(start ?? 6, end);
   }
 
-  return 'https://t.me/' + props.message.user.link.slice(1);
+  return telegramLink + props.message.user.link.slice(1);
 });
 
 const messageLink = computed(
-  () =>
-    'https://t.me/' + config.bot.name + '?start=f_' + props.message.message.id
+  () => telegramLink + config.bot.name + '?start=f_' + props.message.message.id
 );
 
 const name = computed(

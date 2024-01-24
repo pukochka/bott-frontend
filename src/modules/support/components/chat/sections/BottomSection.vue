@@ -1,5 +1,5 @@
 <template>
-  <q-card square flat bordered class="absolute-bottom">
+  <q-card square flat bordered>
     <q-input
       borderless
       autogrow

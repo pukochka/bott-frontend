@@ -1,6 +1,7 @@
 import TicketInfo from '../components/items/sections/TicketInfo.vue';
 import TicketStatusGrid from '../components/items/sections/TicketStatusGrid.vue';
 import UserView from '../components/items/sections/GridUserView.vue';
+import { date } from 'quasar';
 
 export const columns: Array<any> = [
   {
@@ -43,7 +44,8 @@ export const columns: Array<any> = [
     name: 'time',
     align: 'center',
     label: 'Время создания',
-    field: (row: any) => row.created_at,
+    field: (row: any) =>
+      date.formatDate(Date.parse(row.created_at), 'DD MMM, YYYY HH:mm'),
     hover: false,
     component: TicketInfo,
   },

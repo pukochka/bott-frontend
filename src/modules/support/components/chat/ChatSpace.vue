@@ -1,12 +1,51 @@
 <template>
-  <div class="absolute-full relative-position bott-page__background">
-    <div class="absolute-full" :style="{ background: colors[color] }"></div>
+  <div class="relative-position">
+    <q-layout
+      view="lHh lpR lff"
+      container
+      class="bott-layout__drawer bott-page__background"
+      style="min-height: 600px"
+    >
+      <q-page-container :style="{ background: chatColors[color] }">
+        <q-header>
+          <top-section></top-section>
+        </q-header>
 
-    <messages-section v-if="!loading"></messages-section>
+        <drawer-info></drawer-info>
 
-    <top-section></top-section>
+        <q-page>
+          <q-scroll-area
+            ref="chat"
+            class="q-px-md absolute-full"
+            :thumb-style="thumbStyle"
+          >
+            <div class="column q-gutter-y-sm q-py-sm">
+              <q-chip
+                dense
+                color="grey"
+                text-color="white"
+                class="self-center q-my-md"
+              >
+                Начало диалога {{ firstMessageDate }}
+              </q-chip>
 
-    <bottom-section></bottom-section>
+              <chat-message
+                v-for="(message, index) of support.messages"
+                :key="message.id"
+                :message="message"
+                :index="index"
+              ></chat-message>
+
+              <div ref="bottom"></div>
+            </div>
+          </q-scroll-area>
+        </q-page>
+
+        <q-footer>
+          <bottom-section></bottom-section>
+        </q-footer>
+      </q-page-container>
+    </q-layout>
 
     <q-inner-loading
       :showing="loading"
@@ -19,34 +58,51 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { date } from 'quasar';
+import { computed, onBeforeMount, onMounted, ref } from 'vue';
+import { chatColors } from '../../utils/common';
 
 import { useSupportStore } from '../../stores/supportStore';
 
-import MessagesSection from './sections/MessagesSection.vue';
 import TopSection from './sections/TopSection.vue';
 import BottomSection from './sections/BottomSection.vue';
+import ChatMessage from '../items/ChatMessage.vue';
+import DrawerInfo from './sections/DrawerInfo.vue';
 
 const support = useSupportStore();
 
 const loading = ref(true);
+const color = ref(1);
+const chat = ref();
+const bottom = ref();
 
-const colors = [
-  'linear-gradient(90deg, hsla(186, 33%, 94%, 0.6) 0%, hsla(216, 41%, 79%, 0.6) 100%)',
-  'linear-gradient(90deg, hsla(298, 68%, 90%, 0.6) 0%, hsla(30, 82%, 91%, 0.6) 100%)',
-  'linear-gradient(90deg, hsla(332, 53%, 82%, 0.6) 0%, hsla(176, 57%, 89%, 0.6) 100%)',
-  'linear-gradient(90deg, hsla(145, 83%, 74%, 0.6) 0%, hsla(204, 77%, 76%, 0.6) 100%)',
-];
-
-const color = ref(Math.floor(Math.random() * colors.length));
+const firstMessageDate = computed(() =>
+  date.formatDate(Date.parse(support.messages[0]?.created_at), 'DD MMM')
+);
 
 onBeforeMount(() => {
+  color.value = Math.floor(Math.random() * chatColors.length);
   loading.value = true;
 
-  support.updateMessages().then(() => (loading.value = false));
+  support.updateMessages().then(() => {
+    loading.value = false;
+    setTimeout(support.scrollToBottom.bind(support), 10);
+  });
 });
 
-onBeforeMount(() => (color.value = Math.floor(Math.random() * colors.length)));
+onMounted(() => {
+  support.scrollRef = chat;
+  support.chatBottomRef = bottom;
+});
+
+const thumbStyle = {
+  width: '8px',
+  opacity: '1',
+  backgroundColor: 'var(--q-primary)',
+  borderRadius: '10px',
+  border: '4px solid rgba(0, 0, 0, 0)',
+  margin: '2px',
+};
 </script>
 
 <style lang="scss" scoped>

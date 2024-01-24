@@ -26,7 +26,9 @@ const props = withDefaults(defineProps<TicketStatusProps>(), {
   value: '',
 });
 
-const status = computed(() => ticketStatuses[props.value] ?? ticketStatuses[0]);
+const status = computed(
+  () => ticketStatuses[props.value.status] ?? ticketStatuses[0]
+);
 
 interface TicketStatusProps {
   label: any;

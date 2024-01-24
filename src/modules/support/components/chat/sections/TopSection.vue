@@ -1,9 +1,5 @@
 <template>
-  <q-card
-    flat
-    square
-    class="absolute-top card-border__bottom bott-page__background"
-  >
+  <q-card flat square class="card-border__bottom bott-page__background">
     <div class="row justify-between items-center no-wrap relative-position">
       <q-btn flat square color="primary" icon="more_vert" v-if="md">
         <q-menu class="bott-portal-menu">

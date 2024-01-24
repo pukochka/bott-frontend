@@ -20,7 +20,7 @@ export function deleteQueryParam(param: string) {
 }
 
 export function has(param: string) {
-  const url = new URLSearchParams(window.document.URL);
+  const url = new URLSearchParams(window.location.search);
 
   return url.has(param);
 }

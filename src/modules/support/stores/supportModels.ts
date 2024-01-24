@@ -11,6 +11,7 @@ export interface WorkStore {
   section: SectionNames;
 
   view: 'table' | 'grid';
+  main: 'view' | 'chat';
 
   drawer: {
     state: boolean;
@@ -29,8 +30,9 @@ export interface WorkStore {
   selectedTicket: SupportTicket | null;
   selectedCategory: SupportCategory | null;
 
-  scroll: any;
-  scroll_bottom: any;
+  topRef: any;
+  scrollRef: any;
+  chatBottomRef: any;
 
   pagination: {
     page: number;
