@@ -49,6 +49,7 @@ export const useSupportStore = defineStore('support', {
       loading: {
         start: true,
         category: false,
+        chat: false,
       },
 
       topRef: null,
@@ -64,6 +65,10 @@ export const useSupportStore = defineStore('support', {
     } as WorkStore),
   getters: {
     offsetTop: (state): number => state.topRef?.offsetTop ?? 500,
+    isMobile: () =>
+      /mobile|iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(
+        navigator.userAgent.toLowerCase()
+      ),
   },
   actions: {
     openDialog(name: DialogNames) {
@@ -79,6 +84,12 @@ export const useSupportStore = defineStore('support', {
       clearInterval(interval);
 
       setQueryParam('id', ticket.id);
+
+      this.loading.chat = true;
+      this.updateMessages().then(() => {
+        this.loading.chat = false;
+        setTimeout(this.scrollToBottom.bind(this), 10);
+      });
 
       interval = setInterval(
         this.updateMessages.bind(this),
@@ -197,9 +208,7 @@ export const useSupportStore = defineStore('support', {
         implementer_id: config.user_id,
         status: status,
       }).then(() => {
-        this.updateCategory(this.selectedCategory?.id ?? -1).then(() => {
-          if (action2 !== void 0) action2();
-        });
+        if (action2 !== void 0) action2();
       });
     },
 

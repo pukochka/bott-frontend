@@ -95,6 +95,10 @@ onMounted(() => {
 });
 
 onBeforeMount(() => {
+  if (window.innerWidth < 600) {
+    support.view = 'grid';
+  }
+
   if (has('id')) {
     const id = Number(getQueryParam('id')) ?? 0;
 

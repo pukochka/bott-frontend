@@ -19,7 +19,7 @@
             class="q-px-md absolute-full"
             :thumb-style="thumbStyle"
           >
-            <div class="column q-gutter-y-sm q-py-sm">
+            <div class="chat-area column q-gutter-y-xs q-py-sm">
               <q-chip
                 dense
                 color="grey"
@@ -48,7 +48,7 @@
     </q-layout>
 
     <q-inner-loading
-      :showing="loading"
+      :showing="support.loading.chat"
       class="bott-page__background"
       transition-show="none"
     >
@@ -71,8 +71,7 @@ import DrawerInfo from './sections/DrawerInfo.vue';
 
 const support = useSupportStore();
 
-const loading = ref(true);
-const color = ref(1);
+const color = ref(0);
 const chat = ref();
 const bottom = ref();
 
@@ -82,12 +81,6 @@ const firstMessageDate = computed(() =>
 
 onBeforeMount(() => {
   color.value = Math.floor(Math.random() * chatColors.length);
-  loading.value = true;
-
-  support.updateMessages().then(() => {
-    loading.value = false;
-    setTimeout(support.scrollToBottom.bind(support), 10);
-  });
 });
 
 onMounted(() => {
@@ -108,5 +101,9 @@ const thumbStyle = {
 <style lang="scss" scoped>
 .bg-page {
   background: #fafafa;
+}
+.chat-area {
+  max-width: 900px;
+  margin: 0 auto;
 }
 </style>

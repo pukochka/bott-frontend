@@ -60,7 +60,7 @@
               v-else
               padding="4px"
               color="positive"
-              class="rounded"
+              class="rounded fit"
               :icon="mdiTagCheck"
               :loading="loading"
               @click="closeTicket"

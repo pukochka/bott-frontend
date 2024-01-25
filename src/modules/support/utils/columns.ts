@@ -28,7 +28,7 @@ export const columns: Array<any> = [
     field: (row: any) =>
       row.manager !== null
         ? row.manager?.first_name + ' ' + row.manager?.last_name
-        : '<span class="text-red">Нет</span>',
+        : null,
     hover: false,
     component: UserView,
   },

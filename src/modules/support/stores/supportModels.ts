@@ -21,6 +21,7 @@ export interface WorkStore {
   loading: {
     start: boolean;
     category: boolean;
+    chat: boolean;
   };
 
   dialogs: Record<DialogNames, boolean>;

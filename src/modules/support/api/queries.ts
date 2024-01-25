@@ -50,6 +50,12 @@ export async function fetchSupportTicket<Q extends keyof SupportTicketQueries>(
         support.tickets = response.data.data;
 
         /** */
+      } else if (query === 'change-status') {
+        /** */
+
+        support.selectedTicket = response.data.data;
+
+        /** */
       }
 
       /** */

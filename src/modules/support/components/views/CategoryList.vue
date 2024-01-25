@@ -32,8 +32,6 @@
                 class="bott-page__background"
               >
                 <div class="row no-wrap items-center q-gutter-x-xs">
-                  <!--                  <q-checkbox dense v-model="props.selected" />-->
-
                   <q-btn
                     flat
                     padding="4px"
@@ -92,16 +90,7 @@
 
           <template v-slot:header="props">
             <q-tr :props="props">
-              <q-th auto-width>
-                <!--                <q-checkbox-->
-                <!--                  dense-->
-                <!--                  v-model="props.selected"-->
-                <!--                  :color="-->
-                <!--                    props.selected || support.selected.length ? 'info' : 'white'-->
-                <!--                  "-->
-                <!--                  keep-color-->
-                <!--                ></q-checkbox>-->
-              </q-th>
+              <q-th auto-width> </q-th>
 
               <q-th
                 :props="props"
