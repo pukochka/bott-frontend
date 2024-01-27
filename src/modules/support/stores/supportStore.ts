@@ -9,7 +9,7 @@ import {
 } from '../api/queries';
 
 import { useDialog } from '../../file-manager/stores/useDialog';
-import { deleteQueryParam, setQueryParam } from '../../../utils/helpers/string';
+import { deleteQueryParam, setQueryParam } from 'src/utils/helpers/string';
 
 import { ticketStatuses } from '../utils/statuses';
 
@@ -140,7 +140,7 @@ export const useSupportStore = defineStore('support', {
       this.scrollRef.setScrollPosition(
         'vertical',
         this.chatBottomRef.offsetTop ?? 600,
-        300
+        200
       );
     },
 
@@ -203,11 +203,19 @@ export const useSupportStore = defineStore('support', {
     ) {
       if (action1 !== void 0) action1();
 
-      fetchSupportTicket('change-status', {
-        ticket_id: ticket_id,
-        implementer_id: config.user_id,
-        status: status,
-      }).then(() => {
+      fetchSupportTicket(
+        'change-status',
+        {
+          ticket_id: ticket_id,
+          implementer_id: config.user_id,
+          status: status,
+        },
+        (response) => {
+          this.tickets = this.tickets.map((ticket) =>
+            ticket.id === this.selectedTicket?.id ? response : ticket
+          );
+        }
+      ).then(() => {
         if (action2 !== void 0) action2();
       });
     },
@@ -237,7 +245,14 @@ export const useSupportStore = defineStore('support', {
       useDialog('Вы уверены, что хотите удалить тикет?', true).onOk(() => {
         if (action1 !== void 0) action1();
         fetchSupportTicket('delete', { ticket_id: ticket_id }, (response) => {
+          if (this.main === 'chat') {
+            this.main = 'view';
+            clearInterval(interval);
+            deleteQueryParam('id');
+          }
+
           this.tickets = response;
+          this.selectedTicket = null;
         }).then(() => {
           if (action2 !== void 0) action2();
         });

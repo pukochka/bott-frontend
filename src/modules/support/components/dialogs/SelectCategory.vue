@@ -1,8 +1,9 @@
 <template>
   <q-dialog
-    v-model="support.dialogs.select_category"
-    position="bottom"
     persistent
+    position="bottom"
+    v-model="support.dialogs.select_category"
+    @before-show="updateShow"
   >
     <q-card flat bordered style="width: 100%" class="dialog-rounded">
       <dialog-header label="Выбор категории"></dialog-header>
@@ -20,12 +21,15 @@
             v-for="category of support.categories"
             :key="category.id"
           >
-            <q-item-section>{{ category.title }}</q-item-section>
+            <q-item-section class="text-body1">
+              {{ category.title }}
+            </q-item-section>
 
             <q-item-section side>
-              <q-checkbox
+              <q-radio
+                v-model="selected"
+                :val="category.id"
                 @update:model-value="updateCategory(category)"
-                :model-value="support.selectedCategory?.id === category.id"
                 color="primary"
               />
             </q-item-section>
@@ -65,15 +69,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
 import { useSupportStore } from '../../stores/supportStore';
+
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
 const support = useSupportStore();
 
+const selected = ref(0);
+
 const updateCategory = (category: SupportCategory) => {
+  selected.value = category.id;
   support.closeDialog('select_category');
 
   support.selectCategory(category);
+};
+
+const updateShow = () => {
+  selected.value = support.selectedCategory?.id ?? 0;
 };
 </script>
 

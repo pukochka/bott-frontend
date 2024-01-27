@@ -16,13 +16,14 @@
             v-for="implementer of implementers"
             :key="implementer.id"
           >
-            <q-item-section>
+            <q-item-section class="text-body1">
               <div v-html="implementer.user.link"></div>
             </q-item-section>
 
             <q-item-section side>
-              <q-checkbox
-                :model-value="implementer.id === selected"
+              <q-radio
+                v-model="selected"
+                :val="implementer.id"
                 @update:model-value="selected = implementer.id"
                 color="primary"
               />

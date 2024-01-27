@@ -1,9 +1,10 @@
-export const chatColors = [
-  'linear-gradient(90deg, hsla(186, 33%, 94%, 0.6) 0%, hsla(216, 41%, 79%, 0.6) 100%)',
-  'linear-gradient(90deg, hsla(298, 68%, 90%, 0.6) 0%, hsla(30, 82%, 91%, 0.6) 100%)',
-  'linear-gradient(90deg, hsla(332, 53%, 82%, 0.6) 0%, hsla(176, 57%, 89%, 0.6) 100%)',
-  'linear-gradient(90deg, hsla(145, 83%, 74%, 0.6) 0%, hsla(204, 77%, 76%, 0.6) 100%)',
-];
+export const chatColors: Record<number, string> = {
+  1: 'linear-gradient(315deg, hsla(44, 61%, 67%, 0.6) 0%, hsla(5, 76%, 52%, 0.6) 92%)',
+  2: 'linear-gradient(315deg, hsla(186, 100%, 69%, 0.6) 0%, hsla(130, 69%, 57%, 0.6) 83%, hsla(128, 68%, 57%, 0.6) 100%)',
+  3: 'linear-gradient(135deg, hsla(198, 100%, 50%, 0.6) 0%, hsla(170, 81%, 54%, 0.6) 100%)',
+  4: 'linear-gradient(180deg, hsla(1, 84%, 80%, 0.6) 0%, hsla(56, 100%, 50%, 0.6) 100%)',
+  5: 'linear-gradient(90deg, hsla(186, 33%, 94%, 0.6) 0%, hsla(216, 41%, 79%, 0.6) 100%)',
+};
 
 export const telegramLink = 'https://t.me/';
 

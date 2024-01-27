@@ -117,7 +117,15 @@ body.body--light {
   background: #fafafa !important;
 }
 
+.bg-card{
+  background:#ffffff;
+}
+
 body.body--dark {
+  .bg-card{
+    background: #1d1d1d ;
+  }
+
   .bg-title {
     background: $bg-neutral-dark;
   }

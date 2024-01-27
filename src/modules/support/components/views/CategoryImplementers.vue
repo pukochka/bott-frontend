@@ -2,8 +2,8 @@
   <div class="text-weight-bold text-center text-h6">
     Исполнители категории
     <span class="text-primary">
-      {{ support.selectedCategory?.title ?? '' }}</span
-    >
+      {{ support.selectedCategory?.title ?? '' }}
+    </span>
   </div>
 
   <div class="q-pt-md">
@@ -33,9 +33,8 @@
           </q-card-section>
 
           <q-scroll-area
-            ref="table"
             :thumb-style="thumbStyle"
-            :style="{ height: height + 'px' }"
+            :style="{ height: `calc(100vh - 400px - ${support.offsetTop}px)` }"
             class="rotateIn"
           >
             <q-list separator dense class="overflow-hidden">
@@ -65,27 +64,21 @@
 
 <script setup lang="ts">
 import { config } from '../../config';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { useSupportStore } from '../../stores/supportStore';
-import { useQuasar } from 'quasar';
+
 import { fetchSupportImplementer } from '../../api/queries';
 
 import UserSearch from 'src/components/search/UserSearch.vue';
 import ImplementorItem from '../items/ImplementorItem.vue';
 
 const support = useSupportStore();
-const quasar = useQuasar();
 
 const loading = ref({
   start: false,
   add: false,
 });
-
-const height = ref(300);
-const table = ref();
-
-const sm = computed(() => quasar.screen.lt.sm);
 
 const addImplementer = (id: string) => {
   loading.value.add = true;
@@ -103,13 +96,6 @@ const addImplementer = (id: string) => {
 };
 
 onMounted(() => {
-  const offset = sm.value ? 80 : 60;
-
-  height.value =
-    window.innerHeight -
-    offset -
-    (table.value?.$el?.getBoundingClientRect().y ?? 300);
-
   loading.value.start = true;
 
   fetchSupportImplementer('index', {

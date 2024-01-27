@@ -85,9 +85,7 @@ const info = computed(() => [
   },
   {
     label: 'Исполнитель',
-    value:
-      support.selectedTicket?.manager?.link ??
-      '<span class="text-red">Нет</span>',
+    value: support.selectedTicket?.manager?.link ?? null,
     component: GridUserView,
   },
   {

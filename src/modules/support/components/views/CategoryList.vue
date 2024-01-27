@@ -2,11 +2,7 @@
   <div class="row relative-position" ref="table">
     <div style="width: 100%">
       <q-scroll-area
-        :style="{
-          maxHeight: height + 'px',
-          minHeight: height + 'px',
-          height: height + 'px',
-        }"
+        :style="{ height: `calc(100vh - 80px - ${support.offsetTop}px)` }"
         :thumb-style="thumbStyle"
       >
         <q-table
@@ -18,9 +14,8 @@
           class="bg-transparent no-shadow q-pa-none fit sticky-virtual-scroll-table"
           :rows-per-page-options="[0]"
           :grid="support.view === 'grid'"
-          v-model:rows="tickets"
-          v-model:columns="columns"
-          v-model:selected="support.selected"
+          :rows="tickets"
+          :columns="columns"
         >
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -128,12 +123,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { columns } from '../../utils/columns';
 
 import { useSupportStore } from '../../stores/supportStore';
-import { useQuasar } from 'quasar';
 
 import TicketGridItem from '../items/TicketGridItem.vue';
 import TicketMenu from '../items/sections/TicketMenu.vue';
@@ -142,28 +136,16 @@ import TableUserView from '../items/sections/TableUserView.vue';
 import TableButtons from '../items/sections/TableButtons.vue';
 
 const support = useSupportStore();
-const quasar = useQuasar();
 
 const table = ref();
-const height = ref(500);
 const hover = ref(false);
 
-const sm = computed(() => quasar.screen.lt.sm);
 const tickets = computed(() => support.tickets);
 const updateHover = (row: any, val: boolean) => {
   hover.value = val;
 
   row.hover = !val;
 };
-
-onMounted(() => {
-  const offset = sm.value ? 150 : 60;
-
-  height.value =
-    window.innerHeight -
-    offset -
-    (table.value?.$el?.getBoundingClientRect().y ?? 200);
-});
 
 const thumbStyle = {
   height: '6px',

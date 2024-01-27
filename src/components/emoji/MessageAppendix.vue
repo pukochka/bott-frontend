@@ -21,7 +21,7 @@
 
 body.body--dark {
   .corner {
-    fill: #0d1b2a;
+    fill: #1d1d1d;
   }
 }
 

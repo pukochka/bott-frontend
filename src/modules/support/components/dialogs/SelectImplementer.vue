@@ -95,7 +95,10 @@ const confirmOffer = () => {
     implementer_id: selected.value,
     category_id: support.selectedCategory?.id ?? -1,
     changing_id: config.user_id,
-  }).then(() => (loading.value.confirm = false));
+  }).then(() => {
+    loading.value.confirm = false;
+    support.closeDialog('select_implementer');
+  });
 };
 
 const updateShow = () => {

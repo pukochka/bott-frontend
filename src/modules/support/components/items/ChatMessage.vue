@@ -50,8 +50,8 @@
       v-if="appendix"
       :style="{
         transform: !status ? 'scale(-1, 1)' : '',
-        left: !status ? '-8px' : '',
-        right: status ? '-8px' : '',
+        left: !status ? '-9px' : '',
+        right: status ? '-9px' : '',
       }"
     ></message-appendix>
   </div>
@@ -69,15 +69,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-
+import { config } from '../../config';
+import { date } from 'quasar';
 import { defaultTicketMessage } from '../../stores/supportModels';
-import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
 
 import { useSupportStore } from '../../stores/supportStore';
 
-import MessageAppendix from '../../../../components/emoji/MessageAppendix.vue';
-import { config } from '../../config';
-import { date } from 'quasar';
+import MessageAppendix from 'src/components/emoji/MessageAppendix.vue';
+
 import { btnViewText, telegramLink } from '../../utils/common';
 
 const props = withDefaults(defineProps<ChatMessageProps>(), {
@@ -125,9 +124,7 @@ const time = computed(() => Date.parse(props.message.created_at));
 const format = computed(() => date.formatDate(time.value, 'HH:mm'));
 
 const appendix = computed(
-  () =>
-    (support.messages[props.index + 1] ?? defaultMessage)?.user?.id !==
-    props.message.user.id
+  () => support.messages[props.index + 1]?.user?.id !== props.message.user.id
 );
 
 const dateView = computed(() => {

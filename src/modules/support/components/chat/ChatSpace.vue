@@ -1,12 +1,12 @@
 <template>
   <div class="relative-position">
     <q-layout
-      view="lHh lpR lff"
+      view="hhh LpR fFr"
       container
       class="bott-layout__drawer bott-page__background"
-      style="min-height: 600px"
+      :style="{ height: `calc(100vh - 65px - ${support.offsetTop}px)` }"
     >
-      <q-page-container :style="{ background: chatColors[color] }">
+      <q-page-container :style="{ background: color }">
         <q-header>
           <top-section></top-section>
         </q-header>
@@ -41,7 +41,7 @@
           </q-scroll-area>
         </q-page>
 
-        <q-footer>
+        <q-footer class="bg-transparent row justify-center">
           <bottom-section></bottom-section>
         </q-footer>
       </q-page-container>
@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { date } from 'quasar';
-import { computed, onBeforeMount, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { chatColors } from '../../utils/common';
 
 import { useSupportStore } from '../../stores/supportStore';
@@ -71,17 +71,16 @@ import DrawerInfo from './sections/DrawerInfo.vue';
 
 const support = useSupportStore();
 
-const color = ref(0);
 const chat = ref();
 const bottom = ref();
+
+const color = computed(
+  () => chatColors[support.selectedTicket?.status ?? 1] ?? ''
+);
 
 const firstMessageDate = computed(() =>
   date.formatDate(Date.parse(support.messages[0]?.created_at), 'DD MMM')
 );
-
-onBeforeMount(() => {
-  color.value = Math.floor(Math.random() * chatColors.length);
-});
 
 onMounted(() => {
   support.scrollRef = chat;

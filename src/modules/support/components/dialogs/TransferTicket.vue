@@ -15,9 +15,10 @@
             </q-item-section>
 
             <q-item-section avatar>
-              <q-checkbox
+              <q-radio
                 @update:model-value="selected = category.id"
-                :model-value="selected === category.id"
+                :val="category.id"
+                v-model="selected"
                 color="primary"
               />
             </q-item-section>

@@ -2,79 +2,100 @@
   <q-btn
     flat
     padding="4px"
-    color="accent"
     class="rounded"
-    v-if="![2].includes(props.ticket.status)"
-    :icon="mdiBriefcase"
-    :loading="loading.pick"
-    @click="pickTicket"
+    :class="[props.fit ? ' fit' : '']"
+    v-for="(button, index) of buttons"
+    :key="index"
+    :color="button.color"
+    :icon="button.icon"
+    :loading="loading"
+    v-show="button.condition"
+    @click="button.action"
   >
     <q-tooltip
       class="bott-tooltip text-center"
       anchor="top middle"
       self="bottom middle"
     >
-      Взять в работу
-    </q-tooltip>
-  </q-btn>
-
-  <q-btn
-    flat
-    v-else
-    padding="4px"
-    color="warning"
-    class="rounded"
-    :icon="mdiTagOff"
-    :loading="loading.offer"
-    @click="offerTicket"
-  >
-    <q-tooltip
-      class="bott-tooltip text-center"
-      anchor="top middle"
-      self="bottom middle"
-    >
-      Предложить закрыть тикет
+      {{ button.label }}
     </q-tooltip>
   </q-btn>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { defaultTicket } from '../../../stores/supportModels';
-import { mdiBriefcase, mdiTagOff } from '@quasar/extras/mdi-v7';
+
 import { useSupportStore } from '../../../stores/supportStore';
+
+import { mdiBriefcase, mdiTagCheck, mdiTagOff } from '@quasar/extras/mdi-v7';
 
 const props = withDefaults(defineProps<TableButtonsProps>(), {
   ticket: () => defaultTicket,
+  fit: false,
 });
 
 const support = useSupportStore();
 
-const loading = ref({
-  pick: false,
-  offer: false,
-});
+const loading = ref(false);
 
 const offerTicket = () => {
+  support.selectedTicket = props.ticket;
   support.workStatus(
     3,
     props.ticket.id,
-    () => (loading.value.offer = true),
-    () => (loading.value.offer = false)
+    () => (loading.value = true),
+    () => (loading.value = false)
   );
 };
 
 const pickTicket = () => {
+  support.selectedTicket = props.ticket;
   support.workStatus(
     2,
     props.ticket.id,
-    () => (loading.value.pick = true),
-    () => (loading.value.pick = false)
+    () => (loading.value = true),
+    () => (loading.value = false)
   );
 };
 
+const closeTicket = () => {
+  support.selectedTicket = props.ticket;
+  support.workStatus(
+    1,
+    props.ticket.id,
+    () => (loading.value = true),
+    () => (loading.value = false)
+  );
+};
+
+const buttons = computed(() => [
+  {
+    label: 'Взять в работу',
+    color: 'positive',
+    icon: mdiBriefcase,
+    action: pickTicket,
+    condition: [1, 5].includes(props.ticket.status),
+  },
+  {
+    label: 'Предложить закрыть тикет',
+    color: 'warning',
+    icon: mdiTagOff,
+    action: offerTicket,
+    condition: props.ticket.status === 2,
+  },
+  {
+    label: 'Закрыть тикет',
+    color: 'accent',
+    icon: mdiTagCheck,
+    action: closeTicket,
+    condition: props.ticket.status === 3,
+  },
+]);
+
 interface TableButtonsProps {
   ticket: SupportTicket;
+  fit?: boolean;
 }
 </script>
 

@@ -8,13 +8,6 @@
     id="emoji"
     @click="dialog = !dialog"
   >
-    <q-tooltip
-      class="bott-tooltip text-center"
-      anchor="top middle"
-      self="bottom middle"
-    >
-      {{ t('add-emoji') }}
-    </q-tooltip>
   </q-btn>
 
   <q-dialog v-model="dialog" position="bottom" seamless>

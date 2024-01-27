@@ -27,12 +27,12 @@ export const ticketMenu: Record<TicketMenuNames, TicketMenuView> = {
   pick: {
     label: 'Взять в работу тикет',
     icon: mdiBriefcase,
-    color: 'accent',
+    color: 'positive',
   },
   close: {
     label: 'Закрыть тикет',
     icon: mdiTagCheck,
-    color: 'positive',
+    color: 'accent',
   },
   transfer: {
     label: 'Передать другому исполнителю',
