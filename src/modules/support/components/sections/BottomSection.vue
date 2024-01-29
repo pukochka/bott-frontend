@@ -37,7 +37,7 @@
             size="md"
             :label="countLabel"
             :loading="loading.page"
-            :disable="support.pagination.count === 1"
+            :disable="pagesCount === 1"
           >
             <q-menu cover class="bott-portal-menu">
               <q-input
@@ -96,15 +96,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
+import { useSupportStore } from '../../stores/supportStore';
+import { fetchSupportTicket } from '../../api/queries';
+
 import {
   mdiChevronDoubleLeft,
   mdiChevronDoubleRight,
 } from '@quasar/extras/mdi-v7';
-import { useQuasar } from 'quasar';
-import { useSupportStore } from '../../stores/supportStore';
-import { fetchSupportTicket } from '../../api/queries';
 
-const quasar = useQuasar();
 const support = useSupportStore();
 
 const search = ref('');
@@ -115,8 +114,6 @@ const loading = ref<Record<LoadingNames, boolean>>({
   first: false,
   page: false,
 });
-
-const sm = computed(() => quasar.screen.lt.sm);
 
 const pagesCount = computed(() => {
   const count = Math.ceil(support.pagination.count / support.pagination.limit);

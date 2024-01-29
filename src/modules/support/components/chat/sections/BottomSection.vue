@@ -1,22 +1,22 @@
 <template>
-  <div class="row full-width" style="max-width: 900px">
+  <div class="row full-width transition-height" style="max-width: 900px">
     <div
       class="col"
       v-if="config.user_id === support.selectedTicket?.manager?.id"
     >
       <div
-        class="row q-col-gutter-x-sm no-wrap q-ma-xs"
+        class="row q-col-gutter-x-sm no-wrap q-ma-xs transition-height"
         @keydown.enter="sendMessage"
       >
         <div class="col relative-position">
           <div
-            class="border-bottom-right-none bg-card overflow-hidden row items-end"
+            class="border-bottom-right-none bg-card overflow-hidden row items-end transition-height"
           >
             <div class="q-px-sm q-pb-sm">
               <emoji-menu @select="addEmoji"></emoji-menu>
             </div>
 
-            <div class="col relative-position">
+            <div class="col relative-position transition-height">
               <span
                 class="input-placeholder non-selectable no-pointer-events"
                 v-if="placeholder"
@@ -27,7 +27,7 @@
               <div
                 ref="chatInput"
                 contenteditable="true"
-                class="bott-message-input input-text-color transition"
+                class="bott-message-input input-text-color transition-height"
                 style="overflow-y: scroll"
                 @keyup="updateText"
                 @keydown="updateText"
@@ -55,8 +55,15 @@
       </div>
     </div>
 
-    <div class="col text-center text-caption text-white q-pa-md" v-else>
-      Для отправки сообщений Вам нужно быть исполнителем тикета
+    <div class="col row justify-center" v-else>
+      <q-chip
+        dense
+        color="grey"
+        text-color="white"
+        class="self-center q-my-md text-caption"
+      >
+        Для отправки сообщений Вам нужно быть исполнителем тикета
+      </q-chip>
     </div>
   </div>
 </template>
@@ -152,5 +159,9 @@ body.body--dark {
   .input-text-color {
     color: #ffffff;
   }
+}
+
+.transition-height {
+  transition: 0.3s height;
 }
 </style>

@@ -27,7 +27,6 @@
       </div>
 
       <q-btn
-        v-if="![0, 2].includes(message.message.type.id)"
         no-caps
         dense
         flat
@@ -36,6 +35,7 @@
         class="rounded full-width q-my-sm"
         color="primary"
         :label="buttonViewLabel"
+        v-if="![0, 2].includes(message.message.type.id)"
       />
 
       <div class="column items-end">
@@ -77,7 +77,7 @@ import { useSupportStore } from '../../stores/supportStore';
 
 import MessageAppendix from 'src/components/emoji/MessageAppendix.vue';
 
-import { btnViewText, telegramLink } from '../../utils/common';
+import { btnViewText, months, telegramLink } from '../../utils/common';
 
 const props = withDefaults(defineProps<ChatMessageProps>(), {
   message: () => defaultTicketMessage,
@@ -131,10 +131,10 @@ const dateView = computed(() => {
   const now = date.formatDate(time.value, 'DD');
   const next = Date.parse(support.messages[props.index + 1]?.created_at);
 
-  const format = date.formatDate(next, 'DD');
-  const formatMonth = date.formatDate(next, 'DD MMM');
+  const day = date.formatDate(next, 'DD');
+  const month = months[new Date(next).getMonth()] ?? '';
 
-  return now !== format && format !== void 0 ? formatMonth : '';
+  return now !== day && day !== void 0 ? day + ' ' + month : '';
 });
 
 interface ChatMessageProps {

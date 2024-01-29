@@ -24,9 +24,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { defaultTicket } from '../../../stores/supportModels';
+import { defaultTicket } from '../../stores/supportModels';
 
-import { useSupportStore } from '../../../stores/supportStore';
+import { useSupportStore } from '../../stores/supportStore';
 
 import { mdiBriefcase, mdiTagCheck, mdiTagOff } from '@quasar/extras/mdi-v7';
 

@@ -29,13 +29,14 @@
         </q-item>
 
         <div class="" v-if="!support.drawer.mini">
-          <component
-            v-for="(item, index) of info"
+          <ticket-section
+            grid
+            v-for="(column, index) of drawerColumns"
             :key="index"
-            :is="item.component"
-            :label="item.label"
-            :value="item.value"
-          ></component>
+            :component="column.component"
+            :col="column.col"
+            :ticket="support.selectedTicket ?? defaultTicket"
+          ></ticket-section>
         </div>
       </q-list>
     </div>
@@ -47,14 +48,17 @@
 </template>
 
 <script setup lang="ts">
+import { date, useQuasar } from 'quasar';
 import { computed, onBeforeMount } from 'vue';
 
 import { useSupportStore } from '../../../stores/supportStore';
 
-import TicketStatusGrid from '../../items/sections/TicketStatusGrid.vue';
+import { defaultTicket } from '../../../stores/supportModels';
+
 import TicketInfo from '../../items/sections/TicketInfo.vue';
-import GridUserView from '../../items/sections/GridUserView.vue';
-import { date, useQuasar } from 'quasar';
+import StatusView from '../../items/sections/StatusView.vue';
+import UserView from '../../items/sections/UserView.vue';
+import TicketSection from '../../items/sections/TicketSection.vue';
 
 const support = useSupportStore();
 const quasar = useQuasar();
@@ -72,52 +76,49 @@ onBeforeMount(() => {
   if (md.value) support.drawer.state = false;
 });
 
-const info = computed(() => [
+const format = (value?: string | null) => {
+  return date.formatDate(Date.parse(value ?? ''), 'DD MMM, YYYY HH:mm');
+};
+
+const drawerColumns = computed(() => [
   {
-    label: 'Статус',
-    value: support.selectedTicket,
-    component: TicketStatusGrid,
+    col: { label: 'Статус' },
+    component: StatusView,
   },
   {
-    label: 'Запрос от',
-    value: support.selectedTicket?.user?.link,
-    component: GridUserView,
+    col: { label: 'Запрос от', name: 'user' },
+    component: UserView,
   },
   {
-    label: 'Исполнитель',
-    value: support.selectedTicket?.manager?.link ?? null,
-    component: GridUserView,
+    col: { label: 'Исполнитель', name: 'implementer' },
+    component: UserView,
   },
   {
-    label: 'Время создания',
-    value: date.formatDate(
-      Date.parse(support.selectedTicket?.created_at ?? ''),
-      'DD MMM, YYYY HH:mm'
-    ),
+    col: {
+      label: 'Время создания',
+      field: () => format(support.selectedTicket?.created_at),
+    },
     component: TicketInfo,
   },
   {
-    label: 'Время принятия в работу',
-    value: date.formatDate(
-      Date.parse(support.selectedTicket?.accepted_at ?? ''),
-      'DD MMM, YYYY HH:mm'
-    ),
+    col: {
+      label: 'Время принятия в работу',
+      field: () => format(support.selectedTicket?.accepted_at),
+    },
     component: TicketInfo,
   },
   {
-    label: 'Время закрытия',
-    value: date.formatDate(
-      Date.parse(support.selectedTicket?.closed_at ?? ''),
-      'DD MMM, YYYY HH:mm'
-    ),
+    col: {
+      label: 'Время закрытия',
+      field: () => format(support.selectedTicket?.closed_at),
+    },
     component: TicketInfo,
   },
   {
-    label: 'Время автоматического удаления',
-    value: date.formatDate(
-      Date.parse(support.selectedTicket?.deleted_at ?? ''),
-      'DD MMM, YYYY HH:mm'
-    ),
+    col: {
+      label: 'Время автоматического удаления',
+      field: () => format(support.selectedTicket?.deleted_at),
+    },
     component: TicketInfo,
   },
 ]);

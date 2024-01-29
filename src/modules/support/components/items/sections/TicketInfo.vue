@@ -1,26 +1,15 @@
 <template>
-  <q-item class="items-center">
-    <q-item-section>{{ label }}</q-item-section>
-
-    <q-item-section
-      side
-      :style="{ maxWidth: percents + '%' }"
-      class="ellipsis-3-lines"
-    >
-      <q-item-label caption>
-        {{ value }}
-      </q-item-label>
-    </q-item-section>
-  </q-item>
+  <div class="font-13" v-html="props.col.field(props.ticket)"></div>
 </template>
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import { computed } from 'vue';
+import { defaultTicket } from '../../../stores/supportModels';
 
-withDefaults(defineProps<TicketInfoProps>(), {
-  label: '',
-  value: '',
+const props = withDefaults(defineProps<TicketInfoProps>(), {
+  ticket: () => defaultTicket,
+  col: () => ({ name: '', field: (row: SupportTicket) => row.id }),
 });
 
 const quasar = useQuasar();
@@ -28,8 +17,8 @@ const quasar = useQuasar();
 const percents = computed(() => (quasar.screen.lt.sm ? 60 : 70));
 
 interface TicketInfoProps {
-  label: any;
-  value: any;
+  ticket: SupportTicket;
+  col: { name: string; field: any };
 }
 </script>
 

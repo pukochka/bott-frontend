@@ -1,13 +1,14 @@
-import TicketInfo from '../components/items/sections/TicketInfo.vue';
-import TicketStatusGrid from '../components/items/sections/TicketStatusGrid.vue';
-import UserView from '../components/items/sections/GridUserView.vue';
 import { date } from 'quasar';
+
+import TicketInfo from '../components/items/sections/TicketInfo.vue';
+import TicketStatus from '../components/items/sections/StatusView.vue';
+import UserView from '../components/items/sections/UserView.vue';
+import TicketMessageView from '../components/items/sections/MessageView.vue';
 
 export const columns: Array<any> = [
   {
     autoWidth: true,
     name: 'id',
-    align: 'center',
     label: 'Название',
     field: (row: SupportTicket) => row.title,
     hover: false,
@@ -16,25 +17,20 @@ export const columns: Array<any> = [
   {
     autoWidth: true,
     name: 'message',
-    align: 'center',
     label: 'Сообщение',
-    classes: 'ellipsis-2-lines text-wrap',
-    style: 'min-width: 150px',
     field: (row: SupportTicket) => row.last_message?.message?.text ?? '',
     hover: false,
-    component: TicketInfo,
+    component: TicketMessageView,
   },
   {
     name: 'status',
-    align: 'center',
     label: 'Статус',
     field: (row: SupportTicket) => row,
     hover: false,
-    component: TicketStatusGrid,
+    component: TicketStatus,
   },
   {
-    name: 'executor',
-    align: 'center',
+    name: 'implementer',
     label: 'Исполнитель',
     field: (row: SupportTicket) =>
       row.manager !== null
@@ -45,7 +41,6 @@ export const columns: Array<any> = [
   },
   {
     name: 'name',
-    align: 'center',
     label: 'Запрос от',
     field: (row: SupportTicket) =>
       row.user?.first_name + ' ' + row.user?.last_name,
@@ -54,7 +49,6 @@ export const columns: Array<any> = [
   },
   {
     name: 'time',
-    align: 'center',
     label: 'Время создания',
     field: (row: SupportTicket) =>
       date.formatDate(Date.parse(row.created_at), 'DD MMM, YYYY HH:mm'),

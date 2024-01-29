@@ -95,6 +95,7 @@ export const defaultTicket: SupportTicket = {
   closed_at: '',
   created_at: '',
   offered_at: '',
+  last_message: null,
   user: {
     id: 0,
     type: '',

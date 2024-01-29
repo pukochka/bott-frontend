@@ -1,11 +1,14 @@
 <template>
-  <div
-    v-html="name"
-    class="text-primary bott-token font-13"
-    v-if="props.ticket.manager || !props.implementer"
-  ></div>
+  <div class="row justify-center">
+    <div
+      v-html="name"
+      style="max-width: 150px"
+      class="text-primary ellipsis bott-token font-13"
+      v-if="props.ticket.manager || !(props.col.name === 'implementer')"
+    ></div>
 
-  <div v-else class="bott-token font-13 text-red">Нет</div>
+    <div v-else class="bott-token font-13 text-red">Нет</div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -14,18 +17,18 @@ import { computed } from 'vue';
 
 const props = withDefaults(defineProps<UserViewProps>(), {
   ticket: () => defaultTicket,
-  implementer: false,
+  col: () => ({ name: '', field: () => '' }),
 });
 
 const name = computed(() =>
-  props.implementer
+  props.col.name === 'implementer'
     ? props.ticket?.manager?.first_name + ' ' + props.ticket?.manager?.last_name
     : props.ticket?.user?.first_name + ' ' + props.ticket?.user?.last_name
 );
 
 interface UserViewProps {
   ticket: SupportTicket;
-  implementer: boolean;
+  col: { name: string; field: any };
 }
 </script>
 

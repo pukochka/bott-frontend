@@ -57,28 +57,13 @@
                 :auto-width="col?.autoWidth"
                 v-for="col of props.cols"
                 :key="props.row[col.name]"
-                :class="[' text-' + (col.align ?? 'center')]"
                 @click="support.openChat(props.row)"
               >
-                <ticket-status
-                  :status="props.row.status"
-                  v-if="col.name === 'status'"
-                ></ticket-status>
-
-                <table-user-view
-                  :implementer="col.name === 'executor'"
+                <ticket-section
+                  :col="col"
                   :ticket="props.row"
-                  v-else-if="['executor', 'name'].includes(col.name)"
-                ></table-user-view>
-
-                <div
-                  class="font-14"
-                  :style="col?.style"
-                  :class="col?.classes"
-                  v-else
-                >
-                  {{ col?.field(props.row) }}
-                </div>
+                  :component="col.component"
+                ></ticket-section>
               </q-td>
             </q-tr>
           </template>
@@ -90,7 +75,7 @@
               <q-th
                 :props="props"
                 :auto-width="col?.autoWidth"
-                :style="col?.style"
+                style="text-align: center"
                 v-for="col of props.cols"
                 :key="col.name"
               >
@@ -131,9 +116,11 @@ import { useSupportStore } from '../../stores/supportStore';
 
 import TicketGridItem from '../items/TicketGridItem.vue';
 import TicketMenu from '../items/sections/TicketMenu.vue';
-import TicketStatus from '../items/sections/TicketStatusTable.vue';
-import TableUserView from '../items/sections/TableUserView.vue';
-import TableButtons from '../items/sections/TableButtons.vue';
+import TicketStatus from '../items/sections/StatusView.vue';
+import TableUserView from '../items/sections/UserView.vue';
+import TableButtons from '../sections/TableButtons.vue';
+import TicketMessageView from '../items/sections/MessageView.vue';
+import TicketSection from '../items/sections/TicketSection.vue';
 
 const support = useSupportStore();
 

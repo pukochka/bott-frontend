@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import { date } from 'quasar';
 import { computed, onMounted, ref } from 'vue';
-import { chatColors } from '../../utils/common';
+import { chatColors, months } from '../../utils/common';
 
 import { useSupportStore } from '../../stores/supportStore';
 
@@ -78,9 +78,14 @@ const color = computed(
   () => chatColors[support.selectedTicket?.status ?? 1] ?? ''
 );
 
-const firstMessageDate = computed(() =>
-  date.formatDate(Date.parse(support.messages[0]?.created_at), 'DD MMM')
-);
+const firstMessageDate = computed(() => {
+  const timestamp = Date.parse(support.messages[0]?.created_at) ?? '';
+
+  const day = date.formatDate(timestamp, 'DD');
+  const month = months[new Date(timestamp).getMonth()] ?? '';
+
+  return day + ' ' + month;
+});
 
 onMounted(() => {
   support.scrollRef = chat;

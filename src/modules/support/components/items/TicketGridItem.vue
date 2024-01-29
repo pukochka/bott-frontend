@@ -39,13 +39,14 @@
       <q-separator />
 
       <q-list class="relative-position overflow-hidden">
-        <component
+        <ticket-section
+          grid
+          :col="col"
+          :ticket="vmProps.props.row"
+          :component="col.component"
           v-for="col of props.cols"
           :key="col.name"
-          :is="col.component"
-          :label="col.label"
-          :value="col.value"
-        ></component>
+        ></ticket-section>
 
         <div
           class="absolute-full"
@@ -63,7 +64,8 @@ import { defaultTicket } from '../../stores/supportModels';
 import { useSupportStore } from '../../stores/supportStore';
 
 import TicketMenu from './sections/TicketMenu.vue';
-import TableButtons from './sections/TableButtons.vue';
+import TableButtons from '../sections/TableButtons.vue';
+import TicketSection from './sections/TicketSection.vue';
 
 const vmProps = withDefaults(defineProps<TicketGridItemProps>(), {
   props: () => ({ row: defaultTicket, cols: [] }),
