@@ -9,7 +9,7 @@ export function getQueryParam(name: string, str?: string) {
 export function setQueryParam(name: string, value: string | number) {
   const url = new URL(window.document.URL);
   url.searchParams.set(name, value.toString());
-  window.history.replaceState({}, '', url.toString());
+  window.history.pushState({}, '', url.toString());
 }
 
 export function deleteQueryParam(param: string) {

@@ -66,8 +66,6 @@
 <script setup lang="ts">
 import { onBeforeMount, onMounted, ref } from 'vue';
 
-import { defaultCategory, defaultTicket } from './stores/supportModels';
-
 import {
   fetchSupportCategory,
   fetchSupportMessages,
@@ -144,6 +142,16 @@ onBeforeMount(() => {
     support.loading.start = false;
   });
 });
+
+window.onpopstate = () => {
+  if (!has('category_id')) {
+    support.tickets = [];
+    support.selectedCategory = null;
+  }
+  if (!has('id')) {
+    support.closeChat();
+  }
+};
 </script>
 
 <style scoped lang="scss"></style>

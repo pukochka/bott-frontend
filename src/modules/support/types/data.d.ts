@@ -29,6 +29,8 @@ declare interface SupportTicket {
   title: string;
   /** Статус тикета 1 - закрыт 2 - открыт 3 - ожидает закрытия 4 - повторно открыт 5 - ожидает менеджера */
   status: number;
+  /** */
+  last_message: SupportTicketMessage;
   /** Дата и время создания тикета (2023-10-13 20:47:35) */
   created_at: string;
   /** Дата и время принятия в работу (2023-10-13 20:47:35) */

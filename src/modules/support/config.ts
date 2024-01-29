@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const config = {
   host: 'https://api.bot-t.com/',
   id: 1,

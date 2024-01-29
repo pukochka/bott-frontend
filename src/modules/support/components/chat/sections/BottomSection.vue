@@ -1,64 +1,75 @@
 <template>
-  <div class="col" style="max-width: 900px">
+  <div class="row full-width" style="max-width: 900px">
     <div
-      class="row q-col-gutter-x-sm no-wrap q-ma-xs"
-      @keydown.enter="sendMessage"
+      class="col"
+      v-if="config.user_id === support.selectedTicket?.manager?.id"
     >
-      <div class="col relative-position">
-        <div
-          class="border-bottom-right-none bg-card overflow-hidden row items-end"
-        >
-          <div class="q-px-sm q-pb-sm">
-            <emoji-menu @select="addEmoji"></emoji-menu>
+      <div
+        class="row q-col-gutter-x-sm no-wrap q-ma-xs"
+        @keydown.enter="sendMessage"
+      >
+        <div class="col relative-position">
+          <div
+            class="border-bottom-right-none bg-card overflow-hidden row items-end"
+          >
+            <div class="q-px-sm q-pb-sm">
+              <emoji-menu @select="addEmoji"></emoji-menu>
+            </div>
+
+            <div class="col relative-position">
+              <span
+                class="input-placeholder non-selectable no-pointer-events"
+                v-if="placeholder"
+              >
+                Сообщение
+              </span>
+
+              <div
+                ref="chatInput"
+                contenteditable="true"
+                class="bott-message-input input-text-color transition"
+                style="overflow-y: scroll"
+                @keyup="updateText"
+                @keydown="updateText"
+              ></div>
+            </div>
           </div>
 
-          <div class="col relative-position">
-            <span
-              class="input-placeholder non-selectable no-pointer-events"
-              v-if="placeholder"
-            >
-              Сообщение
-            </span>
+          <message-appendix style="right: -9px"></message-appendix>
+        </div>
 
-            <div
-              ref="chatInput"
-              contenteditable="true"
-              class="bott-message-input input-text-color transition"
-              style="overflow-y: scroll"
-              @keyup="updateText"
-              @keydown="updateText"
-            ></div>
+        <div class="row items-end">
+          <div class="bg-card round">
+            <q-btn
+              flat
+              round
+              padding="16px"
+              size="md"
+              color="primary"
+              icon="send"
+              :loading="loading"
+              @click="sendMessage"
+            />
           </div>
         </div>
-
-        <message-appendix style="right: -9px"></message-appendix>
       </div>
+    </div>
 
-      <div class="row items-end">
-        <div class="bg-card round">
-          <q-btn
-            flat
-            round
-            padding="16px"
-            size="md"
-            color="primary"
-            icon="send"
-            :loading="loading"
-            @click="sendMessage"
-          />
-        </div>
-      </div>
+    <div class="col text-center text-caption text-white q-pa-md" v-else>
+      Для отправки сообщений Вам нужно быть исполнителем тикета
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { config } from '../../../config';
+
 import { ref } from 'vue';
 import { fetchSupportMessages } from '../../../api/queries';
 import { useSupportStore } from '../../../stores/supportStore';
 
-import MessageAppendix from '../../../../../components/emoji/MessageAppendix.vue';
-import EmojiMenu from '../../../../../components/emoji/EmojiMenu.vue';
+import MessageAppendix from 'src/components/emoji/MessageAppendix.vue';
+import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
 
 const support = useSupportStore();
 

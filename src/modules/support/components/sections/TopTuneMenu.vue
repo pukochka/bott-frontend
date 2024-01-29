@@ -70,6 +70,7 @@
           dense
           v-for="(button, index) of topActions"
           :key="index"
+          v-show="button.condition"
           @click="button.action"
         >
           <q-item-section avatar>
@@ -112,10 +113,12 @@ const sm = computed(() => quasar.screen.lt.sm);
 const padding = computed(() => (sm.value ? '4px 16px' : '6px 32px'));
 
 const deleteCategory = () => {
+  if (support.selectedCategory?.default === 1) return;
+
   useDialog(
-    `Вы уверены, что хотите удалить категорию <span class="text-primary">${
-      support.selectedCategory?.title ?? ''
-    }</span>?`,
+    `Вы уверены, что хотите удалить категорию <span class="text-primary">
+${support.selectedCategory?.title ?? ''}
+</span>?`,
     true
   ).onOk(() => {
     loading.value = true;
@@ -177,18 +180,21 @@ const topActions = computed(() => [
     action: () => support.openDialog('select_implementer'),
     color: 'info',
     icon: mdiBriefcaseArrowUpDown,
+    condition: true,
   },
   {
     label: 'Предложить закрыть все открытые тикеты',
     action: massOffer,
     color: 'warning',
     icon: mdiTagCheck,
+    condition: true,
   },
   {
     label: 'Удалить категорию',
     action: deleteCategory,
     color: 'red',
     icon: 'close',
+    condition: support.selectedCategory?.default === 0,
   },
 ]);
 </script>
