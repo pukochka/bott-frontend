@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<IntegrationIndexItemProps>(), {
   item: () => defaultIntegrationIndex,
 });
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(false);
 
@@ -69,15 +69,15 @@ const deleteIntegration = () => {
       message_id: config.message_id,
       id: props.item.id,
     }).then(() => {
-      store.updateIntegrations().then(() => (loading.value = false));
+      feedback.updateIntegrations().then(() => (loading.value = false));
     });
   });
 };
 
 const editIntegration = () => {
-  store.selectedIntegration = props.item;
+  feedback.selectedIntegration = props.item;
 
-  store.openDialog('api_edit');
+  feedback.openDialog('api_edit');
 };
 
 const menuActions = computed(() => [

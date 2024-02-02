@@ -93,7 +93,7 @@ const emit = defineEmits<{
   (e: 'load'): void;
 }>();
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const text = ref('');
 const validator = ref('');
@@ -116,9 +116,9 @@ const updateInput = () => {
       message: text.value,
       validator: radios.value[section.value].value,
     },
-    store.updateQuestion
+    feedback.updateQuestion
   ).then(() => {
-    store.closeDialog('message');
+    feedback.closeDialog('message');
     emit('load');
   });
 };

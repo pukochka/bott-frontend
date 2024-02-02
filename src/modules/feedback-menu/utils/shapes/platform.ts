@@ -15,7 +15,7 @@ export function createPlatform(
   message: MessageFeedbackItemPreview,
   coords: Array<number> | PaperPoint
 ) {
-  const store = useFeedbackStore();
+  const feedback = useFeedbackStore();
 
   const circleGroup = new Group();
 
@@ -46,7 +46,7 @@ export function createPlatform(
     circleGroup.insertChild(3, icon);
   }
 
-  const start = store.feedback.start;
+  const start = feedback.feedback.start;
 
   if (message.id === start?.id && message.type === start?.type) {
     const startText = createText(
@@ -65,7 +65,7 @@ export function createPlatform(
     if (message.type === 4) {
       icon.tweenTo({ opacity: 1 }, 150);
     }
-    store.clickable = true;
+    feedback.clickable = true;
     gsap.to(backCircle, { radius: 90, duration: 0.15 });
   };
 
@@ -73,7 +73,7 @@ export function createPlatform(
     if (message.type === 4) {
       icon.tweenTo({ opacity: 0 }, 150);
     }
-    store.clickable = false;
+    feedback.clickable = false;
     gsap.to(backCircle, { radius: 80, duration: 0.15 });
   };
 

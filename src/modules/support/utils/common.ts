@@ -1,3 +1,7 @@
+import PhotoTile from '../components/chat/media/PhotoTile.vue';
+import DocumentTile from '../components/chat/media/DocumentTile.vue';
+import VideoTile from '../components/chat/media/VideoTile.vue';
+
 export const chatColors: Record<number, string> = {
   1: 'linear-gradient(270deg, hsla(31, 91%, 59%, 0.6) 0%, hsla(360, 100%, 67%, 0.6) 100%)',
   2: 'linear-gradient(135deg, hsla(91, 68%, 54%, 0.6) 0%, hsla(125, 58%, 45%, 0.6) 100%)',
@@ -6,13 +10,13 @@ export const chatColors: Record<number, string> = {
   5: 'linear-gradient(90deg, hsla(186, 33%, 94%, 0.6) 0%, hsla(216, 41%, 79%, 0.6) 100%)',
 };
 
-export const telegramLink = 'https://t.me/';
-
-export const btnViewText: Record<number, string> = {
-  1: 'изображение',
-  3: 'файл',
-  4: 'видео',
-  5: 'анимацию',
+export const TG_DESKTOP = 'https://t.me/';
+export const TG_API = 'https://api.telegram.org/';
+export const mediaComponents: Record<number, any> = {
+  1: PhotoTile,
+  3: DocumentTile,
+  4: VideoTile,
+  5: PhotoTile,
 };
 
 const gradient: Record<string, [string, string]> = {

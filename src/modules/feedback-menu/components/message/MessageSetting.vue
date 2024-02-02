@@ -4,7 +4,7 @@
     full-width
     position="bottom"
     @before-show="updateShow"
-    v-model="store.dialogs.message"
+    v-model="feedback.dialogs.message"
   >
     <div class="row justify-center">
       <q-card bordered flat class="dialog-rounded bott-dialog__responsive">
@@ -34,7 +34,7 @@
 
           <component
             :is="component"
-            :message="store.selectedMessage"
+            :message="feedback.selectedMessage"
             :update="loading.data"
             @load="loading.update = false"
           />
@@ -100,7 +100,7 @@ import QuizView from './sections/QuizView.vue';
 import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
 import RadioItem from '../views/RadioItem.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const text = ref({
   value: '',
@@ -124,7 +124,7 @@ const setting: any = {
   3: QuizView,
 };
 
-const component = computed(() => setting[store.selectedMessage?.type ?? 1]);
+const component = computed(() => setting[feedback.selectedMessage?.type ?? 1]);
 
 const addEmoji = (value: string) => (text.value.value += value);
 
@@ -133,10 +133,10 @@ const updateMessage = () => {
   loading.value.data = true;
 
   fetchFeedback('update-input', {
-    input_id: store.selectedMessage?.id ?? 0,
+    input_id: feedback.selectedMessage?.id ?? 0,
     text: text.value.value,
     is_confirm: confirm.value,
-    type: store.selectedMessage?.type ?? 1,
+    type: feedback.selectedMessage?.type ?? 1,
   }).then(() => (loading.value.data = false));
 };
 
@@ -144,18 +144,18 @@ const deleteQuestion = () => {
   useDialog('Вы уверены, что хотите удалить вопрос?', true).onOk(() => {
     loading.value.delete = true;
     fetchFeedback('delete-input', {
-      type: store.selectedMessage?.type ?? 1,
-      input_id: store.selectedMessage?.id ?? 1,
+      type: feedback.selectedMessage?.type ?? 1,
+      input_id: feedback.selectedMessage?.id ?? 1,
     }).then(() => {
       loading.value.delete = false;
-      store.closeDialog('message');
+      feedback.closeDialog('message');
     });
   });
 };
 
 const updateShow = () => {
-  confirm.value = store.selectedMessage?.confirm ?? false;
-  text.value.value = store.selectedMessage?.text ?? '';
+  confirm.value = feedback.selectedMessage?.confirm ?? false;
+  text.value.value = feedback.selectedMessage?.text ?? '';
 };
 </script>
 

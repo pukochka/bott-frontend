@@ -1,5 +1,5 @@
 <template>
-  <div class="row full-width transition-height" style="max-width: 900px">
+  <div class="row full-width transition-height" style="max-width: 925px">
     <div
       class="col"
       v-if="config.user_id === support.selectedTicket?.manager?.id"

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="store.dialogs.touch" @before-hide="updateHide">
+  <q-dialog v-model="feedback.dialogs.touch" @before-hide="updateHide">
     <q-card bordered flat class="rounded">
       <component :is="menu[opened]"></component>
     </q-card>
@@ -15,11 +15,11 @@ import MessageMenu from '../menu/MessageMenu.vue';
 import LinkMenu from '../menu/LinkMenu.vue';
 import TouchMenu from '../menu/TouchMenu.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const opened = computed(
   () =>
-    Object.entries(store.menu)
+    Object.entries(feedback.menu)
       .filter(([_, value]) => value)
       .map(([key]) => key)?.[0] ?? 'create'
 );
@@ -32,9 +32,9 @@ const menu = computed(() => ({
 }));
 
 const updateHide = () => {
-  store.hideMenu();
+  feedback.hideMenu();
 
-  if (store.action !== null) store.action();
+  if (feedback.action !== null) feedback.action();
 };
 </script>
 

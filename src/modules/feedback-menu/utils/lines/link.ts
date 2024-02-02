@@ -96,7 +96,7 @@ export class Link {
   }
 
   mountLine() {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     this.lineStart = dashLine(
       this.points.middle,
@@ -122,17 +122,17 @@ export class Link {
     this.lineEnd.opacity = 0.6;
 
     this.lineFront.onClick = (event: any) => {
-      store.selectedMessage = this.startMessage;
-      store.selectedMessageNext = this.endMessage;
-      store.selectedOption = this.crossroad;
+      feedback.selectedMessage = this.startMessage;
+      feedback.selectedMessageNext = this.endMessage;
+      feedback.selectedOption = this.crossroad;
 
-      const touch = !!event.event?.changedTouches?.[0] || store.isMobile;
+      const touch = !!event.event?.changedTouches?.[0] || feedback.isMobile;
 
-      store.openMenu('link', undefined, touch);
+      feedback.openMenu('link', undefined, touch);
     };
 
     this.lineFront.onMouseEnter = () => {
-      store.clickable = true;
+      feedback.clickable = true;
 
       this.lineEnd?.tweenTo({ opacity: 0.9 }, 150);
       this.lineStart?.tweenTo({ opacity: 0.9 }, 150);
@@ -140,7 +140,7 @@ export class Link {
       this.endCircle?.tweenTo({ opacity: 0.9 }, 150);
     };
     this.lineFront.onMouseLeave = () => {
-      store.clickable = false;
+      feedback.clickable = false;
 
       this.lineEnd?.tweenTo({ opacity: 0.6 }, 150);
       this.lineStart?.tweenTo({ opacity: 0.6 }, 150);

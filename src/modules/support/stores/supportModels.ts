@@ -13,6 +13,11 @@ export interface WorkStore {
   view: 'table' | 'grid';
   main: 'view' | 'chat';
 
+  media: {
+    link: string;
+    isVideo: boolean;
+  };
+
   drawer: {
     state: boolean;
     mini: boolean;
@@ -48,6 +53,7 @@ export type DialogNames =
   | 'implementor_transfer'
   | 'select_category'
   | 'select_implementer'
+  | 'media_player'
   | 'edit_ticket';
 
 export type SectionNames =

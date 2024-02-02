@@ -59,7 +59,7 @@ const emit = defineEmits<{
   (e: 'filter', status?: number): void;
 }>();
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const filter = ref<FilterNames>('all');
 
@@ -92,7 +92,7 @@ const data = computed(
   (): Array<InfoItem> => [
     {
       label: 'Всего заявок',
-      value: store.answersCount.all,
+      value: feedback.answersCount.all,
       tooltip: 'Показать все',
       icon: mdiFilterOffOutline,
       loading: loading.value.all,
@@ -101,7 +101,7 @@ const data = computed(
     },
     {
       label: 'Из них незавершенных',
-      value: store.answersCount.unfinished,
+      value: feedback.answersCount.unfinished,
       tooltip: 'Показать незавершенные',
       icon: mdiFilterOutline,
       loading: loading.value.unfinished,
@@ -110,7 +110,7 @@ const data = computed(
     },
     {
       label: 'Из них непрочитанных',
-      value: store.answersCount.unread,
+      value: feedback.answersCount.unread,
       tooltip: 'Показать непрочитанные',
       icon: mdiFilterOutline,
       loading: loading.value.unread,

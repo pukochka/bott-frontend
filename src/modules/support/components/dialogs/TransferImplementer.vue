@@ -13,7 +13,7 @@
           <q-item
             clickable
             tag="label"
-            v-for="implementer of implementers"
+            v-for="implementer of support.implementers"
             :key="implementer.id"
           >
             <q-item-section class="text-body1">
@@ -23,8 +23,8 @@
             <q-item-section side>
               <q-radio
                 v-model="selected"
-                :val="implementer.id"
-                @update:model-value="selected = implementer.id"
+                :val="implementer.user.id"
+                @update:model-value="selected = implementer.user.id"
                 color="primary"
               />
             </q-item-section>
@@ -79,10 +79,6 @@ const loading = ref({
   transfer: false,
 });
 const selected = ref(0);
-
-const implementers = computed(() =>
-  support.implementers.filter((item) => item.user.id !== config.user_id)
-);
 
 const transferTicket = () => {
   loading.value.transfer = true;

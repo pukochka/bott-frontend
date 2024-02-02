@@ -23,7 +23,7 @@
 
             <q-breadcrumbs-el
               class="rounded q-px-xs"
-              :label="store.message.title"
+              :label="feedback.message.title"
             />
           </q-breadcrumbs>
         </div>
@@ -57,7 +57,7 @@
       </q-card>
     </div>
 
-    <warning-start v-if="!store.isMobile && !md"></warning-start>
+    <warning-start v-if="!feedback.isMobile && !md"></warning-start>
   </div>
 </template>
 
@@ -75,38 +75,38 @@ import {
 
 import WarningStart from '../views/WarningStart.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 const quasar = useQuasar();
 
 const sm = computed(() => !quasar.screen.lt.sm);
 const md = computed(() => quasar.screen.lt.md);
 
-const disabled = computed(() => store.onconnection || store.dragging);
+const disabled = computed(() => feedback.onconnection || feedback.dragging);
 
-const breadcrumbs = computed(() => store.message?.breadcrumbs?.crumbs);
+const breadcrumbs = computed(() => feedback.message?.breadcrumbs?.crumbs);
 
 const buttons = computed(() => [
   {
     label: 'Смотреть заявки',
-    action: () => store.openDialog('answers'),
+    action: () => feedback.openDialog('answers'),
     icon: mdiForum,
     color: 'primary',
   },
   {
     label: 'Настройки уведомлений для администраторов',
-    action: () => store.openDialog('notify'),
+    action: () => feedback.openDialog('notify'),
     icon: mdiBellCog,
     color: 'primary',
   },
   {
     label: 'Настройки обратной связи',
-    action: () => store.openDialog('settings'),
+    action: () => feedback.openDialog('settings'),
     icon: mdiMessageSettings,
     color: 'primary',
   },
   {
     label: 'Готовые интеграции',
-    action: () => store.openDialog('api'),
+    action: () => feedback.openDialog('api'),
     icon: mdiApi,
     color: 'primary',
   },

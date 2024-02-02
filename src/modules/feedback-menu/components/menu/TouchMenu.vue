@@ -30,7 +30,7 @@ import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import { mdiTransitConnectionHorizontal } from '@quasar/extras/mdi-v7';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref({
   delete: false,
@@ -39,18 +39,18 @@ const loading = ref({
   next: false,
 });
 
-const withoutCrossroad = computed(() => store.selectedMessage?.type !== 4);
+const withoutCrossroad = computed(() => feedback.selectedMessage?.type !== 4);
 
 const connectWith = () => {
-  store.closeDialog('touch');
-  store.menu.touch = false;
-  store.mobile.connect = true;
+  feedback.closeDialog('touch');
+  feedback.menu.touch = false;
+  feedback.mobile.connect = true;
 };
 
 const addMessage = () => {
-  store.closeDialog('touch');
-  store.menu.touch = false;
-  store.openMenu('create', undefined, true);
+  feedback.closeDialog('touch');
+  feedback.menu.touch = false;
+  feedback.openMenu('create', undefined, true);
 };
 
 const buttons = computed(() => [

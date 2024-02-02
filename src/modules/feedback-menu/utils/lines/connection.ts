@@ -34,8 +34,8 @@ export class Connection {
   drag = false;
 
   get canCreateConnectCircle() {
-    const store = useFeedbackStore();
-    return store.shells.filter((shell) =>
+    const feedback = useFeedbackStore();
+    return feedback.shells.filter((shell) =>
       overlap(this.connectCircle, shell.children[0])
     ).length;
   }
@@ -47,8 +47,8 @@ export class Connection {
   }
 
   get canConnect() {
-    const store = useFeedbackStore();
-    return store.shells.filter(
+    const feedback = useFeedbackStore();
+    return feedback.shells.filter(
       (item) =>
         overlap(this.front, item.children[0]) &&
         /** Фильтрация для начального сообщения */
@@ -58,12 +58,12 @@ export class Connection {
           item.data?.next?.type !== this.message.type) &&
         /** Фильтрация для предыдущего сообщения с CROSSROAD */
         (item.data.type !== 4 ||
-          store.crossroadConnections[this.message.id] !== this.message.type)
+          feedback.crossroadConnections[this.message.id] !== this.message.type)
     );
   }
 
   constructor(message: MessageFeedbackItemPreview, platform: PaperGroup) {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
     this.message = message;
     this.platform = platform;
 
@@ -95,16 +95,16 @@ export class Connection {
     this.groupConnection.opacity = 0;
     this.groupConnection.remove();
 
-    if (store.isMobile) {
+    if (feedback.isMobile) {
       this.group.onClick = () => {
-        store.selectedMessage = this.message;
+        feedback.selectedMessage = this.message;
 
-        store.connecting = true;
+        feedback.connecting = true;
 
-        store.openMenu(
+        feedback.openMenu(
           'touch',
           () => {
-            store.onconnection = false;
+            feedback.onconnection = false;
           },
           true
         );
@@ -112,7 +112,7 @@ export class Connection {
     }
 
     this.group.onMouseDown = () => {
-      store.connecting = true;
+      feedback.connecting = true;
 
       this.openConnection();
     };
@@ -134,8 +134,8 @@ export class Connection {
             return;
           }
 
-          store._feedback = response.feedback;
-          store.selectedMessage = null;
+          feedback._feedback = response.feedback;
+          feedback.selectedMessage = null;
 
           update();
         }
@@ -176,9 +176,9 @@ export class Connection {
     };
 
     this.group.onMouseEnter = () => {
-      if (store.connecting) return;
+      if (feedback.connecting) return;
 
-      store.onconnection = true;
+      feedback.onconnection = true;
       this.icon.visible = true;
 
       gsap.to(this.group.position, {
@@ -188,9 +188,9 @@ export class Connection {
     };
 
     this.group.onMouseLeave = () => {
-      if (store.connecting) return;
+      if (feedback.connecting) return;
 
-      store.onconnection = false;
+      feedback.onconnection = false;
 
       this.returnCircle();
     };
@@ -238,9 +238,9 @@ export class Connection {
   }
 
   openConnection() {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
-    store.layer.addChild(this.groupConnection);
+    feedback.layer.addChild(this.groupConnection);
 
     this.groupConnection.position = new Point(
       (this.platform?.position.x ?? 0) + 300,
@@ -252,28 +252,28 @@ export class Connection {
   createConnect(event: any) {
     this.action = true;
     if (!this.platform) return;
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     if (!this.prev) this.createPrevLink();
 
-    store.selectedMessage = this.message;
+    feedback.selectedMessage = this.message;
 
-    store.action = () => {
-      store.onconnection = false;
+    feedback.action = () => {
+      feedback.onconnection = false;
       this.action = false;
       this.removePrevLink();
       this.removeConnection();
     };
 
     if (this.message.type === 4) {
-      store.openDialog('crossroad_option');
+      feedback.openDialog('crossroad_option');
 
       return;
     }
 
-    const touch = !!event.event?.changedTouches?.[0] || store.isMobile;
+    const touch = !!event.event?.changedTouches?.[0] || feedback.isMobile;
 
-    store.openMenu('create', undefined, touch);
+    feedback.openMenu('create', undefined, touch);
   }
 
   createConnectCircle() {
@@ -296,7 +296,7 @@ export class Connection {
     this.prev = true;
     this.group.opacity = 0.01;
 
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     if (!this.platform || !this.message) return;
 
@@ -310,7 +310,7 @@ export class Connection {
     );
     link.group.sendToBack();
 
-    store.connect.push({
+    feedback.connect.push({
       link: ['new'],
       group: link,
     });
@@ -320,9 +320,9 @@ export class Connection {
     if (this.action) return;
 
     this.group.opacity = 1;
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
-    store.connect
+    feedback.connect
       .filter((item) => item.link.includes('new'))
       .forEach((item) => {
         const link = item.group;
@@ -332,7 +332,9 @@ export class Connection {
         link?.arrowStart?.group?.remove();
       });
 
-    store.connect = store.connect.filter((item) => !item.link.includes('new'));
+    feedback.connect = feedback.connect.filter(
+      (item) => !item.link.includes('new')
+    );
   }
 
   returnCircle() {
@@ -348,9 +350,9 @@ export class Connection {
   }
 
   removeConnection() {
-    const store = useFeedbackStore();
-    store.connecting = false;
-    store.onconnection = false;
+    const feedback = useFeedbackStore();
+    feedback.connecting = false;
+    feedback.onconnection = false;
 
     gsap.to(this.groupConnection, { opacity: 0, duration: 0.15 });
     gsap.to(this.connectCircle, { radius: 1, duration: 0.15 }).then(() => {
@@ -365,27 +367,27 @@ export class FirstConnection {
   group: PaperGroup = new Group();
   icon: PaperGroup = createPlus(new Point(0, 0), 3);
   constructor() {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     const back = circle([0, 0], 80, '#adb5bd', 8, '#adb5bd');
     const front = circle([0, 0], 80, noColor);
     this.icon.scale(6, this.icon.position);
 
     front.onMouseEnter = () => {
-      store.clickable = true;
+      feedback.clickable = true;
     };
 
     front.onMouseLeave = () => {
-      store.clickable = false;
+      feedback.clickable = false;
     };
 
     front.onClick = (event: any) => {
-      const touch = !!event.event?.changedTouches?.[0] || store.isMobile;
+      const touch = !!event.event?.changedTouches?.[0] || feedback.isMobile;
 
-      store.openMenu(
+      feedback.openMenu(
         'create',
         () => {
-          store.onconnection = false;
+          feedback.onconnection = false;
         },
         touch
       );

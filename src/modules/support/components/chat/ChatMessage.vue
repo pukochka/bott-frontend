@@ -5,40 +5,54 @@
   >
     <q-card
       flat
-      class="q-pt-xs q-px-sm"
+      class="q-pt-xs"
       :class="[status ? ' rounded-none-right' : ' rounded-none-left']"
       :style="{ 'max-width': '450px' }"
     >
       <div
-        class="row text-primary"
-        :class="[status ? ' justify-end q-mr-xs' : '']"
+        class="row items-center justify-between text-primary q-mx-xs"
+        :class="[status ? ' justify-end reverse' : '']"
       >
         <q-btn outline padding="0 4px" color="primary" class="rounded">
           <div class="text-caption text-weight-bold" v-html="name"></div>
 
           <q-menu class="bott-portal-menu">
             <q-list dense>
-              <q-item clickable v-close-popup :href="link" target="_blank">
+              <q-item clickable v-close-popup :href="userLink" target="_blank">
                 <q-item-section>Перейти в телеграм</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
         </q-btn>
+
+        <q-btn
+          flat
+          padding="2px"
+          size="10px"
+          color="primary"
+          icon="launch"
+          target="_blank"
+          :href="messageLink"
+          v-if="isMedia"
+        >
+          <q-tooltip
+            class="bott-tooltip text-center"
+            anchor="top middle"
+            self="bottom middle"
+          >
+            Открыть в телеграме
+          </q-tooltip>
+        </q-btn>
       </div>
 
-      <q-btn
-        no-caps
-        dense
-        flat
-        target="_blank"
-        :href="messageLink"
-        class="rounded full-width q-my-sm"
-        color="primary"
-        :label="buttonViewLabel"
-        v-if="![0, 2].includes(message.message.type.id)"
-      />
+      <div class="" v-if="isMedia">
+        <component :is="media" :message="props.message.message"></component>
+      </div>
 
-      <div class="column items-end">
+      <div
+        :class="[isMedia ? ' q-mt-xs' : '']"
+        class="column items-end q-px-sm"
+      >
         <div
           class="font-14 text-content row justify-start full-width"
           v-html="textContent"
@@ -71,13 +85,13 @@
 import { computed } from 'vue';
 import { config } from '../../config';
 import { date } from 'quasar';
+
 import { defaultTicketMessage } from '../../stores/supportModels';
+import { mediaComponents, months, TG_DESKTOP } from '../../utils/common';
 
 import { useSupportStore } from '../../stores/supportStore';
 
 import MessageAppendix from 'src/components/emoji/MessageAppendix.vue';
-
-import { btnViewText, months, telegramLink } from '../../utils/common';
 
 const props = withDefaults(defineProps<ChatMessageProps>(), {
   message: () => defaultTicketMessage,
@@ -86,17 +100,17 @@ const props = withDefaults(defineProps<ChatMessageProps>(), {
 
 const support = useSupportStore();
 
-const buttonViewLabel = computed(
-  () => 'Просмотреть ' + (btnViewText[props.message.message.type.type] ?? '')
-);
+const isMedia = computed(() => ![0, 2].includes(props.message.message.type.id));
+
+const media = computed(() => mediaComponents[props.message.message.type.id]);
 
 const textContent = computed(
   () =>
     props.message.message.text +
-    `<span class="message-meta"><span class="text-caption self-end text-grey q-mx-xs">${format.value}</span></span>`
+    `<span class="message-meta"><span class="text-caption self-end text-grey q-mx-xs non-selectable">${format.value}</span></span>`
 );
 
-const link = computed(() => {
+const userLink = computed(() => {
   if (props.message.user.link.includes('tg://user')) {
     const start = props.message.user.link.indexOf("'") + 1;
     const end = props.message.user.link.lastIndexOf("'");
@@ -104,11 +118,11 @@ const link = computed(() => {
     return props.message.user.link.slice(start ?? 6, end);
   }
 
-  return telegramLink + props.message.user.link.slice(1);
+  return TG_DESKTOP + props.message.user.link.slice(1);
 });
 
 const messageLink = computed(
-  () => telegramLink + config.bot.name + '?start=f_' + props.message.message.id
+  () => TG_DESKTOP + config.bot.name + '?start=f_' + props.message.message.id
 );
 
 const name = computed(

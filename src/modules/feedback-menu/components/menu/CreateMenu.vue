@@ -19,12 +19,12 @@ import { fetchFeedback } from '../../api/queries';
 
 import TypesQuestionList from '../views/TypesQuestionList.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(false);
 const createMessage = (type: any) => {
-  const message = store.selectedMessage;
-  const x = store.feedback.inputs.length
+  const message = feedback.selectedMessage;
+  const x = feedback.feedback.inputs.length
     ? (message?.platform?.position.x ?? 0) + 300
     : 0;
 
@@ -38,15 +38,15 @@ const createMessage = (type: any) => {
       after_type: message?.type ?? null,
     }).then(() => {
       loading.value = false;
-      store.menu.create = false;
-      store.onconnection = false;
-      store.closeDialog('touch');
+      feedback.menu.create = false;
+      feedback.onconnection = false;
+      feedback.closeDialog('touch');
     });
 
     return;
   }
 
-  store.openDialog('crossroad_option');
+  feedback.openDialog('crossroad_option');
 };
 </script>
 

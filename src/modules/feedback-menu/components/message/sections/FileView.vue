@@ -87,6 +87,13 @@
         </template>
       </q-select>
     </div>
+
+    <radio-item
+      label="Несколько файлов"
+      desc="Принимает ли несколько файлов"
+      :model="multiply"
+      @update="(val) => (multiply = val)"
+    ></radio-item>
   </div>
 </template>
 
@@ -97,6 +104,7 @@ import { fetchFeedback } from '../../../api/queries';
 import { defaultInput } from '../../../stores/feedbackModels';
 import { extensions } from '../models';
 import { useFeedbackStore } from '../../../stores/feedbackStore';
+import RadioItem from '../../views/RadioItem.vue';
 
 const props = withDefaults(defineProps<FileQuestionProps>(), {
   message: () => defaultInput,
@@ -107,7 +115,7 @@ const emit = defineEmits<{
   (e: 'load'): void;
 }>();
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const slider = ref({
   value: 1,
@@ -117,6 +125,7 @@ const slider = ref({
 });
 const section = ref<RadioNames>('all');
 const text = ref('');
+const multiply = ref(false);
 const selected = ref<Array<string>>([]);
 
 const size = computed(() => slider.value.value.dimension());
@@ -138,10 +147,11 @@ const updateFile = () => {
       input_id: props.message.id,
       extensions: radios.value[section.value].value,
       size: slider.value.value,
+      is_multiple: multiply.value,
     },
-    store.updateQuestion
+    feedback.updateQuestion
   ).then(() => {
-    store.closeDialog('message');
+    feedback.closeDialog('message');
     emit('load');
   });
 };
@@ -154,6 +164,7 @@ onMounted(() => {
   slider.value.value = props.message.file?.size ?? 1024;
   selected.value = toFormat(props.message.file?.extensions ?? '');
   text.value = props.message.file?.extensions ?? '';
+  multiply.value = props.message.file?.is_multiple ?? false;
 
   if (props.message.file?.extensions.length) {
     section.value = 'your';

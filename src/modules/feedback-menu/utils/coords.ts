@@ -3,19 +3,11 @@ import { PaperPoint } from '../stores/feedbackModels';
 import { Point } from 'paper';
 
 export function makeAutoAlign() {
-  const store = useFeedbackStore();
+  const feedback = useFeedbackStore();
 
   const coords = <Array<Array<number>>>Array.from({
-    length: store.alignCount,
+    length: feedback.alignCount,
   }).fill([0, 0]);
-
-  const { width, height } = document
-    .getElementById('feedback-layer')
-    ?.getBoundingClientRect() ?? { width: 1000, height: 600 };
-
-  console.log(width, height);
-
-  const ratioW = width / store.alignCount;
 
   return coords.map((_, index) => {
     const circleX = index * 300;
@@ -26,12 +18,16 @@ export function makeAutoAlign() {
 }
 
 export function setCenter() {
-  const store = useFeedbackStore();
+  const feedback = useFeedbackStore();
   const x = <number[]>(
-    store.feedback.inputs.map((item) => item.position?.x).filter((item) => item)
+    feedback.feedback.inputs
+      .map((item) => item.position?.x)
+      .filter((item) => item)
   );
   const y = <number[]>(
-    store.feedback.inputs.map((item) => item.position?.y).filter((item) => item)
+    feedback.feedback.inputs
+      .map((item) => item.position?.y)
+      .filter((item) => item)
   );
 
   if (!x.length || !y.length) return new Point(0, 0);
@@ -41,12 +37,12 @@ export function setCenter() {
   const minX = Math.min(...x);
   const minY = Math.min(...y);
 
-  if (Math.abs(maxX - minX) > store.view.viewSize.width) {
-    store.view.zoom = 0.4;
+  if (Math.abs(maxX - minX) > feedback.view.viewSize.width) {
+    feedback.view.zoom = 0.4;
   }
 
-  if (Math.abs(maxY - minY) > store.view.viewSize.height) {
-    store.view.zoom = 0.4;
+  if (Math.abs(maxY - minY) > feedback.view.viewSize.height) {
+    feedback.view.zoom = 0.4;
   }
 
   const max = new Point(maxX, maxY);

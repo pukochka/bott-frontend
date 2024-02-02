@@ -77,6 +77,7 @@ export type DialogsNames =
   | 'crossroad_option'
   | 'administrator_answer'
   | 'api'
+  | 'templates'
   | 'api_edit'
   | 'touch';
 export type MenuNames = 'create' | 'link' | 'message' | 'touch';
@@ -114,6 +115,9 @@ export const defaultFeedbackSetting: MessageFeedbackSetting = {
   limit_in_period: 0,
   period: 0,
   button_cancel: '',
+  message_answer_delete: '',
+  message_answer_read: '',
+  message_answer_for_user: '',
 };
 
 export const defaultAnswer: FeedbackAnswer = {

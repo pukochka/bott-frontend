@@ -30,6 +30,11 @@ export const useSupportStore = defineStore('support', {
       view: 'table',
       main: 'view',
 
+      media: {
+        link: '',
+        isVideo: false,
+      },
+
       drawer: {
         state: true,
         mini: true,
@@ -40,6 +45,7 @@ export const useSupportStore = defineStore('support', {
         implementor_transfer: false,
         transfer_ticket: false,
         select_implementer: false,
+        media_player: false,
       },
 
       selected: [],
@@ -105,6 +111,11 @@ export const useSupportStore = defineStore('support', {
       deleteQueryParam('id');
 
       if (this.categories.length && this.selectedCategory) {
+        this.loading.category = true;
+        this.updateCategory(this.selectedCategory.id, true).then(() => {
+          if (this.tickets.length) this.section = 'list';
+        });
+
         interval = setInterval(
           this.updateCategory.bind(this, this.selectedCategory?.id ?? -1),
           config.category_update_time

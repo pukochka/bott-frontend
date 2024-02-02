@@ -98,7 +98,7 @@ const emit = defineEmits<{
   (e: 'load'): void;
 }>();
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const text = ref({
   value: '',
@@ -128,9 +128,9 @@ const addQuizItem = () => {
     'add-select-option',
     {
       text: text.value.value,
-      input_id: store.selectedMessage?.id ?? 0,
+      input_id: feedback.selectedMessage?.id ?? 0,
     },
-    store.updateQuestion
+    feedback.updateQuestion
   ).then(() => {
     state.value = false;
     loading.value = false;
@@ -144,9 +144,9 @@ const updateQuiz = () => {
       input_id: props.message.id,
       is_multiple: multiply.value,
     },
-    store.updateQuestion
+    feedback.updateQuestion
   ).then(() => {
-    store.closeDialog('message');
+    feedback.closeDialog('message');
     emit('load');
   });
 };

@@ -56,6 +56,12 @@ export async function fetchSupportTicket<Q extends keyof SupportTicketQueries>(
         support.selectedTicket = response.data.data;
 
         /** */
+      } else if (query === 'change-manager') {
+        /** */
+
+        support.selectedTicket = response.data.data;
+
+        /** */
       }
 
       /** */
@@ -79,6 +85,8 @@ export async function fetchSupportMessages<
 
       if (query === 'get-messages') {
         /** */
+
+        if (support.messages.length === response.data?.data?.length) return;
 
         support.messages = response.data.data;
 

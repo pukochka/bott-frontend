@@ -61,16 +61,14 @@
   <select-category></select-category>
 
   <select-implementer></select-implementer>
+
+  <media-player></media-player>
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount, onMounted, ref } from 'vue';
 
-import {
-  fetchSupportCategory,
-  fetchSupportMessages,
-  fetchSupportTicket,
-} from './api/queries';
+import { fetchSupportCategory, fetchSupportTicket } from './api/queries';
 import { useSupportStore } from './stores/supportStore';
 import { getQueryParam, has } from '../../utils/helpers/string';
 
@@ -84,6 +82,7 @@ import EditTicket from './components/dialogs/EditTicket.vue';
 import TransferImplementer from './components/dialogs/TransferImplementer.vue';
 import SelectCategory from './components/dialogs/SelectCategory.vue';
 import SelectImplementer from './components/dialogs/SelectImplementer.vue';
+import MediaPlayer from './components/chat/MediaPlayer.vue';
 
 const support = useSupportStore();
 const area = ref();
@@ -93,35 +92,40 @@ onMounted(() => {
 });
 
 onBeforeMount(() => {
+  const id = Number(getQueryParam('id')) ?? 0;
+  const category_id = Number(getQueryParam('category_id')) ?? 0;
+
   if (window.innerWidth < 600) {
     support.view = 'grid';
   }
 
   if (has('id')) {
-    const id = Number(getQueryParam('id')) ?? 0;
-
     support.main = 'chat';
 
     Promise.all([
-      fetchSupportTicket(
-        'get-ticket',
-        { ticket_id: id },
-        (response) => (support.selectedTicket = response)
-      ),
-      fetchSupportMessages('get-messages', { ticket_id: id, limit: 50 }),
-    ]).then(() => {
-      support.loading.start = false;
-    });
+      fetchSupportCategory('index', undefined, (response) => {
+        const category = (response ?? []).find(
+          (item: SupportCategory) => item.id === category_id
+        );
+
+        if (category !== void 0) {
+          support.selectedCategory = category;
+        }
+      }),
+      fetchSupportTicket('get-ticket', { ticket_id: id }, (response) => {
+        support.selectedTicket = response;
+
+        support.openChat(response);
+      }),
+    ]).then(() => (support.loading.start = false));
 
     return;
   }
 
   if (has('category_id')) {
-    const category_id = Number(getQueryParam('category_id')) ?? 0;
-
     Promise.all([
+      fetchSupportCategory('index'),
       support.updateCategory(category_id),
-      fetchSupportCategory('index', undefined),
     ]).then(() => {
       const category = support.categories.find(
         (item) => item.id === category_id

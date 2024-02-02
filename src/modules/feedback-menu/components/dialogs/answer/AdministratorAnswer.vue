@@ -2,7 +2,7 @@
   <q-dialog
     persistent
     position="bottom"
-    v-model="store.dialogs.administrator_answer"
+    v-model="feedback.dialogs.administrator_answer"
     @before-show="update"
   >
     <q-card class="dialog-rounded" style="width: 100%">
@@ -56,7 +56,7 @@ import { fetchFeedbackAnswer } from '../../../api/queries';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const text = ref('');
 const loading = ref(false);
@@ -66,11 +66,11 @@ const replyAnswer = () => {
 
   fetchFeedbackAnswer('set-answer', {
     text: text.value,
-    answer_id: store.selectedAnswer?.id ?? 0,
+    answer_id: feedback.selectedAnswer?.id ?? 0,
   }).then(() => {
-    store.updateAnswers(() => {
+    feedback.updateAnswers(() => {
       loading.value = false;
-      store.closeDialog('administrator_answer');
+      feedback.closeDialog('administrator_answer');
     });
   });
 };

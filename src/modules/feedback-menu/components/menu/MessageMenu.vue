@@ -32,7 +32,7 @@ import { fetchFeedback } from '../../api/queries';
 import { useDialog } from '../../../file-manager/stores/useDialog';
 import { mdiSourceBranchRemove } from '@quasar/extras/mdi-v7';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref({
   delete: false,
@@ -43,36 +43,36 @@ const loading = ref({
 
 const start = computed(
   () =>
-    store.feedback.start?.type === store.selectedMessage?.type &&
-    store.feedback.start?.id === store.selectedMessage?.id
+    feedback.feedback.start?.type === feedback.selectedMessage?.type &&
+    feedback.feedback.start?.id === feedback.selectedMessage?.id
 );
 
-const withoutCrossroad = computed(() => store.selectedMessage?.type !== 4);
-const withoutNext = computed(() => store.selectedMessage?.next);
+const withoutCrossroad = computed(() => feedback.selectedMessage?.type !== 4);
+const withoutNext = computed(() => feedback.selectedMessage?.next);
 
 const openSetting = () => {
-  store.menu.message = false;
+  feedback.menu.message = false;
 
-  store.closeDialog('touch');
+  feedback.closeDialog('touch');
 
   if (withoutCrossroad.value) {
-    store.openDialog('message');
+    feedback.openDialog('message');
 
     return;
   }
-  store.openDialog('crossroad');
+  feedback.openDialog('crossroad');
 };
 
 const deleteMessage = () => {
   useDialog('Вы уверены, что хотите удалить вопрос?', true).onOk(() => {
     loading.value.delete = true;
     fetchFeedback('delete-input', {
-      input_id: store.selectedMessage?.id ?? 0,
-      type: store.selectedMessage?.type ?? 1,
+      input_id: feedback.selectedMessage?.id ?? 0,
+      type: feedback.selectedMessage?.type ?? 1,
     }).then(() => {
-      store.menu.message = false;
+      feedback.menu.message = false;
       loading.value.delete = false;
-      store.closeDialog('touch');
+      feedback.closeDialog('touch');
     });
   });
 };
@@ -82,16 +82,16 @@ const deleteNext = () => {
   fetchFeedback(
     'set-input-next',
     {
-      input_id: store.selectedMessage?.id ?? 0,
-      type: store.selectedMessage?.type ?? 1,
+      input_id: feedback.selectedMessage?.id ?? 0,
+      type: feedback.selectedMessage?.type ?? 1,
       next_id: null,
       next_type: null,
     },
-    store.updateFeedback
+    feedback.updateFeedback
   ).then(() => {
-    store.menu.message = false;
+    feedback.menu.message = false;
     loading.value.next = false;
-    store.closeDialog('touch');
+    feedback.closeDialog('touch');
   });
 };
 
@@ -102,23 +102,23 @@ const setStart = () => {
   ).onOk(() => {
     loading.value.start = true;
     fetchFeedback('set-start-input', {
-      start_id: store.selectedMessage?.id ?? 0,
-      start_type: store.selectedMessage?.type ?? 0,
+      start_id: feedback.selectedMessage?.id ?? 0,
+      start_type: feedback.selectedMessage?.type ?? 0,
     }).then(() => {
-      store.menu.message = false;
+      feedback.menu.message = false;
       loading.value.start = false;
-      store.closeDialog('touch');
+      feedback.closeDialog('touch');
     });
   });
 };
 
 const addMessage = () => {
-  store.closeDialog('touch');
+  feedback.closeDialog('touch');
 
-  store.action = () => {
-    store.menu.message = false;
+  feedback.action = () => {
+    feedback.menu.message = false;
   };
-  store.openDialog('crossroad_option');
+  feedback.openDialog('crossroad_option');
 };
 
 const buttons = computed(() => [

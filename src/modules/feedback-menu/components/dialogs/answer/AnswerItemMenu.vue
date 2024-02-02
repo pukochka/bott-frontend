@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<AnswerItemMenuProps>(), {
   answer: () => defaultAnswer,
 });
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(false);
 
@@ -49,7 +49,7 @@ const readAnswer = () => {
   loading.value = true;
 
   fetchFeedbackAnswer('read', { answer_id: props.answer.id }).then(() => {
-    store.updateAnswers(() => {
+    feedback.updateAnswers(() => {
       loading.value = false;
     });
   });
@@ -60,11 +60,11 @@ const deleteAnswer = () => {
     loading.value = true;
 
     fetchFeedbackAnswer('delete', { answer_id: [props.answer.id] }, () => {
-      store.answers = store.answers.filter(
+      feedback.answers = feedback.answers.filter(
         (item) => item.id !== props.answer.id
       );
     }).then(() => {
-      store.updateAnswers(() => {
+      feedback.updateAnswers(() => {
         loading.value = false;
       });
     });
@@ -77,8 +77,8 @@ const buttons = computed(() => [
     color: 'primary',
     icon: 'send',
     action: () => {
-      store.selectedAnswer = props.answer;
-      store.openDialog('administrator_answer');
+      feedback.selectedAnswer = props.answer;
+      feedback.openDialog('administrator_answer');
     },
     condition: true,
   },

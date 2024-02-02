@@ -36,7 +36,7 @@ const props = withDefaults(defineProps<NotifyItemProps>(), {
   item: () => defaultNotify,
 });
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(false);
 
@@ -46,7 +46,7 @@ const deleteUser = () => {
       loading.value = true;
 
       fetchFeedbackNotify('delete', { id: props.item.id }, () => {
-        store.notifications = store.notifications.filter(
+        feedback.notifications = feedback.notifications.filter(
           (item) => item.id !== props.item.id
         );
       }).then(() => (loading.value = false));

@@ -37,7 +37,7 @@ import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
 import MessageCard from '../views/MessageCard.vue';
 import { useQuasar } from 'quasar';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 const quasar = useQuasar();
 
 const open = ref(false);
@@ -46,34 +46,34 @@ const menu = ref(false);
 const sm = computed(() => quasar.screen.lt.sm);
 
 const openMenu = (value: boolean) => {
-  if (store.onconnection || store.dragging || menu.value) return;
+  if (feedback.onconnection || feedback.dragging || menu.value) return;
 
   open.value = value;
 };
 
-const hello = computed(() => store.feedback.hello ?? defaultMessage);
-const end = computed(() => store.feedback.end ?? defaultMessage);
-const cancel = computed(() => store.feedback.cancel ?? defaultMessage);
+const hello = computed(() => feedback.feedback.hello ?? defaultMessage);
+const end = computed(() => feedback.feedback.end ?? defaultMessage);
+const cancel = computed(() => feedback.feedback.cancel ?? defaultMessage);
 
 const messages = computed((): any => [
   {
     label: 'Приветствие',
     data: hello.value,
-    condition: store.feedback.hello !== null,
+    condition: feedback.feedback.hello !== null,
     desc: 'Это сообщение будет отправлено перед первым вопросом и опрос начнется, только после нажатия на кнопку. Оставьте поля пустыми, тогда опрос начнется сразу с вопросов.',
     method: 'hello',
   },
   {
     label: 'Прощание',
     data: end.value,
-    condition: store.feedback.end !== null,
+    condition: feedback.feedback.end !== null,
     desc: 'Сообщения после окончания прохождения формы.',
     method: 'end',
   },
   {
     label: 'Сообщение при отмене',
     data: cancel.value,
-    condition: store.feedback.cancel !== null,
+    condition: feedback.feedback.cancel !== null,
     desc: 'В случае если пользователь отменит прохожение формы, ему пришлется сообщение.',
     method: 'cancel',
   },

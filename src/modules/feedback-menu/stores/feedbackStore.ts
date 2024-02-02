@@ -13,7 +13,7 @@ import { update } from '../utils/create';
 import { fetchFeedbackAnswer, fetchFeedbackIntegrations } from '../api/queries';
 import { config } from '../config';
 
-export const useFeedbackStore = defineStore('paper-store', {
+export const useFeedbackStore = defineStore('paper-feedback', {
   state: () =>
     ({
       view: null,

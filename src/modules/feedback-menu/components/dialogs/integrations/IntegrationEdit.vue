@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    v-model="store.dialogs.api_edit"
+    v-model="feedback.dialogs.api_edit"
     persistent
     position="bottom"
     @before-show="updateShow"
@@ -57,7 +57,7 @@ import { useFeedbackStore } from '../../../stores/feedbackStore';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(false);
 
@@ -72,10 +72,10 @@ const updateIntegration = () => {
 
   fetchFeedbackIntegrations('update', {
     message_id: config.message_id,
-    id: store.selectedIntegration?.id ?? -1,
+    id: feedback.selectedIntegration?.id ?? -1,
     ...params,
   }).then(() => {
-    store.updateIntegrations().then(() => (loading.value = false));
+    feedback.updateIntegrations().then(() => (loading.value = false));
   });
 };
 
@@ -98,10 +98,12 @@ const inputs = ref([
 ]);
 
 const updateShow = () => {
-  inputs.value[0].value = store.selectedIntegration?.setting.public_key ?? '';
-  inputs.value[1].value = store.selectedIntegration?.setting.private_key ?? '';
+  inputs.value[0].value =
+    feedback.selectedIntegration?.setting.public_key ?? '';
+  inputs.value[1].value =
+    feedback.selectedIntegration?.setting.private_key ?? '';
   inputs.value[2].value =
-    store.selectedIntegration?.setting.private_key_2 ?? '';
+    feedback.selectedIntegration?.setting.private_key_2 ?? '';
 };
 
 interface FIPublicPrivateParams {

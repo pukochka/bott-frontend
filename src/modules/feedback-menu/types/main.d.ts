@@ -24,14 +24,20 @@ declare interface MessageFeedbackSetting {
   time_notice: number;
   /** Через сколько минут напомнить ответить на вопросы, если ответы остались незавершенные; 0 - не напоминать */
   time_cancel: number;
-  /** Шаблон ответа. Будет применен для каждого ответа пользваотеля. И затем заменит поле {ANSWERS} */
-  template_answer: string;
   /** Количество ответов от одного пользователя за период; 0 - безлимит */
   limit_in_period: number;
   /** Период в минутах; 0 - безлимит */
   period: number;
   /** Текст в кнопке, когда отвечают на вопрос. После клика на кнопку ответ будет отменен. И отправится сообщение cancel (Если создано) */
   button_cancel: string;
+  /** Шаблон ответа. Будет применен для каждого ответа пользваотеля. И затем заменит поле {ANSWERS} */
+  template_answer: string;
+  /** Текст автоматически отправляемый после прочитывания заявки (Смены статуса заявки на прочитано из не прочитано)  */
+  message_answer_read: string;
+  /** Текст автоматически отправляемый после удаления заявки (Отправляется только если удаляется заявка младше 3-х дней и статусов кроме "отвечен") */
+  message_answer_delete: string;
+  /** Текст автоматически отправляемый в ответ менеджера на заявку */
+  message_answer_for_user: string;
 }
 
 declare interface MessageFeedbackItem {
@@ -79,6 +85,8 @@ declare interface MessageFeedbackItemFile {
   size: number;
   /** Поддерживаемые расширения через запятую, при пустой строке, не проверяется */
   extensions: string;
+  /** Поддерживает ли несколько файлов */
+  is_multiple: boolean;
 }
 
 declare interface MessageFeedbackCrossroad {

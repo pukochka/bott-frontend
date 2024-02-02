@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<MessageMenuProps>(), {
 
 const emit = defineEmits<{ (e: 'drop'): void }>();
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(false);
 
@@ -40,8 +40,8 @@ const buttons = computed(() => [
     icon: 'edit',
     color: 'primary',
     action: () => {
-      store.selectedMessageFree = props.message?.data ?? null;
-      store.openDialog('message_free');
+      feedback.selectedMessageFree = props.message?.data ?? null;
+      feedback.openDialog('message_free');
     },
   },
   {

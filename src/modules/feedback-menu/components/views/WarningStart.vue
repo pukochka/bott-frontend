@@ -1,7 +1,7 @@
 <template>
   <div
     class="q-mx-xxl text-red row justify-center"
-    v-if="!store.feedback.start"
+    v-if="!feedback.feedback.start"
   >
     <q-card
       flat
@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<WarningStartProps>(), {
   warning: false,
 });
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 interface WarningStartProps {
   warning?: boolean;

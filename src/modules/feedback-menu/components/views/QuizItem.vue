@@ -134,7 +134,7 @@ const props = withDefaults(defineProps<QuizItemProps>(), {
   method: 'select-option',
 });
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const text = ref({
   value: '',
@@ -157,10 +157,10 @@ const deleteQuiz = () => {
   fetchFeedback(
     `delete-${<'select-option'>props.method}`,
     {
-      input_id: store.selectedMessage?.id ?? 0,
+      input_id: feedback.selectedMessage?.id ?? 0,
       option_id: props.button.id,
     },
-    store.updateQuestion
+    feedback.updateQuestion
   ).then(() => (loading.value.delete = false));
 };
 
@@ -170,11 +170,11 @@ const editQuiz = () => {
   fetchFeedback(
     `update-${<'select-option'>props.method}`,
     {
-      input_id: store.selectedMessage?.id ?? 0,
+      input_id: feedback.selectedMessage?.id ?? 0,
       option_id: props.button.id,
       text: text.value.value,
     },
-    store.updateQuestion
+    feedback.updateQuestion
   ).then(() => (loading.value.edit = false));
 };
 
@@ -184,10 +184,10 @@ const moveQuiz = (side: 'down' | 'up') => {
   fetchFeedback(
     `${side}-${<'select-option'>props.method}`,
     {
-      input_id: store.selectedMessage?.id ?? 0,
+      input_id: feedback.selectedMessage?.id ?? 0,
       option_id: props.button.id,
     },
-    store.updateQuestion
+    feedback.updateQuestion
   ).then(() => (loading.value[side] = false));
 };
 

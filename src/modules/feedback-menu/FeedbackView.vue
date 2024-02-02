@@ -20,38 +20,38 @@
 
     <transition
       :name="
-        store.mobile.setting
+        feedback.mobile.setting
           ? 'q-transition--slide-down'
           : 'q-transition--slide-up'
       "
     >
-      <top-section v-if="sm || store.mobile.setting"></top-section>
+      <top-section v-if="sm || feedback.mobile.setting"></top-section>
     </transition>
 
     <transition
       :name="
-        store.mobile.end
+        feedback.mobile.end
           ? 'q-transition--slide-left'
           : 'q-transition--slide-right'
       "
     >
-      <end-section v-if="sm || store.mobile.end"></end-section>
+      <end-section v-if="sm || feedback.mobile.end"></end-section>
     </transition>
 
     <transition
       :name="
-        store.mobile.start
+        feedback.mobile.start
           ? 'q-transition--slide-right'
           : 'q-transition--slide-left'
       "
     >
-      <start-section v-if="sm || store.mobile.start"></start-section>
+      <start-section v-if="sm || feedback.mobile.start"></start-section>
     </transition>
 
     <mobile-section v-if="!sm"></mobile-section>
 
     <q-inner-loading
-      :showing="store.loading"
+      :showing="feedback.loading"
       class="bg-white"
       transition-show="none"
       transition-hide="fade"
@@ -95,6 +95,7 @@
 <script setup lang="ts">
 import { config } from './config';
 import { computed, onBeforeMount } from 'vue';
+
 import { fetchMessage } from './api/queries';
 import { useFeedbackStore } from './stores/feedbackStore';
 import { useQuasar } from 'quasar';
@@ -122,12 +123,12 @@ import AdministratorAnswer from './components/dialogs/answer/AdministratorAnswer
 import ApiIntegrations from './components/dialogs/ApiIntegrations.vue';
 import IntegrationEdit from './components/dialogs/integrations/IntegrationEdit.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 const quasar = useQuasar();
 
 const opened = computed(
   () =>
-    Object.entries(store.menu)
+    Object.entries(feedback.menu)
       .filter(([_, value]) => value)
       .map(([key]) => key)?.[0] ?? 'create'
 );
@@ -143,23 +144,23 @@ const desktop = computed(() => quasar.platform.is.desktop);
 
 const classes = computed(
   () =>
-    (store.dragging ? ' cursor-grabbing' : '') +
-    (store.onconnection ? ' cursor-grab' : '') +
-    (store.clickable ? ' cursor-pointer' : '')
+    (feedback.dragging ? ' cursor-grabbing' : '') +
+    (feedback.onconnection ? ' cursor-grab' : '') +
+    (feedback.clickable ? ' cursor-pointer' : '')
 );
 
 const visible = computed(() =>
-  Object.values(store.menu)
+  Object.values(feedback.menu)
     .map((value) => value)
     .includes(true)
 );
 const closeMenu = () => {
-  Object.keys(store.menu).forEach((key) => {
-    store.menu[<MenuNames>key] = false;
+  Object.keys(feedback.menu).forEach((key) => {
+    feedback.menu[<MenuNames>key] = false;
 
-    if (store.action) {
-      store.action();
-      store.action = null;
+    if (feedback.action) {
+      feedback.action();
+      feedback.action = null;
     }
   });
 };

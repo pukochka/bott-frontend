@@ -3,7 +3,7 @@
     full-width
     persistent
     position="bottom"
-    v-model="store.dialogs.settings"
+    v-model="feedback.dialogs.settings"
     @before-show="updateShow"
   >
     <div class="row justify-center">
@@ -27,7 +27,7 @@
 
                   <q-inner-loading
                     :showing="
-                      !store.feedback.setting.is_notice &&
+                      !feedback.feedback.setting.is_notice &&
                       card.method === 'notice-admin'
                     "
                   >
@@ -42,7 +42,7 @@
                       padding="4px"
                       label="Включить"
                       class="rounded"
-                      @click="store.openDialog('notify')"
+                      @click="feedback.openDialog('notify')"
                     />
                   </q-inner-loading>
                 </div>
@@ -79,17 +79,6 @@
               </template>
             </q-input>
 
-            <div class="">Текст шаблона заявки</div>
-
-            <editor-content
-              :content="text"
-              no-without-editor
-              :id="0"
-              :message_id="0"
-              :max-value="1024"
-              @update="updateTemplate"
-            ></editor-content>
-
             <q-input
               outlined
               autogrow
@@ -99,6 +88,8 @@
               :maxlength="64"
               v-model="setting.button_cancel"
             />
+
+            <feedback-templates></feedback-templates>
 
             <q-list
               dense
@@ -146,13 +137,13 @@
           </div>
 
           <div class="col-12 col-md-5 q-gutter-y-sm">
-            <faq-section :faq="store.message.faq"></faq-section>
+            <faq-section :faq="feedback.message.faq"></faq-section>
 
             <constants-section
-              :constants="store.message.constants"
+              :constants="feedback.message.constants"
             ></constants-section>
 
-            <div class="row" v-if="store.message.is_generate_default">
+            <div class="row" v-if="feedback.message.is_generate_default">
               <q-btn
                 flat
                 no-caps
@@ -206,10 +197,11 @@ import FaqSection from '../../../inline/components/settings/FaqSection.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import NotifyEditItem from './notification/LimitItem.vue';
 import MessageCard from '../views/MessageCard.vue';
-import EditorContent from 'src/components/editor/EditorContent.vue';
-import { encodeText } from '../../../inline/stores/helpers';
 
-const store = useFeedbackStore();
+import { encodeText } from '../../../inline/stores/helpers';
+import FeedbackTemplates from './FeedbackTemplates.vue';
+
+const feedback = useFeedbackStore();
 
 const loading = ref({
   notice: false,
@@ -222,23 +214,23 @@ const setting = ref<MessageFeedbackSetting>(defaultFeedbackSetting);
 const text = ref(setting.value.template_answer);
 const title = ref(setting.value.template_answer);
 
-const notice = computed(() => store.feedback.notice ?? defaultMessageFree);
+const notice = computed(() => feedback.feedback.notice ?? defaultMessageFree);
 const noticeAdmin = computed(
-  () => store.feedback.noticeAdmin ?? defaultMessageFree
+  () => feedback.feedback.noticeAdmin ?? defaultMessageFree
 );
 
 const cards = computed((): any => [
   {
     label: 'Напоминание для пользователя',
     data: notice.value,
-    condition: store.feedback.notice !== null,
+    condition: feedback.feedback.notice !== null,
     desc: 'Уведолмение для пользователя, которое отправляется через установленное время.',
     method: 'notice',
   },
   {
     label: 'Напоминание для администратора',
     data: noticeAdmin.value,
-    condition: store.feedback.noticeAdmin !== null,
+    condition: feedback.feedback.noticeAdmin !== null,
     desc: 'Уведолмение для администраторов, которое отправляется через установленное время.',
     method: 'notice-admin',
   },
@@ -249,8 +241,8 @@ const resetFeedback = () => {
     () => {
       loading.value.reset = true;
 
-      fetchMessage('reset', { message_id: store.message.id }, (response) => {
-        store._message = response;
+      fetchMessage('reset', { message_id: feedback.message.id }, (response) => {
+        feedback._message = response;
       }).then(() => (loading.value.reset = false));
     }
   );
@@ -263,10 +255,10 @@ const updateTitle = () => {
     'update-title',
     {
       title: title.value,
-      message_id: store.message.id,
+      message_id: feedback.message.id,
     },
     (response) => {
-      store._message.title = response;
+      feedback._message.title = response;
     }
   ).then(() => (loading.value.title = false));
 };
@@ -303,8 +295,8 @@ const updateSettings = () => {
 };
 
 const updateShow = () => {
-  title.value = store.message.title;
-  setting.value = store.feedback.setting;
+  title.value = feedback.message.title;
+  setting.value = feedback.feedback.setting;
   text.value = setting.value.template_answer;
 };
 

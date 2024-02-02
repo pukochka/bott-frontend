@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<IntegrationAccessItemProps>(), {
   item: () => ({ id: -1, description: '', image: '', name: '' }),
 });
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(false);
 
@@ -48,7 +48,7 @@ const addIntegration = () => {
     message_id: config.message_id,
     type: props.item.id,
   }).then(() => {
-    store.updateIntegrations().then(() => (loading.value = false));
+    feedback.updateIntegrations().then(() => (loading.value = false));
   });
 };
 

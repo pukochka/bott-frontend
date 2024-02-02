@@ -123,7 +123,7 @@ const props = withDefaults(defineProps<MessageCardProps>(), {
   },
 });
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 const quasar = useQuasar();
 
 const menu = ref(false);
@@ -143,7 +143,7 @@ const messageAction = (prefix: 'add' | 'drop') => {
       `${prefix}-${<'hello'>props.message.method}`,
       undefined,
       (response) => {
-        store._feedback = response.feedback;
+        feedback._feedback = response.feedback;
       }
     ).then(() => {
       loading.value[prefix] = false;

@@ -9,13 +9,13 @@ export const instance = axios.create({
 });
 
 instance.interceptors.request.use(function (request) {
-  const store = useFeedbackStore();
+  const feedback = useFeedbackStore();
 
   request.params = { token: config.bot.token };
   request.data = {
     bot_id: config.bot.id,
-    message_id: store.message.id,
-    feedback_id: store.feedback.id,
+    message_id: feedback.message.id,
+    feedback_id: feedback.feedback.id,
     ...request.data,
   };
 

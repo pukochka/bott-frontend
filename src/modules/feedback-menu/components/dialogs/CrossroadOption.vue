@@ -3,7 +3,7 @@
     persistent
     position="bottom"
     @before-hide="updateHide"
-    v-model="store.dialogs.crossroad_option"
+    v-model="feedback.dialogs.crossroad_option"
   >
     <q-card flat bordered class="rounded" style="width: 100%">
       <dialog-header label="Название кнопки ответа"></dialog-header>
@@ -64,7 +64,7 @@ import { fetchFeedback } from '../../api/queries';
 import TypesQuestionList from '../views/TypesQuestionList.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(false);
 const type = ref(1);
@@ -78,7 +78,7 @@ const text = ref({
 });
 
 const addCrossroadOption = () => {
-  const message = store.selectedMessage;
+  const message = feedback.selectedMessage;
   loading.value = true;
 
   fetchFeedback('add-crossroad-option', {
@@ -89,15 +89,15 @@ const addCrossroadOption = () => {
     text: text.value.value,
   }).then(() => {
     loading.value = false;
-    store.menu.create = false;
-    store.closeDialog('crossroad_option');
+    feedback.menu.create = false;
+    feedback.closeDialog('crossroad_option');
   });
 };
 
 const updateHide = () => {
   type.value = 1;
   text.value.value = '';
-  if (store.action !== null) store.action();
+  if (feedback.action !== null) feedback.action();
 };
 </script>
 

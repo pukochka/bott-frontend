@@ -4,7 +4,7 @@
     position="bottom"
     @before-show="updateShow"
     @before-hide="updateHide"
-    v-model="store.dialogs.crossroad"
+    v-model="feedback.dialogs.crossroad"
   >
     <q-card flat bordered class="dialog-rounded" style="width: 100%">
       <dialog-header label="Изменение нескольких ответов"></dialog-header>
@@ -88,25 +88,27 @@ import { fetchFeedback } from '../../api/queries';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import QuizItem from '../views/QuizItem.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const text = ref('');
 const loading = ref({
   delete: false,
   update: false,
 });
-const buttons = computed(() => store.selectedMessage?.crossroad?.options ?? []);
+const buttons = computed(
+  () => feedback.selectedMessage?.crossroad?.options ?? []
+);
 
 const deleteQuestion = () => {
   useDialog('Вы уверены, что хотите удалить вопрос?', true).onOk(() => {
     loading.value.delete = true;
 
     fetchFeedback('delete-input', {
-      type: store.selectedMessage?.type ?? 1,
-      input_id: store.selectedMessage?.id ?? 1,
+      type: feedback.selectedMessage?.type ?? 1,
+      input_id: feedback.selectedMessage?.id ?? 1,
     }).then(() => {
       loading.value.delete = false;
-      store.closeDialog('crossroad');
+      feedback.closeDialog('crossroad');
     });
   });
 };
@@ -115,22 +117,22 @@ const updateCrossroad = () => {
   loading.value.update = true;
 
   fetchFeedback('update-input', {
-    input_id: store.selectedMessage?.id ?? 0,
+    input_id: feedback.selectedMessage?.id ?? 0,
     text: text.value,
     type: 4,
     is_confirm: false,
   }).then(() => {
     loading.value.update = false;
-    store.closeDialog('crossroad');
+    feedback.closeDialog('crossroad');
   });
 };
 
 const updateShow = () => {
-  text.value = store.selectedMessage?.text ?? '';
+  text.value = feedback.selectedMessage?.text ?? '';
 };
 
 const updateHide = () => {
-  store.hideMenu();
+  feedback.hideMenu();
 };
 </script>
 

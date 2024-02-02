@@ -3,7 +3,7 @@
     persistent
     full-width
     position="bottom"
-    v-model="store.dialogs.answers"
+    v-model="feedback.dialogs.answers"
     @before-show="updateShow"
   >
     <div class="row justify-center">
@@ -99,7 +99,7 @@
 
           <div
             class="row justify-center q-gutter-x-sm"
-            v-if="store.answers.length"
+            v-if="feedback.answers.length"
           >
             <q-btn
               v-for="(button, index) of pagination"
@@ -153,7 +153,7 @@ import StatusFilter from './answer/filters/StatusFilter.vue';
 import DateFilter from './answer/filters/DateFilter.vue';
 import UserFilter from './answer/filters/UserFilter.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 const quasar = useQuasar();
 
 const filtered = ref(false);
@@ -178,20 +178,20 @@ const statuses: Record<any, 'unfinished' | 'unread'> = {
 const sm = computed(() => quasar.screen.lt.sm);
 
 const paginationAnswers = computed(() =>
-  store.answers.filter(
+  feedback.answers.filter(
     (_, index) => index >= count.value - 5 && index < count.value
   )
 );
 
 const pages = computed(() =>
-  Math.ceil(store.answersCount[statuses?.[filter.value] ?? 'all'] / 5)
+  Math.ceil(feedback.answersCount[statuses?.[filter.value] ?? 'all'] / 5)
 );
 
 const offFilter = () => {
   filtered.value = false;
   loading.value.off = true;
 
-  store.updateAnswers(() => (loading.value.off = false));
+  feedback.updateAnswers(() => (loading.value.off = false));
 };
 
 const updatePagination = (value?: any) => {
@@ -207,7 +207,7 @@ const updateShow = () => {
 
   loading.value.show = true;
 
-  store.updateAnswers(() => (loading.value.show = false));
+  feedback.updateAnswers(() => (loading.value.show = false));
 };
 
 const nextPage = () => {

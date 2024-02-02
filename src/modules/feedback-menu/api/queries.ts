@@ -33,7 +33,7 @@ export async function fetchFeedback<Q extends keyof FBMainQueries>(
   action?: (response: any, original: any) => void
 ) {
   try {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/feedback/main/' + query,
@@ -42,14 +42,14 @@ export async function fetchFeedback<Q extends keyof FBMainQueries>(
       /** */
 
       if (beforeAction.includes(query)) {
-        store._feedback = response.data.data.feedback;
-        store.selectedMessage = null;
+        feedback._feedback = response.data.data.feedback;
+        feedback.selectedMessage = null;
 
         update();
       }
 
       if (notNullable.includes(query)) {
-        store._feedback = response.data.data.feedback;
+        feedback._feedback = response.data.data.feedback;
 
         update();
       }
@@ -61,8 +61,8 @@ export async function fetchFeedback<Q extends keyof FBMainQueries>(
       /** */
 
       if (afterAction.includes(query)) {
-        store._feedback = response.data.data.feedback;
-        store.selectedMessage = null;
+        feedback._feedback = response.data.data.feedback;
+        feedback.selectedMessage = null;
 
         update();
       }
@@ -78,7 +78,7 @@ export async function fetchMessage<Q extends keyof SCMessageQueries>(
   action?: (response: any) => void
 ) {
   try {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/message/' + query,
@@ -88,8 +88,8 @@ export async function fetchMessage<Q extends keyof SCMessageQueries>(
 
       if (query === 'get') {
         /** */
-        store._message = response.data.data;
-        store._feedback = response.data.data.feedback;
+        feedback._message = response.data.data;
+        feedback._feedback = response.data.data.feedback;
 
         install();
         /** */
@@ -104,7 +104,7 @@ export async function fetchFeedbackAnswer<Q extends keyof FBAnswerQueries>(
   action?: (response: any) => void
 ) {
   try {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/feedback/answer/' + query,
@@ -117,7 +117,7 @@ export async function fetchFeedbackAnswer<Q extends keyof FBAnswerQueries>(
       if (query === 'index') {
         /** */
 
-        store.answers = response.data.data ?? [];
+        feedback.answers = response.data.data ?? [];
 
         /** */
       }
@@ -131,7 +131,7 @@ export async function fetchFeedbackNotify<
   Q extends keyof FBNotificationQueries
 >(query: Q, data?: FBNotificationParams<Q>, action?: (response: any) => void) {
   try {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/feedback/notification/' + query,
@@ -144,7 +144,7 @@ export async function fetchFeedbackNotify<
       if (query === 'index') {
         /** */
 
-        store.notifications = response.data.data;
+        feedback.notifications = response.data.data;
 
         /** */
       }
@@ -162,7 +162,7 @@ export async function fetchFeedbackIntegrations<
   action?: (response: any) => void
 ) {
   try {
-    const store = useFeedbackStore();
+    const feedback = useFeedbackStore();
 
     return await instance({
       url: 'v1/bot/messagenew/feedback/api/' + query,
@@ -175,19 +175,19 @@ export async function fetchFeedbackIntegrations<
       if (query === 'index') {
         /** */
 
-        store.indexIntegrations = response.data.data;
+        feedback.indexIntegrations = response.data.data;
 
         /** */
       } else if (query === 'access') {
         /** */
 
-        store.accessIntegrations = response.data.data;
+        feedback.accessIntegrations = response.data.data;
 
         /** */
       } else if (query === 'count') {
         /** */
 
-        store.countIntegrations = response.data.data;
+        feedback.countIntegrations = response.data.data;
 
         /** */
       }

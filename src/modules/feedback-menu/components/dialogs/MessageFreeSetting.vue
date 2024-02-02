@@ -3,7 +3,7 @@
     persistent
     full-width
     position="bottom"
-    v-model="store.dialogs.message_free"
+    v-model="feedback.dialogs.message_free"
   >
     <div class="row justify-center">
       <q-card bordered flat class="dialog-rounded bott-dialog__responsive">
@@ -11,7 +11,7 @@
 
         <q-card-section class="q-pt-none">
           <inline-menu
-            :message="store.selectedMessageFree"
+            :message="feedback.selectedMessageFree"
             :host="config.host"
             :bot_id="config.bot.id"
             :token="config.bot.token"
@@ -28,7 +28,7 @@ import { useFeedbackStore } from '../../stores/feedbackStore';
 import InlineMenu from '../../../inline/InlineMenu.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 </script>
 
 <style scoped lang="scss"></style>

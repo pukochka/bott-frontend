@@ -38,7 +38,7 @@
         padding="4px"
         label="Включить"
         class="rounded"
-        @click="store.openDialog('notify')"
+        @click="feedback.openDialog('notify')"
       />
     </q-inner-loading>
   </q-card>
@@ -53,19 +53,19 @@ import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
 
 import MessageCard from '../views/MessageCard.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 const quasar = useQuasar();
 
 const open = ref(false);
 const menu = ref(false);
 
 const sm = computed(() => quasar.screen.lt.sm);
-const notifyDisabled = computed(() => !store.feedback.setting.is_notice);
+const notifyDisabled = computed(() => !feedback.feedback.setting.is_notice);
 
 const openMenu = (value: boolean) => {
   if (
-    store.onconnection ||
-    store.dragging ||
+    feedback.onconnection ||
+    feedback.dragging ||
     menu.value ||
     notifyDisabled.value
   )
@@ -74,31 +74,33 @@ const openMenu = (value: boolean) => {
   open.value = value;
 };
 
-const startAdmin = computed(() => store.feedback.startAdmin ?? defaultMessage);
-const admin = computed(() => store.feedback.admin ?? defaultMessage);
+const startAdmin = computed(
+  () => feedback.feedback.startAdmin ?? defaultMessage
+);
+const admin = computed(() => feedback.feedback.admin ?? defaultMessage);
 const answerAdmin = computed(
-  () => store.feedback.answerAdmin ?? defaultMessage
+  () => feedback.feedback.answerAdmin ?? defaultMessage
 );
 
 const messages = computed((): any => [
   {
     label: 'Стартовое для администратора',
     data: startAdmin.value,
-    condition: store.feedback.startAdmin !== null,
+    condition: feedback.feedback.startAdmin !== null,
     desc: 'Когда пользователь начнёт проходить форму, администратор получит уведомление.',
     method: 'start-admin',
   },
   {
     label: 'Уведомление администратора',
     data: admin.value,
-    condition: store.feedback.admin !== null,
+    condition: feedback.feedback.admin !== null,
     desc: 'После того как пользователь ответил на вопросы, администратор получит уведомление.',
     method: 'admin',
   },
   {
     label: 'Быстрые ответы для администратора',
     data: answerAdmin.value,
-    condition: store.feedback.answerAdmin !== null,
+    condition: feedback.feedback.answerAdmin !== null,
     desc: 'После того как пользователь ответил на вопросы, администратору будет предложено обработать заявку.',
     method: 'answer',
   },

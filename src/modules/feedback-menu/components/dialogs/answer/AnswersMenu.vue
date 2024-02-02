@@ -28,13 +28,13 @@ import { useDialog } from '../../../../file-manager/stores/useDialog';
 import { useFeedbackStore } from '../../../stores/feedbackStore';
 
 const loading = ref(false);
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const readAllAnswers = () => {
   loading.value = true;
 
   fetchFeedbackAnswer('read-all').then(() => {
-    store.updateAnswers(() => (loading.value = false));
+    feedback.updateAnswers(() => (loading.value = false));
   });
 };
 
@@ -45,8 +45,8 @@ const deleteAllUnfinished = () => {
   ).onOk(() => {
     loading.value = true;
 
-    fetchFeedbackAnswer('delete-by-status', { status: 1 }).then(() => {
-      store.updateAnswers(() => (loading.value = false));
+    fetchFeedbackAnswer('delete-by-status', { status: 0 }).then(() => {
+      feedback.updateAnswers(() => (loading.value = false));
     });
   });
 };
@@ -56,7 +56,7 @@ const deleteAllAnswers = () => {
     loading.value = true;
 
     fetchFeedbackAnswer('delete-by-status').then(() => {
-      store.updateAnswers(() => (loading.value = false));
+      feedback.updateAnswers(() => (loading.value = false));
     });
   });
 };

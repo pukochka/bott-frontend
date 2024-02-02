@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    v-model="store.dialogs.notify"
+    v-model="feedback.dialogs.notify"
     position="bottom"
     @before-show="updateShow"
   >
@@ -20,7 +20,7 @@
         </div>
 
         <div class="">
-          <q-item v-if="!store.notifications.length">
+          <q-item v-if="!feedback.notifications.length">
             <q-item-section class="text-center">
               Пока нет администраторов/ресурсов
             </q-item-section>
@@ -34,7 +34,7 @@
             v-else
           >
             <notify-item
-              v-for="notify of store.notifications"
+              v-for="notify of feedback.notifications"
               :key="notify.id"
               :item="notify"
             ></notify-item>
@@ -106,7 +106,7 @@ import RadioItem from '../views/RadioItem.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import NotifyItem from './notification/NotifyItem.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const notice = ref(false);
 const loading = ref({
@@ -119,23 +119,23 @@ const addUser = (id: any) => {
   loading.value.add = true;
 
   fetchFeedbackNotify('create', { user_id: Number(id) }, (response) => {
-    store.notifications.push(response);
+    feedback.notifications.push(response);
   }).then(() => (loading.value.add = false));
 };
 
 const updateNotify = (val: boolean) => {
   notice.value = val;
-  store._feedback.setting.is_notice = val;
+  feedback._feedback.setting.is_notice = val;
 
   loading.value.notify = true;
 
-  fetchFeedback('update-setting', store.feedback.setting).then(() => {
+  fetchFeedback('update-setting', feedback.feedback.setting).then(() => {
     loading.value.notify = false;
   });
 };
 
 const updateShow = () => {
-  notice.value = store.feedback.setting.is_notice;
+  notice.value = feedback.feedback.setting.is_notice;
 
   loading.value.show = true;
   fetchFeedbackNotify('index').then(() => (loading.value.show = false));

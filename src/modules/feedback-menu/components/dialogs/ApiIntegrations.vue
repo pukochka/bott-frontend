@@ -1,13 +1,13 @@
 <template>
   <q-dialog
-    v-model="store.dialogs.api"
+    v-model="feedback.dialogs.api"
     persistent
     position="bottom"
     @before-show="updateShow"
   >
     <q-card flat bordered class="dialog-rounded" style="width: 100%">
       <dialog-header
-        :label="'Интеграции ' + store.countIntegrations"
+        :label="'Интеграции ' + feedback.countIntegrations"
       ></dialog-header>
 
       <q-card-section
@@ -21,10 +21,10 @@
             bordered
             separator
             class="rounded overflow-hidden"
-            v-if="store.indexIntegrations.length"
+            v-if="feedback.indexIntegrations.length"
           >
             <integration-index-item
-              v-for="item of store.indexIntegrations"
+              v-for="item of feedback.indexIntegrations"
               :key="item.id"
               :item="item"
             ></integration-index-item>
@@ -44,10 +44,10 @@
             bordered
             separator
             class="rounded overflow-hidden"
-            v-if="store.accessIntegrations.length"
+            v-if="feedback.accessIntegrations.length"
           >
             <integration-access-item
-              v-for="item of store.accessIntegrations"
+              v-for="item of feedback.accessIntegrations"
               :key="item.id"
               :item="item"
             ></integration-access-item>
@@ -87,14 +87,14 @@ import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import IntegrationAccessItem from './integrations/IntegrationAccessItem.vue';
 import IntegrationIndexItem from './integrations/IntegrationIndexItem.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const loading = ref(true);
 
 const updateShow = () => {
   loading.value = true;
 
-  store.updateIntegrations().then(() => {
+  feedback.updateIntegrations().then(() => {
     loading.value = false;
   });
 };

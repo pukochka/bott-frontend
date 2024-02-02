@@ -20,7 +20,7 @@
 
     <warning-start></warning-start>
 
-    <div class="row justify-center" v-if="store.mobile.connect">
+    <div class="row justify-center" v-if="feedback.mobile.connect">
       <q-card
         flat
         bordered
@@ -39,7 +39,7 @@
             icon="close"
             label="Отменить"
             class="rounded full-width"
-            @click="store.mobile.connect = false"
+            @click="feedback.mobile.connect = false"
           />
         </div>
       </q-card>
@@ -57,14 +57,14 @@ import {
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import WarningStart from '../views/WarningStart.vue';
 
-const store = useFeedbackStore();
+const feedback = useFeedbackStore();
 
 const openSection = (section: SectionKeys) => {
-  Object.keys(store.mobile)
+  Object.keys(feedback.mobile)
     .filter((key) => key !== section)
-    .forEach((key) => (store.mobile[<SectionKeys>key] = false));
+    .forEach((key) => (feedback.mobile[<SectionKeys>key] = false));
 
-  store.mobile[section] = !store.mobile[section];
+  feedback.mobile[section] = !feedback.mobile[section];
 };
 
 const buttons = computed(() => [

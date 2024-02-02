@@ -59,14 +59,14 @@
 
 <script setup lang="ts">
 import { date } from 'quasar';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUpdated, ref } from 'vue';
 import { chatColors, months } from '../../utils/common';
 
 import { useSupportStore } from '../../stores/supportStore';
 
 import TopSection from './sections/TopSection.vue';
 import BottomSection from './sections/BottomSection.vue';
-import ChatMessage from '../items/ChatMessage.vue';
+import ChatMessage from './ChatMessage.vue';
 import DrawerInfo from './sections/DrawerInfo.vue';
 
 const support = useSupportStore();
@@ -91,6 +91,8 @@ onMounted(() => {
   support.scrollRef = chat;
   support.chatBottomRef = bottom;
 });
+
+onUpdated(support.scrollToBottom.bind(support));
 
 const thumbStyle = {
   width: '8px',

@@ -14,7 +14,7 @@ export function createShell(
   message: MessageFeedbackItemPreview,
   coords: Array<number> | PaperPoint
 ) {
-  const store = useFeedbackStore();
+  const feedback = useFeedbackStore();
   const shell = new Group();
 
   if (message.position) {
@@ -42,21 +42,21 @@ export function createShell(
   shell.addChildren([platform, text, answerText]);
 
   platform.onMouseDrag = (event: any) => {
-    store.dragMessage(message);
-    store.notopen = true;
+    feedback.dragMessage(message);
+    feedback.notopen = true;
     shell.position.x += event.delta.x;
     shell.position.y += event.delta.y;
   };
 
   platform.onMouseDown = () => {
-    store.dragging = true;
-    store.connecting = true;
+    feedback.dragging = true;
+    feedback.connecting = true;
     shell.bringToFront();
   };
 
   platform.onMouseUp = () => {
-    store.dragging = false;
-    store.connecting = false;
+    feedback.dragging = false;
+    feedback.connecting = false;
 
     fetchFeedback('set-input-position', {
       input_id: message.id,
@@ -67,23 +67,23 @@ export function createShell(
   };
 
   platform.onMouseLeave = () => {
-    store.notopen = false;
+    feedback.notopen = false;
   };
 
   platform.onClick = (event: any) => {
-    if (store.mobile.connect) {
+    if (feedback.mobile.connect) {
       fetchFeedback(
         'set-input-next',
         {
-          input_id: store.selectedMessage?.id ?? 0,
-          type: store.selectedMessage?.type ?? 0,
+          input_id: feedback.selectedMessage?.id ?? 0,
+          type: feedback.selectedMessage?.type ?? 0,
           next_id: message.id ?? null,
           next_type: message.type ?? null,
         },
         (response) => {
-          store._feedback = response.feedback;
-          store.selectedMessage = null;
-          store.mobile.connect = false;
+          feedback._feedback = response.feedback;
+          feedback.selectedMessage = null;
+          feedback.mobile.connect = false;
 
           update();
         }
@@ -92,17 +92,17 @@ export function createShell(
       return;
     }
 
-    if (store.notopen) return;
-    store.selectedMessage = message;
+    if (feedback.notopen) return;
+    feedback.selectedMessage = message;
 
-    const touch = !!event.event?.changedTouches?.[0] || store.isMobile;
+    const touch = !!event.event?.changedTouches?.[0] || feedback.isMobile;
 
-    store.openMenu('message', undefined, touch);
+    feedback.openMenu('message', undefined, touch);
   };
 
   platform.data = message;
 
-  store.shells.push(platform);
+  feedback.shells.push(platform);
 
   return { shell, platform };
 }
