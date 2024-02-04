@@ -102,10 +102,10 @@
 import { onBeforeMount, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import { fetchFeedback } from '../../api/queries';
+import { encodeText } from '../../../inline/stores/helpers';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
-import EditorContent from '../../../../components/editor/EditorContent.vue';
-import { encodeText } from '../../../inline/stores/helpers';
+import EditorContent from 'src/components/editor/EditorContent.vue';
 
 const feedback = useFeedbackStore();
 

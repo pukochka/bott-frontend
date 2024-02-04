@@ -2,7 +2,9 @@
   <router-view v-if="props.withoutFooter" />
 
   <div class="bott-page__content" v-else>
-    <div class="q-py-xl" :class="pageClasses">
+    <router-view v-if="props.default" />
+
+    <div class="q-py-xl" :class="pageClasses" v-else>
       <div class="bott-page__title">{{ title }}</div>
 
       <bott-breadcrumbs></bott-breadcrumbs>
@@ -25,9 +27,10 @@ const props = withDefaults(defineProps<BottPageProps>(), {
   title: '',
   drawer: () => [],
   toc: () => [],
-  withoutFooter: false,
-  withoutRight: false,
   requiredParams: () => [],
+  withoutFooter: false,
+  default: false,
+  withoutRight: false,
 });
 
 const quasar = useQuasar();
@@ -54,6 +57,7 @@ interface BottPageProps {
   title: string;
   drawer?: BOTTDrawerButtons[];
   toc?: [];
+  default?: boolean;
   withoutFooter?: boolean;
   withoutRight?: boolean;
   requiredParams?: Array<string>;

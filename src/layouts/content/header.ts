@@ -4,6 +4,7 @@ import {
   mdiRobotOutline,
   mdiHandshake,
   mdiDeveloperBoard,
+  mdiStore,
 } from '@quasar/extras/mdi-v7';
 
 import { t } from 'src/boot/lang';
@@ -33,6 +34,12 @@ const layoutButtons: LayoutButtons[] = [
     label: t('personal-development'),
     link: '/personal-development',
     icon: mdiDeveloperBoard,
+  },
+  {
+    label: 'Биржа и реклама',
+    link: '/stock',
+    icon: mdiStore,
+    is_new: true,
   },
 ];
 
@@ -132,4 +139,5 @@ interface LayoutButtons {
   label: string;
   icon?: string;
   link?: string;
+  is_new?: boolean;
 }

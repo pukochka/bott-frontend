@@ -23,6 +23,15 @@
         <q-item-section>
           {{ button.label }}
         </q-item-section>
+
+        <q-badge
+          v-if="button.is_new"
+          floating
+          rounded
+          color="orange"
+          text-color="white"
+          label="new"
+        />
       </q-item>
     </q-list>
 
@@ -43,7 +52,7 @@
         :to="button.link"
       >
         <q-item-section avatar v-if="!button.sub">
-            <q-icon :name="button.icon" size="20px" color="primary" />
+          <q-icon :name="button.icon" size="20px" color="primary" />
         </q-item-section>
 
         <q-item-section v-if="!button.sub">

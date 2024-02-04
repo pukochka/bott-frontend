@@ -1,0 +1,108 @@
+$gradient:linear-gradient(
+    84.4deg,
+    #6c93ff -4.85%,
+    #976fff 51.72%,
+    #df69d1 110.7%
+);
+$gradient-blue: linear-gradient(225deg, #4EABF8 14.73%, #3478F6 85.27%);
+$gradient-primary: linear-gradient(225deg, #4EABF8 14.73%, #6c93ff 85.27%);
+$gradient-green: linear-gradient(230.46deg, #00A3B4 12.94%, #00CB47 86.29%);
+$gradient-purple: linear-gradient(230.46deg, #CE4D74 0%, #3D52DF 100%);
+$gradient-speaking: linear-gradient(135deg, #5CC85C 0%, #48A1B3 101.27%);
+
+.bott-landing{
+  &__layout{
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  &__container{
+    position: relative;
+    padding: 64px 0;
+  }
+
+  &__title{
+    font-size: 42px;
+    line-height: 40px;
+  }
+
+  &__description{
+    font-size: 16px;
+    font-weight: 500;
+    max-width: 450px;
+  }
+
+  &__icon{
+    filter: blur(3px);
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    color: #976fff;
+  }
+
+  &__service-card{
+    position: relative;
+    padding-left: 60px;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05),0 2px 8px rgba(0,0,0,0.05) !important;
+
+    &:hover{
+      transform: translateY(-4px);
+    }
+
+    &:hover .bott-landing__service-card__icon{
+      left: 0;
+    }
+
+    &__icon{
+      position: absolute;
+      left: -60px;
+      top: 50%;
+      transform: translate(0,-50%);
+      filter: blur(3px);
+    }
+  }
+}
+
+.bott-stock__category-card{
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05),0 2px 8px rgba(0,0,0,0.05) !important;
+
+  &__icon{
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    transform: translate(0,-50%);
+    filter: blur(3px);
+  }
+}
+
+.selected {
+  background: $gradient-blue;
+}
+
+.text-landing-pink{
+  color: #df69d1;
+}
+
+.text-landing-primary{
+  color: #6c93ff;
+}
+
+.text-gradient {
+  background-image: $gradient;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+body.body--dark{
+  .bott-landing__service-card{
+    box-shadow: 0 4px 24px rgba(255,255,255,0.1),0 2px 8px rgba(255,255,255,0.1) !important;
+  }
+}
+
+
