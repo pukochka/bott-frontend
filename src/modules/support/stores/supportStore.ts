@@ -103,6 +103,7 @@ export const useSupportStore = defineStore('support', {
       );
     },
     closeChat() {
+      this.messages = [];
       this.selectedTicket = null;
       this.main = 'view';
 

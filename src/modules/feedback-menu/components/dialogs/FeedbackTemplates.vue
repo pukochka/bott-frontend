@@ -63,11 +63,10 @@
 
       <q-card-section class="q-pt-none">
         <editor-content
-          :content="templates[selected].value"
-          :max-value="1024"
-          no-without-editor
           :id="0"
           :message_id="0"
+          :max-value="1024"
+          :content="templates[selected].value"
           @update="updateText"
         ></editor-content>
       </q-card-section>

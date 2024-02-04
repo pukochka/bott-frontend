@@ -8,7 +8,7 @@
       v-else
       class="ellipsis-2-lines text-wrap text-caption"
       style="max-width: 150px"
-      v-html="props.ticket?.last_message?.message?.text"
+      v-html="text"
     ></div>
 
     <q-badge color="primary" rounded class="self-start q-ml-xs" v-if="isUser">
@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { defaultTicket } from '../../../stores/supportModels';
+import { grinding } from '../../../../../utils/helpers/grinding';
 
 const props = withDefaults(defineProps<TicketMessageProps>(), {
   ticket: () => defaultTicket,
@@ -38,7 +39,11 @@ const isUser = computed(
 );
 
 const isMedia = computed(
-  () => ![0, 2].includes(props.ticket?.last_message?.message?.type?.id)
+  () => ![0, 2].includes(props.ticket?.last_message?.message?.type?.id ?? -1)
+);
+
+const text = computed(() =>
+  grinding(props.ticket?.last_message?.message?.text ?? '')
 );
 
 const mediaLabel = computed(
