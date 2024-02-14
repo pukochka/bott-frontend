@@ -9,6 +9,7 @@ export type PaperPath = paper.Path;
 export type PaperLine = paper.Path.Line;
 export type PaperPoint = paper.Point;
 export type PaperText = paper.PointText;
+export type PaperCircle = paper.Shape.Circle;
 
 export interface FeedbackModels {
   view: PaperView;

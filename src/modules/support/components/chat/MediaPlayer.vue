@@ -7,38 +7,41 @@
     transition-duration="200"
     @before-hide="updateHide"
   >
-    <div class="media-player" :style="transform">
-      <div class="absolute-full flex flex-center" v-if="support.media.isVideo">
-        <video controls>
-          <source :src="support.media.link" />
-        </video>
+    <div class="">
+      <div class="row col-12 justify-end self-start">
+        <q-btn
+          square
+          unelevated
+          size="md"
+          color="primary"
+          icon="close"
+          v-close-popup
+        />
       </div>
 
-      <q-img
-        v-else
-        class="overflow-hidden"
-        spinner-color="primary"
-        spinner-size="82px"
-        fit="contain"
-        width="calc(100vw - 20px)"
-        height="calc(100vh - 20px)"
-        v-touch-pan.prevent.mouse="handlePan"
-        @wheel.prevent="handleWheel"
-        :src="support.media.link"
-        :class="[classes]"
-        v-close-popup="scale === 1"
-      />
-    </div>
+      <div class="full-width column justify-end">
+        <div class="bott-player" :style="transform">
+          <video controls class="bott-player" v-if="support.media.isVideo">
+            <source :src="support.media.link" />
+          </video>
 
-    <q-btn
-      square
-      unelevated
-      size="md"
-      color="primary"
-      icon="close"
-      class="absolute-top-right"
-      v-close-popup
-    />
+          <q-img
+            v-else
+            class="overflow-hidden"
+            spinner-color="primary"
+            spinner-size="82px"
+            fit="contain"
+            width="calc(100vw - 60px)"
+            height="calc(100vh - 60px)"
+            v-touch-pan.prevent.mouse="handlePan"
+            @wheel.prevent="handleWheel"
+            :src="support.media.link"
+            :class="[classes]"
+            v-close-popup="scale === 1"
+          />
+        </div>
+      </div>
+    </div>
   </q-dialog>
 </template>
 

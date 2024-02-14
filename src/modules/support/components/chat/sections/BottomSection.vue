@@ -31,6 +31,7 @@
                 style="overflow-y: scroll"
                 @keyup="updateText"
                 @keydown="updateText"
+                @change="updateText"
               ></div>
             </div>
           </div>
@@ -92,6 +93,12 @@ const addEmoji = (value: string) => {
 };
 
 const updateText = (event: KeyboardEvent) => {
+  if (event.ctrlKey && event.keyCode === 86) {
+    chatInput.value.innerHTML = chatInput.value.textContent;
+    text.value = chatInput.value.textContent;
+    return;
+  }
+
   if (event.keyCode === 13 && placeholder.value) {
     event.preventDefault();
     return;
@@ -101,7 +108,6 @@ const updateText = (event: KeyboardEvent) => {
 
   text.value = chatInput.value.innerHTML;
 };
-
 const sendMessage = (event: KeyboardEvent) => {
   if (event.shiftKey) return;
 
@@ -127,6 +133,11 @@ const sendMessage = (event: KeyboardEvent) => {
   ).then(() => {
     loading.value = false;
   });
+};
+
+const exit = (event: any) => {
+  event.preventDefault();
+  return false;
 };
 </script>
 

@@ -7,6 +7,8 @@ import {
   mdiAnimation,
 } from '@quasar/extras/mdi-v7';
 
+export const textNewMessage = 'Добавить новое сообщение';
+
 export const setting: Record<
   number,
   { title: string; icon: string; color: string }
@@ -101,7 +103,8 @@ export function createText(
   radius?: number,
   color?: string,
   justification?: string,
-  weight?: number
+  weight?: number,
+  vertical?: boolean
 ) {
   const content = new PointText({
     content: message,
@@ -133,8 +136,13 @@ export function moveToPoint(
 
   return to.subtract(from).normalize(length).add(from);
 }
-export function overlap(target: PaperItem, item: PaperItem) {
-  return target?.intersects(item) || target?.isInside(item.bounds);
+export function overlap(
+  target: PaperItem | null,
+  item: PaperItem | null
+): boolean {
+  if (!item) return false;
+
+  return target?.intersects(item) || target?.isInside(item.bounds) || false;
 }
 
 export function rotateCircle(

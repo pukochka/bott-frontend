@@ -1,4 +1,5 @@
-const grindingTags = 'iframe|script|noframes|frame|frameset|source';
+const grindingTags =
+  'iframe|script|noframes|frame|frameset|source|div|span|img|video';
 
 export function grinding(text: string): string {
   const el = document.createElement('div');

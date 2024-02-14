@@ -77,7 +77,9 @@ onBeforeMount(() => {
 });
 
 const format = (value?: string | null) => {
-  return date.formatDate(Date.parse(value ?? ''), 'DD MMM, YYYY HH:mm');
+  return value
+    ? date.formatDate(Date.parse(value), 'DD MMM, YYYY HH:mm')
+    : '<span class="bott-token text-grey font-13">Нет</span>';
 };
 
 const drawerColumns = computed(() => [

@@ -12,6 +12,7 @@ import { defaultTicketMessage } from '../../../stores/supportModels';
 import { computed } from 'vue';
 import { date } from 'quasar';
 import { grinding } from '../../../../../utils/helpers/grinding';
+import { parseContent } from '../../../utils/common';
 
 const props = withDefaults(defineProps<ChatMessageContentProps>(), {
   message: () => defaultTicketMessage,
@@ -32,29 +33,6 @@ const formattedTime = computed(
       'HH:mm'
     )}</span></span>`
 );
-
-function parseContent(content: string): string {
-  if (content.includes('style')) {
-    const el = document.createElement('div');
-    el.innerHTML = content;
-
-    // eslint-disable-next-line prefer-rest-params,@typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const nodeList: Array<HTMLElement> = Array.from(el?.childNodes);
-
-    if (!nodeList.length) return el.innerHTML;
-
-    for (const node of nodeList) {
-      node.attributes.removeNamedItem('style');
-
-      node.innerHTML = parseContent(node.innerHTML);
-    }
-
-    return el.innerHTML;
-  }
-
-  return content;
-}
 
 interface ChatMessageContentProps {
   message: SupportTicketMessage;

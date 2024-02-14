@@ -89,7 +89,9 @@
               v-model="setting.button_cancel"
             />
 
-            <feedback-templates></feedback-templates>
+            <feedback-templates
+              @update="updateLocalSettings"
+            ></feedback-templates>
 
             <q-list
               dense
@@ -263,8 +265,8 @@ const updateTitle = () => {
   ).then(() => (loading.value.title = false));
 };
 
-const updateTemplate = (val: string) => {
-  text.value = encodeText(val);
+const updateLocalSettings = () => {
+  setting.value = feedback.feedback.setting;
 };
 
 const updateItem = (item: any, text: any) => {

@@ -40,3 +40,26 @@ export const months: Record<number, string> = {
   10: 'Ноября',
   11: 'Декабря',
 };
+
+export function parseContent(content: string): string {
+  if ((content ?? '').includes('style')) {
+    const el = document.createElement('div');
+    el.innerHTML = content;
+
+    // eslint-disable-next-line prefer-rest-params,@typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const nodeList: Array<HTMLElement> = Array.from(el?.childNodes ?? []);
+
+    if (!nodeList?.length) return el?.innerHTML;
+
+    for (const node of nodeList) {
+      node?.attributes?.removeNamedItem('style');
+
+      node.innerHTML = parseContent(node.innerHTML);
+    }
+
+    return el?.innerHTML ?? '';
+  }
+
+  return content;
+}

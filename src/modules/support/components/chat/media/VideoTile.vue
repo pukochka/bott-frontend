@@ -4,7 +4,11 @@
       Видео не поддерживается...
     </div>
 
-    <video style="width: 250px; height: 250px" v-if="!loading && !error">
+    <video
+      class="video-player"
+      style="width: 250px; height: 250px"
+      v-if="!loading && !error"
+    >
       <source :src="url" />
     </video>
 

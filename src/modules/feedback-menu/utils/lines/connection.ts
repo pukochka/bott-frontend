@@ -3,15 +3,22 @@ import {
   defaultInput,
   MessageFeedbackItemPreview,
   PaperGroup,
+  PaperItem,
   PaperLine,
+  PaperText,
 } from '../../stores/feedbackModels';
 import { Group, Point } from 'paper';
 import { createPlus } from '../figures';
 import { useFeedbackStore } from '../../stores/feedbackStore';
-import { circle, dashLine } from '../common';
+import {
+  circle,
+  createText,
+  dashLine,
+  overlap,
+  textNewMessage,
+} from '../common';
 import gsap from 'gsap';
 import { Link } from './link';
-import { overlap } from '../common';
 import { fetchFeedback } from '../../api/queries';
 import { update } from '../create';
 
@@ -25,9 +32,10 @@ export class Connection {
   line: PaperLine | null = null;
   icon: PaperGroup = createPlus(new Point(0, 0), 3);
   iconConnection: PaperGroup = createPlus(new Point(0, 0), 3);
-  front: any | null = null;
-  connectCircle: any | null = null;
-  frontCircle: any | null = null;
+  front: PaperItem | null = null;
+  connectCircle: PaperItem | null = null;
+  frontCircle: PaperItem | null = null;
+  text: PaperText | null = null;
 
   action = false;
   prev = false;
@@ -41,8 +49,8 @@ export class Connection {
   }
   get isNewConnect() {
     return (
-      (this.platform?.position.x ?? 0) + 400 < this.front.position.x ||
-      (this.platform?.position.x ?? 0) - 200 > this.front.position.x
+      (this.platform?.position.x ?? 0) + 400 < (this.front?.position.x ?? 0) ||
+      (this.platform?.position.x ?? 0) - 200 > (this.front?.position.x ?? 0)
     );
   }
 
@@ -182,7 +190,7 @@ export class Connection {
       this.icon.visible = true;
 
       gsap.to(this.group.position, {
-        x: this.group.position.x + 25,
+        x: (this.platform?.position.x ?? 0) + 100,
         duration: 0.15,
       });
     };
@@ -232,7 +240,7 @@ export class Connection {
 
       if (this.line && this.platform) {
         this.line.firstCurve.point1 = this.platform.position;
-        this.line.firstCurve.point2 = this.front.position;
+        this.line.firstCurve.point2 = this.front?.position ?? new Point(0, 0);
       }
     };
   }

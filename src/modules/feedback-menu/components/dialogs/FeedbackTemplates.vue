@@ -106,6 +106,10 @@ import { encodeText } from '../../../inline/stores/helpers';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import EditorContent from 'src/components/editor/EditorContent.vue';
 
+const emit = defineEmits<{
+  (e: 'update'): void;
+}>();
+
 const feedback = useFeedbackStore();
 
 const selected = ref<keyof TemplateKeys | null>(null);
@@ -160,6 +164,7 @@ const updateTemplate = () => {
     dialog.value = false;
     loading.value = false;
     update.value = false;
+    emit('update');
   });
 };
 

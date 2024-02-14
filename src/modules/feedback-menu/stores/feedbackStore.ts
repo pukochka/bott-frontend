@@ -80,6 +80,7 @@ export const useFeedbackStore = defineStore('paper-feedback', {
       cursor: new Point(0, 0),
     } as unknown as FeedbackModels),
   getters: {
+    isMove: (state) => state.dragging || state.connecting,
     isMobile: () =>
       /mobile|iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(
         navigator.userAgent.toLowerCase()

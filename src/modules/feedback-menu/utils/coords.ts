@@ -56,15 +56,19 @@ export function setCenter() {
 export function getTextPoints(
   coords: PaperPoint | Array<number>,
   radius?: number,
-  diff?: number
+  diff?: number,
+  vertical?: boolean
 ) {
+  const horizontalDiff = vertical ? 0 : diff ?? 20;
+  const verticalDiff = vertical ? diff ?? 20 : 0;
+
   if (Array.isArray(coords)) {
     const [x, y] = coords;
 
-    return [x, y + (diff ?? 20) + (radius ?? 80)];
+    return [x + horizontalDiff, y + verticalDiff + (radius ?? 80)];
   }
 
   const { x, y } = coords;
 
-  return [x, y + (diff ?? 20) + (radius ?? 80)];
+  return [x + horizontalDiff, y + verticalDiff + (radius ?? 80)];
 }

@@ -28,6 +28,10 @@
         cover
       >
         <types-question-list @create="addBeforeMessage"></types-question-list>
+
+        <q-inner-loading :showing="loading.before">
+          <q-spinner size="50px" color="primary" />
+        </q-inner-loading>
       </q-menu>
     </q-item>
   </q-list>
