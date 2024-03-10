@@ -15,15 +15,18 @@ import { computed, watch } from 'vue';
 
 import { defaultMessage } from '../../../stores/defaults';
 
-import ButtonItem from '../ButtonItem.vue';
 import { onUpdated } from 'vue';
 import { useVectorStore } from '../../../stores/vector/vectorStore';
+import { useDataStore } from '../../../stores/data/dataStore';
+
+import ButtonItem from '../ButtonItem.vue';
 
 const props = withDefaults(defineProps<MessageButtonsProps>(), {
   message: () => defaultMessage,
 });
 
 const vector = useVectorStore();
+const data = useDataStore();
 
 const length = computed(() => props.message.menu?.lines?.length ?? 0);
 
@@ -33,7 +36,7 @@ const buttons = computed((): IMButton[] =>
     : []
 );
 
-onUpdated(vector.updateConnections);
+onUpdated(vector.update);
 
 watch(
   buttons,

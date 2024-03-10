@@ -1,12 +1,18 @@
-import { Connection } from '../classes';
+import { CombineLine, Connection } from '../classes';
 
 export interface VectorStore {
-  connections: SCConnection[];
+  followingMessages: Array<Array<number>>;
+  connections: Array<SCConnection>;
 
   mountedParent: boolean;
   mountedLine: Connection | null;
+  mountedCombine: CombineLine | null;
 
-  linesValue: Connection[];
+  editCombine: [number, string] | null;
+  editConnection: [number, number] | null;
+
+  linesValue: Array<Connection>;
+  combineLines: Array<CombineLine>;
 
   parentEl: DOMRect | null;
   buttonEl: DOMRect | null;

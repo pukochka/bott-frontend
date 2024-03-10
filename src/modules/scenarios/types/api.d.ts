@@ -1,84 +1,60 @@
 interface SCRouteIdParam {
-  /**
-   * Уникальный идентификатор от маршрута
-   * */
+  /** Уникальный идентификатор от маршрута */
   route_id: number;
 }
 
 interface SCColumnIdParam {
-  /**
-   * Уникальный идентификатор колонны
-   * */
+  /** Уникальный идентификатор колонны */
   column_id: number;
 }
 
 interface SCMessageIdParam {
-  /**
-   * Уникальный идентификатор сообщения
-   * */
+  /** Уникальный идентификатор сообщения */
   message_id: number;
 }
 
 interface SCColorIdParam {
-  /**
-   * Уникальный идентификатор цвета
-   * */
+  /** Уникальный идентификатор цвета */
   color_id: number | null;
 }
 
 interface SCTypeParam {
-  /**
-   * Тип сообщения
-   * */
+  /** Тип сообщения */
   type: number;
 }
 
 interface SCTypeMessageParam {
-  /**
-   * Тип сообщения
-   * */
+  /** Тип сообщения */
   message_type: number;
 }
 
 interface SCMessageTypeParam {
-  /**
-   * Тип сообщения
-   * */
+  /** Тип сообщения */
   message_type: number;
 }
 
 interface SCSortParam {
-  /**
-   * Новое положение
-   * */
+  /** Новое положение */
   sort: number;
 }
 
 interface SCMessageParam {
-  /**
-   * Новый текст маршрута
-   * */
+  /** Новый текст маршрута */
   message: string;
 }
 
 interface SCRouteParam {
-  /**
-   * Новый маршрут
-   * */
+  /** Новый маршрут */
   route: string;
 }
 
 interface SCTextParam {
-  /**
-   * Новый маршрут
-   * */
+  /** Новый маршрут */
   text: string;
 }
 
 interface SCTitleParam {
-  /**
-   * Новый маршрут
-   * */
+  /** Новый маршрут */
   title: string;
 }
 
@@ -87,79 +63,47 @@ interface SCUserIdParam {
   user_id: number;
 }
 
+interface SCNextMessageIdParam {
+  /** */
+  message_next_id: number;
+}
+
 /**
  * Запросы для колонн
  * */
-
 declare interface SCColumnQueries {
-  /**
-   * Создать колонну
-   * */
+  /** Создать колонну */
   create: SCRouteIdParam & SCTypeMessageParam;
-
-  /**
-   * Добавить сообщение в колонну
-   * */
+  /** Добавить сообщение в колонну */
   'add-message-in-column': SCRouteIdParam &
     SCColumnIdParam &
     SCTypeMessageParam;
-
-  /**
-   * Переместить сообщение между колоннами/внутри колонны
-   * */
+  /** Переместить сообщение между колоннами/внутри колонны */
   'change-sort-and-column': SCRouteIdParam &
     SCColumnIdParam &
     SCSortParam &
     SCMessageIdParam;
-
-  /**
-   * Удалить колонну
-   * */
+  /** Удалить колонну */
   delete: SCRouteIdParam & SCColumnIdParam;
 }
 
-/**
- * Запросы для команд
- * */
+/** Запросы для команд */
 declare interface SCCommandQueries {
-  /**
-   * Получение всех маршрутов
-   * */
+  /** Получение всех маршрутов */
   index: undefined;
-
-  /**
-   * Получение маршрута
-   * */
+  /** Получение маршрута */
   view: SCRouteIdParam;
-
-  /**
-   * Обновить label у маршрута
-   * */
+  /** Обновить label у маршрута */
   'update-message': SCRouteIdParam & SCMessageParam;
-
-  /**
-   * Обновление пути у маршрута
-   * */
+  /** Обновление пути у маршрута */
   'update-route': SCRouteIdParam & SCRouteParam & SCMessageParam;
-
-  /**
-   * Удаление маршрута
-   * */
+  /** Удаление маршрута */
   delete: SCRouteIdParam;
-
-  /**
-   * Создание обычного маршрута, без колонн
-   * */
+  /** Создание обычного маршрута, без колонн */
   create: SCRouteParam & SCMessageParam;
-
-  /**
-   * Создание маршрута, с колоннами
-   * */
+  /** Создание маршрута, с колоннами */
   'create-with-column': SCMessageParam & SCMessageTypeParam;
-
-  /**
-   * Делает сообщение активным
-   * */
+  /** Делает сообщение активным */
   'set-active': SCMessageIdParam & SCRouteIdParam;
 }
 
@@ -168,75 +112,38 @@ declare interface SCCommandQueries {
  * - URL - /v1/bot/message/message/
  * */
 declare interface SCMessageQueries {
-  /**
-   * Получить свободные сообщения
-   * */
+  /** Получить свободные сообщения */
   index: undefined;
-
-  /**
-   * Получить свободное сообщение
-   * */
+  /** Получить свободное сообщение */
   get: SCMessageIdParam;
-
-  /**
-   * Получить доступные цвета
-   * */
+  /** Получить доступные цвета */
   colors: undefined;
-
-  /**
-   * Получить доступные типы сообщений
-   * */
+  /** Получить доступные типы сообщений */
   types: undefined;
-
-  /**
-   * Сбрасывает сообщение на стандратное. Не у всех сообщений можно сбросить!
-   * */
+  /** Получить доступные типы сообщений */
   reset: SCMessageIdParam;
-
-  /**
-   * Отправялет тестовое сообщение пользователю user_id
-   * */
+  /** Отправялет тестовое сообщение пользователю user_id */
   test: SCMessageIdParam & SCUserIdParam;
-
-  /**
-   * Изменить текст сообщения
-   * */
+  /** Изменить текст сообщения */
   'update-text': SCTextParam & SCMessageIdParam;
-
-  /**
-   * Изменить название сообщения
-   * */
+  /** Изменить название сообщения */
   'update-title': SCMessageIdParam & SCTitleParam;
-
-  /**
-   * Добавление меню
-   * */
+  /** Добавление меню */
   'add-inline-menu': SCMessageIdParam;
-
-  /**
-   * Удаление меню
-   * */
+  /** Удаление меню */
   'delete-inline-menu': SCMessageIdParam;
-
-  /**
-   * Дублировать сообщение
-   * */
+  /** Дублировать сообщение */
   duplicate: SCMessageIdParam;
-
-  /**
-   * Изменить тип сообщения
-   * */
+  /** Изменить тип сообщения */
   'update-type': SCMessageIdParam & SCTypeParam;
-
-  /**
-   * Удаляет сообщение
-   * */
+  /** Удаляет сообщение */
   delete: SCMessageIdParam;
-
-  /**
-   * Задать цвет для названия сообщения
-   * */
+  /** Задать цвет для названия сообщения */
   'set-color': SCMessageIdParam & SCColorIdParam;
+  /** Задает следующее сообщение, которое будет отправлено одновременно */
+  'set-next-message': SCMessageIdParam & SCNextMessageIdParam;
+  /** Удаляет сообщение, которое будет отправлено одновременно */
+  'drop-next-message': SCMessageIdParam;
 }
 
 declare type SCMessageParams<Q extends keyof SCMessageQueries> =

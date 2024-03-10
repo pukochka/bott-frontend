@@ -3,7 +3,8 @@
     persistent
     full-width
     position="bottom"
-    v-model="states.dialogs.edit_message">
+    v-model="states.dialogs.edit_message"
+  >
     <div class="row justify-center">
       <q-card flat bordered class="dialog-rounded bott-dialog__responsive">
         <div class="row items-center justify-between q-px-md q-py-sm">
@@ -16,10 +17,13 @@
 
         <q-card-section class="q-pt-none">
           <inline-menu
+            scenarios
+            no-breadcrumbs
             :message="data.selectedMessage"
             :bot_id="config.bot.id"
             :token="config.bot.token"
-            :host="config.host"></inline-menu>
+            :host="config.host"
+          ></inline-menu>
         </q-card-section>
       </q-card>
     </div>

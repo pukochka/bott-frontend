@@ -25,6 +25,7 @@ export const useStatesStore = defineStore({
 
         connection: false,
         action: false,
+        timer: false,
 
         color: false,
       },

@@ -55,16 +55,6 @@
             :loading="loading"
             @click="updateTitle"
           />
-
-          <q-btn
-            flat
-            dense
-            padding="4px"
-            class="rounded"
-            color="red"
-            icon="close"
-            v-close-popup
-          />
         </template>
       </q-input>
 

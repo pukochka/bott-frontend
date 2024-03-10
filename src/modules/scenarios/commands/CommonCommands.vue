@@ -39,6 +39,8 @@
 
   <button-settings></button-settings>
 
+  <timer-settings></timer-settings>
+
   <transition name="q-transition--fade">
     <scenario-messages v-if="commands.dialogs.scenario"></scenario-messages>
   </transition>
@@ -66,6 +68,7 @@ import EditLabel from '../messages/components/edit/EditLabel.vue';
 import EditMessage from '../messages/components/dialogs/message/EditMessage.vue';
 import MessageType from '../messages/components/dialogs/message/MessageType.vue';
 import AddMessage from '../messages/components/dialogs/message/AddMessage.vue';
+import TimerSettings from '../messages/components/dialogs/TimerSettings.vue';
 
 const commands = useCommandsStore();
 

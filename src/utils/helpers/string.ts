@@ -24,3 +24,14 @@ export function has(param: string) {
 
   return url.has(param);
 }
+
+export function setCaretPosition(name: string, start: number, end: number) {
+  const el = <HTMLInputElement>document.querySelector(name);
+
+  if (el === null) return;
+
+  if (el.setSelectionRange) {
+    el.focus();
+    el.setSelectionRange(start, end);
+  }
+}

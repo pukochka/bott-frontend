@@ -6,12 +6,21 @@
     :id="'message_' + message.id"
     style="max-width: 370px; min-width: 370px"
   >
+    <div
+      class="bott-message--combine-target absolute-top"
+      :id="'top_target_' + message.id"
+    ></div>
+
+    <div
+      class="bott-message--combine-target absolute-bottom"
+      :id="'bottom_target_' + message.id"
+    ></div>
+
     <q-badge
       class="rounded q-mt-none cursor-pointer first-message--banner q-pa-xs"
       v-if="message.active"
-      v-ripple
     >
-      <span class="text-weight-medium">Начальное сообщение</span>
+      <span class="text-weight-medium">Стартовое сообщение</span>
 
       <q-popup-proxy class="rounded bordered bott-portal-menu">
         <q-banner style="max-width: 200px">
@@ -49,11 +58,11 @@
     <message-main :message="message"></message-main>
 
     <message-buttons
-      v-if="dragging === false"
+      v-if="dragging === false && props.message.type.id !== 7"
       :message="message"
     ></message-buttons>
 
-    <div class="row items-center">
+    <div class="row items-center" v-if="props.message.type.id !== 7">
       <q-btn
         v-if="props.message.type.id === 2"
         flat
@@ -80,21 +89,13 @@
     </div>
 
     <message-shadow
-      @click="cancelConnection"
-      :showing="cancelConnecting"
-      label="Отменить связь"
-      icon="close"
-      class="cancel-connection"
-      tooltip="Нажмите для отмены связи"
-    ></message-shadow>
-
-    <message-shadow
-      @click="connect"
-      :showing="isConnecting"
-      label="Наведите на блок и нажмите на него для связи"
-      icon="ads_click"
-      class="add-connection"
-      tooltip="Нажмите для связи"
+      v-if="(vector.connection || vector.combining) && activeShadow"
+      :icon="activeShadow.icon"
+      :class="activeShadow.class"
+      :label="activeShadow.label"
+      :tooltip="activeShadow.tooltip"
+      :showing="activeShadow.showing"
+      @click="activeShadow.action"
     ></message-shadow>
 
     <drag-horizontal
@@ -106,9 +107,10 @@
   </q-card>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue';
+import { config } from '../../../config';
+import { computed, onBeforeMount, onMounted } from 'vue';
 
-import { fetchButtons } from '../../api';
+import { fetchButtons, fetchMessage } from '../../api';
 
 import { useVectorStore } from '../../stores/vector/vectorStore';
 import { useStatesStore } from '../../stores/states/statesStore';
@@ -122,7 +124,9 @@ import EditTitle from '../edit/EditTitle.vue';
 import DragHorizontal from './sections/DragHorizontal.vue';
 import MessageMain from './sections/MessageMain.vue';
 import MessageShadow from './sections/MessageShadow.vue';
-import { config } from '../../../config';
+import MessageTimer from './MessageTimer.vue';
+import { mdiMessageMinus, mdiMessagePlus } from '@quasar/extras/mdi-v7';
+import { useConnect } from '../../../utils';
 
 const props = withDefaults(defineProps<MessageItemProps>(), {
   message: () => defaultMessage,
@@ -134,12 +138,12 @@ const data = useDataStore();
 const states = useStatesStore();
 const vector = useVectorStore();
 
-const isConnecting = computed(
-  () => vector.connection && vector.mountedLine?.message_id !== props.message.id
+const concurrenceConnection = computed(
+  () => vector.mountedLine?.message_id === props.message.id
 );
 
-const cancelConnecting = computed(
-  () => vector.connection && vector.mountedLine?.message_id === props.message.id
+const concurrenceCombine = computed(
+  () => Number(vector.mountedCombine?.id) === props.message.id
 );
 
 const openMessage = () => {
@@ -153,12 +157,54 @@ const startDrag = (e: MouseEvent) => {
 };
 
 const cancelConnection = () => {
+  if (vector.editConnection) {
+    const [message_id, button_id] = vector.editConnection;
+    const line = vector.linesValue.find((item) => item.button_id === button_id);
+
+    if (line) {
+      line.line = useConnect(message_id, button_id);
+    }
+
+    vector.editConnection = null;
+    vector.mountedLine = null;
+
+    return;
+  }
   vector.linesValue.pop();
 
   vector.mountedLine = null;
 };
 
-const connect = () => {
+const cancelCombine = () => {
+  if (vector.editCombine) {
+    vector.updateCurrentCombine();
+    vector.mountedCombine = null;
+
+    return;
+  }
+
+  vector.combineLines.pop();
+
+  vector.mountedCombine = null;
+};
+
+const createCombine = () => {
+  vector.endCombine(props.message.id);
+  const message = data.selectedMessage || defaultMessage;
+
+  fetchMessage(
+    'set-next-message',
+    {
+      message_id: data.selectedMessage?.id ?? 0,
+      message_next_id: props.message.id,
+    },
+    (response) => {
+      message.nextMessage = response.data.data.nextMessage;
+    }
+  );
+};
+
+const createConnection = () => {
   vector.endMove(props.message.id);
 
   fetchButtons(
@@ -174,6 +220,54 @@ const connect = () => {
     }
   );
 };
+
+const activeShadow = computed(
+  () => shadows.value.filter((item) => item.showing)[0]
+);
+
+const shadows = computed(() => [
+  {
+    label: 'Отменить связь',
+    tooltip: 'Нажмите для отмены связи',
+    icon: 'close',
+    class: 'cancel-connection',
+    showing: !vector.combining && concurrenceConnection.value,
+    action: cancelConnection,
+  },
+  {
+    label: 'Наведите на блок и нажмите на него для связи',
+    tooltip: 'Нажмите для связи',
+    icon: 'ads_click',
+    class: 'add-connection',
+    showing: !vector.combining && !concurrenceConnection.value,
+    action: createConnection,
+  },
+  {
+    label: 'Совместить',
+    tooltip: undefined,
+    icon: mdiMessagePlus,
+    class: 'add-connection',
+    showing: !vector.connection && !concurrenceCombine.value,
+    action: createCombine,
+  },
+  {
+    label: 'Отменить совмещение',
+    tooltip: undefined,
+    icon: mdiMessageMinus,
+    class: 'cancel-connection',
+    showing: !vector.connection && concurrenceCombine.value,
+    action: cancelCombine,
+  },
+]);
+
+onBeforeMount(() => {
+  if (props.message.nextMessage === null) return;
+
+  vector.followingMessages.push([
+    props.message.id,
+    props.message.nextMessage.id,
+  ]);
+});
 
 interface MessageItemProps {
   message: MessageFree;
@@ -192,5 +286,10 @@ interface MessageItemProps {
   position: absolute;
   top: -16px;
   left: -16px;
+}
+.bott-message--combine-target {
+  width: 1px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>

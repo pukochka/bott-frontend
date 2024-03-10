@@ -2,26 +2,32 @@
   <svg class="connections-container fit">
     <g
       class="gpath"
-      v-for="button of buttons"
-      :key="button.button_id"
+      v-for="line of vector.linesValue"
+      :key="line.button_id"
       @mouseenter="showTooltip"
       @mouseleave="hideTooltip"
       @mouseout="hideTooltip"
-      @click="openMenu(button.button_id)">
-      <circle
-        stroke="transparent"
-        fill="transparent"
-        :cx="button.line?.start_x"
-        :cy="button.line?.start_y"
-        :r="12" />
-
+      @click="openMenu(line.button_id)"
+    >
       <path
         class="line"
-        stroke-width="1.4"
-        :d="button.line?.path"
-        fill="transparent" />
+        stroke-width="1.6"
+        :d="line.line?.path"
+        fill="transparent"
+      />
 
-      <polygon class="arrow" :points="button.line?.polygon" stroke-width="1" />
+      <polygon class="arrow" :points="line.line?.polygon" stroke-width="1" />
+    </g>
+
+    <g class="gpath" v-for="line of vector.combineLines" :key="line.id">
+      <path
+        class="timer-line"
+        stroke-width="1.6"
+        :d="line.path"
+        fill="transparent"
+      />
+
+      <polygon class="timer-arrow" :points="line.polygon" stroke-width="1" />
     </g>
   </svg>
 
@@ -30,18 +36,22 @@
     touch-position
     @before-show="showUpdate"
     @before-hide="hideUpdate"
-    class="bott-portal-menu">
-    <button-menu-list
+    class="bott-portal-menu"
+  >
+    <button-menu
+      @close="menu = false"
       :button="data.selectedButton"
-      :message="data.selectedMessage"></button-menu-list>
+      :message="data.selectedMessage"
+    ></button-menu>
   </q-menu>
 
   <transition name="q-transition--fade">
     <q-card
-      v-if="tooltip.state"
       flat
+      v-if="tooltip.state"
       class="absolute rounded z-max q-tooltip--style"
-      :style="{ top: tooltip.y + 'px', left: tooltip.x + 'px' }">
+      :style="{ top: tooltip.y + 'px', left: tooltip.x + 'px' }"
+    >
       Нажмите, чтобы изменить
     </q-card>
   </transition>
@@ -54,7 +64,7 @@ import { useVectorStore } from '../../stores/vector/vectorStore';
 import { useDataStore } from '../../stores/data/dataStore';
 import { useStatesStore } from '../../stores/states/statesStore';
 
-import ButtonMenuList from '../items/sections/ButtonMenuList.vue';
+import ButtonMenu from '../items/sections/ButtonMenu.vue';
 
 const vector = useVectorStore();
 const data = useDataStore();
@@ -68,6 +78,9 @@ const tooltip = ref({
   state: false,
   handle: false,
 });
+
+const lines = computed(() => vector.lines ?? []);
+const combined = computed(() => vector.combineLines);
 
 const openMenu = (button_id: number) => {
   if (menu.value || states.dragValue.el) return;
@@ -127,8 +140,6 @@ const hideTooltip = () => {
   tooltip.value.handle = false;
   tooltip.value.state = false;
 };
-
-const buttons = computed(() => vector.lines ?? []);
 </script>
 
 <style lang="scss" scoped>

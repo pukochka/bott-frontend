@@ -80,13 +80,32 @@ import { historyGo } from '../../../../inline/stores/helpers';
 import { deleteQueryParam } from 'src/utils/helpers/string';
 import { useCommandsStore } from '../../../commands/stores/commandsStore';
 import { useQuasar } from 'quasar';
+import { useDialog } from '../../../../file-manager/stores/useDialog';
+import { fetchCommands } from '../../../messages/api';
+import { useVectorStore } from '../../stores/vector/vectorStore';
 
 const states = useStatesStore();
 const data = useDataStore();
 const commands = useCommandsStore();
+const vector = useVectorStore();
 const quasar = useQuasar();
 
 const sm = computed(() => quasar.screen.lt.sm);
+
+const deleteScenario = () => {
+  useDialog(
+    'Вы уверены, что хотите удалить сценарий и все сообщения связанные с ним?',
+    true
+  ).onOk(() => {
+    fetchCommands('delete', { route_id: data.scenarioValue?.id ?? 0 }).then(
+      () => {
+        deleteQueryParam('route_id');
+        commands.closeDialog('scenario');
+        window.location.reload();
+      }
+    );
+  });
+};
 
 const menuButtons = [
   {
@@ -102,6 +121,13 @@ const menuButtons = [
     icon: 'quiz',
     href: '/lk/common/premium/route/help?bot_id=' + 886,
     action: () => '',
+  },
+  {
+    label: 'Удалить',
+    color: 'red',
+    icon: 'close',
+    href: undefined,
+    action: () => deleteScenario(),
   },
 ];
 
@@ -120,6 +146,11 @@ const breadcrumbs = computed(() => [
     label: 'Сценарии и действия',
     action() {
       deleteQueryParam('route_id');
+
+      data.scenarioValue = null;
+      vector.combineLines = [];
+      vector.connections = [];
+      vector.linesValue = [];
 
       commands.closeDialog('scenario');
     },

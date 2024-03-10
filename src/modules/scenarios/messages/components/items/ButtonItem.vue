@@ -3,17 +3,20 @@
     clickable
     class="items-center justify-between no-focus-item"
     :class="{ reverse: targetReverse }"
-    @click="select">
+    @click="select"
+  >
     <div class="">
       <q-icon
         name="warning"
         color="orange"
         size="26px"
-        v-if="button.type === 6">
+        v-if="button.type === 6"
+      >
         <q-tooltip
           class="bott-tooltip text-center"
           anchor="top middle"
-          self="bottom middle">
+          self="bottom middle"
+        >
           Добавите связь / путь, чтобы кнопка была активна
         </q-tooltip>
       </q-icon>
@@ -28,13 +31,16 @@
     <button-checkbox :button="button"></button-checkbox>
 
     <q-menu
+      v-model="menu"
       anchor="bottom right"
       self="top right"
       class="rounded bott-portal-menu"
-      v-model="menu_state">
-      <button-menu-list
+    >
+      <button-menu
+        @close="menu = false"
         :message="props.message"
-        :button="props.button"></button-menu-list>
+        :button="props.button"
+      ></button-menu>
     </q-menu>
   </q-item>
 </template>
@@ -47,7 +53,7 @@ import { useDataStore } from '../../stores/data/dataStore';
 import { defaultButton, defaultMessage } from '../../stores/defaults';
 
 import ButtonCheckbox from './sections/ButtonCheckbox.vue';
-import ButtonMenuList from './sections/ButtonMenuList.vue';
+import ButtonMenu from './sections/ButtonMenu.vue';
 
 const props = withDefaults(defineProps<ButtonItemProps>(), {
   button: () => defaultButton,
@@ -57,7 +63,7 @@ const props = withDefaults(defineProps<ButtonItemProps>(), {
 const vector = useVectorStore();
 const data = useDataStore();
 
-const menu_state = ref(false);
+const menu = ref(false);
 
 const targetReverse = computed(
   () =>

@@ -34,6 +34,8 @@
 import { onMounted, ref } from 'vue';
 import { useDataStore } from '../../stores/data/dataStore';
 
+import { mdiEmoticonHappy, mdiTimer } from '@quasar/extras/mdi-v7';
+
 const props = withDefaults(defineProps<EditTypeProps>(), {
   messageType: 0,
 });
@@ -60,6 +62,8 @@ const icons = [
   'description',
   'movie',
   'gif_box',
+  mdiEmoticonHappy,
+  mdiTimer,
 ];
 
 onMounted(() => {
@@ -70,6 +74,7 @@ onMounted(() => {
 
 interface EditTypeProps {
   messageType?: number | undefined;
+  noTimer?: boolean;
 }
 </script>
 

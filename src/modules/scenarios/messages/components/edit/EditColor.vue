@@ -5,8 +5,7 @@
       :key="index"
       class="col rounded bordered q-pa-md cursor-pointer relative-position"
       :style="{ 'background-color': '#' + item.color }"
-      @click="setColor(item.id)"
-    >
+      @click="setColor(item.id)">
       <div class="absolute-center" v-if="color_id === item.id && loading">
         <q-spinner color="white" size="2em" />
       </div>
@@ -19,8 +18,7 @@
 
   <div
     @click="setColor(null)"
-    class="rounded bordered cursor-pointer text-center relative-position q-pa-xs"
-  >
+    class="rounded bordered cursor-pointer text-center relative-position q-pa-xs">
     <div class="absolute-left" v-if="!color_id && loading">
       <q-spinner color="primary" size="2em" />
     </div>
@@ -33,7 +31,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { fetchMessage } from '../../api';
 

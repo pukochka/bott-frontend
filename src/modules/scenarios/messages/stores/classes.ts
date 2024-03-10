@@ -1,6 +1,9 @@
 import { Line } from './vector/model';
 
 import { useVectorStore } from './vector/vectorStore';
+import { useBezierLine, useMove, usePolygon } from '../../utils';
+import { getRect } from '../../../../utils/helpers/dom';
+import { applyOffsets } from '../../utils/useMove';
 
 export class Dragging {
   x: number;
@@ -45,10 +48,81 @@ export class Connection {
   }
 
   applyLine(line: any) {
-    for (const [key, value] of Object.entries(line)) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.line[key] = value;
+    Object.assign(this.line, line);
+  }
+}
+
+export class CombineLine {
+  path: string;
+  polygon: string;
+  startId: string;
+  endId: string | null;
+  deleted: boolean;
+
+  _id: string;
+
+  get id() {
+    return Number(
+      this._id.includes('bottom') ? this._id.slice(14) : this._id.slice(11)
+    );
+  }
+
+  get start() {
+    return getRect(this.startId);
+  }
+
+  get end() {
+    return getRect(this.endId ?? '');
+  }
+
+  constructor(start: string, ev?: MouseEvent) {
+    this._id = start;
+    this.startId = start;
+    this.endId = null;
+    this.path = '';
+    this.polygon = '';
+    this.deleted = false;
+
+    if (ev) this.move(ev);
+  }
+
+  move(ev: MouseEvent) {
+    if (this.start) {
+      const { left, top } = this.start;
+      const start = applyOffsets(left, top);
+      const end = applyOffsets(ev.clientX, ev.clientY);
+
+      this.draw(start, end);
     }
+  }
+
+  combine(endEl?: string, offset?: number) {
+    this.endId = endEl ?? this.endId;
+
+    if (this.end && this.start && !this.deleted) {
+      const start = applyOffsets(this.start.left, this.start.top);
+      const end = applyOffsets(this.end.left, this.end.top);
+
+      end.y = end.y - (offset ?? 0);
+
+      this.draw(start, end);
+    } else {
+      this.deleted = true;
+      this.path = '';
+      this.polygon = '';
+    }
+  }
+
+  draw(start: CartesianSystem, end: CartesianSystem) {
+    this.path = useBezierLine(
+      start.x,
+      start.y,
+      end.x,
+      end.y,
+      start.x > end.x,
+      true
+    );
+
+    this.polygon = usePolygon(start.x, end.x, end.y, false, true);
   }
 }

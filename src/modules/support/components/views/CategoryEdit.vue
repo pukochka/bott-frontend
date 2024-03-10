@@ -54,7 +54,7 @@
               :bot_id="config.bot.id"
               :host="config.host"
               :message="message"
-              breadcrumbs
+              no-breadcrumbs
             ></inline-menu>
 
             <q-inner-loading

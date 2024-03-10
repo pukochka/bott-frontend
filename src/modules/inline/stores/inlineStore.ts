@@ -17,6 +17,7 @@ export const useInlineStore = defineStore('inline-store', {
       bot_id: 0,
       host: '',
       token: '',
+      scenarios: false,
 
       dialogs: {
         add_button: false,

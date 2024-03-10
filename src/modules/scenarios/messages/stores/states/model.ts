@@ -26,5 +26,6 @@ export type DialogNames =
   | 'settings_button'
   | 'connection'
   | 'action'
+  | 'timer'
   | 'color'
   | 'draggable';

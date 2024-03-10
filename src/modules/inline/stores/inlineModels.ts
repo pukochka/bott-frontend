@@ -10,6 +10,7 @@ export interface InlineStore {
   bot_id: number;
   host: string;
   token: string;
+  scenarios: boolean;
 
   dialogs: Record<DialogsNames, boolean>;
 }
@@ -54,6 +55,9 @@ export const defaultMessageFree: MessageFree = {
   videos: null,
   feedback: null,
   animations: null,
+  timer: null,
+  sticker: null,
+  nextMessage: null,
   type: {
     id: 0,
     type: 0,

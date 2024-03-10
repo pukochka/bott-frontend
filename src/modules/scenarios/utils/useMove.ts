@@ -1,4 +1,4 @@
-import { useBeizerLine, usePolygon, useMoveDirection } from './index';
+import { useBezierLine, usePolygon, useMoveDirection } from './index';
 import { useVectorStore } from '../messages/stores/vector/vectorStore';
 
 const RADIUS = 16;
@@ -13,8 +13,7 @@ export function useMove(event: MouseEvent) {
   const button = vector.buttonEl;
   const message = vector.messageEl;
 
-  const horizontal = vector.scroll.horizontal;
-  const vertical = vector.scroll.vertical;
+  const { horizontal, vertical } = vector.scroll;
 
   const start_x = (button?.left ?? 0) - left + RADIUS + horizontal;
   const start_y = (button?.top ?? 0) - top + RADIUS + vertical;
@@ -23,7 +22,7 @@ export function useMove(event: MouseEvent) {
 
   const reverse = useMoveDirection(message?.left ?? 0, end_x);
 
-  const path = useBeizerLine(start_x, start_y, end_x, end_y, reverse);
+  const path = useBezierLine(start_x, start_y, end_x, end_y, reverse);
   const polygon = usePolygon(start_x, end_x, end_y, reverse);
 
   return {
@@ -36,3 +35,16 @@ export function useMove(event: MouseEvent) {
     polygon: polygon,
   };
 }
+
+export const applyOffsets = (x: number, y: number): CartesianSystem => {
+  const vector = useVectorStore();
+
+  if (vector.parentEl) {
+    const { left, top } = vector.parentEl;
+    const { horizontal, vertical } = vector.scroll;
+
+    return { x: x + horizontal - left, y: y + vertical - top };
+  }
+
+  return { x, y };
+};

@@ -9,7 +9,9 @@
     <q-item-section>
       <q-item-label>{{ item.type?.name }}</q-item-label>
 
-      <q-item-label caption>{{ item.type?.description }}</q-item-label>
+      <q-item-label caption>
+        <div v-html="props.item?.type.description"></div>
+      </q-item-label>
     </q-item-section>
 
     <q-item-section side>

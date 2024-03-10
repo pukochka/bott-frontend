@@ -2,8 +2,10 @@ import axios from 'axios';
 import { config } from '../../config';
 
 import { useDialog } from '../../../file-manager/stores/useDialog';
+import { useVectorStore } from '../stores/vector/vectorStore';
 
 console.log();
+
 const instance = axios.create({
   baseURL: config.host,
   method: 'post',
@@ -19,9 +21,8 @@ instance.interceptors.request.use(function (request) {
 instance.interceptors.response.use(
   function (response) {
     if (!response.data.result) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const message = response.message;
+      const message = response.data.message;
+      const vector = useVectorStore();
 
       useDialog(
         message ??
@@ -29,6 +30,25 @@ instance.interceptors.response.use(
             '\n' +
             response.config.url
       );
+
+      if (
+        response.config.url?.slice(response.config.url.lastIndexOf('/') + 1) ===
+        'set-next-message'
+      ) {
+        if (vector.editCombine) {
+          vector.updateCurrentCombine();
+        } else {
+          try {
+            const { message_id } = JSON.parse(response.config.data);
+
+            vector.combineLines = vector.combineLines.filter(
+              (item) => item.id !== message_id
+            );
+          } catch (e) {
+            vector.combineLines.pop();
+          }
+        }
+      }
 
       return Promise.reject('error');
     }

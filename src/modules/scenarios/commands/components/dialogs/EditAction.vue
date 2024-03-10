@@ -46,6 +46,17 @@
           no-caps
           size="md"
           class="rounded"
+          label="Удалить"
+          color="red"
+          :loading="loading.delete"
+          @click="deleteAction"
+        />
+
+        <q-btn
+          flat
+          no-caps
+          size="md"
+          class="rounded"
           label="Закрыть"
           color="primary"
           v-close-popup
@@ -58,9 +69,9 @@
           class="rounded"
           label="Сохранить"
           color="primary"
-          :loading="loading"
+          :loading="loading.update"
           :disable="required"
-          @click="editRoute"
+          @click="updateRoute"
         />
       </q-card-section>
     </q-card>
@@ -74,6 +85,7 @@ import { computed, ref } from 'vue';
 import { fetchCommands } from '../../api/command';
 
 import { useCommandsStore } from '../../stores/commandsStore';
+import { useDialog } from '../../../../file-manager/stores/useDialog';
 
 import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
@@ -81,7 +93,10 @@ import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 const commands = useCommandsStore();
 
 const route = ref<string | null>(null);
-const loading = ref(false);
+const loading = ref({
+  update: false,
+  delete: false,
+});
 const text = ref({
   value: '',
   max: 64,
@@ -102,8 +117,8 @@ function registerRoute(value: string | null) {
   route.value = value;
 }
 
-const editRoute = () => {
-  loading.value = true;
+const updateRoute = () => {
+  loading.value.update = true;
 
   fetchCommands(
     'update-route',
@@ -117,13 +132,32 @@ const editRoute = () => {
       commands.selectedCommand.label = response.data.data?.label ?? '';
     }
   ).then(() => {
-    loading.value = false;
+    loading.value.update = false;
     commands.closeDialog('edit_action');
   });
 };
 
+const deleteAction = () => {
+  loading.value.delete = true;
+
+  useDialog('Вы уверены что хотите удалить дейстие?', true).onOk(() => {
+    fetchCommands(
+      'delete',
+      { route_id: commands.selectedCommand?.id ?? 0 },
+      () => {
+        commands.commands = commands.commands.filter(
+          (item) => item.id !== commands.selectedCommand?.id
+        );
+      }
+    ).then(() => {
+      loading.value.delete = false;
+      commands.closeDialog('edit_action');
+    });
+  });
+};
+
 const enterDown = (evt: KeyboardEvent) => {
-  if (evt.key === 'Enter' && route.value !== null) editRoute();
+  if (evt.key === 'Enter' && route.value !== null) updateRoute();
 };
 
 const update = () => {

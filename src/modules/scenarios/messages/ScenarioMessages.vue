@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute-full q-ma-none bg-grey-2">
+  <div class="absolute-full q-ma-none bg-grey-2" style="padding-left: 60px">
     <div class="col relative-position">
       <scenario-header></scenario-header>
 
@@ -8,10 +8,10 @@
       <div class="relative-position ellipsis" id="container">
         <q-scroll-area
           visible
+          style="height: calc(100vh - 111px); width: 100%"
           id="drag-copy-element"
           class="relative-position"
           :thumb-style="thumbStyle"
-          style="height: calc(100vh - 111px); width: 100%"
           @scroll="vector.updateScroll"
         >
           <div :style="{ minHeight: '890px', minWidth: '1325px' }">

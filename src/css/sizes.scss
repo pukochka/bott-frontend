@@ -211,6 +211,30 @@ body.body--dark {
   stroke: rgb(199, 199, 199);
   cursor: pointer;
 }
+.timer-line {
+  cursor: pointer;
+  stroke: $primary;
+}
+.timer-arrow {
+  cursor: pointer;
+  stroke: $primary;
+  fill: $primary;
+}
+.timer-arrow:hover{
+  stroke: $secondary;
+  fill: $secondary;
+}
+.timer-arrow:hover + .timer-line{
+  stroke: $secondary;
+}
+.timer-line:hover{
+  stroke: $secondary;
+}
+.timer-line:hover + .timer-arrow{
+  stroke: $secondary;
+  fill: $secondary;
+}
+
 .line.active {
   stroke: rgb(255, 179, 0);
 }
@@ -223,17 +247,15 @@ body.body--dark {
   fill: rgb(199, 199, 199);
   cursor: pointer;
 }
-.gpath {
-  &:hover .line {
-    stroke: rgb(255, 179, 0);
-  }
+
+
+.line:hover  {
+  stroke: rgb(255, 179, 0);
 }
-.gpath {
-  &:hover .arrow {
-    stroke: rgb(255, 179, 0);
-    fill: rgb(255, 179, 0);
-  }
-  &:hover .trash-icon {
-    visibility: visible;
-  }
+.line:hover + .arrow{
+  stroke: rgb(255, 179, 0);
+  fill: rgb(255, 179, 0);
+}
+.arrow:hover + .line{
+  stroke: rgb(255, 179, 0);
 }

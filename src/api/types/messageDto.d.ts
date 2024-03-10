@@ -1,3 +1,4 @@
+/** Сущность свободного сообщения */
 declare interface MessageFree {
   id: number;
   title: string;
@@ -9,6 +10,8 @@ declare interface MessageFree {
   videos: MessageVideo | null;
   feedback: MessageFeedback<MessageFeedbackItem> | null;
   animations: MessageVideo | null;
+  timer: MessageTimer | null;
+  sticker: MessageSticker | null;
 
   type: MessageType;
   color: MessageColor | null;
@@ -24,12 +27,13 @@ declare interface MessageFree {
   is_duplicate: boolean;
   is_test: boolean;
 
+  nextMessage: MessageFree | null;
   breadcrumbs: { crumbs: Array<{ label: string; link: string }> };
   support_types: Record<string, MessageType>;
   constants: Record<string, string>;
   constantAnswers: Record<string, string>;
-  faq: MessageFaqDto;
   frontendMenu: Array<MessageFrontendMenuButton>;
+  faq: MessageFaqDto;
 }
 
 /** Спец Тип сообщения, ипользуется если сообщение не свободное и используется в какой-то логике */
@@ -81,6 +85,21 @@ declare interface MessageVideo extends MessageFreeMedia {
   is_protect_content: boolean | null;
   is_spoiler: boolean | null;
   is_disable_notification: boolean | null;
+}
+
+declare interface MessageSticker {
+  /** */
+  id: number;
+  /** Уведомление о сообщении null - не указано 1 - уведомление выключено 0 - уведомление включено */
+  is_disable_notification: number | null;
+  /** Запрет пересылки сообщение null - не указано 1 - запрещено 0 - разрешено */
+  is_protect_content: number | null;
+}
+
+/** Дейсвтие, относится к свбодным сообщениям. Устанавливает задержку отправки nextMessage */
+declare interface MessageTimer {
+  /** */
+  id: number;
 }
 
 declare interface MessageFaqDto {

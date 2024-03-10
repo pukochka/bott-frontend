@@ -4,7 +4,7 @@ import {
   useDirection,
 } from './useDirection';
 
-import { isEnterColumn, useBeizerLine, usePolygon } from './figures';
+import { isEnterColumn, useBezierLine, usePolygon } from './figures';
 
 import { useRect } from './useRect';
 import { usePosition } from './usePosition';
@@ -48,7 +48,7 @@ export function useConnect(message_id: number, button_id: number) {
     button.x += REVERSE_BUTTON;
   }
 
-  const path = useBeizerLine(button.x, button.y, message.x, message.y, reverse);
+  const path = useBezierLine(button.x, button.y, message.x, message.y, reverse);
   const polygon = usePolygon(button.x, message.x, message.y, reverse);
 
   return {

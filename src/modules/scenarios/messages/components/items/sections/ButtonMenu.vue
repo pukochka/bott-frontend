@@ -3,25 +3,25 @@
     <q-item
       dense
       clickable
-      v-close-popup
+      v-close-popup="button.close"
       class="row items-center"
       v-show="button.condition"
       v-for="(button, index) in menuButtons"
       :key="index"
-      @click="button.action">
+      @click="button.action"
+    >
       <q-icon :name="button.icon" :color="button.color" size="22px" />
 
       <div
         class="text-center q-ml-md flex-grow transition"
-        :class="[button.loading ? ' text-transparent' : '']">
+        :class="[button.loading ? ' text-transparent' : '']"
+      >
         {{ button.label }}
       </div>
 
-      <transition name="fade">
-        <div class="absolute-full flex flex-center" v-if="button.loading">
-          <q-spinner color="primary" size="22px" />
-        </div>
-      </transition>
+      <q-inner-loading :showing="button.loading">
+        <q-spinner size="20px" color="primary" />
+      </q-inner-loading>
     </q-item>
   </q-list>
 </template>
@@ -41,6 +41,10 @@ const props = withDefaults(defineProps<ButtonMenuListProps>(), {
   message: () => defaultMessage,
 });
 
+const emit = defineEmits<{
+  (e: 'close'): void;
+}>();
+
 const vector = useVectorStore();
 const states = useStatesStore();
 const data = useDataStore();
@@ -55,22 +59,22 @@ const select = () => {
   data.selectedMessage = props.message;
 };
 
-const startLine = (e: MouseEvent) => {
-  vector.startMove(e, props.message.id, props.button.id);
-
+const startLine = (ev: MouseEvent) => {
   select();
+  vector.startMove(ev, props.message.id, props.button.id);
 };
 
 const deleteButton = () => {
   loading.value.delete = true;
-  const message = data.selectedMessage;
+  const message = data.selectedMessage || defaultMessage;
 
   fetchButtons('delete-button', { id: props.button.id }, (response) => {
-    message!.menu = response.data.data;
+    message.menu = response.data.data;
 
     vector.deleteConnection('button_id', props.button.id);
-    setTimeout(vector.updateConnections, 10);
+    setTimeout(vector.update, 10);
   }).then(() => {
+    emit('close');
     loading.value.delete = false;
   });
 };
@@ -90,9 +94,10 @@ const disableButton = () => {
       data.scenarioValue = response.data.data;
 
       vector.deleteConnection('button_id', props.button.id);
-      setTimeout(vector.updateConnections, 10);
+      setTimeout(vector.update, 10);
     }
   ).then(() => {
+    emit('close');
     loading.value.disable = false;
   });
 };
@@ -103,6 +108,7 @@ const menuButtons = computed(() => [
     icon: 'edit',
     color: 'primary',
     loading: false,
+    close: true,
     condition: true,
     action: () => states.openDialog('edit_button'),
   },
@@ -111,6 +117,7 @@ const menuButtons = computed(() => [
     icon: 'lan',
     color: 'primary',
     loading: false,
+    close: true,
     condition: props.button?.type === 6,
     action(e: any) {
       startLine(e);
@@ -121,8 +128,15 @@ const menuButtons = computed(() => [
     icon: 'lan',
     color: 'primary',
     loading: false,
+    close: true,
     condition: props.button?.type === 5,
     action(e: any) {
+      const line = vector.linesValue.find(
+        (item) => item.button_id === props.button.id
+      );
+
+      vector.editConnection = line ? [line.message_id, line.button_id] : null;
+
       startLine(e);
     },
   },
@@ -130,6 +144,7 @@ const menuButtons = computed(() => [
     label: 'Сделать неактивной',
     icon: 'close',
     color: 'orange',
+    close: false,
     loading: loading.value.disable,
     condition: props.button?.type !== 6,
     action: () => disableButton(),
@@ -138,6 +153,7 @@ const menuButtons = computed(() => [
     label: 'Удалить',
     icon: 'delete',
     color: 'red',
+    close: false,
     loading: loading.value.delete,
     condition: true,
     action: () => deleteButton(),

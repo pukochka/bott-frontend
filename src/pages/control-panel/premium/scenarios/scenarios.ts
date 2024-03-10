@@ -5,5 +5,6 @@ export default {
   title: t('actions-scenarios'),
   requiredParams: [],
 
+  withoutFooter: true,
   drawer: menu,
 };

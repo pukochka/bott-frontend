@@ -7,6 +7,7 @@
       class="bott-tooltip text-center"
       anchor="top middle"
       self="bottom middle"
+      v-if="props.tooltip"
     >
       {{ props.tooltip }}
     </q-tooltip>

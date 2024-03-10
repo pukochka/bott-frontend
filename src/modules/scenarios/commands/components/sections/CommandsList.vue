@@ -50,7 +50,9 @@
     <transition name="q-transition--fade">
       <div
         class="absolute-full flex flex-center"
-        v-if="commands.commands?.length && !filtered.length && !commands.loading ">
+        v-if="
+          commands.commands?.length && !filtered.length && !commands.loading
+        ">
         <div class="column items-center">
           <q-icon name="search" color="primary" size="32px" />
 
@@ -79,6 +81,7 @@ const tab = ref('all');
 
 const filtered = computed(() =>
   commands.commands
+    .filter(Boolean)
     .filter((command) =>
       tab.value === 'scenarios'
         ? command.is_column

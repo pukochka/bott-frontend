@@ -95,7 +95,7 @@ const text = ref({
     return (
       this.max >= this.value.length &&
       this.min <= this.value.length &&
-      commands.commands.filter((item) => item.label === text.value.value)
+      commands.commands.filter((item) => item?.label === text.value.value)
         .length === 0
     );
   },
