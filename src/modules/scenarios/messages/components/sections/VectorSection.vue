@@ -7,7 +7,7 @@
       @mouseenter="showTooltip"
       @mouseleave="hideTooltip"
       @mouseout="hideTooltip"
-      @click="openMenu(line.button_id)"
+      @click="openConnectionMenu(line.button_id)"
     >
       <path
         class="line"
@@ -19,7 +19,12 @@
       <polygon class="arrow" :points="line.line?.polygon" stroke-width="1" />
     </g>
 
-    <g class="gpath" v-for="line of vector.combineLines" :key="line.id">
+    <g
+      class="gpath"
+      v-for="line of vector.combineLines"
+      :key="line.id"
+      @click="openCombineMenu(line.id)"
+    >
       <path
         class="timer-line"
         stroke-width="1.6"
@@ -32,13 +37,17 @@
   </svg>
 
   <q-menu
-    v-model="menu"
-    touch-position
-    @before-show="showUpdate"
-    @before-hide="hideUpdate"
     class="bott-portal-menu"
+    touch-position
+    max-width="220px"
+    v-model="menu"
+    @before-show="showUpdate"
+    @before-hide="click = false"
   >
+    <timer-menu @close="menu = false" v-if="combine"></timer-menu>
+
     <button-menu
+      v-else
       @close="menu = false"
       :button="data.selectedButton"
       :message="data.selectedMessage"
@@ -58,13 +67,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 import { useVectorStore } from '../../stores/vector/vectorStore';
 import { useDataStore } from '../../stores/data/dataStore';
 import { useStatesStore } from '../../stores/states/statesStore';
 
 import ButtonMenu from '../items/sections/ButtonMenu.vue';
+import TimerMenu from '../items/sections/TimerMenu.vue';
 
 const vector = useVectorStore();
 const data = useDataStore();
@@ -72,6 +82,7 @@ const states = useStatesStore();
 
 const menu = ref(false);
 const click = ref(false);
+const combine = ref(false);
 const tooltip = ref({
   x: 0,
   y: 0,
@@ -79,10 +90,22 @@ const tooltip = ref({
   handle: false,
 });
 
-const lines = computed(() => vector.lines ?? []);
-const combined = computed(() => vector.combineLines);
+const openCombineMenu = (message_id: number) => {
+  if (menu.value || states.dragValue.el) return;
 
-const openMenu = (button_id: number) => {
+  const messages =
+    data.scenarioValue?.columns.map((column) => column.messages).flat() ?? [];
+
+  data.selectedMessage =
+    messages.find((item) => item.id === message_id) || null;
+
+  if (data.selectedMessage) {
+    click.value = true;
+    combine.value = true;
+  }
+};
+
+const openConnectionMenu = (button_id: number) => {
   if (menu.value || states.dragValue.el) return;
 
   const messages =
@@ -108,17 +131,14 @@ const openMenu = (button_id: number) => {
       .flat()
       .find((button) => button.id === button_id) ?? null;
 
-  if (!data.selectedButton || !data.selectedMessage) return;
-
-  click.value = true;
+  if (data.selectedButton || data.selectedMessage) {
+    click.value = true;
+    combine.value = false;
+  }
 };
 
 const showUpdate = () => {
   if (!click.value) menu.value = false;
-};
-
-const hideUpdate = () => {
-  click.value = false;
 };
 
 const showTooltip = async (e: MouseEvent) => {

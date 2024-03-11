@@ -76,6 +76,8 @@
             size="md"
             label="Сохранить"
             color="primary"
+            :loading="loading"
+            @click="updateTimerMessage"
           />
         </q-card-section>
       </q-card>
@@ -91,9 +93,9 @@ import { useStatesStore } from '../../stores/states/statesStore';
 import { useDataStore } from '../../stores/data/dataStore';
 
 import { parseTimestamp } from 'src/utils/helpers/time';
+import { fetchMessage } from '../../api';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
-import ConstantsSection from '../../../../inline/components/settings/ConstantsSection.vue';
 import FaqSection from '../../../../inline/components/settings/FaqSection.vue';
 import TimeSlider from '../items/sections/TimeSlider.vue';
 
@@ -102,6 +104,7 @@ const messages = useDataStore();
 
 const time = ref(1);
 const updated = ref(false);
+const loading = ref(false);
 
 const formatted = computed(() => parseTimestamp(time.value, true));
 
@@ -118,6 +121,23 @@ const updateTime = (value: number) => {
   updated.value = true;
 
   time.value = value;
+};
+
+const updateTimerMessage = () => {
+  loading.value = true;
+  const timerValue = time.value.toString();
+  const message = messages.selectedMessage || defaultMessage;
+
+  fetchMessage(
+    'update-text',
+    { message_id: selected.value.id, text: timerValue },
+    () => {
+      message.text = timerValue;
+    }
+  ).then(() => {
+    loading.value = false;
+    states.closeDialog('timer');
+  });
 };
 
 const updateShow = () => {

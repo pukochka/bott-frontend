@@ -55,16 +55,20 @@ import { fetchCommands } from './api';
 
 import { useStatesStore } from './stores/states/statesStore';
 import { useVectorStore } from './stores/vector/vectorStore';
-import { getQueryParam } from 'src/utils/helpers/string';
+import { getQueryParam, has } from 'src/utils/helpers/string';
 
 import ScenarioEditor from './components/sections/ScenarioEditor.vue';
 import ScenarioHeader from './components/sections/ScenarioHeader.vue';
 
 import VectorSection from './components/sections/VectorSection.vue';
 import MessageItem from './components/items/MessageItem.vue';
+import { useDataStore } from './stores/data/dataStore';
+import { useCommandsStore } from '../commands/stores/commandsStore';
 
 const states = useStatesStore();
 const vector = useVectorStore();
+const data = useDataStore();
+const commands = useCommandsStore();
 
 const thumbStyle = {
   width: '8px',
@@ -88,6 +92,16 @@ onUnmounted(() => {
   states.initialization.data = false;
   states.initialization.lines = false;
 });
+
+window.onpopstate = () => {
+  if (!has('route_id')) {
+    commands.dialogs.scenario = false;
+    data.scenarioValue = null;
+    vector.connections = [];
+    vector.combineLines = [];
+    vector.linesValue = [];
+  }
+};
 </script>
 
 <style lang="scss" scoped></style>

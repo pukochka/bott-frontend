@@ -1,7 +1,7 @@
 import { Line } from './vector/model';
 
 import { useVectorStore } from './vector/vectorStore';
-import { useBezierLine, useMove, usePolygon } from '../../utils';
+import { useBezierLine, usePolygon } from '../../utils';
 import { getRect } from '../../../../utils/helpers/dom';
 import { applyOffsets } from '../../utils/useMove';
 
@@ -62,9 +62,7 @@ export class CombineLine {
   _id: string;
 
   get id() {
-    return Number(
-      this._id.includes('bottom') ? this._id.slice(14) : this._id.slice(11)
-    );
+    return Number(this._id.slice(14));
   }
 
   get start() {

@@ -6,7 +6,7 @@
       v-close-popup="button.close"
       class="row items-center"
       v-show="button.condition"
-      v-for="(button, index) in menuButtons"
+      v-for="(button, index) in buttons"
       :key="index"
       @click="button.action"
     >
@@ -59,19 +59,19 @@ const select = () => {
   data.selectedMessage = props.message;
 };
 
-const startLine = (ev: MouseEvent) => {
+const start = (ev: MouseEvent) => {
   select();
-  vector.startMove(ev, props.message.id, props.button.id);
+  vector.startMove(ev, props.message?.id || 0, props.button?.id || 0);
 };
 
 const deleteButton = () => {
   loading.value.delete = true;
   const message = data.selectedMessage || defaultMessage;
 
-  fetchButtons('delete-button', { id: props.button.id }, (response) => {
+  fetchButtons('delete-button', { id: props.button?.id || 0 }, (response) => {
     message.menu = response.data.data;
 
-    vector.deleteConnection('button_id', props.button.id);
+    vector.deleteConnection('button_id', props.button?.id || 0);
     setTimeout(vector.update, 10);
   }).then(() => {
     emit('close');
@@ -85,15 +85,15 @@ const disableButton = () => {
   fetchButtons(
     'update-data-and-type',
     {
-      id: props.button.id,
+      id: props.button?.id || 0,
       action: 'free',
       type: 6,
-      text: props.button.text,
+      text: props.button?.text || '',
     },
     (response) => {
       data.scenarioValue = response.data.data;
 
-      vector.deleteConnection('button_id', props.button.id);
+      vector.deleteConnection('button_id', props.button?.id || 0);
       setTimeout(vector.update, 10);
     }
   ).then(() => {
@@ -102,7 +102,7 @@ const disableButton = () => {
   });
 };
 
-const menuButtons = computed(() => [
+const buttons = computed(() => [
   {
     label: 'Изменить кнопку',
     icon: 'edit',
@@ -120,7 +120,7 @@ const menuButtons = computed(() => [
     close: true,
     condition: props.button?.type === 6,
     action(e: any) {
-      startLine(e);
+      start(e);
     },
   },
   {
@@ -132,12 +132,12 @@ const menuButtons = computed(() => [
     condition: props.button?.type === 5,
     action(e: any) {
       const line = vector.linesValue.find(
-        (item) => item.button_id === props.button.id
+        (item) => item.button_id === props.button?.id
       );
 
       vector.editConnection = line ? [line.message_id, line.button_id] : null;
 
-      startLine(e);
+      start(e);
     },
   },
   {
@@ -147,7 +147,7 @@ const menuButtons = computed(() => [
     close: false,
     loading: loading.value.disable,
     condition: props.button?.type !== 6,
-    action: () => disableButton(),
+    action: disableButton,
   },
   {
     label: 'Удалить',
@@ -156,13 +156,13 @@ const menuButtons = computed(() => [
     close: false,
     loading: loading.value.delete,
     condition: true,
-    action: () => deleteButton(),
+    action: deleteButton,
   },
 ]);
 
 interface ButtonMenuListProps {
-  message: MessageFree;
-  button: IMButton;
+  message: MessageFree | null;
+  button: IMButton | null;
 }
 </script>
 

@@ -24,7 +24,6 @@ export const useDataStore = defineStore('data', {
         .flat(),
   },
   actions: {
-    /** */
     updateActive() {
       (this.scenarioValue?.columns ?? [])
         .map((column) => column.messages)
