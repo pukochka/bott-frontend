@@ -3,17 +3,16 @@
     clickable
     class="non-selectable"
     :disable="button.disable"
-    :class="['text-' + button.color]"
     @click="button.action"
   >
     <q-item-section avatar>
-      <q-icon :name="button.icon" size="26px" />
+      <q-icon :name="button.icon" :color="button.color" size="22px" />
     </q-item-section>
 
     <q-item-section>{{ button.label }}</q-item-section>
 
     <q-item-section side v-if="button.sortable">
-      <q-icon :name="icon" color="primary" size="26px" />
+      <q-icon :name="icon" color="primary" size="22px" />
     </q-item-section>
   </q-item>
 </template>

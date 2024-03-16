@@ -1,7 +1,5 @@
 <template>
-  <q-scroll-area
-    style="max-height: calc(100vh / 2); height: calc(100vh / 2); width: 100%"
-  >
+  <q-scroll-area style="height: calc(100vh / 2); width: 100%" class="q-pa-sm">
     <div
       class="relative-position rounded overflow-hidden"
       :class="[sortBy ? ' q-pb-md' : '']"

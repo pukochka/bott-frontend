@@ -19,12 +19,18 @@
       </div>
     </div>
 
-    <div
-      style="max-height: 200px"
-      v-if="video.length"
-      class="rounded overflow-hidden"
-    >
-      <q-video loading="lazy" :src="video"></q-video>
+    <div class="row" v-if="video.length">
+      <q-btn
+        flat
+        no-caps
+        padding="4px"
+        class="rounded col"
+        size="13px"
+        color="red"
+        :href="video"
+        :icon="mdiYoutube"
+        label="Видео на YouTube"
+      />
     </div>
   </q-card>
 </template>
@@ -33,6 +39,7 @@
 import { computed } from 'vue';
 
 import PanelHeader from '../PanelHeader.vue';
+import { mdiYoutube } from '@quasar/extras/mdi-v7';
 
 const props = withDefaults(defineProps<FaqSectionProps>(), {
   faq: () => ({

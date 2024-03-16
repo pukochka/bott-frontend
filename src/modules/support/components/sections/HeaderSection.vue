@@ -1,129 +1,213 @@
 <template>
-  <div class="col-12 q-px-md">
-    <div class="" v-if="md">
-      <div class="row no-wrap q-pb-xs q-col-gutter-x-sm bott-btn__outline">
-        <div class="col-10">
-          <q-btn
-            outline
-            no-wrap
-            no-caps
-            size="md"
-            color="primary"
-            :label="support.selectedCategory?.title ?? 'Выбрать категорию'"
-            class="rounded fit"
-            @click="support.openDialog('select_category')"
-          />
-        </div>
-
-        <div class="col-2">
-          <q-btn
-            outline
-            no-wrap
-            no-caps
-            size="md"
-            color="primary"
-            icon="add"
-            class="rounded fit"
-            @click="createCategory"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="row items-center" v-else>
-      <q-separator vertical class="q-my-xs" />
-
-      <q-scroll-area
-        visible
-        style="height: 32px"
-        class="col"
-        :thumb-style="thumbStyle"
-      >
-        <div class="row no-wrap">
-          <div
-            class="row items-center no-wrap rounded-top overflow-hidden transition"
-            v-for="category of support.categories"
-            :key="category.id"
-            style="max-width: 170px; min-width: 170px"
-            :class="[
-              support.selectedCategory?.id === category.id
-                ? ' bg-primary text-white'
-                : '',
-            ]"
+  <div class="row no-wrap overflow-hidden rounded-top">
+    <q-btn
+      flat
+      size="md"
+      color="primary"
+      :icon="mdiMenu"
+      padding="8px 32px"
+      :disable="support.selectedCategory === null"
+    >
+      <q-menu class="bott-portal-menu" max-width="250px">
+        <q-list dense separator>
+          <q-item
+            clickable
+            v-for="(button, index) in buttons"
+            :key="index"
+            v-show="button.condition"
+            @click="button.action"
           >
-            <q-btn
-              flat
-              no-caps
-              no-wrap
-              square
-              class="fit"
-              padding="4px 12px"
-              @click="support.selectCategory(category)"
-            >
-              <div class="text-weight-bold ellipsis">{{ category.title }}</div>
-            </q-btn>
+            <q-item-section avatar>
+              <q-icon :name="button.icon" :color="button.color" size="22px" />
+            </q-item-section>
 
-            <q-separator vertical class="q-my-xs" />
-          </div>
-        </div>
-      </q-scroll-area>
+            <q-item-section>
+              <q-item-label>{{ button.label }}</q-item-label>
+            </q-item-section>
+          </q-item>
 
-      <q-btn
-        flat
-        icon="add"
-        color="primary"
-        padding="4px"
-        class="rounded q-ml-sm"
-        @click="createCategory"
+          <q-inner-loading :showing="loading">
+            <q-spinner size="50px" color="primary" />
+          </q-inner-loading>
+        </q-list>
+      </q-menu>
+    </q-btn>
+
+    <q-btn
+      flat
+      square
+      size="16px"
+      color="primary"
+      icon="chevron_left"
+      padding="8px 32px"
+      @click="support.closeChat"
+      v-if="sm && support.selectedTicket"
+    >
+    </q-btn>
+
+    <q-tabs
+      dense
+      shrink
+      class="non-selectable"
+      active-color="primary"
+      v-model="support.category"
+    >
+      <q-tab
+        no-caps
+        v-for="category in support.categories"
+        :key="category.id"
+        :name="category.id"
+        @click="support.selectCategory(category)"
       >
-        <q-tooltip
-          class="bott-tooltip text-center"
-          anchor="top middle"
-          self="bottom middle"
-        >
-          Добавить категорию
-        </q-tooltip>
-      </q-btn>
-    </div>
+        <div>{{ category.title }}</div>
+      </q-tab>
+    </q-tabs>
   </div>
 </template>
 
 <script setup lang="ts">
+import { config } from '../../config';
+import { computed, ref } from 'vue';
+
+import { useDialog } from '../../../file-manager/stores/useDialog';
+import { fetchSupportCategory, fetchSupportTicket } from '../../api/queries';
+
 import { useSupportStore } from '../../stores/supportStore';
 import { useQuasar } from 'quasar';
-import { computed } from 'vue';
-import { fetchSupportTicket } from '../../api/queries';
+import {
+  mdiAccountTie,
+  mdiBriefcaseArrowUpDown,
+  mdiEyeOutline,
+  mdiMenu,
+  mdiTagCheck,
+} from '@quasar/extras/mdi-v7';
 
 const support = useSupportStore();
 const quasar = useQuasar();
 
-const md = computed(() => quasar.screen.lt.md);
+const loading = ref(false);
 
-const createCategory = () => {
-  support.selectedCategory = null;
-  support.section = 'create';
+const sm = computed(() => quasar.screen.lt.sm);
+
+const deleteCategory = () => {
+  if (support.selectedCategory?.default === 1) return;
+
+  useDialog(
+    `Вы уверены, что хотите удалить категорию <span class="text-primary">
+${support.selectedCategory?.title ?? ''}
+</span>?`,
+    true
+  ).onOk(() => {
+    loading.value = true;
+
+    fetchSupportCategory(
+      'delete',
+      {
+        category_id: support.selectedCategory?.id ?? -1,
+      },
+      (response) => {
+        support.selectedCategory = null;
+        support.tickets = [];
+        support.categories = response;
+      }
+    ).then(() => (loading.value = false));
+  });
 };
 
-const color = [
-  '#c1121f',
-  '#fca311',
-  '#588157',
-  '#a98467',
-  '#7209b7',
-  '#619b8a',
-  '#f9844a',
-  '#6d597a',
-  '#ffc9b9',
-  '#4c956c',
-  '#4c8fa2',
-  '#dff71d',
-];
+const massOffer = () => {
+  useDialog(
+    'Вы уверены, что хотите предложить закрыть все октрытые тикеты ' +
+      `<span class='text-primary'>${
+        support.selectedCategory?.title ?? ''
+      }</span>?`,
+    true
+  ).onOk(() => {
+    loading.value = true;
 
-const thumbStyle = {
-  height: '4px',
-  margin: '2px',
-  background: 'var(--q-primary)',
+    fetchSupportTicket('mass-offer', {
+      implementer_id: config.user_id,
+      category_id: support.selectedCategory?.id ?? -1,
+    }).then(() => {
+      loading.value = false;
+    });
+  });
 };
+
+const changeStatus = () => {
+  loading.value = true;
+  fetchSupportCategory(
+    'change-status',
+    {
+      category_id: support.selectedCategory?.id ?? -1,
+    },
+    () => {
+      if (support.selectedCategory) {
+        loading.value = false;
+        const status = support.selectedCategory.status;
+        support.selectedCategory.status = status === 1 ? 0 : 1;
+      }
+    }
+  );
+};
+
+const buttons = computed(() => [
+  {
+    label: 'Добавить категорию',
+    icon: 'add',
+    action: () => support.openDialog('category_add'),
+    color: 'primary',
+    condition: true,
+  },
+  {
+    label: 'Исполнители категории',
+    icon: mdiAccountTie,
+    action: () => support.openDialog('category_implementers'),
+    color: 'accent',
+    condition: true,
+  },
+  {
+    label: 'Лог категории',
+    icon: mdiEyeOutline,
+    action: () => support.openDialog('category_log'),
+    color: 'orange',
+    condition: true,
+  },
+  {
+    label: 'Редактирование категории',
+    icon: 'edit',
+    action: () => support.openDialog('category_edit'),
+    color: 'secondary',
+    condition: true,
+  },
+  {
+    label: 'Изменить статус категории',
+    icon: 'circle',
+    action: changeStatus,
+    color: support.selectedCategory?.status === 1 ? 'positive' : 'negative',
+    condition: true,
+  },
+  {
+    label: 'Перенос незакрытых тикетов на другого исполнителя',
+    action: () => support.openDialog('select_implementer'),
+    color: 'info',
+    icon: mdiBriefcaseArrowUpDown,
+    condition: true,
+  },
+  {
+    label: 'Предложить закрыть все открытые тикеты',
+    action: massOffer,
+    color: 'warning',
+    icon: mdiTagCheck,
+    condition: true,
+  },
+  {
+    label: 'Удалить категорию',
+    action: deleteCategory,
+    color: 'red',
+    icon: 'close',
+    condition: support.selectedCategory?.default === 0,
+  },
+]);
 </script>
 
 <style scoped lang="scss">

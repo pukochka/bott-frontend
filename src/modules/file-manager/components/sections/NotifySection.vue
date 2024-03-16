@@ -3,8 +3,7 @@
     <transition name="q-transition--fade">
       <div
         class="q-pa-xl flex flex-center absolute-full"
-        v-if="notify.condition"
-      >
+        v-if="notify.condition">
         <div class="column items-center q-gutter-y-sm">
           <q-icon :name="notify.icon" color="primary" size="32px" />
 
@@ -18,8 +17,7 @@
             class="rounded"
             color="primary"
             label="Очистить фильтр"
-            @click="disableFilter"
-          />
+            @click="disableFilter" />
         </div>
       </div>
     </transition>

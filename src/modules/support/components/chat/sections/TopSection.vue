@@ -1,7 +1,30 @@
 <template>
-  <q-card flat square class="card-border__bottom bott-page__background">
-    <div class="row justify-between items-center no-wrap relative-position">
-      <q-btn flat square color="primary" icon="more_vert" v-if="md">
+  <div class="bott-page__background" id="support-chat-card">
+    <div class="row items-center no-wrap relative-position">
+      <div class="q-px-sm ellipsis">
+        <div class="ellipsis q-gutter-x-sm text-color--grey">
+          <span class="text-weight-bold">
+            {{ support.selectedTicket?.user?.first_name }}
+            {{ support.selectedTicket?.user?.last_name }}
+          </span>
+
+          <span
+            v-clickable
+            v-html="support.selectedTicket?.user?.link"
+            class="text-primary cursor-pointer rounded"
+            @click="copyToClipboard(support.selectedTicket?.user?.link ?? '')"
+          >
+          </span>
+        </div>
+
+        <div class="text-caption text-grey ellipsis">
+          {{ support.selectedTicket?.title }}
+        </div>
+      </div>
+
+      <q-space></q-space>
+
+      <q-btn flat square color="primary" icon="more_vert" v-if="md || splitter">
         <q-menu class="bott-portal-menu">
           <q-list dense>
             <q-item
@@ -26,7 +49,7 @@
         </q-menu>
       </q-btn>
 
-      <div class="row" v-else>
+      <div class="row no-wrap" v-else>
         <q-btn
           flat
           square
@@ -49,48 +72,32 @@
         </q-btn>
       </div>
 
-      <div class="text-h6 text-weight-bold ellipsis">
-        {{ support.selectedTicket?.title ?? '' }}
-      </div>
-
-      <div class="row no-wrap">
-        <q-btn
-          padding="8px 22px"
-          square
-          flat
-          size="md"
-          color="primary"
-          icon="info"
-          v-if="md"
-          @click="toggleDrawer"
-        />
-
-        <q-btn
-          padding="8px 22px"
-          square
-          flat
-          size="md"
-          color="primary"
-          icon="close"
-          @click="support.closeChat"
-        />
-      </div>
+      <q-btn
+        padding="8px 22px"
+        square
+        flat
+        size="md"
+        color="primary"
+        icon="info"
+        @click="toggleDrawer"
+      />
     </div>
-  </q-card>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import { ticketMenu, TicketMenuNames } from '../../../utils/ticket-menu';
 
 import { useSupportStore } from '../../../stores/supportStore';
-import { useQuasar } from 'quasar';
+import { copyToClipboard, useQuasar } from 'quasar';
 
 const support = useSupportStore();
 const quasar = useQuasar();
 
 const md = computed(() => quasar.screen.lt.md);
+const splitter = computed(() => support.rightSplitterPanel < 250);
 
 const loading = ref({
   offer: false,
@@ -106,8 +113,7 @@ const buttons = computed(() =>
 );
 
 const toggleDrawer = () => {
-  support.drawer.mini = false;
-  support.drawer.state = !support.drawer.state;
+  support.drawer = !support.drawer;
 };
 
 const pickTicket = () => {
@@ -144,6 +150,10 @@ const closeTicket = () => {
     () => (loading.value.close = false)
   );
 };
+
+onMounted(() => {
+  support.updateChatActionButtons(50);
+});
 
 const actions = computed(
   (): Record<TicketMenuNames, any> => ({
@@ -186,13 +196,4 @@ const actions = computed(
 );
 </script>
 
-<style scoped lang="scss">
-.card-border__bottom {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-body.body--dark {
-  .card-border__bottom {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.28);
-  }
-}
-</style>
+<style scoped lang="scss"></style>

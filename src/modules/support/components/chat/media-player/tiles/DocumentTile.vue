@@ -25,15 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import { config } from '../../../config';
+import { config } from '../../../../config';
 import { computed, onBeforeMount, ref } from 'vue';
 
-import { defaultMessage } from '../../../../scenarios/messages/stores/defaults';
-import { TG_API } from '../../../utils/common';
+import { defaultMessage } from '../../../../../scenarios/messages/stores/defaults';
+import { TG_API } from '../../../../utils/common';
 
 import { mdiFile } from '@quasar/extras/mdi-v7';
 
-import { fetchFile } from '../../../api/telegram';
+import { fetchFile } from '../../../../api/telegram';
 
 const props = withDefaults(defineProps<DocumentTileProps>(), {
   message: () => defaultMessage,

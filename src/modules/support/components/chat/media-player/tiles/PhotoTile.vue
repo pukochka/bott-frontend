@@ -5,6 +5,7 @@
     @click="openMediaPlayer"
   >
     <q-img
+      :id="'image_' + props.message.id"
       ref="imageField"
       v-if="!loading"
       :src="url"
@@ -15,17 +16,17 @@
 </template>
 
 <script setup lang="ts">
-import { config } from '../../../config';
-import { computed, onBeforeMount, ref } from 'vue';
+import { config } from '../../../../config';
+import { computed, onBeforeMount, onUpdated, ref } from 'vue';
 
-import { defaultMessage } from '../../../../scenarios/messages/stores/defaults';
-import { TG_API } from '../../../utils/common';
+import { defaultTicketMessage } from '../../../../stores/supportModels';
+import { TG_API } from '../../../../utils/common';
 
-import { fetchFile } from '../../../api/telegram';
-import { useSupportStore } from '../../../stores/supportStore';
+import { fetchFile } from '../../../../api/telegram';
+import { useSupportStore } from '../../../../stores/supportStore';
 
 const props = withDefaults(defineProps<PhotoTileProps>(), {
-  message: () => defaultMessage,
+  message: () => defaultTicketMessage,
 });
 
 const support = useSupportStore();
@@ -39,7 +40,15 @@ const url = computed(
 );
 
 const openMediaPlayer = () => {
+  const image = <HTMLImageElement>(
+    document.querySelector('#image_' + props.message.id + ' img')
+  );
+
+  support.media.width = image.naturalWidth;
+  support.media.height = image.naturalHeight;
+
   support.media.link = url.value;
+  support.selectedMessage = props.message;
 
   support.openDialog('media_player');
 };
@@ -47,13 +56,15 @@ const openMediaPlayer = () => {
 onBeforeMount(() => {
   loading.value = true;
 
-  fetchFile(props.message.photos?.code ?? '', (response) => {
+  fetchFile(props.message.message.photos?.code ?? '', (response) => {
     filePath.value = response.file_path;
   }).then(() => (loading.value = false));
 });
 
+onUpdated(support.scrollToBottom.bind(support));
+
 interface PhotoTileProps {
-  message: MessageFree;
+  message: SupportTicketMessage;
 }
 </script>
 

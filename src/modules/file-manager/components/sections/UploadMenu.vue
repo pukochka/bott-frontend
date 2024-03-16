@@ -22,7 +22,11 @@
         </div>
       </q-card-section>
 
-      <q-card-section class="q-pt-none">
+      <q-card-section class="q-pt-none relative-position">
+        <div class="absolute-center" v-if="!data.uploadFiles.length">
+          <q-spinner class="" size="50px" color="primary" />
+        </div>
+
         <q-scroll-area style="max-height: 280px; height: 140px">
           <div class="row q-col-gutter-sm">
             <upload-card

@@ -4,11 +4,9 @@
       <component
         :is="component"
         :link="props.item.result"
-        :name="props.item.name"
-      >
+        :name="props.item.name">
         <div
-          class="absolute-bottom text-caption text-center image-padding-none"
-        >
+          class="absolute-bottom text-caption text-center image-padding-none">
           <div class="ellipsis">{{ item.name }}</div>
         </div>
       </component>
@@ -22,8 +20,7 @@
         icon="close"
         class="q-ma-xs absolute-top-right"
         v-if="!loading && !onload"
-        @click="deleteUpload"
-      />
+        @click="deleteUpload" />
 
       <q-inner-loading :showing="loading && !onload">
         <q-spinner-gears size="50px" color="primary" />

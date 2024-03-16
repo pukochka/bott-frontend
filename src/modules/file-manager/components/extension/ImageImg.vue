@@ -5,8 +5,7 @@
     :src="props.link"
     spinner-color="primary"
     spinner-size="42px"
-    :ratio="1 / 2"
-  >
+    :ratio="1 / 2">
     <slot></slot>
   </q-img>
 </template>

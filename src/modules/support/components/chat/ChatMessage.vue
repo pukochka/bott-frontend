@@ -5,9 +5,8 @@
   >
     <q-card
       flat
-      class="q-pt-xs"
+      class="bott-message--container q-pt-xs"
       :class="[status ? ' rounded-none-right' : ' rounded-none-left']"
-      :style="{ 'max-width': '450px' }"
     >
       <chat-message-top
         :status="status"
@@ -17,7 +16,7 @@
       <component
         v-if="isMedia"
         :is="media"
-        :message="props.message.message"
+        :message="props.message"
       ></component>
 
       <chat-message-content :message="props.message"></chat-message-content>
@@ -100,5 +99,8 @@ interface ChatMessageProps {
 }
 .rounded-none-right {
   border-radius: 10px 10px 0 10px;
+}
+.bott-message--container {
+  max-width: 450px;
 }
 </style>

@@ -1,6 +1,8 @@
 import { instance } from './instance';
 import { useSupportStore } from '../stores/supportStore';
 
+const ticketQueries = ['change-manager', 'get-ticket', 'change-status'];
+
 export async function fetchSupportCategory<
   Q extends keyof SupportCategoryQueries
 >(query: Q, data?: SupportCategoryParams<Q>, action?: (response: any) => void) {
@@ -50,13 +52,7 @@ export async function fetchSupportTicket<Q extends keyof SupportTicketQueries>(
         support.tickets = response.data.data;
 
         /** */
-      } else if (query === 'change-status') {
-        /** */
-
-        support.selectedTicket = response.data.data;
-
-        /** */
-      } else if (query === 'change-manager') {
+      } else if (ticketQueries.includes(query)) {
         /** */
 
         support.selectedTicket = response.data.data;
@@ -86,7 +82,14 @@ export async function fetchSupportMessages<
       if (query === 'get-messages') {
         /** */
 
-        if (support.messages.length === response.data?.data?.length) return;
+        const storeLength = support.messages.length;
+        const responseLength = response.data?.data?.length;
+
+        if (
+          support.messages[storeLength - 1]?.id ===
+          response.data?.data?.[responseLength - 1]?.id
+        )
+          return;
 
         support.messages = response.data.data;
 

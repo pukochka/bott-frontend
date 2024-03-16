@@ -23,6 +23,7 @@
 
       <q-btn flat class="rounded" padding="2px">
         {{ data.pagination.page }} / {{ pageCount }}
+
         <q-menu class="bott-portal-menu" cover>
           <q-input
             class="bott-input--rounded"
@@ -104,11 +105,11 @@ const setPage = () => {
 
 const height = computed(() => quasar.screen.lt.sm);
 
-const pageCount = computed(() =>
-  Math.ceil(data.files.length / data.pagination.count) === 0
-    ? 1
-    : Math.ceil(data.files.length / data.pagination.count)
-);
+const pageCount = computed(() => {
+  const count = Math.ceil(data.files.length / data.pagination.count);
+
+  return count === 0 ? 1 : count;
+});
 
 const checkMessage = () => {
   const name = data.selectedFiles[0].name;
@@ -140,7 +141,7 @@ const assignMessage = () => {
     },
     () => {
       fetchFile('index', undefined, () => {
-        useDialog('Успешно прикреплено!');
+        data.showTooltipAttach(file.name);
 
         if (data.dialog && data.message) {
           data.message[path].abs_path = file.link;
@@ -165,7 +166,10 @@ const leftButtons = computed(() => [
 const rightButtons = computed(() => [
   {
     icon: 'chevron_right',
-    action: () => data.pagination.page++,
+    action: () => {
+      console.log(data.pagination.page);
+      data.pagination.page++;
+    },
   },
   {
     icon: 'keyboard_double_arrow_right',

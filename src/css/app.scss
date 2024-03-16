@@ -120,6 +120,7 @@ body.body--light {
 
 .bg-card{
   background:#ffffff;
+  color: #929397;
 }
 
 body.body--dark {
@@ -198,6 +199,10 @@ body.body--dark {
 
   .bott-table .q-table tbody tr:nth-child(even) {
     background: #1d1f2a;
+  }
+
+  .text-color--grey{
+    color: #ffffff !important
   }
 }
 
@@ -430,5 +435,68 @@ body.body--dark {
 .bott-input-suffix .q-field__suffix {
   color: inherit !important ;
 }
+
+#support-work-space .q-splitter__panel{
+  overflow: hidden;
+}
+
+body .body--dark {
+  .bott-ticket--item-message--content,
+  .bott-ticket--item-message--time {
+    color: #aaaaaa;
+  }
+}
+
+.bott-ticket--item {
+  height: 74px;
+  align-items: start;
+
+  &-message--content,
+  &-message--time {
+    color: #707579;
+  }
+
+  &[data-selected="true"] .bott-ticket--item-message--content,
+  &[data-selected="true"] .bott-ticket--item-message--time,
+  &[data-selected="true"] .bott-ticket--item-user {
+    color: #ffffff;
+  }
+
+  &[data-selected="true"] .bott-ticket--item-status {
+    border: 1px solid #ffffff;
+  }
+
+
+
+  &-user {
+    text-align: initial;
+    unicode-bidi: plaintext;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &-status {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+  }
+  &-info {
+    flex: 1;
+    overflow: hidden;
+    &-row {
+      overflow: hidden;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+}
+
+.text-color--grey{
+  color: #474747
+}
+
+
+
 
 

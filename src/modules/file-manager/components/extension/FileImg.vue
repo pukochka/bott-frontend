@@ -6,8 +6,7 @@
     @error="onErr"
     spinner-color="primary"
     spinner-size="42px"
-    :img-style="err !== 'img' ? style : {}"
-  >
+    :img-style="err !== 'img' ? style : {}">
     <slot></slot>
   </q-img>
 </template>

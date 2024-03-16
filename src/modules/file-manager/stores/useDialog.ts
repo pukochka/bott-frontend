@@ -1,5 +1,5 @@
 import { Dialog } from 'quasar';
-import { grinding } from '../../../utils/helpers/grinding';
+import { grinding } from 'src/utils/helpers/grinding';
 
 export function useDialog(message?: string, cancel?: boolean) {
   const grindingMessage = grinding(message ?? '');

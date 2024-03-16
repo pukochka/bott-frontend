@@ -46,6 +46,12 @@ export interface FMStore {
   file_support_extensions: Array<string>;
   file_max_size: number;
   paths: string;
+
+  loaded: boolean;
+  attach: {
+    tooltip: boolean;
+    name: string;
+  };
 }
 
 type SortableNames = 'date' | 'size';

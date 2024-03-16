@@ -5,8 +5,8 @@
       v-if="config.user_id === support.selectedTicket?.manager?.id"
     >
       <div
-        class="row q-col-gutter-x-sm no-wrap q-ma-xs transition-height"
         @keydown.enter="sendMessage"
+        class="row q-col-gutter-x-sm no-wrap q-ma-xs transition-height"
       >
         <div class="col relative-position">
           <div
@@ -133,11 +133,6 @@ const sendMessage = (event: KeyboardEvent) => {
   ).then(() => {
     loading.value = false;
   });
-};
-
-const exit = (event: any) => {
-  event.preventDefault();
-  return false;
 };
 </script>
 

@@ -27,8 +27,9 @@
             </q-item-section>
 
             <q-item-section side>
-              <q-checkbox
-                :model-value="selected === implementer.user.id"
+              <q-radio
+                v-model="selected"
+                :val="implementer.user.id"
                 @update:model-value="selected = implementer.user.id"
                 color="primary"
               />

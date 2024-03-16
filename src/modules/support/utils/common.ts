@@ -1,13 +1,13 @@
-import PhotoTile from '../components/chat/media/PhotoTile.vue';
-import DocumentTile from '../components/chat/media/DocumentTile.vue';
-import VideoTile from '../components/chat/media/VideoTile.vue';
+import PhotoTile from '../components/chat/media-player/tiles/PhotoTile.vue';
+import DocumentTile from '../components/chat/media-player/tiles/DocumentTile.vue';
+import VideoTile from '../components/chat/media-player/tiles/VideoTile.vue';
 
 export const chatColors: Record<number, string> = {
-  1: 'linear-gradient(270deg, hsla(31, 91%, 59%, 0.6) 0%, hsla(360, 100%, 67%, 0.6) 100%)',
-  2: 'linear-gradient(135deg, hsla(91, 68%, 54%, 0.6) 0%, hsla(125, 58%, 45%, 0.6) 100%)',
-  3: 'linear-gradient(180deg, hsla(209, 100%, 66%, 0.6) 0%, hsla(211, 100%, 50%, 0.6) 100%)',
-  4: 'linear-gradient(135deg, hsla(37, 100%, 63%, 0.6) 0%, hsla(31, 91%, 59%, 0.6) 100%)',
-  5: 'linear-gradient(90deg, hsla(186, 33%, 94%, 0.6) 0%, hsla(216, 41%, 79%, 0.6) 100%)',
+  1: 'linear-gradient(225deg, hsla(31, 91%, 59%, 0.6) 0%, hsla(0, 100%, 67%, 0.6) 50%, hsla(31, 91%, 59%, 0.6) 100%)',
+  2: 'linear-gradient(135deg, hsla(91, 68%, 54%, 0.6) 0%, hsla(125, 58%, 45%, 0.6) 50%, hsla(91, 68%, 54%, 0.6) 100%)',
+  3: 'linear-gradient(315deg, hsla(209, 100%, 66%, 0.6) 0%, hsla(211, 100%, 50%, 0.6) 50%, hsla(209, 100%, 66%, 0.6) 100%)',
+  4: 'linear-gradient(45deg, hsla(37, 100%, 66%,  0.6) 0%, hsla(31, 91%, 59%,  0.6) 50%, hsla(37, 100%, 66%,  0.6) 100%)',
+  5: 'linear-gradient(225deg, hsla(186, 33%, 94%,  0.6) 0%, hsla(215, 41%, 79%,  0.6) 50%, hsla(186, 33%, 94%,  0.6) 100%)',
 };
 
 export const TG_DESKTOP = 'https://t.me/';
@@ -24,6 +24,27 @@ const gradient: Record<string, [string, string]> = {
   'user-filled': ['#C36EFF', '#8B60FA'],
   'favorite-filled': ['#88D93A', '#30B73B'],
   'group-filled': ['#FFB743', '#F69A36'],
+};
+
+export const colors = [
+  '#c1121f',
+  '#fca311',
+  '#588157',
+  '#a98467',
+  '#7209b7',
+  '#619b8a',
+  '#f9844a',
+  '#6d597a',
+  '#ffc9b9',
+  '#4c956c',
+  '#4c8fa2',
+  '#dff71d',
+];
+
+export const mediaIcons: Record<number, string> = {
+  1: 'image',
+  3: 'file',
+  4: 'video',
 };
 
 export const months: Record<number, string> = {

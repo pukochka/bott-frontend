@@ -1,27 +1,26 @@
 import { defaultMessage } from '../../scenarios/messages/stores/defaults';
 
 export interface WorkStore {
-  chat: boolean;
-
   categories: Array<SupportCategory>;
   tickets: Array<SupportTicket>;
   implementers: Array<SupportImplementer>;
   messages: Array<SupportTicketMessage>;
 
-  section: SectionNames;
-
-  view: 'table' | 'grid';
-  main: 'view' | 'chat';
+  category: number;
+  panel: 'tickets' | 'chat';
+  categoryInterval: string | number | NodeJS.Timeout | undefined;
+  messagesInterval: string | number | NodeJS.Timeout | undefined;
 
   media: {
+    width: number;
+    height: number;
     link: string;
     isVideo: boolean;
   };
 
-  drawer: {
-    state: boolean;
-    mini: boolean;
-  };
+  drawer: boolean;
+  splitterModel: number;
+  rightSplitterPanel: number;
 
   loading: {
     start: boolean;
@@ -31,10 +30,9 @@ export interface WorkStore {
 
   dialogs: Record<DialogNames, boolean>;
 
-  selected: Array<any>;
-
   selectedTicket: SupportTicket | null;
   selectedCategory: SupportCategory | null;
+  selectedMessage: SupportTicketMessage | null;
 
   topRef: any;
   scrollRef: any;
@@ -54,21 +52,11 @@ export type DialogNames =
   | 'select_category'
   | 'select_implementer'
   | 'media_player'
+  | 'category_add'
+  | 'category_log'
+  | 'category_implementers'
+  | 'category_edit'
   | 'edit_ticket';
-
-export type SectionNames =
-  | 'list'
-  | 'manager'
-  | 'select'
-  | 'edit'
-  | 'create'
-  | 'log';
-
-export const ticketStatues = {
-  0: '',
-  1: '',
-  2: '',
-};
 
 export const defaultImplementer: SupportImplementer = {
   id: 0,
@@ -83,14 +71,6 @@ export const defaultImplementer: SupportImplementer = {
     last_name: '',
     username: '',
   },
-};
-
-export const defaultCategory: SupportCategory = {
-  default: 0,
-  id: 0,
-  view_category_id: 0,
-  title: '',
-  status: 0,
 };
 
 export const defaultTicket: SupportTicket = {

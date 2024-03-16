@@ -4,19 +4,6 @@ export interface StatusView {
   text: string;
 }
 
-export const categoryStatues: Record<string, StatusView> = {
-  0: {
-    label: 'Не активна',
-    color: 'negative',
-    text: '',
-  },
-  1: {
-    label: 'Активна',
-    color: 'positive',
-    text: '',
-  },
-};
-
 export const ticketStatuses: Record<string, StatusView> = {
   0: {
     label: 'Обратитесь в поддержку',

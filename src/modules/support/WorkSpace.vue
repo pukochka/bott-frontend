@@ -1,148 +1,109 @@
 <template>
-  <div class="fit relative-position" style="min-height: 200px" ref="area">
-    <!--    <div class="bott-page__title q-px-md q-py-lg">Категории вопросов</div>-->
+  <div class="fit relative-position" style="min-height: 200px">
+    <header-section></header-section>
 
-    <!--    <q-breadcrumbs class="q-pa-md text-subtitle2">-->
-    <!--      <q-breadcrumbs-el label="Home" />-->
-    <!--      <q-breadcrumbs-el label="Components" />-->
-    <!--      <q-breadcrumbs-el label="Breadcrumbs" />-->
-    <!--    </q-breadcrumbs>-->
+    <div class="" id="support-work-space">
+      <q-tab-panels
+        v-if="sm"
+        animated
+        v-model="support.panel"
+        class="bg-transparent"
+        :style="{ height: `calc(100vh - ${support.offsetTop}px)` }"
+      >
+        <q-tab-panel name="tickets" class="q-pa-none">
+          <left-panel></left-panel>
+        </q-tab-panel>
 
-    <q-tab-panels
-      v-model="support.main"
-      animated
-      class="q-pa-none bg-transparent"
-      transition-next="fade"
-      transition-prev="fade"
-    >
-      <q-tab-panel name="view" class="q-pa-none">
-        <div class="">
-          <header-section></header-section>
+        <q-tab-panel name="chat" class="q-pa-none">
+          <right-panel></right-panel>
+        </q-tab-panel>
+      </q-tab-panels>
 
-          <div class="relative-position">
-            <top-section class="col-12"></top-section>
-
-            <main-section class="col-12"></main-section>
-
-            <bottom-section class="col-12"></bottom-section>
-
-            <q-inner-loading
-              style="z-index: 11"
-              transition-show="none"
-              :showing="support.loading.category"
-              class="bott-page__background"
-            >
-              <q-spinner-gears size="80px" color="primary" />
-            </q-inner-loading>
-          </div>
-        </div>
-      </q-tab-panel>
-
-      <q-tab-panel name="chat" class="q-pa-none">
-        <chat-section></chat-section>
-      </q-tab-panel>
-    </q-tab-panels>
+      <main-section v-else></main-section>
+    </div>
 
     <q-inner-loading
+      style="z-index: 10"
       transition-show="none"
-      :showing="support.loading.start"
       class="bott-page__background"
+      :showing="support.loading.start"
     >
       <q-spinner size="70px" color="primary" />
     </q-inner-loading>
   </div>
 
-  <transfer-ticket></transfer-ticket>
+  <category-create></category-create>
 
-  <transfer-implementer></transfer-implementer>
+  <category-edit></category-edit>
 
-  <edit-ticket></edit-ticket>
+  <category-implementers></category-implementers>
 
-  <select-category></select-category>
+  <category-log></category-log>
 
-  <select-implementer></select-implementer>
+  <category-select></category-select>
+
+  <implementer-select></implementer-select>
+
+  <implementer-transfer></implementer-transfer>
+
+  <ticket-edit></ticket-edit>
+
+  <ticket-transfer></ticket-transfer>
 
   <media-player></media-player>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { computed, onBeforeMount, onMounted } from 'vue';
 
 import { fetchSupportCategory, fetchSupportTicket } from './api/queries';
 import { useSupportStore } from './stores/supportStore';
-import { getQueryParam, has } from '../../utils/helpers/string';
+import { getQueryParam, has } from 'src/utils/helpers/string';
+import { getRect } from '../../utils/helpers/dom';
+import { useQuasar } from 'quasar';
 
 import HeaderSection from './components/sections/HeaderSection.vue';
 import MainSection from './components/sections/MainSection.vue';
-import BottomSection from './components/sections/BottomSection.vue';
-import TopSection from './components/sections/TopSection.vue';
-import ChatSection from './components/chat/ChatSpace.vue';
-import TransferTicket from './components/dialogs/TransferTicket.vue';
-import EditTicket from './components/dialogs/EditTicket.vue';
-import TransferImplementer from './components/dialogs/TransferImplementer.vue';
-import SelectCategory from './components/dialogs/SelectCategory.vue';
-import SelectImplementer from './components/dialogs/SelectImplementer.vue';
-import MediaPlayer from './components/chat/MediaPlayer.vue';
+import TicketTransfer from './components/dialogs/TicketTransfer.vue';
+import TicketEdit from './components/dialogs/TicketEdit.vue';
+import ImplementerTransfer from './components/dialogs/ImplementerTransfer.vue';
+import ImplementerSelect from './components/dialogs/ImplementerSelect.vue';
+import CategoryCreate from './components/dialogs/CategoryCreate.vue';
+import CategoryEdit from './components/dialogs/CategoryEdit.vue';
+import CategoryImplementers from './components/dialogs/CategoryImplementers.vue';
+import CategoryLog from './components/dialogs/CategoryLog.vue';
+import CategorySelect from './components/dialogs/CategorySelect.vue';
+import MediaPlayer from './components/chat/media-player/MediaPlayer.vue';
+import LeftPanel from './components/sections/LeftPanel.vue';
+import RightPanel from './components/sections/RightPanel.vue';
 
 const support = useSupportStore();
-const area = ref();
+const quasar = useQuasar();
 
-onMounted(() => {
-  support.topRef = area;
-});
+const sm = computed(() => quasar.screen.lt.sm);
+
+onMounted(() => (support.topRef = getRect('support-work-space')));
 
 onBeforeMount(() => {
-  const id = Number(getQueryParam('id')) ?? 0;
-  const category_id = Number(getQueryParam('category_id')) ?? 0;
+  const id = Number(getQueryParam('id'));
+  const category_id = Number(getQueryParam('category_id'));
 
-  if (window.innerWidth < 600) {
-    support.view = 'grid';
-  }
+  Promise.all([
+    fetchSupportCategory('index', undefined),
+    !isNaN(category_id) ? support.updateCategory(category_id) : '',
+    !isNaN(id) ? fetchSupportTicket('get-ticket', { ticket_id: id }) : '',
+  ]).then(() => {
+    const category =
+      support.categories.find((item) => item.id === category_id) || null;
 
-  if (has('id')) {
-    support.main = 'chat';
+    if (category) {
+      support.selectCategory(category);
+    }
 
-    Promise.all([
-      fetchSupportCategory('index', undefined, (response) => {
-        const category = (response ?? []).find(
-          (item: SupportCategory) => item.id === category_id
-        );
+    if (support.selectedTicket) {
+      support.openChat(support.selectedTicket);
+    }
 
-        if (category !== void 0) {
-          support.selectedCategory = category;
-        }
-      }),
-      fetchSupportTicket('get-ticket', { ticket_id: id }, (response) => {
-        support.selectedTicket = response;
-
-        support.openChat(response);
-      }),
-    ]).then(() => (support.loading.start = false));
-
-    return;
-  }
-
-  if (has('category_id')) {
-    Promise.all([
-      fetchSupportCategory('index'),
-      support.updateCategory(category_id),
-    ]).then(() => {
-      const category = support.categories.find(
-        (item) => item.id === category_id
-      );
-
-      if (category !== void 0) {
-        support.selectedCategory = category;
-        support.section = 'list';
-      }
-
-      support.loading.start = false;
-    });
-
-    return;
-  }
-
-  fetchSupportCategory('index', undefined, () => {
     support.loading.start = false;
   });
 });

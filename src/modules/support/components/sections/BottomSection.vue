@@ -1,95 +1,73 @@
 <template>
-  <div
-    class="row justify-center items-center"
-    v-if="support.section === 'list' && support.tickets.length"
-  >
-    <div class="row q-pt-xs items-center justify-center">
-      <div class="text-caption q-pr-sm text-center">
-        <div class="">{{ rangeLabel }}</div>
-      </div>
+  <div class="row no-wrap items-center">
+    <q-btn
+      v-for="(button, index) of leftArrows"
+      :key="index"
+      flat
+      square
+      no-wrap
+      no-caps
+      size="md"
+      class="col"
+      color="primary"
+      :icon="button.icon"
+      :loading="button.loading"
+      :disable="button.condition"
+      @click="button.action"
+    />
 
-      <q-card
-        flat
-        bordered
-        class="row rounded items-center no-wrap overflow-hidden"
-      >
-        <div class="" v-for="(button, index) of leftArrows" :key="index">
-          <q-btn
-            flat
-            square
-            no-wrap
-            no-caps
-            size="md"
-            color="primary"
-            :icon="button.icon"
-            :loading="button.loading"
-            :disable="button.condition"
-            @click="button.action"
-          />
-        </div>
+    <q-btn
+      flat
+      square
+      no-wrap
+      no-caps
+      size="md"
+      class="col"
+      :label="countLabel"
+      :loading="loading.page"
+      :disable="pagesCount === 1"
+    >
+      <q-menu cover class="bott-portal-menu">
+        <q-input
+          autofocus
+          outlined
+          style="min-width: 200px"
+          mask="####"
+          label="Введите номер страницы"
+          class="bott-input--rounded"
+          v-model="search"
+        >
+          <template #append>
+            <q-btn
+              v-close-popup
+              dense
+              flat
+              size="md"
+              icon="check"
+              color="primary"
+              class="rounded"
+              @click="setPage"
+            />
+          </template>
+        </q-input>
+      </q-menu>
+    </q-btn>
 
-        <div class="">
-          <q-btn
-            flat
-            square
-            no-wrap
-            no-caps
-            size="md"
-            :label="countLabel"
-            :loading="loading.page"
-            :disable="pagesCount === 1"
-          >
-            <q-menu cover class="bott-portal-menu">
-              <q-input
-                autofocus
-                outlined
-                style="min-width: 200px"
-                mask="####"
-                label="Введите номер страницы"
-                class="bott-input--rounded"
-                v-model="search"
-              >
-                <template #append>
-                  <q-btn
-                    dense
-                    flat
-                    size="md"
-                    color="primary"
-                    class="rounded"
-                    icon="check"
-                    v-close-popup
-                    @click="setPage"
-                  />
-                </template>
-              </q-input>
-            </q-menu>
-          </q-btn>
-        </div>
-
-        <div class="" v-for="(button, index) of rightArrows" :key="index">
-          <q-btn
-            flat
-            square
-            no-wrap
-            no-caps
-            size="md"
-            color="primary"
-            :icon="button.icon"
-            :loading="button.loading"
-            :disable="button.condition"
-            @click="button.action"
-          />
-        </div>
-      </q-card>
-    </div>
-
-    <div class="text-caption q-pl-sm text-center">
-      <div class="">Тикетов</div>
-      <div class="">
-        в категории
-        <span class="text-primary">{{ support.pagination.count }}</span>
-      </div>
-    </div>
+    <q-btn
+      v-for="(button, index) of rightArrows"
+      :key="index"
+      flat
+      square
+      no-wrap
+      no-caps
+      size="md"
+      class="col"
+      color="primary"
+      :icon="button.icon"
+      :loading="button.loading"
+      :disable="button.condition"
+      @click="button.action"
+    />
   </div>
 </template>
 
@@ -122,9 +100,6 @@ const pagesCount = computed(() => {
 });
 const countLabel = computed(
   () => support.pagination.page + ' / ' + pagesCount.value
-);
-const rangeLabel = computed(
-  () => support.pagination.offset + 1 + ' - ' + (support.pagination.offset + 25)
 );
 
 const updatePage = (name: LoadingNames) => {

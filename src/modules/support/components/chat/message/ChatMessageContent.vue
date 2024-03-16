@@ -8,10 +8,11 @@
 </template>
 
 <script setup lang="ts">
-import { defaultTicketMessage } from '../../../stores/supportModels';
 import { computed } from 'vue';
+import { defaultTicketMessage } from '../../../stores/supportModels';
+
 import { date } from 'quasar';
-import { grinding } from '../../../../../utils/helpers/grinding';
+import { grinding } from 'src/utils/helpers/grinding';
 import { parseContent } from '../../../utils/common';
 
 const props = withDefaults(defineProps<ChatMessageContentProps>(), {

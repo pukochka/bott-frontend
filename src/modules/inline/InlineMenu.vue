@@ -1,20 +1,18 @@
 <template>
   <div class="relative-position" style="min-height: 380px">
-    <transition name="fade">
-      <div class="absolute-full" v-if="loading.start">
-        <q-spinner size="80px" color="primary" class="absolute-center" />
-      </div>
-    </transition>
+    <q-inner-loading :showing="loading.start" class="rounded">
+      <q-spinner size="80px" color="primary" />
+    </q-inner-loading>
 
     <div class="row q-col-gutter-sm" v-show="!loading.start">
       <div class="col-12 col-sm-7 q-gutter-y-md">
         <q-card
-          class="rounded q-gutter-y-sm"
           flat
           bordered
+          class="rounded q-gutter-y-sm"
           :class="[!props.noBreadcrumbs ? ' q-px-md q-pb-md' : ' q-pa-md']"
         >
-          <q-breadcrumbs v-if="!props.noBreadcrumbs">
+          <q-breadcrumbs v-if="!props.noBreadcrumbs" gutter="none" align="left">
             <q-breadcrumbs-el
               class="rounded q-px-xs"
               v-clickable="index !== breadcrumbs.length - 1"
@@ -25,16 +23,16 @@
             />
           </q-breadcrumbs>
 
-          <div class="row items-center justify-between q-ma-none">
+          <div class="row items-center justify-between no-wrap">
             <top-section></top-section>
 
             <file-manager
-              v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
               dialog
               :message="inline.message"
               :bot_id="inline.bot_id"
               :token="inline.token"
               :host="inline.host"
+              v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
             ></file-manager>
           </div>
 
@@ -108,6 +106,7 @@ import FaqSection from './components/settings/FaqSection.vue';
 import ControlSection from './components/settings/ControlSection.vue';
 import TopSection from './components/TopSection.vue';
 import MessageContent from './components/MessageContent.vue';
+import config from './config';
 
 const props = withDefaults(defineProps<InlineMenuProps>(), {
   message: undefined,
@@ -160,7 +159,7 @@ onBeforeMount(() => {
     return;
   }
 
-  const message_id = Number(getQueryParam('id')) ?? 1;
+  const message_id = Number(getQueryParam('id')) || 1;
 
   Promise.all([
     fetchMessage('get', { message_id: message_id }),
@@ -181,9 +180,9 @@ const windowProps = () => {
   }
 
   try {
-    // inline.bot_id = bot.id;
-    // inline.token = bot.token;
-    // inline.host = host;
+    inline.bot_id = config.bot.id;
+    inline.token = config.bot.token;
+    inline.host = config.host;
   } catch (e) {}
 };
 

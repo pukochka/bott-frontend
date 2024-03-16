@@ -8,25 +8,31 @@
     color="primary"
     padding="2px 10px"
     icon="attach_file"
-    :label="'Загрузить ' + btnText"
-    @click="dialog = !dialog"
+    :label="'Загрузить ' + label"
+    @click="dialogWindow = !dialogWindow"
   />
 
   <q-dialog
-    v-if="props.dialog"
-    v-model="dialog"
     full-width
+    full-height
     class="rounded"
+    v-if="props.dialog"
+    v-model="dialogWindow"
     @hide="updateManager"
     @before-show="updateShow"
   >
-    <file-manager-card></file-manager-card>
+    <div class="row justify-center items-center">
+      <file-manager-card></file-manager-card>
+    </div>
   </q-dialog>
 
-  <file-manager-card update v-else></file-manager-card>
+  <div class="row justify-center" v-else>
+    <file-manager-card></file-manager-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
+import { config } from './config';
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { defaultMessageFree } from '../inline/stores/inlineModels';
 
@@ -34,7 +40,6 @@ import { fetchFile } from './api/queries';
 import { useFileStore } from './stores/fileStore';
 
 import FileManagerCard from './FileManagerCard.vue';
-import { config } from './config';
 
 const props = withDefaults(defineProps<FileManagerProps>(), {
   message: () => defaultMessageFree,
@@ -44,11 +49,11 @@ const props = withDefaults(defineProps<FileManagerProps>(), {
   token: '',
 });
 
-const dialog = ref(false);
-
 const data = useFileStore();
 
-const btnText = computed(
+const dialogWindow = ref(false);
+
+const label = computed(
   () => text[data.message?.type.path ?? 'photos'] ?? 'картинку'
 );
 
@@ -66,27 +71,25 @@ const updateManager = () => {
 };
 
 const updateShow = () => {
-  fetchFile('index');
+  fetchFile('index').then(() => (data.loaded = true));
 };
 
 onBeforeMount(() => {
-  if (props.bot_id === 0 || props.bot_id === void 0) {
+  if (props.bot_id === void 0) {
     data.dialog = false;
-    data.host = config.host;
-    data.bot_id = config.bot.id;
-    data.token = config.bot.token;
-    data.message = config.message;
-
-    fetchFile('index');
-
-    return;
+    // data.host = config.host;
+    // data.bot_id = config.bot.id;
+    // data.token = config.bot.token;
+    // data.message = config.message;
+  } else {
+    data.message = props.message;
+    data.dialog = props.dialog;
+    data.bot_id = props.bot_id ?? 0;
+    data.token = props.token ?? '';
+    data.host = props.host ?? '';
   }
 
-  data.message = props.message;
-  data.dialog = props.dialog;
-  data.bot_id = props.bot_id ?? 0;
-  data.token = props.token ?? '';
-  data.host = props.host ?? '';
+  fetchFile('index').then(() => (data.loaded = true));
 });
 
 watch(

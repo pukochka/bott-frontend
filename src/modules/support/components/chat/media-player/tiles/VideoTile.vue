@@ -1,12 +1,12 @@
 <template>
-  <div class="relative-position" style="width: 250px; height: 250px">
+  <div class="relative-position" style="min-width: 250px; height: 250px">
     <div class="text-center text-red" v-if="error">
       Видео не поддерживается...
     </div>
 
     <video
       class="video-player"
-      style="width: 250px; height: 250px"
+      style="min-width: 250px; height: 250px; width: 100%"
       v-if="!loading && !error"
     >
       <source :src="url" />
@@ -29,18 +29,19 @@
 </template>
 
 <script setup lang="ts">
-import { config } from '../../../config';
-import { computed, onBeforeMount, ref } from 'vue';
+import { config } from '../../../../config';
+import { computed, onBeforeMount, onUpdated, ref } from 'vue';
 
-import { TG_API } from '../../../utils/common';
-import { defaultMessage } from '../../../../scenarios/messages/stores/defaults';
+import { TG_API } from '../../../../utils/common';
+import { defaultTicketMessage } from '../../../../stores/supportModels';
 
-import { fetchFile } from '../../../api/telegram';
+import { fetchFile } from '../../../../api/telegram';
+import { useSupportStore } from '../../../../stores/supportStore';
+
 import { mdiPlay } from '@quasar/extras/mdi-v7';
-import { useSupportStore } from '../../../stores/supportStore';
 
 const props = withDefaults(defineProps<VideoTileProps>(), {
-  message: () => defaultMessage,
+  message: () => defaultTicketMessage,
 });
 
 const support = useSupportStore();
@@ -63,15 +64,17 @@ const openMediaPlayer = () => {
 onBeforeMount(() => {
   loading.value = true;
 
-  fetchFile(props.message.videos?.code ?? '', (response) => {
+  fetchFile(props.message.message.videos?.code ?? '', (response) => {
     filePath.value = response.file_path;
   })
     .then(() => (loading.value = false))
     .catch(() => (error.value = true));
 });
 
+onUpdated(support.scrollToBottom.bind(support));
+
 interface VideoTileProps {
-  message: MessageFree;
+  message: SupportTicketMessage;
 }
 </script>
 

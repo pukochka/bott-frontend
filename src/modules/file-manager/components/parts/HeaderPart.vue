@@ -9,7 +9,7 @@
         class="rounded"
         :color="action.color"
         :icon="action.icon"
-        :label="action.label"
+        :label="!sm ? action.label : ''"
         :disable="action.disabled"
         :loading="action.loading"
         @click="action.action"
@@ -77,11 +77,16 @@ import { useDialog } from '../../stores/useDialog';
 import { useFileStore } from '../../stores/fileStore';
 
 import TuneMenu from '../sections/TuneMenu.vue';
+import { useQuasar } from 'quasar';
 
 const data = useFileStore();
+const quasar = useQuasar();
 
 const uploadFiles = ref<any>(null);
 const loading = ref(false);
+
+const sm = computed(() => quasar.screen.lt.sm);
+
 const openExplorer = () => {
   uploadFiles.value?.click();
 };
@@ -146,9 +151,9 @@ const assignMessage = () => {
     },
     () => {
       fetchFile('index', undefined, () => {
-        useDialog('Успешно прикреплено!');
+        data.showTooltipAttach(file.name);
 
-        if (data.dialog) {
+        if (data.dialog && data.message) {
           data.message[path]['abs_path'] = file.link;
           data.message[path]['host'] = file.name;
         }

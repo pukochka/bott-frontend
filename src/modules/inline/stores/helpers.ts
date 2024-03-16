@@ -17,9 +17,10 @@ export function useNotify(message: string) {
   });
 }
 
-export function historyGo(to: string) {
+export function historyGo(to: string, blank?: boolean) {
   const el = document.createElement('a');
   el.href = to;
+  el.target = blank ? '_blank' : '';
 
   el.click();
 }

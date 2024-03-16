@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { config } from '../../config';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useSupportStore } from '../../stores/supportStore';
 
 import { fetchSupportImplementer, fetchSupportTicket } from '../../api/queries';

@@ -2,17 +2,11 @@
   <q-item>
     <q-item-section>
       <q-item-label>
-        <q-btn dense flat no-caps size="md" class="rounded" color="primary">
-          <div v-html="implementer.user.link"></div>
+        {{ implementer.user.first_name }} {{ implementer.user.last_name }}
+      </q-item-label>
 
-          <q-tooltip
-            class="bott-tooltip text-center"
-            anchor="top middle"
-            self="bottom middle"
-          >
-            Перейти в телеграм
-          </q-tooltip>
-        </q-btn>
+      <q-item-label caption class="text-primary">
+        <div v-html="implementer.user.link"></div>
       </q-item-label>
 
       <q-item-label

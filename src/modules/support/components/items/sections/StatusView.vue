@@ -1,15 +1,10 @@
 <template>
-  <div class="row justify-center items-center">
-    <q-btn
-      unelevated
-      no-wrap
-      no-caps
-      class="rounded"
-      padding="2px 12px"
-      :color="ticketStatus.color"
-      :label="ticketStatus.label"
-    />
-  </div>
+  <span
+    class="font-14 rounded q-px-xs text-center text-no-wrap"
+    :class="[' bg-' + ticketStatus.color]"
+  >
+    {{ ticketStatus.label }}
+  </span>
 </template>
 
 <script setup lang="ts">

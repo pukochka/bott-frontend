@@ -2,43 +2,38 @@ import { config } from '../config';
 
 import { defineStore } from 'pinia';
 import { DialogNames, WorkStore } from './supportModels';
-import {
-  fetchSupportCategory,
-  fetchSupportMessages,
-  fetchSupportTicket,
-} from '../api/queries';
+import { fetchSupportMessages, fetchSupportTicket } from '../api/queries';
 
 import { useDialog } from '../../file-manager/stores/useDialog';
 import { deleteQueryParam, setQueryParam } from 'src/utils/helpers/string';
 
 import { ticketStatuses } from '../utils/statuses';
-
-let interval: string | number | NodeJS.Timeout | undefined;
+import { getRect } from '../../../utils/helpers/dom';
 
 export const useSupportStore = defineStore('support', {
   state: () =>
     ({
-      chat: false,
-
       categories: [],
       tickets: [],
       implementers: [],
       messages: [],
 
-      section: 'select',
-
-      view: 'table',
-      main: 'view',
+      category: 0,
+      panel: 'tickets',
+      categoryInterval: undefined,
+      messagesInterval: undefined,
 
       media: {
+        width: 100,
+        height: 100,
         link: '',
         isVideo: false,
       },
 
-      drawer: {
-        state: true,
-        mini: true,
-      },
+      drawer: false,
+      splitterModel: 50,
+      rightSplitterPanel: 651,
+
       dialogs: {
         edit_ticket: false,
         select_category: false,
@@ -46,11 +41,15 @@ export const useSupportStore = defineStore('support', {
         transfer_ticket: false,
         select_implementer: false,
         media_player: false,
+        category_implementers: false,
+        category_edit: false,
+        category_add: false,
+        category_log: false,
       },
 
-      selected: [],
       selectedTicket: null,
       selectedCategory: null,
+      selectedMessage: null,
 
       loading: {
         start: true,
@@ -70,7 +69,7 @@ export const useSupportStore = defineStore('support', {
       },
     } as WorkStore),
   getters: {
-    offsetTop: (state): number => state.topRef?.offsetTop ?? 500,
+    offsetTop: (state): number => state.topRef?.top + 6 ?? 500,
     isMobile: () =>
       /mobile|iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(
         navigator.userAgent.toLowerCase()
@@ -83,67 +82,34 @@ export const useSupportStore = defineStore('support', {
     closeDialog(name: DialogNames) {
       this.dialogs[name] = false;
     },
-    openChat(ticket: SupportTicket) {
-      this.selectedTicket = ticket;
-      this.main = 'chat';
 
-      clearInterval(interval);
+    openChat(ticket: SupportTicket) {
+      this.messages = [];
+      this.panel = 'chat';
+      this.loading.chat = true;
+      this.selectedTicket = ticket;
 
       setQueryParam('id', ticket.id);
 
-      this.loading.chat = true;
       this.updateMessages().then(() => {
         this.loading.chat = false;
-        setTimeout(this.scrollToBottom.bind(this), 10);
+        setTimeout(this.scrollToBottom.bind(this), 100);
       });
 
-      interval = setInterval(
+      clearInterval(this.messagesInterval);
+      this.messagesInterval = setInterval(
         this.updateMessages.bind(this),
         config.messages_update_time
       );
     },
     closeChat() {
       this.messages = [];
+      this.panel = 'tickets';
+      this.drawer = false;
       this.selectedTicket = null;
-      this.main = 'view';
-
-      clearInterval(interval);
 
       deleteQueryParam('id');
-
-      if (this.categories.length && this.selectedCategory) {
-        this.loading.category = true;
-        this.updateCategory(this.selectedCategory.id, true).then(() => {
-          if (this.tickets.length) this.section = 'list';
-        });
-
-        interval = setInterval(
-          this.updateCategory.bind(this, this.selectedCategory?.id ?? -1),
-          config.category_update_time
-        );
-
-        return;
-      }
-
-      this.loading.category = true;
-
-      fetchSupportCategory('index', undefined).then(
-        () => (this.loading.category = false)
-      );
-    },
-
-    closeSection() {
-      if (['log', 'manager', 'edit'].includes(this.section)) {
-        this.section = 'list';
-        return;
-      }
-
-      if (this.selectedCategory?.id) this.selectedCategory = null;
-
-      clearInterval(interval);
-      deleteQueryParam('category_id');
-
-      this.section = 'select';
+      clearInterval(this.messagesInterval);
     },
 
     scrollToBottom() {
@@ -160,18 +126,17 @@ export const useSupportStore = defineStore('support', {
       this.loading.category = true;
 
       this.tickets = [];
-      this.section = 'list';
       this.pagination.offset = 0;
       this.pagination.page = 1;
       this.pagination.count = 0;
+      this.category = category.id;
       this.selectedCategory = category;
 
-      clearInterval(interval);
       setQueryParam('category_id', category.id);
-
       this.updateCategory(category.id, true).then();
 
-      interval = setInterval(
+      clearInterval(this.categoryInterval);
+      this.categoryInterval = setInterval(
         this.updateCategory.bind(this, category.id),
         config.category_update_time
       );
@@ -257,11 +222,8 @@ export const useSupportStore = defineStore('support', {
       useDialog('Вы уверены, что хотите удалить тикет?', true).onOk(() => {
         if (action1 !== void 0) action1();
         fetchSupportTicket('delete', { ticket_id: ticket_id }, (response) => {
-          if (this.main === 'chat') {
-            this.main = 'view';
-            clearInterval(interval);
-            deleteQueryParam('id');
-          }
+          deleteQueryParam('id');
+          clearInterval(this.messagesInterval);
 
           this.tickets = response;
           this.selectedTicket = null;
@@ -269,6 +231,12 @@ export const useSupportStore = defineStore('support', {
           if (action2 !== void 0) action2();
         });
       });
+    },
+
+    updateChatActionButtons(percent: number) {
+      const { width } = getRect('support-chat-card');
+
+      this.rightSplitterPanel = ((100 - percent) / 100) * width;
     },
   },
 });

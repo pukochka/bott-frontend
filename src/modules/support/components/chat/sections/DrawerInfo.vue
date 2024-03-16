@@ -1,26 +1,10 @@
 <template>
-  <q-drawer
-    bordered
-    side="right"
-    :width="width"
-    :mini-width="70"
-    :mini="support.drawer.mini"
-    v-model="support.drawer.state"
-  >
+  <q-drawer bordered side="right" :width="width" v-model="support.drawer">
     <div class="absolute-full">
       <q-list class="full-height">
-        <q-item
-          clickable
-          class="transition"
-          :class="[support.drawer.mini ? ' absolute-full' : '']"
-          @click="toggleDrawer"
-        >
+        <q-item clickable class="transition" @click="toggleDrawer">
           <q-item-section avatar>
-            <q-icon
-              :name="support.drawer.mini ? 'info' : 'chevron_right'"
-              color="primary"
-              size="26px"
-            />
+            <q-icon name="chevron_right" color="primary" size="26px" />
           </q-item-section>
 
           <q-item-section class="absolute-center">
@@ -28,16 +12,22 @@
           </q-item-section>
         </q-item>
 
-        <div class="" v-if="!support.drawer.mini">
-          <ticket-section
-            grid
-            v-for="(column, index) of drawerColumns"
-            :key="index"
-            :component="column.component"
-            :col="column.col"
-            :ticket="support.selectedTicket ?? defaultTicket"
-          ></ticket-section>
-        </div>
+        <ticket-section
+          grid
+          v-for="(column, index) of drawerColumns"
+          :key="index"
+          :component="column.component"
+          :col="column.col"
+          :ticket="support.selectedTicket ?? defaultTicket"
+        ></ticket-section>
+
+        <q-item clickable class="transition" @click="support.closeChat">
+          <q-item-section avatar>
+            <q-icon name="close" color="red" size="26px" />
+          </q-item-section>
+
+          <q-item-section class="absolute-center"> Закрыть чат </q-item-section>
+        </q-item>
       </q-list>
     </div>
 
@@ -49,7 +39,7 @@
 
 <script setup lang="ts">
 import { date, useQuasar } from 'quasar';
-import { computed, onBeforeMount } from 'vue';
+import { computed } from 'vue';
 
 import { useSupportStore } from '../../../stores/supportStore';
 
@@ -64,17 +54,11 @@ const support = useSupportStore();
 const quasar = useQuasar();
 
 const sm = computed(() => quasar.screen.lt.sm);
-const md = computed(() => quasar.screen.lt.md);
 const width = computed(() => (sm.value ? 300 : 350));
 
 const toggleDrawer = () => {
-  support.drawer.mini = md.value ? false : !support.drawer.mini;
-  support.drawer.state = md.value ? !support.drawer.state : true;
+  support.drawer = !support.drawer;
 };
-
-onBeforeMount(() => {
-  if (md.value) support.drawer.state = false;
-});
 
 const format = (value?: string | null) => {
   return value

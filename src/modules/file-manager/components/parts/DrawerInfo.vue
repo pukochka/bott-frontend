@@ -3,24 +3,22 @@
     bordered
     :width="260"
     side="right"
-    behavior="desktop"
+    :behavior="sm ? 'mobile' : 'desktop'"
     :mini="data.drawerInfo"
     v-model="drawer"
   >
-    <q-list>
-      <q-item
-        clickable
-        @click="data.drawerInfo = !data.drawerInfo"
+    <div class="relative-position" :class="[data.drawerInfo ? ' fit' : ' row']">
+      <q-btn
+        flat
+        square
+        size="md"
+        color="primary"
+        :class="[data.drawerInfo ? 'absolute-full' : 'col']"
+        :icon="data.drawerInfo ? 'info' : 'chevron_right'"
         :disable="data.selectedFiles.length !== 1"
-      >
-        <q-item-section avatar class="text-primary">
-          <q-icon
-            :name="data.drawerInfo ? 'info' : 'chevron_right'"
-            size="24px"
-          ></q-icon>
-        </q-item-section>
-      </q-item>
-    </q-list>
+        @click="data.drawerInfo = !data.drawerInfo"
+      />
+    </div>
 
     <q-card square flat class="q-pa-xs" v-if="!data.drawerInfo">
       <div>
@@ -66,10 +64,14 @@ import { defaultFileCard } from '../../stores/fileModels';
 
 import FileImg from '../extension/FileImg.vue';
 import VideoPreview from '../extension/VideoPreview.vue';
+import { useQuasar } from 'quasar';
 
 const data = useFileStore();
+const quasar = useQuasar();
 
 const drawer = ref(true);
+
+const sm = computed(() => quasar.screen.lt.sm);
 
 const component = computed(() =>
   data.paths === 'videos' ? VideoPreview : FileImg

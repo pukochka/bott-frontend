@@ -61,12 +61,18 @@ export const useFileStore = defineStore('file-manager-data', {
 
       pagination: {
         page: 1,
-        count: 15,
+        count: 25,
       },
 
       file_support_extensions: [],
       file_max_size: 0,
       paths: 'photos',
+
+      loaded: false,
+      attach: {
+        tooltip: false,
+        name: '',
+      },
     } as FMStore),
 
   getters: {
@@ -77,19 +83,12 @@ export const useFileStore = defineStore('file-manager-data', {
 
     files: (state) =>
       state.usersFiles
-        .reverse()
         .filter((file) =>
           state.tabs === 'all'
             ? file
             : state.tabs === 'used'
             ? file.used
             : !file.used
-        )
-        .filter((file) =>
-          file.name
-            .toLowerCase()
-            .trim()
-            .includes(state.search.toLowerCase().trim())
         )
         .sort(
           state.sortable.size === null
@@ -104,8 +103,8 @@ export const useFileStore = defineStore('file-manager-data', {
             : state.sortable.date
             ? compareUpDate.apply('date')
             : compareDownDate.apply('date')
-        ),
-
+        )
+        .reverse(),
     uploadSize: (state) =>
       state.uploadFiles
         .map((item) => Number(item.size))
@@ -157,7 +156,7 @@ export const useFileStore = defineStore('file-manager-data', {
       this.uploadMenu = true;
 
       for (const file of files) {
-        const alpha = await hasAlpha(file);
+        const alpha = this.paths === 'photos' ? await hasAlpha(file) : true;
 
         if (
           this.paths !== 'photos' ||
@@ -240,6 +239,13 @@ export const useFileStore = defineStore('file-manager-data', {
 
       this.sortable[section] =
         this.sortable[section] === false ? null : !this.sortable[section];
+    },
+
+    showTooltipAttach(name: string) {
+      this.attach.name = name;
+      this.attach.tooltip = true;
+
+      setTimeout(() => (this.attach.tooltip = false), 2000);
     },
 
     checkSize(size: number) {

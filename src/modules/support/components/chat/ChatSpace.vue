@@ -1,10 +1,10 @@
 <template>
   <div class="relative-position">
     <q-layout
-      view="hhh LpR fFr"
       container
-      class="bott-layout__drawer bott-page__background"
-      :style="{ height: `calc(100vh - 65px - ${support.offsetTop}px)` }"
+      view="hhh LpR fFr"
+      class="bott-page__layout bott-page__background"
+      :style="{ height: `calc(100vh - ${support.offsetTop}px)` }"
     >
       <q-page-container :style="{ background: color }">
         <q-header>
@@ -19,15 +19,31 @@
             class="q-px-md absolute-full"
             :thumb-style="thumbStyle"
           >
-            <div class="chat-area column q-gutter-y-xs q-py-sm">
+            <div class="bott-chat--area column q-gutter-y-xs q-py-sm">
               <q-chip
                 dense
                 color="grey"
                 text-color="white"
                 class="self-center q-my-md"
+                v-if="!support.loading.chat"
               >
                 Начало диалога {{ firstMessageDate }}
               </q-chip>
+
+              <q-inner-loading
+                class="bg-transparent"
+                :showing="support.loading.chat"
+              >
+                <div class="column q-gutter-y-sm absolute full-width">
+                  <q-skeleton
+                    v-for="(item, index) in heights"
+                    :key="item"
+                    :height="item + 'px'"
+                    :class="[index % 2 ? 'self-end' : '']"
+                    class="rounded bott-chat--area-skeleton"
+                  />
+                </div>
+              </q-inner-loading>
 
               <chat-message
                 v-for="(message, index) of support.messages"
@@ -41,25 +57,20 @@
           </q-scroll-area>
         </q-page>
 
-        <q-footer class="bg-transparent row justify-center">
+        <q-footer
+          v-if="!support.loading.chat"
+          class="bg-transparent row justify-center"
+        >
           <bottom-section></bottom-section>
         </q-footer>
       </q-page-container>
     </q-layout>
-
-    <q-inner-loading
-      :showing="support.loading.chat"
-      class="bott-page__background"
-      transition-show="none"
-    >
-      <q-spinner size="50px" color="primary" />
-    </q-inner-loading>
   </div>
 </template>
 
 <script setup lang="ts">
 import { date } from 'quasar';
-import { computed, onMounted, onUpdated, ref } from 'vue';
+import { computed, onMounted, onUnmounted, onUpdated, ref } from 'vue';
 import { chatColors, months } from '../../utils/common';
 
 import { useSupportStore } from '../../stores/supportStore';
@@ -73,6 +84,8 @@ const support = useSupportStore();
 
 const chat = ref();
 const bottom = ref();
+
+const heights = [140, 100, 90, 160, 50, 80, 140];
 
 const color = computed(
   () => chatColors[support.selectedTicket?.status ?? 1] ?? ''
@@ -92,6 +105,11 @@ onMounted(() => {
   support.chatBottomRef = bottom;
 });
 
+onUnmounted(() => {
+  support.messages = [];
+  support.selectedTicket = null;
+});
+
 onUpdated(support.scrollToBottom.bind(support));
 
 const thumbStyle = {
@@ -108,8 +126,12 @@ const thumbStyle = {
 .bg-page {
   background: #fafafa;
 }
-.chat-area {
+.bott-chat--area {
   max-width: 900px;
   margin: 0 auto;
+  &-skeleton {
+    max-width: 450px;
+    width: 100%;
+  }
 }
 </style>

@@ -62,12 +62,13 @@
 import { config } from '../../../config';
 import { computed } from 'vue';
 
+import { TG_DESKTOP } from '../../../utils/common';
 import { defaultTicketMessage } from '../../../stores/supportModels';
 
-import { mdiContentCopy, mdiTelegram } from '@quasar/extras/mdi-v5';
-import { TG_DESKTOP } from '../../../utils/common';
 import { copyToClipboard } from 'quasar';
-import { grinding } from '../../../../../utils/helpers/grinding';
+import { grinding } from 'src/utils/helpers/grinding';
+
+import { mdiContentCopy, mdiTelegram } from '@quasar/extras/mdi-v5';
 
 const props = withDefaults(defineProps<ChatMessageTopProps>(), {
   message: () => defaultTicketMessage,

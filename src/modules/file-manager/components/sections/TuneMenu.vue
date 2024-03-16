@@ -1,7 +1,7 @@
 <template>
   <q-menu class="bott-portal-menu" max-height="200px">
     <q-list dense>
-      <q-item clickable class="text-primary">
+      <q-item clickable>
         <q-item-section avatar>
           <q-icon name="grid_view" color="primary" size="24px" />
         </q-item-section>
@@ -51,7 +51,7 @@ import ActionButton from './ActionButton.vue';
 
 const data = useFileStore();
 
-const paginationCounts = [5, 10, 15, 20];
+const paginationCounts = [10, 25, 50];
 
 const changeCount = (count: number) => {
   data.pagination.page = 1;
