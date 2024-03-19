@@ -1,9 +1,12 @@
 import { Dialog } from 'quasar';
+import { replaceUnsolvableTags } from 'src/utils/helpers/replace';
 
-export function useDialog(message?: string, cancel?: boolean) {
+export function useDialog(message?: string, cancel?: boolean, title?: string) {
+  const grindingMessage = replaceUnsolvableTags(message);
+
   return Dialog.create({
-    title: 'Уведомление',
-    message: message,
+    title: title || 'Уведомление',
+    message: grindingMessage,
     class: 'rounded no-shadow bordered',
     html: true,
     ok: {

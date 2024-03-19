@@ -86,13 +86,13 @@ import { ref, computed } from 'vue';
 
 import { fetchMenu } from '../../api/queries';
 import { useReplyStore } from '../../stores/replyStore';
+import { useDialog } from 'src/utils/use/useDialog';
 
 import { replyTypes, replyButtons } from '../../utils/buttons';
 
 import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
 import SelectType from 'src/components/select-type/SelectType.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
-import { useDialog } from '../../../file-manager/stores/useDialog';
 
 const text = ref({
   value: '',

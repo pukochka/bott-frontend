@@ -1,7 +1,7 @@
 <template>
   <div class="bott-page__background" id="support-chat-card">
     <div class="row items-center no-wrap relative-position">
-      <div class="q-px-sm ellipsis">
+      <div class="q-px-sm ellipsis" style="font-size: 1rem">
         <div class="ellipsis q-gutter-x-sm text-color--grey">
           <span class="text-weight-bold">
             {{ support.selectedTicket?.user?.first_name }}
@@ -17,7 +17,7 @@
           </span>
         </div>
 
-        <div class="text-caption text-grey ellipsis">
+        <div class="text-caption bott-ticket--item-message--content ellipsis">
           {{ support.selectedTicket?.title }}
         </div>
       </div>

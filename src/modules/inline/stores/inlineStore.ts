@@ -2,14 +2,21 @@ import { ref } from 'vue';
 
 import { defineStore } from 'pinia';
 
-import { defaultMessageFree, DialogsNames, InlineStore } from './inlineModels';
+import { DialogsNames, InlineStore } from './inlineModels';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 export const useInlineStore = defineStore('inline-store', {
   state: () =>
     ref({
       settings: [],
       types: [],
-      message: defaultMessageFree,
+      message: defaultMessage,
+
+      combine: {
+        messages: [],
+        count: 0,
+        page: 0,
+      },
 
       selectedButton: null,
       selectedLine: null,
@@ -25,11 +32,15 @@ export const useInlineStore = defineStore('inline-store', {
         drag: false,
         editor: false,
         edit_type_message: false,
+        combine: false,
+        combine_message: false,
       },
     } as InlineStore),
   getters: {
-    inlineMenu: (state): IMMenu | null => state.message.menu,
-    inlineLines: (state): IMLine[] => state.message.menu?.lines ?? [],
+    messages: (state): Array<MessageFree> => state.combine.messages,
+
+    menu: (state): IMMenu | null => state.message.menu,
+    lines: (state): IMLine[] => state.message.menu?.lines ?? [],
 
     mappedKeys: (state) =>
       Object.fromEntries(state.settings.map((item) => [item.key, item.value])),

@@ -4,7 +4,8 @@
       <div
         class="col-12 col-sm-6 col-md"
         v-for="button in buttons"
-        :key="button.label">
+        :key="button.label"
+      >
         <q-btn
           stack
           outline
@@ -15,7 +16,8 @@
           :icon="button.icon"
           :label="button.label"
           :href="button.href"
-          @click="button.action" />
+          @click="button.action"
+        />
       </div>
     </div>
   </div>
@@ -24,9 +26,9 @@
 <script lang="ts" setup>
 import { config } from '../../../config';
 
-import { useDialog } from '../../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { useCommandsStore } from '../../stores/commandsStore';
-import { historyGo } from '../../../../inline/stores/helpers';
+import { historyGo } from 'src/utils/helpers/string';
 
 const commands = useCommandsStore();
 

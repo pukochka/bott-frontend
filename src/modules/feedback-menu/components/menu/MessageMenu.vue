@@ -29,7 +29,7 @@ import { useFeedbackStore } from '../../stores/feedbackStore';
 import { computed, ref } from 'vue';
 
 import { fetchFeedback } from '../../api/queries';
-import { useDialog } from '../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { mdiSourceBranchRemove } from '@quasar/extras/mdi-v7';
 
 const feedback = useFeedbackStore();

@@ -49,7 +49,7 @@ function getText(name: KeySchema, value: string | number) {
   return other;
 }
 
-export function parseTimestamp(
+export function getFormattedTime(
   time: string | number,
   formatted?: boolean,
   schema?: TimeSchema

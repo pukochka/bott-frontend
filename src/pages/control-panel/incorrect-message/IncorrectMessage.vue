@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import InlineMenu from 'src/modules/inline';
+import InlineMenu from 'src/modules/inline/InlineMenu.vue';
 </script>
 
 <style lang="scss" scoped></style>

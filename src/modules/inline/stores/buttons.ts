@@ -1,4 +1,4 @@
-import config from '../config';
+import { config } from '../config';
 
 import CommonType from 'src/components/select-type/CommonType.vue';
 import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';

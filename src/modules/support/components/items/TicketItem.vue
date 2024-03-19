@@ -2,9 +2,9 @@
   <q-item
     clickable
     :data-selected="isSelected"
-    class="bott-ticket--item rounded non-selectable"
     :class="[classes]"
-    @click="support.openChat(props.ticket)"
+    class="bott-ticket--item rounded non-selectable"
+    @click="handleOpenChat"
   >
     <q-item-section>
       <q-item-label
@@ -13,7 +13,10 @@
         <div class="bott-ticket--item-info">
           <div class="bott-ticket--item-info-row">
             <span class="text-weight-bold ellipsis bott-ticket--item-user">
-              {{ ticket.user.first_name }} {{ ticket.user.last_name }}
+              {{ ticket.title }}
+              <span class="bott-ticket--item-message--time">
+                ({{ ticket.user.first_name }} {{ ticket.user.last_name }})
+              </span>
             </span>
 
             <q-space></q-space>
@@ -26,35 +29,40 @@
             </div>
 
             <div class="font-12 q-px-xs bott-ticket--item-message--time">
-              {{ time }}
+              {{
+                getMessageFormattedTime(
+                  props.ticket?.last_message?.created_at ?? '0'
+                )
+              }}
             </div>
-
-            <q-icon
-              size="16px"
-              name="check"
-              :color="isSelected ? 'white' : 'primary'"
-              v-if="ticket.user.id === ticket.last_message?.user?.id"
-            />
           </div>
         </div>
       </q-item-label>
 
-      <q-item-label
-        class="bott-ticket--item-message--content font-14 q-pt-xs"
-        style="word-break: break-all"
-      >
-        <span class="ellipsis-2-lines">
-          <q-icon
-            size="20px"
-            class="q-pr-sm"
-            v-if="isMedia"
-            :name="icon"
-            :color="isSelected ? 'white' : 'primary'"
-          />
+      <div class="row no-wrap items-start q-pt-xs">
+        <q-item-label
+          style="word-break: break-all"
+          class="bott-ticket--item-message--content col font-14"
+        >
+          <span class="ellipsis-2-lines">
+            <q-icon
+              size="20px"
+              class="q-pr-sm"
+              v-if="isMedia"
+              :name="icon"
+              :color="isSelected ? 'white' : 'primary'"
+            />
 
-          <span v-html="ticket.last_message?.message?.text"></span>
-        </span>
-      </q-item-label>
+            <span v-html="lastMessage"></span>
+          </span>
+        </q-item-label>
+
+        <q-avatar
+          size="16px"
+          :color="isSelected ? 'white' : 'grey'"
+          v-if="ticket.user.id === ticket.last_message?.user?.id"
+        />
+      </div>
     </q-item-section>
   </q-item>
 </template>
@@ -64,10 +72,13 @@ import { computed } from 'vue';
 
 import { defaultTicket } from '../../stores/supportModels';
 import { mediaIcons } from '../../utils/common';
-import { ticketStatuses } from '../../utils/statuses';
+import {
+  getMessageFormattedTime,
+  ticketStatuses,
+} from '../../utils/messageMeta';
+import { replaceUnsolvableTags } from 'src/utils/helpers/replace';
 
 import { useSupportStore } from '../../stores/supportStore';
-import { date } from 'quasar';
 
 const props = withDefaults(defineProps<TicketItemProps>(), {
   ticket: () => defaultTicket,
@@ -95,12 +106,15 @@ const ticketStatus = computed(
   () => ticketStatuses[props.ticket.status] ?? ticketStatuses[0]
 );
 
-const time = computed(() =>
-  date.formatDate(
-    Date.parse(props.ticket?.last_message?.created_at ?? '0'),
-    'HH:mm'
-  )
+const lastMessage = computed(() =>
+  replaceUnsolvableTags(props.ticket.last_message?.message?.text)
 );
+
+const handleOpenChat = () => {
+  if (support.selectedTicket?.id === props.ticket.id) return;
+
+  support.openChat(props.ticket);
+};
 
 interface TicketItemProps {
   ticket: SupportTicket;

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { config } from '../../config';
 
 import { useCommandsStore } from '../stores/commandsStore';
-import { useDialog } from '../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
 const instance = axios.create({
   baseURL: config.host,

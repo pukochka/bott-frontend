@@ -50,7 +50,7 @@ import { ref, computed } from 'vue';
 import { useVectorStore } from '../../stores/vector/vectorStore';
 import { useDataStore } from '../../stores/data/dataStore';
 
-import { defaultButton, defaultMessage } from '../../stores/defaults';
+import { defaultMessage, defaultButton } from 'src/utils/helpers/defaults';
 
 import ButtonCheckbox from './sections/ButtonCheckbox.vue';
 import ButtonMenu from './sections/ButtonMenu.vue';

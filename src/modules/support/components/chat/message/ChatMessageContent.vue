@@ -11,9 +11,8 @@
 import { computed } from 'vue';
 import { defaultTicketMessage } from '../../../stores/supportModels';
 
-import { date } from 'quasar';
-import { grinding } from 'src/utils/helpers/grinding';
-import { parseContent } from '../../../utils/common';
+import { replaceUnsolvableTags } from 'src/utils/helpers/replace';
+import { getMessageTime } from '../../../utils/messageMeta';
 
 const props = withDefaults(defineProps<ChatMessageContentProps>(), {
   message: () => defaultTicketMessage,
@@ -22,16 +21,13 @@ const props = withDefaults(defineProps<ChatMessageContentProps>(), {
 const isMedia = computed(() => ![0, 2].includes(props.message.message.type.id));
 
 const textContent = computed(
-  () => grinding(parseContent(props.message.message.text)) + formattedTime.value
+  () => replaceUnsolvableTags(props.message.message.text) + time.value
 );
 
-const time = computed(() => Date.parse(props.message.created_at));
-
-const formattedTime = computed(
+const time = computed(
   () =>
-    `<span class="message-meta"><span class="text-caption self-end text-grey q-mx-xs non-selectable">${date.formatDate(
-      time.value,
-      'HH:mm'
+    `<span class="message-meta"><span class="q-mx-xs">${getMessageTime(
+      props.message.created_at
     )}</span></span>`
 );
 

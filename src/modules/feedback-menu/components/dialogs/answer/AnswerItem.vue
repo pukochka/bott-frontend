@@ -13,7 +13,22 @@
     </q-item-section>
 
     <q-item-section>
-      <div v-html="answer"></div>
+      <q-item-label
+        v-clickable="props.answer.answer !== ''"
+        class="rounded"
+        @click="viewAnswer"
+      >
+        <div v-html="answer" class="ellipsis-3-lines"></div>
+
+        <q-tooltip
+          class="bott-tooltip text-center"
+          anchor="top middle"
+          self="bottom middle"
+          v-if="props.answer.answer !== ''"
+        >
+          Смотреть ответ
+        </q-tooltip>
+      </q-item-label>
     </q-item-section>
 
     <q-item-section>
@@ -39,7 +54,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { copyToClipboard } from 'quasar';
-import { useNotify } from '../../../../inline/stores/helpers';
+
+import { useNotify } from 'src/utils/use/useNotify';
+import { useDialog } from 'src/utils/use/useDialog';
 
 import { defaultAnswer, statuses } from '../../../stores/feedbackModels';
 
@@ -69,6 +86,12 @@ const copyUsername = () => {
   copyToClipboard('@' + props.answer.user.username ?? '').then(() =>
     useNotify('Скопировано!')
   );
+};
+
+const viewAnswer = () => {
+  if (props.answer.answer === '') return;
+
+  useDialog(props.answer.answer, false, 'Ответ');
 };
 
 const data = computed(() => [

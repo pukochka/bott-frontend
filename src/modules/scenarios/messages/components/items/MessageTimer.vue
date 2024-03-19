@@ -3,7 +3,7 @@
     flat
     v-clickable
     class="rounded relative-position q-pa-sm overflow-hidden"
-    @click="states.openDialog('timer')"
+    @click="states.openDialog('timer_view')"
   >
     <div class="row items-center justify-center">
       <q-icon :name="mdiTimerOutline" color="primary" size="46px" />
@@ -22,13 +22,13 @@
 </template>
 
 <script setup lang="ts">
-import { defaultMessage } from '../../stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import { useStatesStore } from '../../stores/states/statesStore';
 
 import { mdiTimerOutline } from '@quasar/extras/mdi-v7';
 import { computed } from 'vue';
-import { parseTimestamp } from '../../../../../utils/helpers/time';
+import { getFormattedTime } from 'src/utils/helpers/time';
 
 const props = withDefaults(defineProps<MessageTimerProps>(), {
   message: () => defaultMessage,
@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<MessageTimerProps>(), {
 const states = useStatesStore();
 
 const formatted = computed(() =>
-  parseTimestamp(props.message.text, true, 'triple')
+  getFormattedTime(props.message.text, true, 'triple')
 );
 
 interface MessageTimerProps {

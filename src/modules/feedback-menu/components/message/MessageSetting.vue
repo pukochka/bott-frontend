@@ -90,7 +90,7 @@
 import { computed, ref } from 'vue';
 
 import { fetchFeedback } from '../../api/queries';
-import { useDialog } from '../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';

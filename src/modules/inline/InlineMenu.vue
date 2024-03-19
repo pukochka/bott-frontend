@@ -10,9 +10,9 @@
           flat
           bordered
           class="rounded q-gutter-y-sm"
-          :class="[!props.noBreadcrumbs ? ' q-px-md q-pb-md' : ' q-pa-md']"
+          :class="[condition ? ' q-px-md q-pb-md' : ' q-pa-md']"
         >
-          <q-breadcrumbs v-if="!props.noBreadcrumbs" gutter="none" align="left">
+          <q-breadcrumbs v-if="condition" gutter="none" align="left">
             <q-breadcrumbs-el
               class="rounded q-px-xs"
               v-clickable="index !== breadcrumbs.length - 1"
@@ -23,7 +23,7 @@
             />
           </q-breadcrumbs>
 
-          <div class="row items-center justify-between no-wrap">
+          <div class="row items-center justify-between no-wrap q-ma-none">
             <top-section></top-section>
 
             <file-manager
@@ -36,16 +36,14 @@
             ></file-manager>
           </div>
 
-          <assigned-file
-            v-if="[1, 3, 4, 5].includes(inline.message.type.id)"
-          ></assigned-file>
+          <assigned-media :message="inline.message"></assigned-media>
 
-          <message-content></message-content>
+          <content-section></content-section>
         </q-card>
 
         <buttons-section
-          v-if="inline.inlineMenu && inline.inlineLines.length > 0"
-          :menu="inline.inlineMenu"
+          v-if="inline.menu && inline.lines.length > 0"
+          :menu="inline.menu"
           :loading="loading.delete"
           :is_support_menu="inline.message.is_support_menu"
           @select-button="openSettings"
@@ -53,60 +51,53 @@
           @delete-line="deleteLine"
         ></buttons-section>
 
-        <setting-section
+        <bottom-section
           v-if="inline.message.is_support_menu"
-        ></setting-section>
+          @drop-combine="(id) => emit('drop-combine', id)"
+        ></bottom-section>
       </div>
 
       <div class="col-12 col-sm-5 q-gutter-y-sm">
-        <control-section></control-section>
-
-        <inline-settings></inline-settings>
-
-        <faq-section :faq="inline.message.faq"></faq-section>
-
-        <constants-section
-          :constants="inline.message.constants"
-        ></constants-section>
+        <right-section :loading="loading.start"></right-section>
       </div>
     </div>
   </div>
 
-  <add-button></add-button>
+  <button-add-modal></button-add-modal>
 
-  <editor-dial></editor-dial>
+  <button-settings-modal></button-settings-modal>
 
-  <button-settings></button-settings>
+  <update-type-modal></update-type-modal>
 
-  <edit-type-message></edit-type-message>
+  <combine-modal></combine-modal>
 
-  <draggable-dial :elements="inline.inlineLines"></draggable-dial>
+  <editor-modal></editor-modal>
+
+  <draggable-modal :elements="inline.lines"></draggable-modal>
 </template>
 <script lang="ts" setup>
+import { config } from './config';
 import { computed, onBeforeMount, ref } from 'vue';
 
 import { fetchMenu, fetchMessage, fetchSettings } from './api/queries';
 import { getQueryParam } from 'src/utils/helpers/string';
 
 import { useInlineStore } from './stores/inlineStore';
-import { useDialog } from '../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
-import AddButton from './components/dialogs/AddButton.vue';
-import ButtonSettings from './components/dialogs/ButtonSettings.vue';
-import ButtonsSection from 'src/components/inline/ButtonsSection.vue';
-import SettingSection from './components/SettingSection.vue';
-import EditorDial from './components/dialogs/EditorDial.vue';
-import DraggableDial from './components/dialogs/DraggableDial.vue';
-import FileManager from '../file-manager/FileManager.vue';
-import AssignedFile from './components/AssignedFile.vue';
-import InlineSettings from './components/settings/InlineSettings.vue';
-import EditTypeMessage from './components/dialogs/EditTypeMessage.vue';
-import ConstantsSection from './components/settings/ConstantsSection.vue';
-import FaqSection from './components/settings/FaqSection.vue';
-import ControlSection from './components/settings/ControlSection.vue';
+import EditorModal from './components/modals/EditorModal.vue';
+import ButtonAddModal from './components/modals/ButtonAddModal.vue';
+import ButtonSettingsModal from './components/modals/ButtonSettingsModal.vue';
+import UpdateTypeModal from './components/modals/UpdateTypeModal.vue';
+import DraggableModal from './components/modals/DraggableModal.vue';
+import CombineModal from './components/modals/CombineModal.vue';
 import TopSection from './components/TopSection.vue';
-import MessageContent from './components/MessageContent.vue';
-import config from './config';
+import ContentSection from './components/ContentSection.vue';
+import BottomSection from './components/BottomSection.vue';
+import FileManager from '../file-manager/FileManager.vue';
+import ButtonsSection from 'src/components/inline/ButtonsSection.vue';
+import AssignedMedia from 'src/components/file-manager/AssignedMedia.vue';
+import RightSection from './components/RightSection.vue';
 
 const props = withDefaults(defineProps<InlineMenuProps>(), {
   message: undefined,
@@ -117,12 +108,18 @@ const props = withDefaults(defineProps<InlineMenuProps>(), {
   scenarios: false,
 });
 
+const emit = defineEmits<{
+  (e: 'drop-combine', id: number): void;
+}>();
+
 const inline = useInlineStore();
 
 const loading = ref({
   delete: false,
   start: true,
 });
+
+const condition = computed(() => !props.noBreadcrumbs);
 
 const openSettings = (button: IMButton) => {
   inline.selectedButton = button;
@@ -183,6 +180,7 @@ const windowProps = () => {
     inline.bot_id = config.bot.id;
     inline.token = config.bot.token;
     inline.host = config.host;
+    inline.scenarios = false;
   } catch (e) {}
 };
 

@@ -58,13 +58,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
+import { useQuasar } from 'quasar';
 import { useFileStore } from '../../stores/fileStore';
 
 import { defaultFileCard } from '../../stores/fileModels';
 
-import FileImg from '../extension/FileImg.vue';
-import VideoPreview from '../extension/VideoPreview.vue';
-import { useQuasar } from 'quasar';
+import { getMediaComponent } from 'src/components/file-manager/media';
 
 const data = useFileStore();
 const quasar = useQuasar();
@@ -73,9 +72,7 @@ const drawer = ref(true);
 
 const sm = computed(() => quasar.screen.lt.sm);
 
-const component = computed(() =>
-  data.paths === 'videos' ? VideoPreview : FileImg
-);
+const component = computed(() => getMediaComponent(data.paths));
 
 const file = computed(() => data.selectedFiles[0] ?? defaultFileCard);
 

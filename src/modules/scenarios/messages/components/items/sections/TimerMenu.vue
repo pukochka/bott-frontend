@@ -19,7 +19,7 @@ import { computed, ref } from 'vue';
 import { fetchMessage } from '../../../api';
 import { useDataStore } from '../../../stores/data/dataStore';
 import { useVectorStore } from '../../../stores/vector/vectorStore';
-import { defaultMessage } from '../../../stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 const emit = defineEmits<{
   (e: 'close'): void;

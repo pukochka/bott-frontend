@@ -72,7 +72,7 @@ import { computed, ref } from 'vue';
 import { defaultFileCard } from '../../stores/fileModels';
 
 import { fetchFile } from '../../api/queries';
-import { useDialog } from '../../stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
 import { useFileStore } from '../../stores/fileStore';
 

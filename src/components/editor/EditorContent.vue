@@ -11,7 +11,11 @@
       </div>
 
       <div class="relative-position bordered rounded q-pa-sm">
-        <EditorContent class="relative-position" :editor="editor" />
+        <EditorContent
+          v-if="editor"
+          class="relative-position"
+          :editor="editor"
+        />
 
         <div
           class="absolute-full z-top bg-opacity"

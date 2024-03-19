@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
 
-import { defaultMessage } from '../../../stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import { onUpdated } from 'vue';
 import { useVectorStore } from '../../../stores/vector/vectorStore';

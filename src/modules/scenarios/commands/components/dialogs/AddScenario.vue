@@ -30,12 +30,10 @@
       <q-card-section class="q-pt-none">
         <div class="q-pb-sm">Тип первого сообщения</div>
 
-        <edit-type
-          v-if="types.length"
+        <update-type-list
           @select="update"
-          :types="types"
-          :type="selected"
-        ></edit-type>
+          :types="data.types"
+        ></update-type-list>
       </q-card-section>
 
       <q-card-section class="q-pt-none row justify-end q-gutter-sm">
@@ -65,23 +63,20 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 import { fetchCommands } from '../../../messages/api';
-
 import { useCommandsStore } from '../../stores/commandsStore';
+import { useDataStore } from '../../../messages/stores/data/dataStore';
 
-import EditType from '../../../../inline/components/settings/EditType.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
+import UpdateTypeList from 'src/components/meta/UpdateTypeList.vue';
 
 const commands = useCommandsStore();
+const data = useDataStore();
 
 const loading = ref(false);
 const selected = ref(0);
-
-const types = computed(() =>
-  Object.entries(support).map(([_, value]) => value)
-);
 
 const update = (id: number) => {
   selected.value = id;
@@ -108,58 +103,19 @@ const enterDown = (evt: KeyboardEvent) => {
 const addRoute = () => {
   loading.value = true;
 
-  fetchCommands('create-with-column', {
-    message: text.value.value,
-    message_type: selected.value,
-  }).then(() => {
+  fetchCommands(
+    'create-with-column',
+    {
+      message: text.value.value,
+      message_type: selected.value,
+    },
+    (response) => {
+      commands.commands.push(response.data.data);
+    }
+  ).then(() => {
     loading.value = false;
     commands.closeDialog('add_scenario');
   });
-};
-
-const support = {
-  '0': {
-    id: 0,
-    type: 0,
-    label: 'Текстовое сообщение',
-    description: 'Сообщение содержащее только текст',
-    path: 'texts',
-  },
-  '1': {
-    id: 1,
-    type: 1,
-    label: 'Сообщение с картинкой',
-    description: 'Сообщение содержащее одну картинку',
-    path: 'photos',
-  },
-  '2': {
-    id: 2,
-    type: 2,
-    label: 'Обратная связь',
-    description: 'Форма для сбора данных от клиентов путем ответов на вопросы',
-    path: null,
-  },
-  '3': {
-    id: 3,
-    type: 3,
-    label: 'Сообщение-файл',
-    description: 'Документ с описанием(Отправка файла)',
-    path: 'files',
-  },
-  '4': {
-    id: 4,
-    type: 4,
-    label: 'Сообщение c видео',
-    description: 'Сообщение содержащее видео',
-    path: 'videos',
-  },
-  '5': {
-    id: 5,
-    type: 5,
-    label: 'Сообщение c анимацией(gif)',
-    description: 'Сообщение содержащее анимацию(GIF)',
-    path: 'animations',
-  },
 };
 
 const updateShow = () => {

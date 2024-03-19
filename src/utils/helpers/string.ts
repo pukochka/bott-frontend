@@ -25,13 +25,10 @@ export function has(param: string) {
   return url.has(param);
 }
 
-export function setCaretPosition(name: string, start: number, end: number) {
-  const el = <HTMLInputElement>document.querySelector(name);
+export function historyGo(to: string, blank?: boolean) {
+  const el = document.createElement('a');
+  el.href = to;
+  el.target = blank ? '_blank' : '';
 
-  if (el === null) return;
-
-  if (el.setSelectionRange) {
-    el.focus();
-    el.setSelectionRange(start, end);
-  }
+  el.click();
 }

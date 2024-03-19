@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { FMStore } from './fileModels';
 
 import 'src/utils/polifils/dimension';
-import { useDialog } from './useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { fetchFile } from '../api/queries';
 import {
   compareDown,

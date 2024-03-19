@@ -66,7 +66,6 @@ import { TG_DESKTOP } from '../../../utils/common';
 import { defaultTicketMessage } from '../../../stores/supportModels';
 
 import { copyToClipboard } from 'quasar';
-import { grinding } from 'src/utils/helpers/grinding';
 
 import { mdiContentCopy, mdiTelegram } from '@quasar/extras/mdi-v5';
 
@@ -85,14 +84,12 @@ const messageLink = computed(
 );
 
 const username = computed(() =>
-  grinding(
-    props.message.user.link.includes('tg://user')
-      ? props.message.user.link.slice(
-          props.message.user.link.indexOf("'") + 1,
-          props.message.user.link.lastIndexOf("'")
-        )
-      : props.message.user.link
-  )
+  props.message.user.link.includes('tg://user')
+    ? props.message.user.link.slice(
+        props.message.user.link.indexOf("'") + 1,
+        props.message.user.link.lastIndexOf("'")
+      )
+    : props.message.user.link
 );
 
 const userLink = computed(() => {

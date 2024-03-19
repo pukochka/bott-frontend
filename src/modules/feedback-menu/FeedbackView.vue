@@ -80,6 +80,8 @@
 
   <api-integrations></api-integrations>
 
+  <update-type-modal></update-type-modal>
+
   <integration-edit></integration-edit>
 
   <q-inner-loading
@@ -122,6 +124,7 @@ import TouchDialog from './components/dialogs/TouchDialog.vue';
 import AdministratorAnswer from './components/dialogs/answer/AdministratorAnswer.vue';
 import ApiIntegrations from './components/dialogs/ApiIntegrations.vue';
 import IntegrationEdit from './components/dialogs/integrations/IntegrationEdit.vue';
+import UpdateTypeModal from './components/dialogs/UpdateTypeModal.vue';
 
 const feedback = useFeedbackStore();
 const quasar = useQuasar();

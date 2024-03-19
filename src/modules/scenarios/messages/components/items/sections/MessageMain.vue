@@ -1,18 +1,13 @@
 <template>
-  <message-timer
+  <timer-card
     v-if="timer"
+    :combined="false"
     :message="props.message"
-    @click="data.selectedMessage = props.message"
-  ></message-timer>
+    @update-time="updateTime"
+  ></timer-card>
 
   <div class="rounded bordered overflow-hidden" v-if="!timer && !feedback">
-    <div
-      class="relative-position"
-      style="height: 130px"
-      v-if="[1, 3, 4, 5].includes(message.type.id) && path.length"
-    >
-      <component :is="type.comp" :name="file.host" :link="file.abs_path" />
-    </div>
+    <assigned-media scenarios :message="props.message"></assigned-media>
 
     <div
       class="q-px-sm q-py-xs"
@@ -31,15 +26,14 @@
 <script lang="ts" setup>
 import { computed, onUpdated } from 'vue';
 import { colors } from 'quasar';
-import { defaultMessageMedia } from '../../../../../inline/stores/inlineModels';
-import { defaultMessage } from '../../../stores/defaults';
+
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import { useVectorStore } from '../../../stores/vector/vectorStore';
-import { useDataStore } from '../../../stores/data/dataStore';
+import fetchMessage from '../../../api/queries/message';
 
-import FileImg from '../../../../../file-manager/components/extension/FileImg.vue';
-import VideoPreview from '../../../../../file-manager/components/extension/VideoPreview.vue';
-import MessageTimer from '../MessageTimer.vue';
+import TimerCard from 'src/components/timer/TimerCard.vue';
+import AssignedMedia from 'src/components/file-manager/AssignedMedia.vue';
 
 const { changeAlpha } = colors;
 
@@ -48,39 +42,36 @@ const props = withDefaults(defineProps<MessageMainProps>(), {
 });
 
 const vector = useVectorStore();
-const data = useDataStore();
 
 const timer = computed(() => props.message.type.id === 7);
 const feedback = computed(() => props.message.type.id === 2);
 
-const ext: Record<number, { path: Paths; comp: any }> = {
-  1: { path: 'photos', comp: FileImg },
-  3: { path: 'files', comp: FileImg },
-  4: { path: 'videos', comp: VideoPreview },
-  5: { path: 'animations', comp: FileImg },
-};
-
-const type = computed(() => ext[props.message.type.id]);
-
-const file = computed(
-  () => props.message[type.value.path ?? 'photos'] ?? defaultMessageMedia
-);
-
-const path = computed(
-  () => props.message[type.value.path ?? 'photos']?.host ?? ''
-);
-
 const color = computed(() =>
   changeAlpha(props.message.color?.color ?? '#ffffff', 0.3)
 );
+
+const updateTime = (value: number, callback?: () => void) => {
+  const message = props.message;
+
+  fetchMessage(
+    'update-text',
+    {
+      message_id: props.message.id,
+      text: value.toString(),
+    },
+    (response) => {
+      message.text = response.data.data;
+    }
+  ).then(() => {
+    if (callback !== void 0) callback();
+  });
+};
 
 interface MessageMainProps {
   message: MessageFree;
 }
 
 onUpdated(vector.update);
-
-type Paths = 'photos' | 'files' | 'videos' | 'animations';
 </script>
 
 <style lang="scss" scoped>

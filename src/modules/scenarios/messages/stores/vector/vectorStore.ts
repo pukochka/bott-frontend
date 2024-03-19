@@ -243,5 +243,8 @@ export const useVectorStore = defineStore({
       this.updateCombined();
       this.editCombine = null;
     },
+    dropCombineLine(id: number) {
+      this.combineLines = this.combineLines.filter((item) => item.id !== id);
+    },
   },
 });

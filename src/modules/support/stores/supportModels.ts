@@ -1,4 +1,6 @@
-import { defaultMessage } from '../../scenarios/messages/stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
+
+type Interval = string | number | NodeJS.Timeout | undefined;
 
 export interface WorkStore {
   categories: Array<SupportCategory>;
@@ -8,8 +10,8 @@ export interface WorkStore {
 
   category: number;
   panel: 'tickets' | 'chat';
-  categoryInterval: string | number | NodeJS.Timeout | undefined;
-  messagesInterval: string | number | NodeJS.Timeout | undefined;
+  categoryInterval: Interval;
+  messagesInterval: Interval;
 
   media: {
     width: number;

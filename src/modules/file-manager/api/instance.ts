@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { useDialog } from '../stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { useFileStore } from '../stores/fileStore';
 
 const instance = axios.create({

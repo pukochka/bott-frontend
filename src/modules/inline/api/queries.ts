@@ -1,8 +1,9 @@
+import { config } from '../config';
 import instance from './interseptor';
 
 import { useInlineStore } from '../stores/inlineStore';
-import { useDialog } from '../../file-manager/stores/useDialog';
-import { useNotify } from '../stores/helpers';
+import { useDialog } from 'src/utils/use/useDialog';
+import { useNotify } from 'src/utils/use/useNotify';
 
 const scenariosQueries = ['update-data-and-type'];
 
@@ -91,6 +92,18 @@ export async function fetchMessage<Q extends keyof SCMessageQueries>(
         inline.message.title = response.data.data;
 
         /** */
+      } else if (query === 'set-next-message') {
+        /** */
+
+        inline.message.nextMessage = response.data.data?.nextMessage ?? null;
+
+        /** */
+      } else if (query === 'drop-next-message') {
+        /** */
+
+        inline.message.nextMessage = null;
+
+        /** */
       }
     });
   } catch (e) {
@@ -99,7 +112,7 @@ export async function fetchMessage<Q extends keyof SCMessageQueries>(
 }
 
 export async function fetchSettings(
-  request: 'settings' | 'update-settings',
+  query: 'settings' | 'update-settings',
   id: number,
   params?: Record<string, any>
 ) {
@@ -109,7 +122,7 @@ export async function fetchSettings(
 
   try {
     return await instance({
-      url: inline.host + 'v1/bot/message/settings/' + request,
+      url: inline.host + 'v1/bot/message/settings/' + query,
       data: data,
     }).then((response) => {
       /** */
@@ -118,6 +131,31 @@ export async function fetchSettings(
 
       /** */
     });
+  } catch (e) {
+    useDialog('Что-то пошло не так, обратитесь в поддержку.');
+  }
+}
+
+const limit = 6;
+
+export async function fetchUpdateMessages(offset: number) {
+  const inline = useInlineStore();
+
+  try {
+    return await Promise.all([
+      instance({
+        url: inline.host + '/v1/bot/messagenew/message/index',
+        data: { user_id: config.user_id, offset, limit },
+      }).then(
+        (response) => (inline.combine.messages = response.data.data || [])
+      ),
+      instance({
+        url: inline.host + '/v1/bot/messagenew/message/count',
+        data: { user_id: config.user_id, offset, limit },
+      }).then(
+        (response) => (inline.combine.count = Number(response.data.data) || 0)
+      ),
+    ]);
   } catch (e) {
     useDialog('Что-то пошло не так, обратитесь в поддержку.');
   }

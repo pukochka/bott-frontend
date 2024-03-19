@@ -77,6 +77,7 @@ export type DialogsNames =
   | 'crossroad'
   | 'crossroad_option'
   | 'administrator_answer'
+  | 'update_type'
   | 'api'
   | 'templates'
   | 'api_edit'

@@ -5,14 +5,18 @@
       bordered
       class="rounded flex-center flex overflow-hidden"
       style="height: 140px"
-      @click="select">
+      @click="select"
+    >
       <div class="fit flex flex-center">
         <component
           :is="component"
           :link="props.item.link"
-          :name="props.item.name">
+          :name="props.item.name"
+          :fit="data.imageFit"
+        >
           <div
-            class="absolute-bottom text-caption text-center image-padding-none row items-center justify-between no-wrap">
+            class="absolute-bottom text-caption text-center image-padding-none row items-center justify-between no-wrap"
+          >
             <div class="ellipsis">{{ item.name }}</div>
 
             <q-checkbox
@@ -21,7 +25,8 @@
               size="44px"
               :model-value="selected"
               color="primary"
-              @click="select($event, true)">
+              @click="select($event, true)"
+            >
               <q-tooltip anchor="top middle" self="bottom middle">
                 Выбрать файл
               </q-tooltip>
@@ -39,9 +44,7 @@ import { computed } from 'vue';
 import { useFileStore } from '../stores/fileStore';
 
 import { defaultFileCard } from '../stores/fileModels';
-
-import FileImg from './extension/FileImg.vue';
-import VideoPreview from './extension/VideoPreview.vue';
+import { getMediaComponent } from 'src/components/file-manager/media';
 
 const props = withDefaults(defineProps<FileCardProps>(), {
   item: () => defaultFileCard,
@@ -49,13 +52,7 @@ const props = withDefaults(defineProps<FileCardProps>(), {
 
 const data = useFileStore();
 
-const classes = computed(() =>
-  data.paths === 'videos' ? 'q-img__content' : ''
-);
-
-const component = computed(() =>
-  data.paths === 'videos' ? VideoPreview : FileImg
-);
+const component = computed(() => getMediaComponent(data.paths));
 
 const selected = computed(
   () =>

@@ -72,17 +72,16 @@
 <script setup lang="ts">
 import { config } from '../../../config';
 import { computed } from 'vue';
+
 import { useStatesStore } from '../../stores/states/statesStore';
 import { useDataStore } from '../../stores/data/dataStore';
-
-import { historyGo } from '../../../../inline/stores/helpers';
-
+import { useVectorStore } from '../../stores/vector/vectorStore';
+import { historyGo } from 'src/utils/helpers/string';
 import { deleteQueryParam } from 'src/utils/helpers/string';
 import { useCommandsStore } from '../../../commands/stores/commandsStore';
 import { useQuasar } from 'quasar';
-import { useDialog } from '../../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { fetchCommands } from '../../../messages/api';
-import { useVectorStore } from '../../stores/vector/vectorStore';
 
 const states = useStatesStore();
 const data = useDataStore();

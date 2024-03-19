@@ -1,3 +1,5 @@
+export const globalPerforms: Array<string> = [];
+
 export const handlerUpdate = (callback: () => void, handle?: string) => {
   return {
     set(target: any, key: any) {
@@ -9,3 +11,11 @@ export const handlerUpdate = (callback: () => void, handle?: string) => {
     },
   };
 };
+
+export function addToGlobalPerforms(name: string) {
+  globalPerforms.push(name);
+}
+
+export function removeFromGlobalPerforms() {
+  globalPerforms.shift();
+}

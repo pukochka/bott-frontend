@@ -50,7 +50,7 @@ import { config } from '../../../config';
 import { computed, ref } from 'vue';
 
 import { useFeedbackStore } from '../../../stores/feedbackStore';
-import { useDialog } from '../../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { fetchFeedbackIntegrations } from '../../../api/queries';
 
 import { defaultIntegrationIndex } from '../../../stores/feedbackModels';

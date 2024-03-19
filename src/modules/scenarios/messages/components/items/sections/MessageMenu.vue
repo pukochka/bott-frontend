@@ -87,10 +87,9 @@ import { useDataStore } from '../../../stores/data/dataStore';
 import { useStatesStore } from '../../../stores/states/statesStore';
 import { useVectorStore } from '../../../stores/vector/vectorStore';
 
-import { defaultMessage } from '../../../stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import { mdiMessagePlus, mdiMessageMinus } from '@quasar/extras/mdi-v7';
-import { CombineLine } from '../../../stores/classes';
 
 const props = withDefaults(defineProps<MessageMenuProps>(), {
   message: () => defaultMessage,
@@ -135,9 +134,7 @@ const deleteCombine = () => {
     menu.value = false;
     loading.value.deleteCombine = false;
 
-    vector.combineLines = vector.combineLines.filter(
-      (item) => item.id !== props.message.id
-    );
+    vector.dropCombineLine(props.message.id);
   });
 };
 

@@ -3,10 +3,7 @@
     <q-item-section>
       <q-item-label>
         {{ implementer.user.first_name }} {{ implementer.user.last_name }}
-      </q-item-label>
-
-      <q-item-label caption class="text-primary">
-        <div v-html="implementer.user.link"></div>
+        <span class="text-primary">{{ getUserLink(implementer.user) }}</span>
       </q-item-label>
 
       <q-item-label
@@ -57,11 +54,14 @@
 </template>
 
 <script setup lang="ts">
-import { defaultImplementer } from '../../stores/supportModels';
 import { computed, onMounted, ref } from 'vue';
-import { useDialog } from '../../../file-manager/stores/useDialog';
+
+import { useDialog } from 'src/utils/use/useDialog';
 import { fetchSupportImplementer } from '../../api/queries';
 import { useSupportStore } from '../../stores/supportStore';
+import { getUserLink } from '../../utils/messageMeta';
+
+import { defaultImplementer } from '../../stores/supportModels';
 
 const props = withDefaults(defineProps<ImplementorItemProps>(), {
   implementer: () => defaultImplementer,

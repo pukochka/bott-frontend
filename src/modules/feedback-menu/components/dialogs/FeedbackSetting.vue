@@ -139,6 +139,18 @@
           </div>
 
           <div class="col-12 col-md-5 q-gutter-y-sm">
+            <message-free-settings
+              no-settings
+              :message="feedback.message"
+              :host="config.host"
+              :bot-name="config.bot.name"
+              :token="config.bot.token"
+              :bot-id="config.bot.id"
+              @update-type="updateType"
+              @refresh="refreshMessage"
+              @test="testMessage"
+            ></message-free-settings>
+
             <faq-section :faq="feedback.message.faq"></faq-section>
 
             <constants-section
@@ -188,20 +200,22 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import { fetchFeedback, fetchMessage } from '../../api/queries';
-import { useDialog } from '../../../file-manager/stores/useDialog';
-import { defaultFeedbackSetting } from '../../stores/feedbackModels';
-import { defaultMessageFree } from '../../../inline/stores/inlineModels';
+import { useDialog } from 'src/utils/use/useDialog';
 
-import ConstantsSection from '../../../inline/components/settings/ConstantsSection.vue';
-import FaqSection from '../../../inline/components/settings/FaqSection.vue';
+import { defaultFeedbackSetting } from '../../stores/feedbackModels';
+import { defaultMessage } from 'src/utils/helpers/defaults';
+
+import MessageFreeSettings from 'src/components/meta/MessageFreeSettings.vue';
+import ConstantsSection from 'src/components/meta/ConstantsSection.vue';
+import FaqSection from 'src/components/meta/FaqSection.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import NotifyEditItem from './notification/LimitItem.vue';
 import MessageCard from '../views/MessageCard.vue';
-
-import { encodeText } from '../../../inline/stores/helpers';
 import FeedbackTemplates from './FeedbackTemplates.vue';
+import { config } from '../../config';
 
 const feedback = useFeedbackStore();
 
@@ -216,9 +230,9 @@ const setting = ref<MessageFeedbackSetting>(defaultFeedbackSetting);
 const text = ref(setting.value.template_answer);
 const title = ref(setting.value.template_answer);
 
-const notice = computed(() => feedback.feedback.notice ?? defaultMessageFree);
+const notice = computed(() => feedback.feedback.notice ?? defaultMessage);
 const noticeAdmin = computed(
-  () => feedback.feedback.noticeAdmin ?? defaultMessageFree
+  () => feedback.feedback.noticeAdmin ?? defaultMessage
 );
 
 const cards = computed((): any => [
@@ -248,6 +262,29 @@ const resetFeedback = () => {
       }).then(() => (loading.value.reset = false));
     }
   );
+};
+
+const refreshMessage = (callback?: () => void) => {
+  useDialog('Вы уверены, что хотите сбросить сообщение?', true).onOk(() => {
+    fetchMessage('reset', { message_id: feedback.message.id }, (response) => {
+      feedback._message = response;
+    }).then(() => {
+      if (callback !== void 0) callback();
+    });
+  });
+};
+
+const testMessage = (callback?: () => void) => {
+  fetchMessage('test', {
+    message_id: feedback.message.id,
+    user_id: config.user_id || 0,
+  }).then(() => {
+    if (callback !== void 0) callback();
+  });
+};
+
+const updateType = () => {
+  feedback.openDialog('update_type');
 };
 
 const updateTitle = () => {

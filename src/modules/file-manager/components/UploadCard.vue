@@ -4,9 +4,11 @@
       <component
         :is="component"
         :link="props.item.result"
-        :name="props.item.name">
+        :name="props.item.name"
+      >
         <div
-          class="absolute-bottom text-caption text-center image-padding-none">
+          class="absolute-bottom text-caption text-center image-padding-none"
+        >
           <div class="ellipsis">{{ item.name }}</div>
         </div>
       </component>
@@ -20,7 +22,8 @@
         icon="close"
         class="q-ma-xs absolute-top-right"
         v-if="!loading && !onload"
-        @click="deleteUpload" />
+        @click="deleteUpload"
+      />
 
       <q-inner-loading :showing="loading && !onload">
         <q-spinner-gears size="50px" color="primary" />
@@ -38,8 +41,7 @@ import { computed, ref, watch } from 'vue';
 
 import { useFileStore } from '../stores/fileStore';
 
-import FileImg from './extension/FileImg.vue';
-import VideoPreview from './extension/VideoPreview.vue';
+import { getMediaComponent } from 'src/components/file-manager/media';
 
 const props = withDefaults(defineProps<UploadCardProps>(), {
   item: () => {
@@ -54,12 +56,7 @@ const props = withDefaults(defineProps<UploadCardProps>(), {
 
 const data = useFileStore();
 
-const component = computed(() =>
-  data.paths === 'videos' ? VideoPreview : FileImg
-);
-const classes = computed(() =>
-  data.paths === 'videos' ? 'q-img__content' : ''
-);
+const component = computed(() => getMediaComponent(data.paths));
 
 const onload = ref(false);
 const loading = computed(() => data.uploadStack.includes(props.item.id));

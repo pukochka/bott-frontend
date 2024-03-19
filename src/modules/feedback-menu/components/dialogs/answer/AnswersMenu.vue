@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { fetchFeedbackAnswer } from '../../../api/queries';
-import { useDialog } from '../../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { useFeedbackStore } from '../../../stores/feedbackStore';
 
 const loading = ref(false);

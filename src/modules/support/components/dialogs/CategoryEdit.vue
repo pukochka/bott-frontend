@@ -81,7 +81,7 @@ import { ref } from 'vue';
 import { useSupportStore } from '../../stores/supportStore';
 
 import { fetchMessage, fetchSupportCategory } from '../../api/queries';
-import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import InlineMenu from '../../../inline/InlineMenu.vue';

@@ -1,11 +1,11 @@
 <template>
-  <file-manager
-    :bot_id="886"
-    :dialog="false"
-    host="https://api.bot-t.com/"
-    token="1172473489:AAFoRo3JvyXS5c1l5aW5qvOtDzZEQVJvf0w"
-  ></file-manager>
-  <!--  <inline-menu></inline-menu>-->
+  <!--  <file-manager-->
+  <!--    :bot_id="886"-->
+  <!--    :dialog="false"-->
+  <!--    host="https://api.bot-t.com/"-->
+  <!--    token="1172473489:AAFoRo3JvyXS5c1l5aW5qvOtDzZEQVJvf0w"-->
+  <!--  ></file-manager>-->
+  <inline-menu></inline-menu>
 </template>
 
 <script lang="ts" setup>

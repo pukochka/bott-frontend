@@ -23,11 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { config } from '../../../config';
 import { computed, ref } from 'vue';
+
 import { useFeedbackStore } from '../../../stores/feedbackStore';
 import { fetchFeedbackAnswer } from '../../../api/queries';
-import { useDialog } from '../../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
 import { defaultAnswer } from '../../../stores/feedbackModels';
 

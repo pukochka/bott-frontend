@@ -87,7 +87,7 @@ const text = ref({
     return (
       this.max >= this.value.length &&
       this.min <= this.value.length &&
-      commands.commands.filter((item) => item.label === text.value.value)
+      commands.commands.filter((item) => item?.label === text.value.value)
         .length === 0 &&
       route.value !== null
     );
@@ -103,10 +103,16 @@ function registerRoute(value: string | null) {
 const addAction = () => {
   loading.value = true;
 
-  fetchCommands('create', {
-    message: text.value.value,
-    route: route.value ?? '',
-  }).then(() => {
+  fetchCommands(
+    'create',
+    {
+      message: text.value.value,
+      route: route.value ?? '',
+    },
+    (response) => {
+      commands.commands.push(response.data.data);
+    }
+  ).then(() => {
     loading.value = false;
     commands.closeDialog('add_action');
   });

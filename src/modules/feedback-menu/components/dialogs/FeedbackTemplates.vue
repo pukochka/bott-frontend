@@ -99,9 +99,10 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
+
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import { fetchFeedback } from '../../api/queries';
-import { encodeText } from '../../../inline/stores/helpers';
+import { encodeText } from 'src/utils/helpers/replace';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 import EditorContent from 'src/components/editor/EditorContent.vue';

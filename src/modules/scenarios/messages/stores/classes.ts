@@ -2,7 +2,7 @@ import { Line } from './vector/model';
 
 import { useVectorStore } from './vector/vectorStore';
 import { useBezierLine, usePolygon } from '../../utils';
-import { getRect } from '../../../../utils/helpers/dom';
+import { getRect } from 'src/utils/helpers/dom';
 import { applyOffsets } from '../../utils/useMove';
 
 export class Dragging {

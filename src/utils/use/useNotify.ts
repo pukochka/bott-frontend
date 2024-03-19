@@ -1,7 +1,10 @@
 import { Notify } from 'quasar';
 
-export function useNotify(message?: string, callback?: () => void) {
+export function useNotify(message: string) {
   return Notify.create({
-    message: message ?? '',
+    position: 'top',
+    message: message,
+    classes: 'rounded',
+    timeout: 1500,
   });
 }

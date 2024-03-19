@@ -4,11 +4,11 @@ import { defineStore } from 'pinia';
 import { DialogNames, WorkStore } from './supportModels';
 import { fetchSupportMessages, fetchSupportTicket } from '../api/queries';
 
-import { useDialog } from '../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { deleteQueryParam, setQueryParam } from 'src/utils/helpers/string';
+import { getRect } from 'src/utils/helpers/dom';
 
-import { ticketStatuses } from '../utils/statuses';
-import { getRect } from '../../../utils/helpers/dom';
+import { ticketStatuses } from '../utils/messageMeta';
 
 export const useSupportStore = defineStore('support', {
   state: () =>
@@ -234,7 +234,7 @@ export const useSupportStore = defineStore('support', {
     },
 
     updateChatActionButtons(percent: number) {
-      const { width } = getRect('support-chat-card');
+      const { width } = getRect('support-chat-card') ?? { width: 200 };
 
       this.rightSplitterPanel = ((100 - percent) / 100) * width;
     },

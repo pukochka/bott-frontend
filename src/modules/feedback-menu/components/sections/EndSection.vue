@@ -49,7 +49,7 @@ import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 import { useQuasar } from 'quasar';
 
-import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import MessageCard from '../views/MessageCard.vue';
 

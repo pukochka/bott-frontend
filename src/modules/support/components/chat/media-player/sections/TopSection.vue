@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { historyGo } from '../../../../../inline/stores/helpers';
+import { historyGo } from 'src/utils/helpers/string';
 import { useSupportStore } from '../../../../stores/supportStore';
 import { date, useQuasar } from 'quasar';
 

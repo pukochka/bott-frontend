@@ -5,7 +5,8 @@
       :key="index"
       class="col rounded bordered q-pa-md cursor-pointer relative-position"
       :style="{ 'background-color': '#' + item.color }"
-      @click="setColor(item.id)">
+      @click="setColor(item.id)"
+    >
       <div class="absolute-center" v-if="color_id === item.id && loading">
         <q-spinner color="white" size="2em" />
       </div>
@@ -18,7 +19,8 @@
 
   <div
     @click="setColor(null)"
-    class="rounded bordered cursor-pointer text-center relative-position q-pa-xs">
+    class="rounded bordered cursor-pointer text-center relative-position q-pa-xs"
+  >
     <div class="absolute-left" v-if="!color_id && loading">
       <q-spinner color="primary" size="2em" />
     </div>
@@ -37,7 +39,7 @@ import { fetchMessage } from '../../api';
 
 import { useDataStore } from '../../stores/data/dataStore';
 
-import { defaultMessage } from '../../stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 const props = withDefaults(defineProps<EditColorProps>(), {
   message: () => defaultMessage,

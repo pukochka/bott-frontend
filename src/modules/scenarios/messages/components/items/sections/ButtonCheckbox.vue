@@ -6,11 +6,13 @@
     class="rounded"
     :color="linesConnection ? 'warning' : 'primary'"
     :icon="notConnection ? 'radio_button_unchecked' : 'radio_button_checked'"
-    :id="`button_${button.id}`">
+    :id="`button_${button.id}`"
+  >
     <q-tooltip
       class="bott-tooltip text-center"
       anchor="top middle"
-      self="bottom middle">
+      self="bottom middle"
+    >
       {{ tooltip }}
     </q-tooltip>
   </q-btn>
@@ -18,7 +20,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import { defaultButton } from '../../../stores/defaults';
+import { defaultButton } from 'src/utils/helpers/defaults';
 
 const props = withDefaults(defineProps<ButtonCheckboxProps>(), {
   button: () => defaultButton,

@@ -6,7 +6,7 @@ import { useDataStore } from '../../messages/stores/data/dataStore';
 export async function fetchCommands<Q extends keyof SCCommandQueries>(
   query: Q,
   params?: SCCommandParams<Q>,
-  action?: (response) => void
+  action?: (response: any) => void
 ) {
   const commands = useCommandsStore();
 
@@ -32,7 +32,7 @@ export async function fetchCommands<Q extends keyof SCCommandQueries>(
       } else if (query === 'index') {
         /** */
 
-        commands.commands = response.data.data;
+        commands.commands = response.data.data.filter(Boolean);
 
         /** */
       }

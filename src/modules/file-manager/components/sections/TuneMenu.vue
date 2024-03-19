@@ -45,7 +45,7 @@ import { mdiSelectAll } from '@quasar/extras/mdi-v7';
 import { useFileStore } from '../../stores/fileStore';
 
 import { fetchFile } from '../../api/queries';
-import { useDialog } from '../../stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
 import ActionButton from './ActionButton.vue';
 

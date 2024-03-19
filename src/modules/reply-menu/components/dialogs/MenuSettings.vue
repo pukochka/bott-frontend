@@ -97,7 +97,7 @@ import { ref } from 'vue';
 import { useReplyStore } from '../../stores/replyStore';
 import { fetchMenu } from '../../api/queries';
 import { useDialog } from 'src/utils/use/useDialog';
-import { historyGo } from '../../../inline/stores/helpers';
+import { historyGo } from 'src/utils/helpers/string';
 
 import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';

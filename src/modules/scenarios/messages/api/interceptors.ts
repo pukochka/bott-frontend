@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { config } from '../../config';
 
-import { useDialog } from '../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { useVectorStore } from '../stores/vector/vectorStore';
 
 console.log();

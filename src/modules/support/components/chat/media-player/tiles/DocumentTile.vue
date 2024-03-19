@@ -28,7 +28,7 @@
 import { config } from '../../../../config';
 import { computed, onBeforeMount, ref } from 'vue';
 
-import { defaultMessage } from '../../../../../scenarios/messages/stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 import { TG_API } from '../../../../utils/common';
 
 import { mdiFile } from '@quasar/extras/mdi-v7';

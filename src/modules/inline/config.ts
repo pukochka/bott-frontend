@@ -1,4 +1,4 @@
-const config = {
+export const config = {
   host: 'https://api.bot-t.com/',
   bot: {
     id: 886,
@@ -27,6 +27,7 @@ const config = {
     recurrent_check_id: null,
     is_free: null,
   },
+  user_id: 2876811,
   webs: [
     {
       id: 277,
@@ -72,5 +73,3 @@ const config = {
     },
   ],
 };
-
-export default config;

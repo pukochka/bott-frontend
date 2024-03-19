@@ -7,7 +7,7 @@ import {
   MessageFeedbackItemPreview,
 } from './feedbackModels';
 import { Link } from '../utils/lines/link';
-import { defaultMessageFree } from '../../inline/stores/inlineModels';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 import { Point } from 'paper';
 import { update } from '../utils/create';
 import { fetchFeedbackAnswer, fetchFeedbackIntegrations } from '../api/queries';
@@ -61,6 +61,7 @@ export const useFeedbackStore = defineStore('paper-feedback', {
         api: false,
         api_edit: false,
         administrator_answer: false,
+        update_type: false,
       },
 
       countIntegrations: 0,
@@ -86,7 +87,7 @@ export const useFeedbackStore = defineStore('paper-feedback', {
         navigator.userAgent.toLowerCase()
       ),
     alignCount: (state) => state._feedback.inputs.length,
-    message: (state): MessageFree => state._message ?? defaultMessageFree,
+    message: (state): MessageFree => state._message ?? defaultMessage,
     feedback: (state): MessageFeedback<MessageFeedbackItemPreview> =>
       state._feedback ?? defaultFeedback,
 

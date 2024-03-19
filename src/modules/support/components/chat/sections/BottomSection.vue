@@ -16,22 +16,33 @@
               <emoji-menu @select="addEmoji"></emoji-menu>
             </div>
 
-            <div class="col relative-position transition-height">
-              <span
-                class="input-placeholder non-selectable no-pointer-events"
-                v-if="placeholder"
+            <div
+              class="col relative-position overflow-hidden relative-position"
+            >
+              <transition
+                :name="
+                  placeholder
+                    ? 'transition--slide-left'
+                    : 'transition--slide-right'
+                "
               >
-                Сообщение
-              </span>
+                <span
+                  v-if="placeholder"
+                  class="input-placeholder non-selectable no-pointer-events"
+                >
+                  Сообщение
+                </span>
+              </transition>
 
               <div
+                id="chat-input"
                 ref="chatInput"
                 contenteditable="true"
+                spellcheck="false"
                 class="bott-message-input input-text-color transition-height"
-                style="overflow-y: scroll"
+                @paste="pasteText"
                 @keyup="updateText"
                 @keydown="updateText"
-                @change="updateText"
               ></div>
             </div>
           </div>
@@ -61,7 +72,7 @@
         dense
         color="grey"
         text-color="white"
-        class="self-center q-my-md text-caption"
+        class="self-center q-my-md font-14"
       >
         Для отправки сообщений Вам нужно быть исполнителем тикета
       </q-chip>
@@ -75,6 +86,13 @@ import { config } from '../../../config';
 import { ref } from 'vue';
 import { fetchSupportMessages } from '../../../api/queries';
 import { useSupportStore } from '../../../stores/supportStore';
+import { replaceUnsolvableTags } from 'src/utils/helpers/replace';
+import {
+  getCaretPosition,
+  setCaretPosition,
+  insertHtmlInSelection,
+  getHtmlBeforeSelection,
+} from 'src/utils/helpers/selection';
 
 import MessageAppendix from 'src/components/emoji/MessageAppendix.vue';
 import EmojiMenu from 'src/components/emoji/EmojiMenu.vue';
@@ -87,15 +105,30 @@ const loading = ref(false);
 const placeholder = ref(true);
 
 const addEmoji = (value: string) => {
-  chatInput.value.innerHTML += value;
-
   placeholder.value = chatInput.value.textContent?.length === 0;
+
+  chatInput.value.innerHTML += value;
+};
+
+const pasteText = (ev: ClipboardEvent) => {
+  ev.preventDefault();
+  const el = document.getElementById('chat-input');
+
+  if (!el) return;
+
+  const plain = ev.clipboardData?.getData('text/plain') || '';
+
+  const caretPosition = getCaretPosition(el);
+
+  insertHtmlInSelection(plain);
+  setCaretPosition(el, (caretPosition + plain).length);
+  text.value = chatInput.value.innerHTML;
 };
 
 const updateText = (event: KeyboardEvent) => {
+  placeholder.value = chatInput.value.textContent?.length === 0;
+
   if (event.ctrlKey && event.keyCode === 86) {
-    chatInput.value.innerHTML = chatInput.value.textContent;
-    text.value = chatInput.value.textContent;
     return;
   }
 
@@ -103,8 +136,6 @@ const updateText = (event: KeyboardEvent) => {
     event.preventDefault();
     return;
   }
-
-  placeholder.value = chatInput.value.textContent?.length === 0;
 
   text.value = chatInput.value.innerHTML;
 };
@@ -128,7 +159,7 @@ const sendMessage = (event: KeyboardEvent) => {
       chatInput.value.innerHTML = '';
       placeholder.value = true;
       support.messages = response;
-      setTimeout(support.scrollToBottom.bind(support), 10);
+      setTimeout(support.scrollToBottom.bind(support), 100);
     }
   ).then(() => {
     loading.value = false;
@@ -154,13 +185,20 @@ const sendMessage = (event: KeyboardEvent) => {
 }
 
 .input-placeholder {
-  position: absolute;
+  top: 29%;
   left: 0;
-  top: 50%;
-  transform: translate(0, -50%);
   color: #a2acb4;
+  display: block;
+  pointer-events: none;
+  position: absolute;
+  max-width: 100%;
+  padding-inline-end: 0.5rem;
+  inset-inline-start: unset;
+  z-index: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
-
 body.body--dark {
   .input-text-color {
     color: #ffffff;

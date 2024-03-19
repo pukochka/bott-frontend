@@ -108,15 +108,16 @@
 </template>
 <script setup lang="ts">
 import { config } from '../../../config';
-import { computed, onBeforeMount, onMounted } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 
 import { fetchButtons, fetchMessage } from '../../api';
 
 import { useVectorStore } from '../../stores/vector/vectorStore';
 import { useStatesStore } from '../../stores/states/statesStore';
 import { useDataStore } from '../../stores/data/dataStore';
+import { useConnect } from '../../../utils';
 
-import { defaultMessage } from '../../stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import MessageMenu from './sections/MessageMenu.vue';
 import MessageButtons from './sections/MessageButtons.vue';
@@ -124,9 +125,8 @@ import EditTitle from '../edit/EditTitle.vue';
 import DragHorizontal from './sections/DragHorizontal.vue';
 import MessageMain from './sections/MessageMain.vue';
 import MessageShadow from './sections/MessageShadow.vue';
-import MessageTimer from './MessageTimer.vue';
+
 import { mdiMessageMinus, mdiMessagePlus } from '@quasar/extras/mdi-v7';
-import { useConnect } from '../../../utils';
 
 const props = withDefaults(defineProps<MessageItemProps>(), {
   message: () => defaultMessage,

@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
-import { useDialog } from '../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { fetchFeedback } from '../../api/queries';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';

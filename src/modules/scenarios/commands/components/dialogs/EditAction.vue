@@ -85,7 +85,7 @@ import { computed, ref } from 'vue';
 import { fetchCommands } from '../../api/command';
 
 import { useCommandsStore } from '../../stores/commandsStore';
-import { useDialog } from '../../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
 import ActionMenu from 'src/components/actions-menu/ActionMenu.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
@@ -105,7 +105,7 @@ const text = ref({
     return (
       this.max >= this.value.length &&
       this.min <= this.value.length &&
-      commands.commands.filter((item) => item.label === text.value.value)
+      commands.commands.filter((item) => item?.label === text.value.value)
         .length === 0
     );
   },
@@ -128,8 +128,10 @@ const updateRoute = () => {
       route_id: commands.selectedCommand?.id ?? 0,
     },
     (response) => {
-      commands.selectedCommand.route = response.data.data?.route ?? '';
-      commands.selectedCommand.label = response.data.data?.label ?? '';
+      if (commands.selectedCommand) {
+        commands.selectedCommand.route = response.data.data?.route ?? '';
+        commands.selectedCommand.label = response.data.data?.label ?? '';
+      }
     }
   ).then(() => {
     loading.value.update = false;
@@ -146,7 +148,7 @@ const deleteAction = () => {
       { route_id: commands.selectedCommand?.id ?? 0 },
       () => {
         commands.commands = commands.commands.filter(
-          (item) => item.id !== commands.selectedCommand?.id
+          (item) => item?.id !== commands.selectedCommand?.id
         );
       }
     ).then(() => {

@@ -1,7 +1,7 @@
 import { instance } from './instance';
 import { useMenuStore } from '../stores/menuStore';
 import { useRoutes } from '../useMenu';
-import { useDialog } from '../../../modules/file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
 export async function fetchMenu(
   query: string,

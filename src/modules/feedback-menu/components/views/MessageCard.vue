@@ -102,9 +102,9 @@ import { computed, ref } from 'vue';
 
 import { fetchFeedback } from '../../api/queries';
 import { useFeedbackStore } from '../../stores/feedbackStore';
-import { useDialog } from '../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
-import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import MessageMenu from './MessageMenu.vue';
 import { useQuasar } from 'quasar';

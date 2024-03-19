@@ -32,9 +32,8 @@
 </template>
 
 <script lang="ts" setup>
-import { config } from './config';
 import { computed, onBeforeMount, ref, watch } from 'vue';
-import { defaultMessageFree } from '../inline/stores/inlineModels';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import { fetchFile } from './api/queries';
 import { useFileStore } from './stores/fileStore';
@@ -42,7 +41,7 @@ import { useFileStore } from './stores/fileStore';
 import FileManagerCard from './FileManagerCard.vue';
 
 const props = withDefaults(defineProps<FileManagerProps>(), {
-  message: () => defaultMessageFree,
+  message: () => defaultMessage,
   dialog: false,
   bot_id: 0,
   host: '',

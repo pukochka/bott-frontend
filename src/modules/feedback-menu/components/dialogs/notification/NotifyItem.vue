@@ -49,12 +49,14 @@
 </template>
 
 <script setup lang="ts">
-import { defaultNotify } from '../../../stores/feedbackModels';
-import { useDialog } from '../../../../file-manager/stores/useDialog';
-import { fetchFeedbackNotify } from '../../../api/queries';
 import { ref } from 'vue';
-import { useFeedbackStore } from '../../../stores/feedbackStore';
+
+import { useDialog } from 'src/utils/use/useDialog';
 import { copyToClipboard } from 'quasar';
+import { fetchFeedbackNotify } from '../../../api/queries';
+import { useFeedbackStore } from '../../../stores/feedbackStore';
+
+import { defaultNotify } from '../../../stores/feedbackModels';
 
 const props = withDefaults(defineProps<NotifyItemProps>(), {
   item: () => defaultNotify,

@@ -34,7 +34,7 @@ import { useVectorStore } from '../../../stores/vector/vectorStore';
 import { useStatesStore } from '../../../stores/states/statesStore';
 import { useDataStore } from '../../../stores/data/dataStore';
 
-import { defaultButton, defaultMessage } from '../../../stores/defaults';
+import { defaultMessage, defaultButton } from 'src/utils/helpers/defaults';
 
 const props = withDefaults(defineProps<ButtonMenuListProps>(), {
   button: () => defaultButton,

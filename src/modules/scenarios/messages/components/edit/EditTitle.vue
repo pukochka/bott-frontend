@@ -69,7 +69,7 @@ import { isDarkColor } from 'src/utils/helpers/dom';
 
 import { fetchMessage } from '../../api';
 
-import { defaultMessage } from '../../stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import EditColor from './EditColor.vue';
 

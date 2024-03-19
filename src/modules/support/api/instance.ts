@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { config } from '../config';
-import { useDialog } from '../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
 export const instance = axios.create({
   baseURL: config.host,

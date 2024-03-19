@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { useInlineStore } from '../stores/inlineStore';
-import { useDialog } from '../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 
 const instance = axios.create({
   method: 'post',
@@ -13,7 +13,7 @@ instance.interceptors.request.use(function (request) {
   request.params = { token: inline.token };
   request.data = {
     bot_id: inline.bot_id,
-    menu_id: inline.inlineMenu?.id,
+    menu_id: inline.menu?.id,
     ...request.data,
   };
 

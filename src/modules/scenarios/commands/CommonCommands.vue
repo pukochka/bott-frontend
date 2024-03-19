@@ -29,17 +29,15 @@
 
   <edit-command></edit-command>
 
-  <add-message></add-message>
+  <add-message-modal></add-message-modal>
 
-  <edit-message></edit-message>
+  <edit-message-modal></edit-message-modal>
 
-  <message-type></message-type>
+  <update-type-modal></update-type-modal>
 
   <edit-label></edit-label>
 
   <button-settings></button-settings>
-
-  <timer-settings></timer-settings>
 
   <transition name="q-transition--fade">
     <scenario-messages v-if="commands.dialogs.scenario"></scenario-messages>
@@ -52,7 +50,7 @@ import { computed, onBeforeMount } from 'vue';
 
 import { fetchCommands, fetchMessage } from './api/command';
 import { useCommandsStore } from './stores/commandsStore';
-import { historyGo } from '../../inline/stores/helpers';
+import { historyGo } from 'src/utils/helpers/string';
 import { has } from 'src/utils/helpers/string';
 
 import CommandsList from './components/sections/CommandsList.vue';
@@ -65,10 +63,9 @@ import EditCommand from './components/dialogs/EditAction.vue';
 import ScenarioMessages from '../messages/ScenarioMessages.vue';
 import ButtonSettings from '../messages/components/dialogs/ButtonSettings.vue';
 import EditLabel from '../messages/components/edit/EditLabel.vue';
-import EditMessage from '../messages/components/dialogs/message/EditMessage.vue';
-import MessageType from '../messages/components/dialogs/message/MessageType.vue';
-import AddMessage from '../messages/components/dialogs/message/AddMessage.vue';
-import TimerSettings from '../messages/components/dialogs/TimerSettings.vue';
+import EditMessageModal from '../messages/components/dialogs/message/EditMessageModal.vue';
+import UpdateTypeModal from '../messages/components/dialogs/message/UpdateTypeModal.vue';
+import AddMessageModal from '../messages/components/dialogs/message/AddMessageModal.vue';
 
 const commands = useCommandsStore();
 

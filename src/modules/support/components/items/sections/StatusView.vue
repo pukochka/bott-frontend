@@ -1,6 +1,6 @@
 <template>
   <span
-    class="font-14 rounded q-px-xs text-center text-no-wrap"
+    class="font-14 rounded q-px-xs text-center text-white text-no-wrap"
     :class="[' bg-' + ticketStatus.color]"
   >
     {{ ticketStatus.label }}
@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { ticketStatuses } from '../../../utils/statuses';
+import { ticketStatuses } from '../../../utils/messageMeta';
 import { defaultTicket } from '../../../stores/supportModels';
 
 const props = withDefaults(defineProps<TicketStatusProps>(), {

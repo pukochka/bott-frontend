@@ -86,11 +86,13 @@
   <menu-settings></menu-settings>
 </template>
 <script lang="ts" setup>
+import { config } from './config';
 import { computed, onBeforeMount, ref } from 'vue';
 
 import { useReplyStore } from './stores/replyStore';
 import { useDialog } from 'src/utils/use/useDialog';
 import { fetchMenu } from './api/queries';
+import { historyGo } from 'src/utils/helpers/string';
 
 import DraggableDial from './components/dialogs/DraggableDial.vue';
 import AddButton from './components/dialogs/AddButton.vue';
@@ -98,8 +100,6 @@ import ButtonSettings from './components/dialogs/ButtonSettings.vue';
 import MenuSettings from './components/dialogs/MenuSettings.vue';
 import InputSection from './components/InputSection.vue';
 import ButtonsSection from '../../components/inline/ButtonsSection.vue';
-import { config } from './config';
-import { historyGo } from '../inline/stores/helpers';
 
 const reply = useReplyStore();
 

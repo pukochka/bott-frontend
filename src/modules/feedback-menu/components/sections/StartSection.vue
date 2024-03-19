@@ -32,7 +32,7 @@
 import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../../stores/feedbackStore';
 
-import { defaultMessage } from '../../../scenarios/messages/stores/defaults';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import MessageCard from '../views/MessageCard.vue';
 import { useQuasar } from 'quasar';

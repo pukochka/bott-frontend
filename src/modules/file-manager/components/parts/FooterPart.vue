@@ -86,7 +86,7 @@ import { defaultFileCard } from '../../stores/fileModels';
 import { useFileStore } from '../../stores/fileStore';
 
 import { fetchFile } from '../../api/queries';
-import { useDialog } from '../../stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { useQuasar } from 'quasar';
 
 const data = useFileStore();

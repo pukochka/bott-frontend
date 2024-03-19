@@ -1,6 +1,5 @@
 <template>
   <q-splitter
-    splitterModel
     class="overflow-hidden"
     :style="style"
     v-model="support.splitterModel"

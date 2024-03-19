@@ -69,11 +69,11 @@
 import { config } from '../../config';
 import { computed, ref } from 'vue';
 
-import { useDialog } from '../../../file-manager/stores/useDialog';
+import { useDialog } from 'src/utils/use/useDialog';
 import { fetchSupportCategory, fetchSupportTicket } from '../../api/queries';
-
 import { useSupportStore } from '../../stores/supportStore';
 import { useQuasar } from 'quasar';
+
 import {
   mdiAccountTie,
   mdiBriefcaseArrowUpDown,
