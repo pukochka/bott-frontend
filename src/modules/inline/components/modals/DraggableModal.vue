@@ -146,16 +146,28 @@ const dragStart = (e: CustomEvent) => {
 const dragEnd = () => {
   if (helpClassTop.value) {
     loading.value = true;
-    fetchMenu('move-first-line', {
-      id: moving_element.value?.id ?? 0,
-    }).then(() => (loading.value = false));
+    fetchMenu(
+      'move-first-line',
+      {
+        id: moving_element.value?.id ?? 0,
+      },
+      (response) => {
+        inline.message.menu = response;
+      }
+    ).then(() => (loading.value = false));
   }
 
   if (helpClassBottom.value) {
     loading.value = true;
-    fetchMenu('move-last-line', {
-      id: moving_element.value?.id ?? 0,
-    }).then(() => (loading.value = false));
+    fetchMenu(
+      'move-last-line',
+      {
+        id: moving_element.value?.id ?? 0,
+      },
+      (response) => {
+        inline.message.menu = response;
+      }
+    ).then(() => (loading.value = false));
   }
   is_drag.value = false;
   helpClassTop.value = false;
@@ -165,19 +177,31 @@ const dragEnd = () => {
 const dragChange = (evt: DragEvent) => {
   if ('moved' in evt) {
     loading.value = true;
-    fetchMenu('change-sort-and-line', {
-      line_id: selected_line.value?.id ?? 0,
-      id: evt.moved?.element?.id ?? 0,
-      sort: evt.moved?.newIndex ?? 0,
-    }).then(() => (loading.value = false));
+    fetchMenu(
+      'change-sort-and-line',
+      {
+        line_id: selected_line.value?.id ?? 0,
+        id: evt.moved?.element?.id ?? 0,
+        sort: evt.moved?.newIndex ?? 0,
+      },
+      (response) => {
+        inline.message.menu = response;
+      }
+    ).then(() => (loading.value = false));
   }
   if ('added' in evt) {
     loading.value = true;
-    fetchMenu('change-sort-and-line', {
-      line_id: selected_line.value?.id ?? 0,
-      id: evt.added?.element.id ?? 0,
-      sort: evt.added?.newIndex ?? 0,
-    }).then(() => (loading.value = false));
+    fetchMenu(
+      'change-sort-and-line',
+      {
+        line_id: selected_line.value?.id ?? 0,
+        id: evt.added?.element.id ?? 0,
+        sort: evt.added?.newIndex ?? 0,
+      },
+      (response) => {
+        inline.message.menu = response;
+      }
+    ).then(() => (loading.value = false));
   }
 };
 

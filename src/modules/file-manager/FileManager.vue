@@ -74,7 +74,7 @@ const updateShow = () => {
 };
 
 onBeforeMount(() => {
-  if (props.bot_id === void 0) {
+  if (props.bot_id === 0) {
     data.dialog = false;
     // data.host = config.host;
     // data.bot_id = config.bot.id;

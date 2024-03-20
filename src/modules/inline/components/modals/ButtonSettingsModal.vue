@@ -133,23 +133,52 @@ const addEmoji = (value: string) => (text.value.value += value);
 const deleteButton = () => {
   loading.value.delete = true;
 
-  fetchMenu('delete-button', { id: inline.selectedButton?.id ?? 0 }).then(
-    () => {
-      loading.value.delete = false;
-      inline.closeDialog('button_settings');
+  fetchMenu(
+    'delete-button',
+    { id: inline.selectedButton?.id ?? 0 },
+    (response) => {
+      inline.message.menu = response;
     }
-  );
+  ).then(() => {
+    loading.value.delete = false;
+    inline.closeDialog('button_settings');
+  });
 };
 
 const updateButton = () => {
   loading.value.update = true;
 
-  fetchMenu('update-data-and-type', {
-    id: inline.selectedButton?.id ?? 0,
-    text: text.value.value,
-    type: state.value.type,
-    action: state.value.action ?? '',
-  }).then(() => {
+  let action = state.value.action ?? '';
+
+  if (state.value.type === 5) {
+    action = action?.replace('system/free?id=', '');
+  }
+
+  fetchMenu(
+    'update-data-and-type',
+    {
+      id: inline.selectedButton?.id ?? 0,
+      text: text.value.value,
+      type: state.value.type,
+      action: action,
+    },
+    (response) => {
+      if (inline.scenarios && state.value.type === 5) {
+        const scenario = <SCCommandView>response;
+        const message = scenario.columns
+          .map((item) =>
+            item.messages.find((message) => message.id === inline.message.id)
+          )
+          .filter(Boolean);
+
+        inline.message.menu = message[0]?.menu
+          ? message[0]?.menu
+          : inline.message.menu;
+      } else {
+        inline.message.menu = response;
+      }
+    }
+  ).then(() => {
     loading.value.update = false;
     inline.closeDialog('button_settings');
   });

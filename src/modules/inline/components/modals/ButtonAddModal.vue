@@ -111,12 +111,18 @@ const addButton = () => {
   loading.value = true;
 
   if (inline.selectedLine !== null) {
-    fetchMenu('add-button-in-line', {
-      text: text.value.value,
-      type: state.value.type,
-      line_id: inline.selectedLine,
-      action: state.value.action ?? '',
-    }).then(() => {
+    fetchMenu(
+      'add-button-in-line',
+      {
+        text: text.value.value,
+        type: state.value.type,
+        line_id: inline.selectedLine,
+        action: state.value.action ?? '',
+      },
+      (response) => {
+        inline.message.menu = response;
+      }
+    ).then(() => {
       loading.value = false;
       inline.closeDialog('add_button');
     });
@@ -124,11 +130,17 @@ const addButton = () => {
     return;
   }
 
-  fetchMenu('add-button-with-line', {
-    text: text.value.value,
-    type: state.value.type,
-    action: state.value.action ?? '',
-  }).then(() => {
+  fetchMenu(
+    'add-button-with-line',
+    {
+      text: text.value.value,
+      type: state.value.type,
+      action: state.value.action ?? '',
+    },
+    (response) => {
+      inline.message.menu = response;
+    }
+  ).then(() => {
     loading.value = false;
     inline.closeDialog('add_button');
   });

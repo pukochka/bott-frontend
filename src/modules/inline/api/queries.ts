@@ -5,11 +5,10 @@ import { useInlineStore } from '../stores/inlineStore';
 import { useDialog } from 'src/utils/use/useDialog';
 import { useNotify } from 'src/utils/use/useNotify';
 
-const scenariosQueries = ['update-data-and-type'];
-
 export async function fetchMenu<Q extends keyof IMQueries>(
   query: Q,
-  params?: IMParams<Q>
+  params?: IMParams<Q>,
+  handle?: (response: any) => void
 ) {
   const inline = useInlineStore();
 
@@ -20,20 +19,7 @@ export async function fetchMenu<Q extends keyof IMQueries>(
     }).then((response) => {
       /** */
 
-      if (inline.scenarios && scenariosQueries.includes(query)) {
-        const scenario = <SCCommandView>response.data.data;
-        const message = scenario.columns
-          .map((item) =>
-            item.messages.find((message) => message.id === inline.message.id)
-          )
-          .filter(Boolean);
-
-        inline.message.menu = message[0]?.menu
-          ? message[0]?.menu
-          : inline.message.menu;
-      } else {
-        inline.message.menu = response.data.data;
-      }
+      if (handle !== void 0) handle(response.data.data);
 
       /** */
     });

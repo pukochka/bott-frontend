@@ -137,9 +137,13 @@ const deleteLine = (line: number) => {
   useDialog('Вы уверены, что хотите удалить линию?', true).onOk(() => {
     loading.value.delete = true;
 
-    fetchMenu('delete-line', { line_id: inline?.selectedLine ?? 0 }).then(
-      () => (loading.value.delete = false)
-    );
+    fetchMenu(
+      'delete-line',
+      { line_id: inline?.selectedLine ?? 0 },
+      (response) => {
+        inline.message.menu = response;
+      }
+    ).then(() => (loading.value.delete = false));
   });
 };
 
