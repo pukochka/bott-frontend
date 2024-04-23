@@ -2,7 +2,7 @@
   <div class="fit relative-position" style="min-height: 200px">
     <header-section></header-section>
 
-    <div class="" id="support-work-space">
+    <div class="relative-position" id="support-work-space">
       <q-tab-panels
         v-if="sm"
         animated
@@ -20,6 +20,20 @@
       </q-tab-panels>
 
       <main-section v-else></main-section>
+
+      <q-inner-loading
+        class="bott-page__background"
+        style="z-index: 1"
+        :showing="support.selectedCategory === null"
+      >
+        <q-chip
+          label="Выберите категорию"
+          color="grey"
+          text-color="white"
+          size="lg"
+        >
+        </q-chip>
+      </q-inner-loading>
     </div>
 
     <q-inner-loading
@@ -54,12 +68,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, onMounted } from 'vue';
+import { computed, onBeforeMount, onMounted, onUnmounted } from 'vue';
 
 import { fetchSupportCategory, fetchSupportTicket } from './api/queries';
 import { useSupportStore } from './stores/supportStore';
 import { getQueryParam, has } from 'src/utils/helpers/string';
-import { getRect } from '../../utils/helpers/dom';
+import { getRect } from 'src/utils/helpers/dom';
 import { useQuasar } from 'quasar';
 
 import HeaderSection from './components/sections/HeaderSection.vue';
@@ -81,6 +95,8 @@ const support = useSupportStore();
 const quasar = useQuasar();
 
 const sm = computed(() => quasar.screen.lt.sm);
+
+const condition = computed(() => support.selectedTicket);
 
 onMounted(() => (support.topRef = getRect('support-work-space')));
 
@@ -106,6 +122,11 @@ onBeforeMount(() => {
 
     support.loading.start = false;
   });
+});
+
+onUnmounted(() => {
+  clearInterval(support.messagesInterval);
+  clearInterval(support.categoryInterval);
 });
 
 window.onpopstate = () => {

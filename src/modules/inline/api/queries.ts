@@ -121,28 +121,3 @@ export async function fetchSettings(
     useDialog('Что-то пошло не так, обратитесь в поддержку.');
   }
 }
-
-const limit = 6;
-
-export async function fetchUpdateMessages(offset: number) {
-  const inline = useInlineStore();
-
-  try {
-    return await Promise.all([
-      instance({
-        url: inline.host + '/v1/bot/messagenew/message/index',
-        data: { user_id: config.user_id, offset, limit },
-      }).then(
-        (response) => (inline.combine.messages = response.data.data || [])
-      ),
-      instance({
-        url: inline.host + '/v1/bot/messagenew/message/count',
-        data: { user_id: config.user_id, offset, limit },
-      }).then(
-        (response) => (inline.combine.count = Number(response.data.data) || 0)
-      ),
-    ]);
-  } catch (e) {
-    useDialog('Что-то пошло не так, обратитесь в поддержку.');
-  }
-}

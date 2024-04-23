@@ -130,26 +130,27 @@ export const useFeedbackStore = defineStore('paper-feedback', {
           );
 
           const platforms = <MessageFeedbackItemPreview[]>(
-            item.crossroad?.options
-              .map((opt) => {
-                return { id: opt.next.id, type: opt.next.type };
-              })
-              .map((cross) => {
-                if (inputs[cross.id]?.type === cross.type)
-                  return inputs[cross.id];
-              })
-          );
+            item.crossroad?.options || []
+          )
+            .map((opt) => {
+              return { id: opt?.next?.id, type: opt?.next?.type };
+            })
+            .map((cross) => {
+              if (inputs[cross.id]?.type === cross?.type)
+                return inputs[cross?.id];
+            })
+            .filter(Boolean);
 
           platforms.forEach((platform) => {
             const options = <[number, MessageFeedbackCrossroadOption][]>(
               this.feedback.inputs
                 .map((item) =>
-                  item.crossroad?.options.map((opt) => {
-                    return [opt.next.id, opt];
+                  (item.crossroad?.options ?? []).map((opt) => {
+                    return [opt?.next?.id, opt];
                   })
                 )
                 .flat()
-                .filter((i) => i)
+                .filter(([i]) => i)
             );
 
             const option = Object.fromEntries(options)[platform.id];

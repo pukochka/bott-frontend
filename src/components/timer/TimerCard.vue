@@ -3,7 +3,7 @@
     flat
     v-clickable
     class="rounded relative-position q-pa-sm overflow-hidden"
-    @click="viewModal = true"
+    @click="handleClick"
   >
     <div class="row items-center justify-center">
       <q-icon :name="mdiTimerOutline" color="primary" size="46px" />
@@ -12,7 +12,6 @@
     </div>
 
     <q-tooltip
-      v-if="!props.combined"
       class="bott-tooltip text-center"
       anchor="top middle"
       self="bottom middle"
@@ -41,10 +40,12 @@ import { mdiTimerOutline } from '@quasar/extras/mdi-v7';
 
 const props = withDefaults(defineProps<TimerCardProps>(), {
   message: () => defaultMessage,
+  scenarios: false,
 });
 
 const emit = defineEmits<{
   (e: 'update-time', time: number, callback?: () => void): void;
+  (e: 'open-inline-menu'): void;
 }>();
 
 const updateTime = (value: number, callback?: () => void) => {
@@ -57,8 +58,18 @@ const formatted = computed(() =>
   getFormattedTime(props.message.text, true, 'triple')
 );
 
+const handleClick = () => {
+  if (props.scenarios) {
+    emit('open-inline-menu');
+    return;
+  }
+
+  viewModal.value = true;
+};
+
 interface TimerCardProps {
   message: MessageFree;
+  scenarios: boolean;
 }
 </script>
 

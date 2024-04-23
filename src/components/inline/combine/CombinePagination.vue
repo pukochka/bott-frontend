@@ -1,14 +1,16 @@
 <template>
   <q-list bordered separator class="rounded overflow-hidden">
     <combine-message-item
-      v-for="message in inline.messages"
+      v-for="message in messages"
       :key="message.id"
       :message="message"
+      :view-message="props.message"
+      @set-next-message="setNext"
     ></combine-message-item>
 
     <q-separator></q-separator>
 
-    <div class="row no-wrap justify-center" v-if="inline.combine.count > 6">
+    <div class="row no-wrap justify-center" v-if="pagination.count > 6">
       <q-btn
         v-for="button of leftButtons"
         :key="button.icon"
@@ -67,21 +69,39 @@
       />
     </div>
   </q-list>
+
+  <q-inner-loading
+    :showing="loading.start"
+    class="bg-card"
+    transition-show="none"
+  >
+    <q-spinner size="50px" color="primary" />
+  </q-inner-loading>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useInlineStore } from '../../stores/inlineStore';
-
+import { computed, ref, onBeforeMount } from 'vue';
+import { defaultMessage } from 'src/utils/helpers/defaults';
 import CombineMessageItem from './CombineMessageItem.vue';
-import { fetchUpdateMessages } from '../../api/queries';
+import { fetchMessages } from './query';
 
-const inline = useInlineStore();
+const props = withDefaults(defineProps<CombinePaginationProps>(), {
+  message: () => defaultMessage,
+  host: '',
+  bot_id: 0,
+  token: '',
+});
+
+const emit = defineEmits<{
+  (e: 'set-next-message', next_id: number, callback?: () => void): void;
+}>();
 
 const search = ref('');
+const messages = ref([]);
 const pagination = ref({
   page: 1,
   offset: 0,
+  count: 0,
 });
 const loading = ref<Record<ButtonNames, boolean>>({
   next: false,
@@ -89,15 +109,27 @@ const loading = ref<Record<ButtonNames, boolean>>({
   last: false,
   first: false,
   search: false,
+  start: false,
 });
 
-const pagesCount = computed(() => Math.ceil(inline.combine.count / 6));
+const pagesCount = computed(() => Math.ceil(pagination.value.count / 6));
+
+const setNext = (next_id: number, callback?: () => void) => {
+  emit('set-next-message', next_id, callback);
+};
 
 const updatePage = (side: ButtonNames) => {
   loading.value[side] = true;
-  fetchUpdateMessages(pagination.value.offset).then(
-    () => (loading.value[side] = false)
-  );
+
+  fetchMessages(
+    'index',
+    props.host,
+    props.token,
+    { bot_id: props.bot_id, offset: pagination.value.offset },
+    (response) => {
+      messages.value = response;
+    }
+  ).then(() => (loading.value[side] = false));
 };
 
 const nextPage = () => {
@@ -169,7 +201,39 @@ const rightButtons = computed(() => [
   },
 ]);
 
-type ButtonNames = 'next' | 'prev' | 'last' | 'first' | 'search';
+onBeforeMount(() => {
+  loading.value.start = true;
+
+  Promise.all([
+    fetchMessages(
+      'index',
+      props.host,
+      props.token,
+      { bot_id: props.bot_id, offset: 0 },
+      (response) => {
+        messages.value = response;
+      }
+    ),
+    fetchMessages(
+      'count',
+      props.host,
+      props.token,
+      { bot_id: props.bot_id, offset: 0 },
+      (response) => {
+        pagination.value.count = Number(response) || 0;
+      }
+    ),
+  ]).then(() => (loading.value.start = false));
+});
+
+type ButtonNames = 'next' | 'prev' | 'last' | 'first' | 'search' | 'start';
+
+interface CombinePaginationProps {
+  message: MessageFree;
+  host: string;
+  bot_id: number;
+  token: string;
+}
 </script>
 
 <style scoped lang="scss"></style>

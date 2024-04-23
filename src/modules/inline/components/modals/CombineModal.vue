@@ -4,22 +4,19 @@
     full-width
     position="bottom"
     v-model="inline.dialogs.combine"
-    @before-show="updateShow"
   >
     <div class="row justify-center">
       <q-card flat bordered class="bott-dialog__responsive dialog-rounded">
         <dialog-header label="Совместить сообщение"></dialog-header>
 
         <q-card-section class="q-pt-none" style="min-height: 200px">
-          <combine-pagination></combine-pagination>
-
-          <q-inner-loading
-            :showing="loading"
-            class="bg-card"
-            transition-show="none"
-          >
-            <q-spinner size="50px" color="primary" />
-          </q-inner-loading>
+          <combine-pagination
+            :message="inline.message"
+            :host="inline.host"
+            :bot_id="inline.bot_id"
+            :token="inline.token"
+            @set-next-message="setNextMessage"
+          ></combine-pagination>
         </q-card-section>
 
         <q-card-section class="q-pt-none row justify-end q-gutter-x-sm">
@@ -48,21 +45,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-
-import { fetchUpdateMessages } from '../../api/queries';
+import { fetchMessage } from '../../api/queries';
 import { useInlineStore } from '../../stores/inlineStore';
 
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
 
-import CombinePagination from '../combine/CombinePagination.vue';
+import CombinePagination from 'src/components/inline/combine/CombinePagination.vue';
 
 const inline = useInlineStore();
-const loading = ref(false);
 
-const updateShow = () => {
-  loading.value = true;
-  fetchUpdateMessages(0).then(() => (loading.value = false));
+const setNextMessage = (next_id: number, callback?: () => void) => {
+  fetchMessage('set-next-message', {
+    message_id: inline.message.id,
+    message_next_id: next_id,
+  }).then(() => (callback !== void 0 ? callback() : false));
 };
 </script>
 

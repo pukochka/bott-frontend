@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUpdated, nextTick, watch } from 'vue';
+import { onMounted, onUpdated } from 'vue';
 
 import { useDataStore } from '../../stores/data/dataStore';
 import { useStatesStore } from '../../stores/states/statesStore';
@@ -52,7 +52,7 @@ async function mountingLines() {
 }
 
 onMounted(mountingLines);
-onUpdated(() => setTimeout(vector.update.bind(vector), 10));
+onUpdated(() => setTimeout(vector.update.bind(vector), 20));
 </script>
 
 <style lang="scss" scoped></style>

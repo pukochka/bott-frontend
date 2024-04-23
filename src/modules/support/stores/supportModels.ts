@@ -2,7 +2,7 @@ import { defaultMessage } from 'src/utils/helpers/defaults';
 
 type Interval = string | number | NodeJS.Timeout | undefined;
 
-export interface WorkStore {
+export interface SupportStore {
   categories: Array<SupportCategory>;
   tickets: Array<SupportTicket>;
   implementers: Array<SupportImplementer>;
@@ -12,6 +12,16 @@ export interface WorkStore {
   panel: 'tickets' | 'chat';
   categoryInterval: Interval;
   messagesInterval: Interval;
+
+  search: {
+    name: 'user' | 'title';
+    value: string;
+    tickets: boolean;
+    loading: boolean;
+    foundingUsers: Array<{ id: string; text: string; title: string }>;
+    foundingTickets: Array<SupportTicket>;
+    foundingTicketsByTitle: Array<{ id: string; text: string; title: string }>;
+  };
 
   media: {
     width: number;

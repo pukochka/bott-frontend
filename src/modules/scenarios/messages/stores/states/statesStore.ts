@@ -24,6 +24,7 @@ export const useStatesStore = defineStore({
         change_type: false,
 
         connection: false,
+        combine: false,
         action: false,
         timer_view: false,
         timer_settings: false,

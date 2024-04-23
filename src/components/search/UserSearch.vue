@@ -44,8 +44,8 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { computed, ref } from 'vue';
+import { fetchUserSearch } from './query';
 
 const props = withDefaults(defineProps<UserSearchProps>(), {
   bot_id: 0,
@@ -77,15 +77,17 @@ const fetchSearch = async () => {
   }
 
   loading.value = true;
-  return axios({
-    method: 'get',
-    url: 'https://api.bot-t.com/v2/ajax/bot/user/name',
-    params: { bot_id: props.bot_id, token: props.token, q: search.value },
-  }).then((response) => {
-    loading.value = false;
-    if (!response.data?.results) return;
 
-    result.value = response.data?.results ?? [];
+  fetchUserSearch(
+    'https://api.bot-t.com/',
+    {
+      bot_id: props.bot_id,
+      token: props.token,
+      q: search.value,
+    },
+    (results) => (result.value = results)
+  ).then(() => {
+    loading.value = false;
   });
 };
 

@@ -1,23 +1,6 @@
 .bott-dialog__responsive {
   width: 100%;
-}
-
-@media (min-width: 599px) {
-  .bott-dialog__responsive {
-    width: 85%;
-  }
-}
-
-@media (min-width: 1023px) {
-  .bott-dialog__responsive {
-    width: 80%;
-  }
-}
-
-@media (min-width: 1439px) {
-  .bott-dialog__responsive {
-    width: 75%;
-  }
+  max-width: 1200px;
 }
 
 @media (min-width: 1846px) {

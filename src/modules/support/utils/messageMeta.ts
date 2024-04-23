@@ -46,7 +46,7 @@ export const ticketStatuses: Record<string, StatusView> = {
 export function getMessageTime(time: string | undefined | null) {
   const timestamp = Date.parse(time || '0') + OFFSET;
 
-  return date.formatDate(timestamp, 'HH:MM');
+  return date.formatDate(timestamp, 'HH:mm');
 }
 
 export function getMessageFormattedTime(time: string | undefined | null) {
@@ -61,7 +61,7 @@ export function getMessageFormattedTime(time: string | undefined | null) {
 
   return weekNow === weekTime
     ? dayNow === dayTime
-      ? date.formatDate(timestamp, 'HH:MM')
+      ? date.formatDate(timestamp, 'HH:mm')
       : weekDays[Number(dayTime) || 0]
     : date.formatDate(timestamp, 'DD.MM.YYYY');
 }

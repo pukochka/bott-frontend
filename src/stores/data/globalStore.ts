@@ -3,7 +3,7 @@ import { DataStore } from 'stores/data/model';
 import { defaultBot, defaultUserBots } from 'stores/defaults/bot';
 import { defaultUser } from 'stores/defaults';
 
-export const useGlobalStore = defineStore('global-store', {
+export const useGlobalStore = defineStore('global-stores', {
   state: () =>
     ({
       userData: defaultUser,

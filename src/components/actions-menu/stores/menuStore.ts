@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { MenuStore } from './models';
 
-export const useMenuStore = defineStore('action-menu-store', {
+export const useMenuStore = defineStore('action-menu-stores', {
   state: () =>
     ({
       routes: [],

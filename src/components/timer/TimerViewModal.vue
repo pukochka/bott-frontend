@@ -70,8 +70,6 @@
           </div>
         </q-card-section>
 
-        <q-card-section class="q-pt-none text-center"> </q-card-section>
-
         <q-card-section class="q-pt-none row justify-end q-gutter-sm">
           <q-btn
             flat

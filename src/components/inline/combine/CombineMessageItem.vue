@@ -33,7 +33,7 @@
           <div class="row justify-center col non-selectable">Совмещено</div>
         </q-chip>
 
-        <div v-else-if="inline.message.id === props.message.id"></div>
+        <div v-else-if="props.viewMessage.id === props.message.id"></div>
 
         <q-btn
           v-else
@@ -58,20 +58,21 @@ import { computed, ref } from 'vue';
 import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import { replaceUnsolvableTags } from 'src/utils/helpers/replace';
-import { messageFreeTypes } from '../../stores/common';
-import { fetchMessage } from '../../api/queries';
-import { useInlineStore } from '../../stores/inlineStore';
+import { messageFreeTypes } from './common';
 
 const props = withDefaults(defineProps<CombineMessageItemProps>(), {
   message: () => defaultMessage,
+  viewMessage: () => defaultMessage,
 });
 
-const inline = useInlineStore();
+const emit = defineEmits<{
+  (e: 'set-next-message', next_id: number, callback?: () => void): void;
+}>();
 
 const loading = ref(false);
 
 const combined = computed(
-  () => inline.message.nextMessage?.id === props.message.id
+  () => props.viewMessage.nextMessage?.id === props.message.id
 );
 
 const text = computed(() => replaceUnsolvableTags(props.message.text));
@@ -83,14 +84,12 @@ const type = computed(
 const combineMessage = () => {
   loading.value = true;
 
-  fetchMessage('set-next-message', {
-    message_id: inline.message.id,
-    message_next_id: props.message.id,
-  }).then(() => (loading.value = false));
+  emit('set-next-message', props.message.id, () => (loading.value = false));
 };
 
 interface CombineMessageItemProps {
   message: MessageFree;
+  viewMessage: MessageFree;
 }
 </script>
 

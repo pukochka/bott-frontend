@@ -1,7 +1,7 @@
 import { config } from '../config';
 
 import { defineStore } from 'pinia';
-import { DialogNames, WorkStore } from './supportModels';
+import { DialogNames, SupportStore } from './supportModels';
 import { fetchSupportMessages, fetchSupportTicket } from '../api/queries';
 
 import { useDialog } from 'src/utils/use/useDialog';
@@ -22,6 +22,16 @@ export const useSupportStore = defineStore('support', {
       panel: 'tickets',
       categoryInterval: undefined,
       messagesInterval: undefined,
+
+      search: {
+        name: 'user',
+        value: '',
+        loading: false,
+        tickets: false,
+        foundingUsers: [],
+        foundingTickets: [],
+        foundingTicketsByTitle: [],
+      },
 
       media: {
         width: 100,
@@ -67,7 +77,7 @@ export const useSupportStore = defineStore('support', {
         offset: 0,
         limit: 25,
       },
-    } as WorkStore),
+    } as SupportStore),
   getters: {
     offsetTop: (state): number => state.topRef?.top + 6 ?? 500,
     isMobile: () =>
@@ -112,6 +122,14 @@ export const useSupportStore = defineStore('support', {
       clearInterval(this.messagesInterval);
     },
 
+    clearSearch() {
+      this.search.value = '';
+      this.search.foundingTickets = [];
+      this.search.foundingUsers = [];
+      this.search.loading = false;
+      this.search.tickets = false;
+    },
+
     scrollToBottom() {
       if (this.scrollRef === null || this.chatBottomRef === null) return;
 
@@ -131,6 +149,7 @@ export const useSupportStore = defineStore('support', {
       this.pagination.count = 0;
       this.category = category.id;
       this.selectedCategory = category;
+      this.clearSearch();
 
       setQueryParam('category_id', category.id);
       this.updateCategory(category.id, true).then();

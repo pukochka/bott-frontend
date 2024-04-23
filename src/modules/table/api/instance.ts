@@ -2,30 +2,18 @@ import axios from 'axios';
 import { config } from '../config';
 import { useDialog } from 'src/utils/use/useDialog';
 
-export const instance = axios.create({
-  baseURL: config.host,
-  method: 'post',
-});
+const instance = axios.create();
 
 instance.interceptors.request.use(function (request) {
-  request.params = { token: config.bot.token };
-
-  request.data = Object.assign(request.data ?? {}, {
-    bot_id: config.bot.id,
-    id: config.id,
-  });
+  request.params = Object.assign(request.params, config.table.query.params);
+  request.data = Object.assign(request.data, config.table.query.data);
 
   return request;
 });
 
 instance.interceptors.response.use(
   function (response) {
-    const result =
-      'result' in response.data
-        ? response.data.result
-        : response.data.results.length;
-
-    if (!result) {
+    if (!response.data.result) {
       useDialog(
         response.data?.message ?? 'Что-то пошло не так, обратитесь в поддержку.'
       );

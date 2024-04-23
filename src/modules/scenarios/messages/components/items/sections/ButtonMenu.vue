@@ -118,7 +118,7 @@ const buttons = computed(() => [
     color: 'primary',
     loading: false,
     close: true,
-    condition: props.button?.type === 6,
+    condition: props.button?.type !== 5,
     action(e: any) {
       start(e);
     },

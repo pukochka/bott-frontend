@@ -1,5 +1,11 @@
 <template>
-  <q-drawer bordered side="right" :width="width" v-model="support.drawer">
+  <q-drawer
+    bordered
+    no-swipe-open
+    side="right"
+    :width="width"
+    v-model="support.drawer"
+  >
     <div class="absolute-full">
       <q-list class="full-height">
         <q-item clickable class="transition" @click="toggleDrawer">

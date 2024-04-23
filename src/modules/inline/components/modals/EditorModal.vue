@@ -16,12 +16,22 @@
 
         <q-card-section class="q-pt-none">
           <editor-content
+            v-if="inline.message.type.id !== 6"
             :id="inline.bot_id"
             :message_id="inline.message.id"
             :content="inline.message.text"
             :max-value="inline.message.text_length"
             @update="updateText"
           ></editor-content>
+
+          <q-input
+            v-else
+            outlined
+            :maxlength="256"
+            label="ID Стикера"
+            class="bott-input--rounded"
+            v-model="text"
+          />
         </q-card-section>
 
         <q-card-section class="q-pt-none row justify-end q-gutter-sm">

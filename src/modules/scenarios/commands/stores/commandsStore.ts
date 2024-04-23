@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { CommandsStore, DialogNames } from './models';
 
-export const useCommandsStore = defineStore('data-commands-store', {
+export const useCommandsStore = defineStore('data-commands-stores', {
   state: () =>
     ({
       commands: [],

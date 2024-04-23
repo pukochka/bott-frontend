@@ -124,7 +124,7 @@ module.exports = configure(function (/* ctx */) {
     sourceFiles: {
       // rootComponent: 'src/FeedbackMessage.vue',
       // router: 'src/router/index',
-      // store: 'src/store/index',
+      // stores: 'src/stores/index',
       // registerServiceWorker: 'src-pwa/register-service-worker',
       // serviceWorker: 'src-pwa/custom-service-worker',
       // pwaManifestFile: 'src-pwa/manifest.json',

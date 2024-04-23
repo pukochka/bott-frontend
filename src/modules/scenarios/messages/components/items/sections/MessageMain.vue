@@ -1,9 +1,9 @@
 <template>
   <timer-card
     v-if="timer"
-    :combined="false"
+    scenarios
     :message="props.message"
-    @update-time="updateTime"
+    @open-inline-menu="handleOpen"
   ></timer-card>
 
   <div class="rounded bordered overflow-hidden" v-if="!timer && !feedback">
@@ -30,7 +30,8 @@ import { colors } from 'quasar';
 import { defaultMessage } from 'src/utils/helpers/defaults';
 
 import { useVectorStore } from '../../../stores/vector/vectorStore';
-import fetchMessage from '../../../api/queries/message';
+import { useDataStore } from '../../../stores/data/dataStore';
+import { useStatesStore } from '../../../stores/states/statesStore';
 
 import TimerCard from 'src/components/timer/TimerCard.vue';
 import AssignedMedia from 'src/components/file-manager/AssignedMedia.vue';
@@ -42,6 +43,8 @@ const props = withDefaults(defineProps<MessageMainProps>(), {
 });
 
 const vector = useVectorStore();
+const data = useDataStore();
+const states = useStatesStore();
 
 const timer = computed(() => props.message.type.id === 7);
 const feedback = computed(() => props.message.type.id === 2);
@@ -50,21 +53,10 @@ const color = computed(() =>
   changeAlpha(props.message.color?.color ?? '#ffffff', 0.3)
 );
 
-const updateTime = (value: number, callback?: () => void) => {
-  const message = props.message;
+const handleOpen = () => {
+  data.selectedMessage = props.message;
 
-  fetchMessage(
-    'update-text',
-    {
-      message_id: props.message.id,
-      text: value.toString(),
-    },
-    (response) => {
-      message.text = response.data.data;
-    }
-  ).then(() => {
-    if (callback !== void 0) callback();
-  });
+  states.openDialog('edit_message');
 };
 
 interface MessageMainProps {

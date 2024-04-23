@@ -58,6 +58,14 @@ export async function fetchSupportTicket<Q extends keyof SupportTicketQueries>(
         support.selectedTicket = response.data.data;
 
         /** */
+      } else if (query === 'search-title') {
+        /** */
+
+        support.search.foundingTicketsByTitle = response.data.results.filter(
+          (item: { id: string }) => item.id !== ''
+        );
+
+        /** */
       }
 
       /** */

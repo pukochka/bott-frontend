@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 import { DialogsNames, InlineStore } from './inlineModels';
 import { defaultMessage } from 'src/utils/helpers/defaults';
 
-export const useInlineStore = defineStore('inline-store', {
+export const useInlineStore = defineStore('inline-stores', {
   state: () =>
     ref({
       settings: [],

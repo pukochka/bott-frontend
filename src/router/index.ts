@@ -47,7 +47,7 @@ export const routes: RouteRecordRaw[] = [
   },
 ];
 
-export default route(async function (/* { store, ssrContext } */) {
+export default route(async function (/* { stores, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : process.env.VUE_ROUTER_MODE === 'history'

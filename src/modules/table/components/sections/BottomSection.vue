@@ -77,15 +77,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { useSupportStore } from '../../stores/supportStore';
 import { fetchSupportTicket } from '../../api/queries';
 
 import {
   mdiChevronDoubleLeft,
   mdiChevronDoubleRight,
 } from '@quasar/extras/mdi-v7';
-
-const support = useSupportStore();
 
 const search = ref('');
 const loading = ref<Record<LoadingNames, boolean>>({

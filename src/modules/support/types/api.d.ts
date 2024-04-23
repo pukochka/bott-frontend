@@ -18,11 +18,6 @@ interface STStatusParam {
   status: number;
 }
 
-interface STIdParam {
-  /**  */
-  id: number;
-}
-
 interface STUserIdParam {
   /**  */
   user_id: number;
@@ -103,6 +98,13 @@ declare interface SupportTicketQueries {
   'get-messages': STTicketIdParam & STLimitParam;
   /** Написать сообщение от исполнителя */
   'implementer-write': STTextParam & STTicketIdParam & STLimitParam;
+  /** Поиск тикетов по пользователю */
+  'search-author': STUserIdParam &
+    STCategoryIdParam &
+    STOffsetParam &
+    STLimitParam;
+  /** Поиск тикетов по названию */
+  'search-title': STTitleParam & STCategoryIdParam;
   /** Удаление тикета */
   delete: STTicketIdParam;
 }

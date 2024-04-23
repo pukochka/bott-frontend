@@ -85,7 +85,7 @@ const services = computed(() => [
     action: '',
     icon: mdiFinance,
     color: 'landing-pink',
-    link: '/stock/store',
+    link: '/stock/stores',
   },
   {
     label: 'Реклама и продвижение',

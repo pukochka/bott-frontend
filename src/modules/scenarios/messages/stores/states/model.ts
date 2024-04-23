@@ -26,6 +26,7 @@ export type DialogNames =
   | 'settings_button'
   | 'connection'
   | 'action'
+  | 'combine'
   | 'timer_view'
   | 'timer_settings'
   | 'color'
