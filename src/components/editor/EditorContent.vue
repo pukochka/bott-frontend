@@ -52,7 +52,7 @@
           no-caps
           v-if="props['no-without-editor']"
           :href="`/lk/common/messages/main/old-browser?bot_id=${props.id}&id=${props.message_id}`"
-          :label="t('edit-text-in-editor')"
+          label="Редактировать без редактора"
         />
       </div>
 
@@ -67,7 +67,6 @@
 <script lang="ts" setup>
 import { ref, onBeforeUnmount, computed } from 'vue';
 import { useEditor, EditorContent } from '@tiptap/vue-3';
-import { t } from 'src/boot/lang';
 
 import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
@@ -80,10 +79,11 @@ import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
 import CharacterCount from '@tiptap/extension-character-count';
 
-import { TGSpoiler } from './TGSpoiler';
-import { CodeMark } from './CodeMark';
+import { tgSpoiler } from './tgSpoiler';
+import { codeMark } from './codeMark';
 
 import EditorButtons from './EditorButtons.vue';
+import { Blockquote } from './blockquote';
 
 const props = withDefaults(defineProps<EditorProps>(), {
   id: 0,
@@ -128,10 +128,11 @@ const editor = useEditor({
     Strike,
     Underline,
     History,
-    TGSpoiler.configure({
+    Blockquote,
+    tgSpoiler.configure({
       excludes: '',
     }),
-    CodeMark.configure({
+    codeMark.configure({
       excludes: '',
       code: true,
     }),

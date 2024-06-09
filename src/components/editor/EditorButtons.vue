@@ -41,9 +41,9 @@
         borderless
         autofocus
         input-class="rounded q-px-md"
-        :label="t('link')"
+        label="Ссылка"
         v-model="link_input.value"
-        :hint="t('example-link')"
+        hint="Пример ссылки: https://bot-t.com"
       >
       </q-input>
 
@@ -53,7 +53,7 @@
           padding="4px"
           class="rounded"
           color="red"
-          :label="t('button-cancel')"
+          label="Отмена"
           v-close-popup
         />
 
@@ -62,7 +62,7 @@
           padding="4px"
           class="rounded"
           color="primary"
-          :label="t('button-confirm')"
+          label="Применить"
           :disable="!link_input.required"
           @click="setLink"
         />
@@ -74,8 +74,9 @@
 <script lang="ts" setup>
 import { Editor } from '@tiptap/vue-3';
 import { computed, PropType, ref, watch } from 'vue';
-import { t } from 'src/boot/lang';
+
 import EmojiMenu from '../emoji/EmojiMenu.vue';
+import { mdiFormatQuoteClose } from '@quasar/extras/mdi-v7';
 
 const emit = defineEmits<{
   (e: 'update', value: any): void;
@@ -125,35 +126,35 @@ watch(
 
 const buttons = computed(() => [
   {
-    tooltip: t('bold'),
+    tooltip: 'Жирный',
     icon: 'format_bold',
     action: () => props.editor?.chain().focus().toggleBold().run(),
     disabled: state.value.code_state,
     active: props.editor?.isActive('bold'),
   },
   {
-    tooltip: t('italic'),
+    tooltip: 'Курсив',
     icon: 'format_italic',
     action: () => props.editor?.chain().focus().toggleItalic().run(),
     disabled: state.value.code_state,
     active: props.editor?.isActive('italic'),
   },
   {
-    tooltip: t('strike'),
+    tooltip: 'Зачёркнутый',
     icon: 'format_strikethrough',
     action: () => props.editor?.chain().focus().toggleStrike().run(),
     disabled: state.value.code_state,
     active: props.editor?.isActive('strike'),
   },
   {
-    tooltip: t('underline'),
+    tooltip: 'Подчеркнутый',
     icon: 'format_underlined',
     action: () => props.editor?.chain().focus().toggleUnderline().run(),
     disabled: state.value.code_state,
     active: props.editor?.isActive('underline'),
   },
   {
-    tooltip: t('create-link'),
+    tooltip: 'Создать ссылку',
     icon: 'link',
     action: () =>
       (link_input.value.value =
@@ -164,7 +165,7 @@ const buttons = computed(() => [
     active: props.editor?.isActive('link'),
   },
   {
-    tooltip: t('source-code'),
+    tooltip: 'Исходный код',
     icon: 'code',
     action() {
       state.value.code_state = !state.value.code_state;
@@ -182,39 +183,46 @@ const buttons = computed(() => [
     active: state.value.code_state,
   },
   {
-    tooltip: t('code-mono'),
+    tooltip: 'Код (Моношрифт-code)',
     icon: 'closed_caption',
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     action: () => props.editor?.chain().focus().toggleCodeMark().run(),
     disabled: state.value.code_state,
-    active: props.editor?.isActive('CodeMark'),
+    active: props.editor?.isActive('codeMark'),
   },
   {
-    tooltip: t('hidden-tg'),
+    tooltip: 'Скрытый',
     icon: 'hide_source',
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     action: () => props.editor?.chain().focus().toggleTgspoiler().run(),
     disabled: state.value.code_state,
-    active: props.editor?.isActive('TGSpoiler'),
+    active: props.editor?.isActive('tgSpoiler'),
   },
   {
-    tooltip: t('cancel-action'),
+    tooltip: 'Цитата',
+    icon: mdiFormatQuoteClose,
+    action: () => props.editor?.chain().focus().toggleBlockquote().run(),
+    disabled: state.value.code_state,
+    active: props.editor?.isActive('blockquote'),
+  },
+  {
+    tooltip: 'Отменить действие',
     icon: 'undo',
     action: () => props.editor?.chain().focus().undo().run(),
     disabled: state.value.code_state,
     active: false,
   },
   {
-    tooltip: t('cancel-action-prev'),
+    tooltip: 'Предыдущее действие',
     icon: 'redo',
     action: () => props.editor?.chain().focus().redo().run(),
     disabled: state.value.code_state,
     active: false,
   },
   {
-    tooltip: t('cancel-selected-format'),
+    tooltip: 'Отменить выделенное форматирование',
     icon: 'close',
     action: () => props.editor?.chain().focus().unsetAllMarks().run(),
     disabled: state.value.code_state,

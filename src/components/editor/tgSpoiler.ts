@@ -1,22 +1,24 @@
 import { Mark, mergeAttributes } from '@tiptap/core';
 
-export const CodeMark = Mark.create({
-  name: 'CodeMark',
+export const tgSpoiler = Mark.create({
+  name: 'tgSpoiler',
   addOptions() {
     return {
-      HTMLAttributes: {},
+      HTMLAttributes: {
+        class: 'tg-spoiler',
+      },
     };
   },
   parseHTML() {
     return [
       {
-        tag: 'code',
+        tag: 'span',
       },
     ];
   },
   renderHTML({ HTMLAttributes }) {
     return [
-      'code',
+      'span',
       mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
       0,
     ];
@@ -25,7 +27,7 @@ export const CodeMark = Mark.create({
   // @ts-ignore
   addCommands() {
     return {
-      toggleCodeMark:
+      toggleTgspoiler:
         () =>
         ({ commands }: any) => {
           return commands.toggleMark(this.name);
