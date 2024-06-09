@@ -67,8 +67,8 @@ const menu = ref(false);
 
 const targetReverse = computed(
   () =>
-    vector.lines.find((item) => item.button_id === props.button.id)?.line
-      ?.reverse ?? false
+    vector.linesValue.find((item) => item.button_id === props.button.id)?.line
+      ?.reverse || false
 );
 
 const select = () => {

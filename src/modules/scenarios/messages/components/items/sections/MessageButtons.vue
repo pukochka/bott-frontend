@@ -15,9 +15,7 @@ import { computed, watch } from 'vue';
 
 import { defaultMessage } from 'src/utils/helpers/defaults';
 
-import { onUpdated } from 'vue';
-import { useVectorStore } from '../../../stores/vector/vectorStore';
-import { useDataStore } from '../../../stores/data/dataStore';
+import { update, useVectorStore } from '../../../stores/vector/vectorStore';
 
 import ButtonItem from '../ButtonItem.vue';
 
@@ -26,7 +24,6 @@ const props = withDefaults(defineProps<MessageButtonsProps>(), {
 });
 
 const vector = useVectorStore();
-const data = useDataStore();
 
 const length = computed(() => props.message.menu?.lines?.length ?? 0);
 
@@ -36,21 +33,10 @@ const buttons = computed((): IMButton[] =>
     : []
 );
 
-onUpdated(vector.update);
-
 watch(
   buttons,
   () => {
-    buttons.value.forEach((button) => {
-      if (button.type !== 5) {
-        vector.connections = vector.connections.filter(
-          (item) => item.button_id !== button.id
-        );
-        vector.linesValue = vector.linesValue.filter(
-          (item) => item.button_id !== button.id
-        );
-      }
-    });
+    update(buttons.value);
   },
   { deep: true }
 );

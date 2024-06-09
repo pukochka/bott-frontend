@@ -2,7 +2,7 @@ import instance from '../interceptors';
 
 import { useDataStore } from '../../stores/data/dataStore';
 import { useStatesStore } from '../../stores/states/statesStore';
-import { useVectorStore } from '../../stores/vector/vectorStore';
+import { update, useVectorStore } from '../../stores/vector/vectorStore';
 import { useCommandsStore } from '../../../commands/stores/commandsStore';
 
 export default async function fetchCommands<Q extends keyof SCCommandQueries>(
@@ -47,6 +47,8 @@ export default async function fetchCommands<Q extends keyof SCCommandQueries>(
 
         /** */
       }
+
+      update();
     });
   } catch (e) {}
 }

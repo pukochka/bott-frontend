@@ -24,12 +24,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onUpdated } from 'vue';
+import { computed } from 'vue';
 import { colors } from 'quasar';
 
 import { defaultMessage } from 'src/utils/helpers/defaults';
 
-import { useVectorStore } from '../../../stores/vector/vectorStore';
 import { useDataStore } from '../../../stores/data/dataStore';
 import { useStatesStore } from '../../../stores/states/statesStore';
 
@@ -42,7 +41,6 @@ const props = withDefaults(defineProps<MessageMainProps>(), {
   message: () => defaultMessage,
 });
 
-const vector = useVectorStore();
 const data = useDataStore();
 const states = useStatesStore();
 
@@ -62,8 +60,6 @@ const handleOpen = () => {
 interface MessageMainProps {
   message: MessageFree;
 }
-
-onUpdated(vector.update);
 </script>
 
 <style lang="scss" scoped>

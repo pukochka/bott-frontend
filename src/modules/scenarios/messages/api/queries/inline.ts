@@ -1,6 +1,7 @@
 import instance from '../interceptors';
 
 import { useDataStore } from '../../stores/data/dataStore';
+import { update, useVectorStore } from '../../stores/vector/vectorStore';
 
 export default async function fetchButtons<Q extends keyof IMQueries>(
   query: Q,
@@ -8,6 +9,7 @@ export default async function fetchButtons<Q extends keyof IMQueries>(
   action?: (data: any) => void
 ) {
   const data = useDataStore();
+  const vector = useVectorStore();
 
   try {
     return await instance({
@@ -17,6 +19,8 @@ export default async function fetchButtons<Q extends keyof IMQueries>(
       /** */
 
       if (action !== void 0) action(response);
+
+      update();
 
       /** */
     });

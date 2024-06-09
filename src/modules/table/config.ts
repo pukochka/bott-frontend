@@ -131,9 +131,13 @@ export const config = {
     is_free: null,
   },
   table: {
-    name: '',
-    props: {},
-    columns: columns,
+    props: {
+      breakpoints: {
+        sm: ['id', 'username'],
+        md: ['id', 'username'],
+        lg: ['id', 'username'],
+      },
+    },
     query: {
       index: 'https://api.bot-t.com/v1/ bot/user/index',
       count: 'https://api.bot-t.com/v1/ bot/user/count',

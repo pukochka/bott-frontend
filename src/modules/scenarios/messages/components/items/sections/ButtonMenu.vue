@@ -30,7 +30,7 @@
 import { computed, ref } from 'vue';
 
 import { fetchButtons } from '../../../api';
-import { useVectorStore } from '../../../stores/vector/vectorStore';
+import { update, useVectorStore } from '../../../stores/vector/vectorStore';
 import { useStatesStore } from '../../../stores/states/statesStore';
 import { useDataStore } from '../../../stores/data/dataStore';
 
@@ -72,7 +72,6 @@ const deleteButton = () => {
     message.menu = response.data.data;
 
     vector.deleteConnection('button_id', props.button?.id || 0);
-    setTimeout(vector.update, 10);
   }).then(() => {
     emit('close');
     loading.value.delete = false;
@@ -94,7 +93,6 @@ const disableButton = () => {
       data.scenarioValue = response.data.data;
 
       vector.deleteConnection('button_id', props.button?.id || 0);
-      setTimeout(vector.update, 10);
     }
   ).then(() => {
     emit('close');

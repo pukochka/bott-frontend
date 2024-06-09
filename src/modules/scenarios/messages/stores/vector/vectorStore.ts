@@ -8,6 +8,7 @@ import { handlerUpdate } from 'src/utils/helpers/handles';
 import { CombineLine, Connection } from '../classes';
 
 import { VectorStore, ScrollAreaEvent } from './model';
+import { debounce } from 'quasar';
 
 export const useVectorStore = defineStore({
   id: 'vector',
@@ -43,10 +44,6 @@ export const useVectorStore = defineStore({
     scroll: (state) => state.scrollValues,
   },
   actions: {
-    update() {
-      this.updateCombined();
-      this.updateConnections();
-    },
     positionParent() {
       this.parentEl = getRect('container');
     },
@@ -248,3 +245,23 @@ export const useVectorStore = defineStore({
     },
   },
 });
+
+export const update = debounce((buttons?: Array<IMButton>) => {
+  const vector = useVectorStore();
+
+  vector.updateCombined();
+  vector.updateConnections();
+
+  if (buttons !== void 0) {
+    buttons.forEach((button) => {
+      if (button.type !== 5) {
+        vector.connections = vector.connections.filter(
+          (item) => item.button_id !== button.id
+        );
+        vector.linesValue = vector.linesValue.filter(
+          (item) => item.button_id !== button.id
+        );
+      }
+    });
+  }
+}, 60);

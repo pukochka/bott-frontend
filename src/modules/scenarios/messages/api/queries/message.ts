@@ -1,7 +1,7 @@
 import instance from '../interceptors';
 
 import { useDataStore } from '../../stores/data/dataStore';
-import { useVectorStore } from '../../stores/vector/vectorStore';
+import { update, useVectorStore } from '../../stores/vector/vectorStore';
 
 export default async function fetchMessage<Q extends keyof SCMessageQueries>(
   query: Q,
@@ -44,6 +44,8 @@ export default async function fetchMessage<Q extends keyof SCMessageQueries>(
 
         /** */
       }
+
+      update();
     });
   } catch (e) {}
 }
