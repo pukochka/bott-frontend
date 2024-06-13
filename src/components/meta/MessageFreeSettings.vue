@@ -9,7 +9,10 @@
     <q-list v-if="settings.length">
       <component
         @loading="update"
-        :is="components[setting.type]"
+        :is="
+          setting.key === 'effect_id' ? SettingDate : components[setting.type]
+        "
+        :effects="effects"
         @update-setting="updateSettings"
         :setting="setting"
         v-for="(setting, index) of settings"
@@ -134,6 +137,7 @@ const emit = defineEmits<{
 }>();
 
 const settings = ref<Array<MessageFreeSettingsItem>>([]);
+const effects = ref([]);
 const data = ref({ bot_id: 0, id: 0 });
 const loading = ref({
   setting: false,
@@ -197,9 +201,26 @@ onBeforeMount(() => {
 
   loading.value.setting = true;
 
-  fetchSettings(props.host, 'settings', data.value, props.token, (response) => {
-    settings.value = response;
-  }).then(() => (loading.value.setting = false));
+  Promise.all([
+    fetchSettings(
+      props.host,
+      'settings',
+      data.value,
+      props.token,
+      (response) => {
+        settings.value = response;
+      }
+    ),
+    fetchSettings(
+      props.host,
+      'get-effects',
+      data.value,
+      props.token,
+      (response) => {
+        effects.value = response;
+      }
+    ),
+  ]).then(() => (loading.value.setting = false));
 });
 
 const components = {

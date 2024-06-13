@@ -2,7 +2,7 @@ declare interface MessageFreeSettingsItem {
   label: string;
   key: string;
   type: MessageFreeSettingsItemType;
-  value: boolean;
+  value: string | boolean;
 }
 
 declare type MessageFreeSettingsItemType =
