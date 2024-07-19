@@ -16,6 +16,7 @@
 
         <q-card-section class="q-pt-none">
           <editor-content
+            no-without-editor
             v-if="inline.message.type.id !== 6"
             :id="inline.bot_id"
             :message_id="inline.message.id"
@@ -67,7 +68,6 @@ import { ref } from 'vue';
 import { useInlineStore } from '../../stores/inlineStore';
 
 import { fetchMessage } from '../../api/queries';
-import { encodeText } from 'src/utils/helpers/replace';
 
 import EditorContent from 'src/components/editor/EditorContent.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
@@ -83,16 +83,14 @@ const updateText = (value: string) => (text.value = value);
 const saveText = () => {
   loading.value = true;
 
-  const content = encodeText(text.value);
-
   fetchMessage(
     'update-text',
     {
       message_id: inline.message.id,
-      text: content,
+      text: text.value,
     },
     () => {
-      inline.message.text = content ?? inline.message.text;
+      inline.message.text = text.value || inline.message.text;
     }
   ).then(() => {
     loading.value = false;

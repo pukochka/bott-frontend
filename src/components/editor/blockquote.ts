@@ -1,4 +1,4 @@
-import { mergeAttributes, Node, wrappingInputRule } from '@tiptap/core';
+import { Mark, mergeAttributes } from '@tiptap/core';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -28,7 +28,7 @@ export const inputRegex = /^\s*>\s$/;
  * This extension allows you to create blockquotes.
  * @see https://tiptap.dev/api/nodes/blockquote
  */
-export const Blockquote = Node.create({
+export const Blockquote = Mark.create({
   name: 'blockquote',
 
   addOptions() {
@@ -36,12 +36,6 @@ export const Blockquote = Node.create({
       HTMLAttributes: {},
     };
   },
-
-  content: 'block+',
-
-  group: 'block',
-
-  defining: true,
 
   parseHTML() {
     return [{ tag: 'blockquote' }];
@@ -60,7 +54,7 @@ export const Blockquote = Node.create({
       toggleBlockquote:
         () =>
         ({ commands }) => {
-          return commands.toggleWrap(this.name);
+          return commands.toggleMark(this.name);
         },
     };
   },
@@ -69,14 +63,5 @@ export const Blockquote = Node.create({
     return {
       'Mod-Shift-b': () => this.editor.commands.toggleBlockquote(),
     };
-  },
-
-  addInputRules() {
-    return [
-      wrappingInputRule({
-        find: inputRegex,
-        type: this.type,
-      }),
-    ];
   },
 });

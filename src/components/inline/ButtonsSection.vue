@@ -11,9 +11,9 @@
         class="rounded"
         color="primary"
         icon="delete"
-        :loading="props.loading"
+        :loading="props.loading && handledLine === line.id"
         v-if="props.is_support_menu"
-        @click="emit('delete-line', line.id)"
+        @click="deleteLine(line.id)"
       >
         <q-tooltip
           class="bott-tooltip"
@@ -75,6 +75,8 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
+
 const props = withDefaults(defineProps<ButtonsSectionProps>(), {
   menu: () => ({ id: 0, lines: [] }),
   loading: false,
@@ -86,6 +88,14 @@ const emit = defineEmits<{
   (e: 'add-button', line_id: number): void;
   (e: 'delete-line', line_id: number): void;
 }>();
+
+const handledLine = ref<number>(-1);
+
+const deleteLine = (line_id: number) => {
+  handledLine.value = line_id;
+
+  emit('delete-line', line_id);
+};
 
 const thumbStyle = {
   margin: '4px',

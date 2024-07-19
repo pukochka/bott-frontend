@@ -50,7 +50,7 @@
           padding="0 8px"
           color="primary"
           no-caps
-          v-if="props['no-without-editor']"
+          v-if="props.noWithoutEditor"
           :href="`/lk/common/messages/main/old-browser?bot_id=${props.id}&id=${props.message_id}`"
           label="Редактировать без редактора"
         />
@@ -78,19 +78,19 @@ import History from '@tiptap/extension-history';
 import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
 import CharacterCount from '@tiptap/extension-character-count';
-
+import HardBreak from '@tiptap/extension-hard-break';
+import { Slice, Fragment, Node } from 'prosemirror-model';
+import { Blockquote } from './blockquote';
 import { tgSpoiler } from './tgSpoiler';
 import { codeMark } from './codeMark';
 
 import EditorButtons from './EditorButtons.vue';
-import { Blockquote } from './blockquote';
 
 const props = withDefaults(defineProps<EditorProps>(), {
   id: 0,
+  noWithoutEditor: false,
   message_id: 0,
-  maxValue: () => 1024,
-  config: () => null,
-  'no-without-editor': false,
+  maxValue: 1024,
 });
 
 const emit = defineEmits<{
@@ -105,46 +105,61 @@ const state = ref({
 
 const is_link = ref(false);
 
-const text = computed(() =>
-  props.content
-    .split('\n')
-    .map((item) => `<p>${item}</p>`)
-    .join('')
-);
+const text = computed(() => props.content.replace(/(?:\r\n?|\n)/gi, '<br>'));
 
 const editor = useEditor({
   content: text.value,
   injectCSS: true,
   extensions: [
-    Document.configure({
-      excludes: '',
-    }),
+    Document.configure({ excludes: '' }),
     Paragraph,
-    Text.configure({
-      excludes: '',
-    }),
+    Text.configure({ excludes: '' }),
     Bold,
     Italic,
     Strike,
     Underline,
     History,
     Blockquote,
-    tgSpoiler.configure({
-      excludes: '',
+    HardBreak.extend({
+      addKeyboardShortcuts() {
+        return {
+          Enter: () => this.editor.commands.setHardBreak(),
+        };
+      },
     }),
-    codeMark.configure({
-      excludes: '',
-      code: true,
-    }),
+    tgSpoiler.configure({ excludes: '' }),
+    codeMark.configure({ excludes: '', code: true }),
     Link.configure({
       HTMLAttributes: {
         target: '',
       },
     }),
-    CharacterCount.configure({
-      limit: props.maxValue,
-    }),
+    CharacterCount.configure({ limit: props.maxValue }),
   ],
+  editorProps: {
+    clipboardTextParser(text, context) {
+      const blocks = text.split(/(?:\r\n?|\n)/);
+      const nodes: any = [];
+
+      blocks.forEach((line) => {
+        let nodeJson = {
+          type: 'doc',
+          content: [{ type: 'hardBreak', text: '' }],
+        };
+        if (line.length > 0) {
+          nodeJson.content = [
+            { type: 'text', text: line },
+            { type: 'hardBreak', text: '' },
+          ];
+        }
+        let node = Node.fromJSON(context.doc.type.schema, nodeJson);
+        nodes.push(node);
+      });
+
+      const fragment = Fragment.fromArray(nodes);
+      return Slice.maxOpen(fragment);
+    },
+  },
   onUpdate: (state) => {
     emit('update', state.editor.getHTML());
   },
@@ -166,7 +181,7 @@ interface EditorProps {
   id: number;
   message_id: number;
   maxValue?: number;
-  'no-without-editor'?: boolean;
+  noWithoutEditor?: boolean;
 }
 </script>
 

@@ -16,6 +16,7 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "@tiptap/extension-blockquote": "^2.4.0",
+    "@tiptap/extension-hard-break": "^2.5.4",
     "axios": "^1.2.1",
     "compress.js": "^1.2.2",
     "eslint-plugin-quasar": "^1.1.0",

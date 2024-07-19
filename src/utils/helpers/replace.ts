@@ -14,9 +14,14 @@ export const replaceUnsolvableTags = (value?: string | null) =>
   );
 
 export function encodeText(text: string) {
-  return text
-    .replace(/<br>/gi, '')
-    .replace(/<\/p>/gi, '\n')
-    .replace(/<p>/gi, '')
-    .replace(/<p><\/p>/gi, '\n');
+  return text;
+  // .replace(/<p><\/p>/gi, '\n')
+  // .replace(/<\/p>/gi, '\n')
+  // .replace(/<p>/gi, '')
 }
+// export function encodeText(text: string) {
+//   const matches = text.match(/<\/p>/gi) || [];
+//   const withoutLast = matches.slice(0, matches.length - 2).join('');
+//
+//   return withoutLast.replace(/<p>/gi, '').replace(/<\/p>/gi, '\n');
+// }

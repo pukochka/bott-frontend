@@ -33,7 +33,7 @@
           </q-item-section>
 
           <q-item-section>
-            {{ metaEffects[effect].label || effect }}
+            {{ metaEffects[effect]?.label || effect }}
           </q-item-section>
 
           <q-item-section side v-if="effect === props.setting.value">
@@ -93,7 +93,7 @@ const metaEffects: Record<
     label: 'Салют',
     color: 'positive',
   },
-  '5044134455711629726': {
+  '5159385139981059251': {
     icon: 'favorite',
     label: 'Сердечки',
     color: 'negative',
