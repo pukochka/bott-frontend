@@ -34,15 +34,18 @@ interface RMSortParam {
   sort: number;
 }
 
-interface RMCommonParams {
-  /**
-   * Для type = ROUTE Новый путь Для type = CONNECT тип сообщения Для type = WEB_APP Ссылка на веб модуль Для остальных пустая строка
-   * */
-  route: string;
+interface RMMessageParam {
   /**
    * Текст кнопки
    * */
   message: string;
+}
+
+interface RMCommonParams extends RMMessageParam {
+  /**
+   * Для type = ROUTE Новый путь Для type = CONNECT тип сообщения Для type = WEB_APP Ссылка на веб модуль Для остальных пустая строка
+   * */
+  route: string;
   /**
    * Тип кнопки
    * */
@@ -58,6 +61,10 @@ declare interface RMQueries {
    * Обновляет настройки меню
    * */
   update: RMUpdateParams;
+  /**
+   * Удалить кнопку
+   * */
+  'update-message': RMIdParam & RMMessageParam;
   /**
    * Удалить кнопку
    * */

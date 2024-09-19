@@ -348,12 +348,12 @@ const spam = computed(
     },
     {
       label: 'Период в минутах, между заявками',
-      value: setting.value.limit_in_period,
+      value: setting.value.period,
       prop: 'limit_in_period',
     },
     {
       label: 'Сколько раз можно ответить за период',
-      value: setting.value.period,
+      value: setting.value.limit_in_period,
       prop: 'period',
     },
     {

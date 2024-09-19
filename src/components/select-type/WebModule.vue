@@ -96,12 +96,26 @@
 import { ref, onMounted, computed } from 'vue';
 
 const props = withDefaults(defineProps<WebModuleProps>(), {
-  webs: () => [],
-  action: () => null,
+  regexp: () => /^/,
+  action: null,
+  label: '',
+  grow: false,
+  default: '',
+  hint: '',
+  error: 'Введено неверное количество символов',
+  webs: [],
+  actions: [],
+  route: '',
+  index: false,
+  static: false,
+  bot_id: undefined,
+  host: '',
+  message_id: undefined,
+  token: undefined,
 });
 
 const emit = defineEmits<{
-  (e: 'change', value: string | null): void;
+  (e: 'change', value: string | null | number): void;
 }>();
 
 const dialog = ref(false);
@@ -121,7 +135,7 @@ onMounted(() => {
   if (props.action === null) emit('change', null);
   else {
     selected.value =
-      props.webs?.find((item) => item.value === props.action) ?? null;
+      props.webs?.find((item: any) => item.value === props.action) || null;
 
     if (selected.value?.value) module.value = 'modules';
     else link.value = props.action;
@@ -131,17 +145,21 @@ onMounted(() => {
 });
 
 interface WebModuleProps {
-  webs: WebModule[];
+  label: string;
   action: string | null;
-  label?: any;
-  actions?: any;
-  hint?: any;
-  route?: any;
-  default?: any;
-  grow?: any;
   bot_id: number;
   message_id: number;
   token: string;
   host: string;
+  index?: boolean;
+  static?: boolean;
+  regexp?: RegExp;
+  grow?: boolean;
+  default?: string;
+  hint?: string;
+  error?: string;
+  webs?: any;
+  actions?: any;
+  route?: any;
 }
 </script>

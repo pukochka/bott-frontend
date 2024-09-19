@@ -32,6 +32,10 @@ const props = withDefaults(defineProps<GeneralTypeProps>(), {
   route: '',
   index: false,
   static: false,
+  bot_id: undefined,
+  host: '',
+  message_id: undefined,
+  token: undefined,
 });
 
 const emit = defineEmits<{

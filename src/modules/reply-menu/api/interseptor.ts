@@ -28,7 +28,8 @@ instance.interceptors.response.use(
 
     if (!jsonData) {
       useDialog(
-        response.data?.message ?? 'Что-то пошло не так, обратитесь в поддержку.'
+        JSON.parse(response.data)?.message ||
+          'Что-то пошло не так, обратитесь в поддержку.'
       );
 
       return Promise.reject('error');

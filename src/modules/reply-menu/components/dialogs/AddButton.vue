@@ -37,7 +37,7 @@
           :webs="config.webs"
           :buttons="replyButtons"
           :types="replyTypes"
-          :button="null"
+          :button="button"
           @update="update"
         ></select-type>
       </q-card-section>
@@ -136,6 +136,15 @@ const addButton = () => {
     loading.value = false;
     reply.closeDialog('add_button');
   });
+};
+
+const button = {
+  id: 0,
+  sort: 0,
+  line_id: 0,
+  type: 0,
+  text: '',
+  action: 'category/main',
 };
 
 const enterDown = (ev: KeyboardEvent) => {

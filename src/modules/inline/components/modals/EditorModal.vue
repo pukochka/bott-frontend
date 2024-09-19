@@ -68,6 +68,7 @@ import { ref } from 'vue';
 import { useInlineStore } from '../../stores/inlineStore';
 
 import { fetchMessage } from '../../api/queries';
+import { encodeText } from 'src/utils/helpers/replace';
 
 import EditorContent from 'src/components/editor/EditorContent.vue';
 import DialogHeader from 'src/components/dialogs-sections/DialogHeader.vue';
@@ -83,14 +84,16 @@ const updateText = (value: string) => (text.value = value);
 const saveText = () => {
   loading.value = true;
 
+  const content = encodeText(text.value);
+
   fetchMessage(
     'update-text',
     {
       message_id: inline.message.id,
-      text: text.value,
+      text: content,
     },
     () => {
-      inline.message.text = text.value || inline.message.text;
+      inline.message.text = content || inline.message.text;
     }
   ).then(() => {
     loading.value = false;

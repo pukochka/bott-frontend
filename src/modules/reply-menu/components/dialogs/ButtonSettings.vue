@@ -99,7 +99,7 @@ const text = ref({
   max: 64,
   min: 1,
   get required() {
-    return this.max > this.value.length && this.min < this.value.length;
+    return this.max >= this.value.length && this.min <= this.value.length;
   },
 });
 
@@ -108,8 +108,10 @@ const reply = useReplyStore();
 const loading = ref({
   'delete-button': false,
   'update-data-and-type': false,
+  'update-message': false,
 });
 const type = ref(0);
+const initialType = ref(0);
 const change = ref(false);
 
 const state = ref({
@@ -127,15 +129,22 @@ const update = (value: any) => (state.value = value);
 
 const addEmoji = (value: string) => (text.value.value += value);
 
-const request = (query: 'delete-button' | 'update-data-and-type') => {
+const request = (
+  query: 'delete-button' | 'update-data-and-type' | 'update-message'
+) => {
   loading.value[query] = true;
 
-  fetchMenu(query, {
-    id: reply.selectedButton?.id ?? 0,
-    message: text.value.value,
-    route: state.value.action ?? '',
-    type: state.value.type,
-  }).then(() => {
+  fetchMenu(
+    query,
+    {
+      id: reply.selectedButton?.id || 0,
+      message: text.value.value,
+      route: state.value.action || '',
+      type: state.value.type,
+    },
+    undefined,
+    query === 'update-message'
+  ).then(() => {
     loading.value[query] = false;
     reply.closeDialog('button_settings');
   });
@@ -143,6 +152,12 @@ const request = (query: 'delete-button' | 'update-data-and-type') => {
 
 const updateButton = () => {
   if (reply.selectedButton?.type === 5) {
+    if (initialType.value === 5) {
+      request('update-message');
+
+      return;
+    }
+
     useDialog(
       'Вы уверены, что хотите изменить кнопку со сценарием? При изменении типа кнопки, сценарий связанный с кнопкой удалиться.',
       true
@@ -166,6 +181,7 @@ const updateState = () => {
   change.value = false;
   text.value.value = reply.selectedButton?.text ?? '';
   type.value = reply.selectedButton?.type ?? 0;
+  initialType.value = type.value;
 };
 </script>
 

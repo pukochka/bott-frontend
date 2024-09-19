@@ -78,12 +78,10 @@ import History from '@tiptap/extension-history';
 import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
 import CharacterCount from '@tiptap/extension-character-count';
-import HardBreak from '@tiptap/extension-hard-break';
 import { Slice, Fragment, Node } from 'prosemirror-model';
 import { Blockquote } from './blockquote';
 import { tgSpoiler } from './tgSpoiler';
 import { codeMark } from './codeMark';
-
 import EditorButtons from './EditorButtons.vue';
 
 const props = withDefaults(defineProps<EditorProps>(), {
@@ -105,7 +103,14 @@ const state = ref({
 
 const is_link = ref(false);
 
-const text = computed(() => props.content.replace(/(?:\r\n?|\n)/gi, '<br>'));
+const text = computed(() =>
+  props.content
+    .split(/(?:\r\n?|\n)/)
+    .map((line) =>
+      line.slice(0, 12) === '<blockquote>' ? line : `<p>${line}</p>`
+    )
+    .join('')
+);
 
 const editor = useEditor({
   content: text.value,
@@ -120,13 +125,6 @@ const editor = useEditor({
     Underline,
     History,
     Blockquote,
-    HardBreak.extend({
-      addKeyboardShortcuts() {
-        return {
-          Enter: () => this.editor.commands.setHardBreak(),
-        };
-      },
-    }),
     tgSpoiler.configure({ excludes: '' }),
     codeMark.configure({ excludes: '', code: true }),
     Link.configure({
@@ -137,20 +135,17 @@ const editor = useEditor({
     CharacterCount.configure({ limit: props.maxValue }),
   ],
   editorProps: {
-    clipboardTextParser(text, context) {
+    clipboardTextParser: (text, context) => {
       const blocks = text.split(/(?:\r\n?|\n)/);
       const nodes: any = [];
 
       blocks.forEach((line) => {
-        let nodeJson = {
-          type: 'doc',
-          content: [{ type: 'hardBreak', text: '' }],
+        let nodeJson: any = {
+          type: 'paragraph',
+          content: [],
         };
         if (line.length > 0) {
-          nodeJson.content = [
-            { type: 'text', text: line },
-            { type: 'hardBreak', text: '' },
-          ];
+          nodeJson.content = [{ type: 'text', text: line }];
         }
         let node = Node.fromJSON(context.doc.type.schema, nodeJson);
         nodes.push(node);

@@ -1,8 +1,8 @@
 <template>
   <div class="text-center q-py-md">{{ label }}</div>
 
-  <div class="row q-col-gutter-y-xs" v-if="info.length">
-    <div class="col-12" v-for="(button, index) of info" :key="index">
+  <div class="row q-col-gutter-y-xs" v-if="props.buttons.length">
+    <div class="col-12" v-for="(button, index) of props.buttons" :key="index">
       <q-btn
         flat
         no-caps
@@ -17,40 +17,30 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-
 const props = withDefaults(defineProps<InfoTypeProps>(), {
   label: '',
   buttons: () => [],
   route: '',
 });
 
-// TODO Костыль
-const info = computed(() =>
-  (props.buttons ?? []).map((item) => {
-    let link = item.link;
-    let label = item.label;
-
-    if (
-      (props.route ?? '').includes('system/free?id=') &&
-      item.type === 'scenario'
-    ) {
-      const index = props.route.indexOf('=') + 1;
-      link += `&route_id=${props.route.slice(index)}`;
-      label = 'Управление сценарием';
-    }
-
-    return {
-      label: label,
-      link: link,
-    };
-  })
-);
-
 interface InfoTypeProps {
   label: string;
   route: string;
   buttons: Array<{ label: string; link: string; type: string }>;
+  action: string | null;
+  bot_id: number;
+  message_id: number;
+  token: string;
+  host: string;
+  index?: boolean;
+  static?: boolean;
+  regexp?: RegExp;
+  grow?: boolean;
+  default?: string;
+  hint?: string;
+  error?: string;
+  webs?: any;
+  actions?: any;
 }
 </script>
 

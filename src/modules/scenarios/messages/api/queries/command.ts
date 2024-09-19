@@ -38,9 +38,12 @@ export default async function fetchCommands<Q extends keyof SCCommandQueries>(
       } else if (query === 'update-message') {
         /** */
 
-        if (data.scenarioValue && commands.selectedCommand) {
+        if (data.scenarioValue) {
           data.scenarioValue.label =
             response.data?.data?.label || data.scenarioValue.label;
+        }
+
+        if (commands.selectedCommand) {
           commands.selectedCommand.label =
             response.data?.data?.label || data.scenarioValue.label;
         }

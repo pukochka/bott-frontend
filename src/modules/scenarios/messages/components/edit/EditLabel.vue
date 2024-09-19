@@ -80,8 +80,12 @@ const editLabel = () => {
     message: text.value.value,
     route_id: data.scenarioValue?.id ?? 0,
   }).then(() => {
-    loading.value = false;
-    states.closeDialog('edit_label');
+    fetchCommands('index', undefined, (response) => {
+      commands.commands = response.data.data;
+    }).then(() => {
+      loading.value = false;
+      states.closeDialog('edit_label');
+    });
   });
 };
 
